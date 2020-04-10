@@ -17,7 +17,7 @@
             <thead>  
                 <tr>   
                     <td>用户ID</td>
-                    <td>用户姓名</td>
+                    <td>用户昵称</td>
                     <td>提现支付宝</td>
                     <td>提现金额</td> 
                     <td>提现手续费</td>
@@ -29,7 +29,7 @@
 				{foreach from=$deposit_list item=row}
                 <tr>  
                     <td><a href="/AcpUser/user_detail/user_id/{$row.user_id}" title="查看用户详情"><span style="color: blue">{$row.id}</span></a></td>
-                    <td>{$row.username}</td>
+                    <td>{$row.nickname}</td>
                     <td>{$row.mobile}</td>
                     <td>{$row.money}元</td>
                     <td>{$row.deposit_server_charge}元</td>

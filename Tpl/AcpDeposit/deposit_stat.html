@@ -28,6 +28,13 @@
                         <option value="2" {if $month == 2}selected{/if}>2</option>  
                         <option value="3" {if $month == 3}selected{/if}>3</option>  
                         <option value="4" {if $month == 4}selected{/if}>4</option>  
+                        <option value="5" {if $month == 5}selected{/if}>5</option>  
+                        <option value="6" {if $month == 6}selected{/if}>6</option>  
+                        <option value="7" {if $month == 7}selected{/if}>7</option>  
+                        <option value="8" {if $month == 8}selected{/if}>8</option>  
+                        <option value="9" {if $month == 9}selected{/if}>9</option>  
+                        <option value="10" {if $month == 10}selected{/if}>10</option>  
+                        <option value="11" {if $month == 11}selected{/if}>11</option>  
                         <option value="12" {if $month == 12}selected{/if}>12</option>  
                     </select>  
                     <span>月</span>  
@@ -107,7 +114,7 @@ else if (date_type == {AcpDepositAction::DEPOSIT_STAT_BY_YEAR})
 xAxis = xAxis.substring(0, xAxis.length - 1);
 xAxis += ']';
 
-var d = '{$date}';
+var d = '提现笔数：{$total_num} , 提现金额: {$total_amount}';
 {literal}
 $(function (){
 var chart = new Highcharts.Chart({
@@ -116,7 +123,7 @@ var chart = new Highcharts.Chart({
 		defaultSeriesType: 'line'
 	},
 	title: {
-		text: d + ' 提现统计'
+		text: d + ' 合计'
 	},
 	subtitle: {
 		text: ''

@@ -26,7 +26,7 @@
 <!--                </tr>-->
                 <tr>
                     <td class="tables-form-title">ID：</td>
-					<td>{if $user_info.id}{$user_info.id}{else}--{/if}</td>
+					<td>{if $user_info.invite_id}{$user_info.invite_id}{else}--{/if}</td>
                 </tr>
                 <tr>
                     <td class="tables-form-title">昵称：</td>  
@@ -35,22 +35,6 @@
                 <tr>
                     <td class="tables-form-title">手机号：</td>  
 					<td>{if $user_info.mobile}{$user_info.mobile}{else}--{/if}</td>
-                </tr>
-                <tr>
-                    <td class="tables-form-title">邮箱：</td>  
-					<td>{if $user_info.email}{$user_info.email}{else}--{/if}</td>
-                </tr>
-                <tr>
-                    <td class="tables-form-title">当前/累积经验：</td>  
-					<td>{if $user_info.exp}{$user_info.exp}{else}0{/if}</td>
-                </tr>
-                <tr>  
-                    <td class="tables-form-title">QQ：</td>  
-                    <td>{if $user_info.qq}{$user_info.qq}{else}--{/if}</td>   
-                </tr>
-                <tr>  
-                    <td class="tables-form-title">登录时间：</td>  
-                    <td>{if $user_info.login_time}{$user_info.login_time|date_format:"%Y-%m-%d %H:%M:%S"}{else}--{/if}</td>   
                 </tr>
                 <tr>  
                     <td class="tables-form-title">注册时间：</td>  

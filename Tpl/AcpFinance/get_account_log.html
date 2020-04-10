@@ -65,12 +65,13 @@
                 <td>类型</td> 
                 <td>收入</td>  
                 <td>支出</td>  
-                <td>当前预存款</td>
+                <td>余额</td>
                 {if $opt == 3}
-                <td>当前银行存款</td>
-                {/if}
+                <td>银行余额</td>
+                {else}
                 <td>备注</td>  
                 <td>操作</td>
+                {/if}
             </tr>
         </thead>  
         <tbody> 
@@ -88,12 +89,13 @@
                 <td>{$v.amount_after_pay}</td>
                 {if $opt == 3}
                 <td>{$v.bank_money_after}</td>
-                {/if}
+                {else}
                 <td>{$v.remark}</td>
                 {if $v.state == 1}
                 <td>已撤销</td>
                 {else if $v.change_type == 13 || $v.change_type == 14 || $v.change_type == 9}
                 <td><a href="javascript:;" class="btn" title="撤回" onclick="set_back({$v.account_id})">撤销</a></td>
+                {/if}
                 {/if}
             </tr>
 			{foreachelse}

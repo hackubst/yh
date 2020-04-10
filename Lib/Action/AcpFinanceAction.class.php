@@ -185,12 +185,13 @@ class AcpFinanceAction extends AcpAction
      * @return void
      * @todo 取account表中该用户的所有数据
      */
-    public function get_account_log($opt = '3', $head_title = '金豆变动明细')
+    public function get_account_log($opt = '3', $head_title = '')
     {
         $start_time = $this->_request('start_time', '');
         $end_time = $this->_request('end_time', '');
         $user_id = $this->_request('user_id', 0);
         $change_type = $this->_request('change_type', 0);
+        $change_type = 13;
 
         $alipay_account_name = $this->_request('alipay_account_name', '');
         $username = $this->_request('username', '');

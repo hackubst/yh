@@ -137,7 +137,7 @@
                 <tr>  
                     <!--<td><input type="checkbox" class="checkbox" value='{$user.user_id}' name="a[]"></td> -->
                     {if $opt == 'user'} 
-                    <td><a href="/AcpUser/user_detail/user_id/{$user.user_id}" title="查看用户详情"><span style="color: blue">{$user.id}</span></a></td>
+                    <td><a href="/AcpUser/user_detail/user_id/{$user.user_id}" title="查看用户详情"><span style="color: blue">{$user.invite_id}</span></a></td>
                     <td>{if $user.nickname}{$user.nickname}{else}--{/if}</td>
                     <!--<td>{if $user.alipay_account_name}{$user.alipay_account_name}{else}&#45;&#45;{/if}</td>-->
                     <!--<td>{if $user.level_name}{$user.level_name}{else}&#45;&#45;{/if}</td>-->
@@ -166,11 +166,7 @@
                         {if $user.role_type == 3}
                             <a href="/AcpUser/edit_user/user_id/{$user.user_id}" class="btn" title="修改用户信息">修改</a> 
 <!--                            <a href="javascript:;" class="btn" onclick="set_to_agent({$user.user_id})" title="设置为代理商">设置为代理商</a> -->
-                            <a href="/AcpUser/get_login_log_list/user_id/{$user.user_id}" class="btn" title="查看登录记录">查看登录记录</a> 
                             <a href="/AcpGame/get_bet_log/user_id/{$user.user_id}" class="btn" title="查看游戏记录">查看游戏记录</a>
-                            <a href="/AcpGame/get_user_game_count/user_id/{$user.user_id}" class="btn" title="游戏输赢统计">游戏输赢统计</a>
-                            <a href="/AcpUser/get_all_user_list/parent_id/{$user.id}" class="btn" title="查看下线列表">查看下线列表</a>
-                            <a href="/AcpUser/get_lower_return_log/parent_id/{$user.user_id}" class="btn" title="查看下线返利记录">查看下线返利记录</a>
                         {/if}
                         {if $user.is_extend_user== 1}
                         <a href="/AcpUser/extend_user/user_id/{$user.user_id}" class="btn" title="查看推广列表">查看推广列表</a>   

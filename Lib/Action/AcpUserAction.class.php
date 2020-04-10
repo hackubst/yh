@@ -1150,7 +1150,7 @@ class AcpUserAction extends AcpAction
         //接收用户ID，验证用户ID有效性
         $redirect = $this->_get('redirect');
         $redirect = $redirect ? url_jiemi($redirect) : U('/AcpUser/get_all_user_list');
-        $user_id = $this->_get('user_id');
+        $user_id = I('user_id');
         $user_id = intval($user_id);
 
         if (!$user_id)

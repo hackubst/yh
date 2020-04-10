@@ -342,7 +342,7 @@ class AcpGameAction extends AcpAction
         $bet_log_obj->setLimit($Page->listRows);
         $show = $Page->show();
         $bet_log_list = $bet_log_obj->getBetLogList('', $where, 'addtime DESC');
-        $bet_log_list = $bet_log_obj->getListData($bet_log_list);
+        //$bet_log_list = $bet_log_obj->getListData($bet_log_list);
         //系列列表
         $series_obj = new GameSeriesModel();
         $series_list = $series_obj->select();
@@ -683,7 +683,10 @@ class AcpGameAction extends AcpAction
         $bet_log_obj->setLimit($Page->listRows);
         $show = $Page->show();
         $bet_log_list = $bet_log_obj->getBetLogList('', $where,'addtime DESC');
-        $bet_log_list = $bet_log_obj->getAllData($bet_log_list);
+        foreach($bet_log_list AS  $k => $v) {
+            $bet_log_list[$k]['game_type_name'] = D('GameType')->where('game_type_id='.$v['game_type_id'])->getField('game_type_name');
+        }
+        #$bet_log_list = $bet_log_obj->getAllData($bet_log_list);
         //系列列表
         $series_obj = new GameSeriesModel();
         $series_list = $series_obj->select();

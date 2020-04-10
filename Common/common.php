@@ -486,8 +486,8 @@ function change_change_type($change_type)
             case 10: $change_type = '提现'; break;
             case 11: $change_type = '红包退回'; break;
             case 12: $change_type = '游戏投注'; break;
-            case 13: $change_type = '后台加金豆'; break;
-            case 14: $change_type = '后台扣金豆'; break;
+            case 13: $change_type = '充值'; break;
+            case 14: $change_type = '扣减金豆'; break;
             case 15: $change_type = '提现申请'; break;
             case 16: $change_type = '拒绝提现申请'; break;
             case 17: $change_type = '游戏竞猜赢取'; break;

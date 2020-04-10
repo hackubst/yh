@@ -207,29 +207,21 @@ $admin_menu_file[$_mod_id]['menu_list'] = array(
         // array('id' => $_sort_id.'21', 'name' => '游戏记录', 'mod_do_url' => '/AcpGame/get_game_log', 'in_menu' => ''),//OK-CC
         array('id' => $_sort_id.'14', 'name' => '投注记录明细列表', 'mod_do_url' => '/AcpGame/get_game_bet_log', 'in_menu' => ''),//OK-CC
         array('id' => $_sort_id.'15', 'name' => '投注记录明细列表', 'mod_do_url' => '/AcpGame/bet_log_detail', 'in_menu' =>  $_sort_id.'14'),//OK-CC
-        array('id' => $_sort_id.'22', 'name' => '每日游戏统计', 'mod_do_url' => '/AcpGame/get_game_count', 'in_menu' => ''),//OK-CC
         // array('id' => $_sort_id.'23', 'name' => '用户输赢统计', 'mod_do_url' => '/AcpGame/get_games_total', 'in_menu' => ''),//OK-CC
 	),
-    '有效流水统计' => array(
-        array('id' => $_sort_id.'31', 'name' => '有效流水统计', 'mod_do_url' => '/AcpGame/get_flow_list', 'in_menu' => ''),//OK-CC
-    ),
 );
 
 
 $admin_menu_file[++$_mod_id] = array('id' =>  ++$_sort_id, 'mod_name' => 'Account', 'name' => '财务管理', 'mod_do_url' => '', 'in_menu' => '', 'default_url' => '/AcpFinance/get_account_apply_list');
 $admin_menu_file[$_mod_id]['menu_list'] = array(
 	'日常处理'	=> array(
-		array('id' => $_sort_id.'01', 'name' => '金豆充值', 'mod_do_url' => '/AcpFinance/recharge_list', 'in_menu' => ''),
 		#array('id' => $_sort_id.'01', 'name' => '入账申请列表', 'mod_do_url' => '/AcpFinance/get_account_apply_list', 'in_menu' => ''),
 		array('id' => $_sort_id.'02', 'name' => '金豆调整', 'mod_do_url' => '/AcpFinance/edit_account', 'in_menu' => ''),//增加手机号、QQ号，修改字段名称展示之，加导出按钮，跳到财务导出页导出Excel	//going-WSQ
-		array('id' => $_sort_id.'03', 'name' => '金豆变动明细', 'mod_do_url' => '/AcpFinance/get_account_log', 'in_menu' => ''),//修改字段名称展示之	//going-WSQ
-		array('id' => $_sort_id.'04', 'name' => '代理余额变动明细', 'mod_do_url' => '/AcpFinance/get_agent_account_log', 'in_menu' => ''),
-	    array('id' => $_sort_id.'05', 'name' => '代理充值记录明细', 'mod_do_url' => '/AcpFinance/get_recharge_log', 'in_menu' => '')
+		array('id' => $_sort_id.'03', 'name' => '第三方充值明细', 'mod_do_url' => '/AcpFinance/get_account_log', 'in_menu' => ''),//修改字段名称展示之	//going-WSQ
     ),
 	'提现管理'	=> array(
-		array('id' => $_sort_id.'14', 'name' => '提现成功记录', 'mod_do_url' => '/AcpDeposit/get_deposit_list', 'in_menu' => ''),
-		array('id' => $_sort_id.'15', 'name' => '提现申请列表', 'mod_do_url' => '/AcpDeposit/get_deposit_apply_list', 'in_menu' => ''),
-		array('id' => $_sort_id.'25', 'name' => '提现统计', 'mod_do_url' => '/AcpDeposit/deposit_stat', 'in_menu' => ''),
+		array('id' => $_sort_id.'14', 'name' => '提现记录', 'mod_do_url' => '/AcpDeposit/get_deposit_list', 'in_menu' => ''),
+		//array('id' => $_sort_id.'15', 'name' => '提现申请列表', 'mod_do_url' => '/AcpDeposit/get_deposit_apply_list', 'in_menu' => ''),
 //		array('id' => $_sort_id.'24', 'name' => '导出提现申请', 'mod_do_url' => '/AcpDeposit/export_deposit_apply', 'in_menu' => ''),
 	),
 	'排行榜'	=> array(
