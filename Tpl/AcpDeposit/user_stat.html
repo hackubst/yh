@@ -116,7 +116,7 @@ var chart = new Highcharts.Chart({
 		defaultSeriesType: 'line'
 	},
 	title: {
-		text: d + ' 提现统计'
+		text: d + ' 统计'
 	},
 	subtitle: {
 		text: ''
@@ -127,7 +127,7 @@ var chart = new Highcharts.Chart({
 	},
 	yAxis: {
 		title: {
-			text: '提现数'
+			text: '注册人数'
 		}
 	},
 	tooltip: {
@@ -146,11 +146,8 @@ var chart = new Highcharts.Chart({
 		}
 	},
 	series: [{
-		name: '提现数',
+		name: '注册人数',
 		data: eval(new_deposit_stat_list)
-	},{
-		name: '提现总金额',
-		data: eval(sum_deposit_stat_list)
 	}]
 });
 });
