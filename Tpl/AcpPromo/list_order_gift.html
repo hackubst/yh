@@ -1,0 +1,94 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <div class="tables-searchbox">  
+          <a href="/AcpPromo/add_order_gift/mod_id/4/redirec/{$cur_url}" class="btn btn-blue"><i class="gicon-plus white"></i>添加订单促销(送礼)</a>  
+    </div>
+    <div class="tables-searchbox">
+        <form method="post" action='/AcpPromo/list_order_gift/mod_id/4'>
+         	<span class="tbs-txt">活动时间：</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t1" value="{if $s_time1}{date('Y-m-d H:i',$s_time1)}{/if}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">
+	        <span class="tbs-txt">至</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t2" value="{if $s_time2}{date('Y-m-d H:i',$s_time2)}{/if}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">
+	        
+	        <span class="tbs-txt">状态：</span>
+	        <label><input type="radio" name="isuse" value='0' checked>全部</label> 
+			<label><input type="radio" name="isuse" value='1' {if $s_isuse == 1}checked{/if}>{$s_type}启用</label>  
+			<label><input type="radio" name="isuse" value='2' {if $s_isuse == 2}checked{/if}/>未启用</label>
+	        
+	        <input type='hidden' name='act' value='search' />
+	        <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </form>
+    </div>  
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="15%">  
+        <col width="15%">  
+        <col width="20%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="10%"> 
+        <col width="15%">  
+        </colgroup>  
+        <thead>
+        	<tr>  
+                <td>编号</td>  
+                <td>促销名称</td>  
+                <td>礼品名称</td>  
+                <td>适用分销商等级</td>  
+                <td>开始时间</td>  
+                <td>结束时间</td> 
+                <td>是否启用</td> 
+                <td>操作</td>  
+            </tr>
+        </thead>  
+        <tbody>
+        	{if $promo_info}
+        	{section name=row loop=$promo_info}  
+            <tr data_mate='{url_jiami($promo_info[row].promotion_order_gift_id)}'>  
+                <td>{$promo_info[row].promotion_order_gift_id}</td>  
+                <td>{$promo_info[row].title}</td>  
+                <td>{$promo_info[row].gift_name}</td>  
+                <td>{if $promo_info[row].rank_need_list}{$promo_info[row].rank_need_list}{else}全部{/if}</td>  
+                <td>{$promo_info[row].start_time}</td>  
+                <td>{$promo_info[row].end_time}</td> 
+                <td>{if $promo_info[row].isuse == 2}<i class="gicon-remove" title='未启用'></i>{else}<i class="gicon-ok" title='已启用'></i>{/if}</td> 
+                <td>   
+                    <a href="/AcpPromo/edit_order_gift/mod_id/4/pi/{url_jiami($promo_info[row].promotion_order_gift_id)}/redirect/{$cur_url}" class="btn" title="修改">编辑</a>   
+                    <a href="javascript:;" class="btn del_order_gift" title="删除">删除</a>   
+                </td>  
+            </tr>
+            {/section} 
+            {else}
+            <tr><td colspan='8'>没有符合条件的活动</td></tr>
+            {/if}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page_str} 
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->    
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpPromo/list_order_gift.js"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpGift/list_gift.css" type="text/css" />
+{/block}

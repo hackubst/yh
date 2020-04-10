@@ -1,0 +1,83 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+{if $message_list}
+<div class="msg_cont">
+	<div class="wal_left_money">
+		<span>未读消息数量：&nbsp;&nbsp;&nbsp;<i>{$not_read_num}</i></span>
+	</div>
+	<ul class="msg_ul" id="going_list">
+	    {foreach from=$message_list item=message}
+	    <li class="msg_li">
+	    	<a href="{$message_detail_link}{$message.message_id}" class="msg_link">
+          <div class="msg_name">{$message.type_text}{if $message.is_read == 0}（未读）{/if}</div>
+          <div class="msg_cont_txt">{$message.message_contents}</div>
+          <div class="msg_time">{$message.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</div>
+	       </a>
+	    </li>
+	    {/foreach}
+	</ul>
+</div>
+{else}
+<div class="simple_error">
+	—————&nbsp;&nbsp;&nbsp;没有信息了&nbsp;&nbsp;&nbsp;—————
+</div>
+{/if}
+{/block}
+{block name="js"}
+<script src="__PUBLIC__/Js/front/order.js?version={$version}"></script>
+<script>
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+{literal}
+$(function()
+{
+	var range = 20; //距下边界长度/单位px  
+	var elemt = 500; //插入元素高度/单位px  
+	var num = firstRow;  
+	var totalheight = 0;  
+	var main = $("#going_list"); //主体元素  
+	$(window).scroll(function()
+	{
+		var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)   
+		totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+		if(($(document).height()-range) <= totalheight  && total > num)
+		{
+			num = parseInt(num) + parseInt(firstRow);
+			//获取订单列表
+			$.post('/FrontUser/get_message_list', {"firstRow":num - parseInt(firstRow)}, function(data, textStatus) 
+			 {
+				if (data != 'failure')
+				{
+					var len = data.length;
+					for (i = 0; i < len; i++)
+					{
+						var html = '<li class="msg_li"><a href="/FrontUser/message_detail/id/' + data[i].message_id + '" class="msg_link">';
+						
+						if (data[i].is_read == 0)
+						{
+							html += '<div class="msg_name">' + data[i].type_text + '（未读）</div>';
+						}else{
+							html += '<div class="msg_name">' + data[i].type_text + '</div>';
+						}
+						html += '<div class="msg_cont_txt">' + data[i].message_contents + '</div><div class="msg_time">' + data[i].addtime + '</div></a></li>';
+						main.append(html);
+					}
+				}
+			}, 'json');
+		}  
+		else
+		{
+			$('#order_ending').show();
+		}
+	}); 
+	
+});	
+
+
+</script>       
+{/literal}
+{/block}

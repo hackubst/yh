@@ -1,0 +1,253 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+<!--s主体内容-->
+<section class="banner-wrapper content-wrapper">
+    <div class="banner-block content-container container">
+        <!-- s分类 -->
+        <div class="col-left nav-col-left">
+            <a href="{$major_link}">
+              <div class="today_most">
+                  <p class="most_title">——今日最大牌——</p>
+
+                  <p class="most_mj">{$major_title}</p>
+                  <img src="{$major_pic}" alt="{$major_title}" class="most_img">
+              </div>
+            </a>
+            {include file="../category_nav.html"}
+        </div>
+        <!-- e分类 -->
+        <div class="col-main">
+            <!--s轮播图-->
+            <div class="flexslider">
+                <ul class="slides">
+                    {foreach from=$cust_flash_list item=cust_flash}
+                    <li>
+                        <a href="{$cust_flash.link}">
+                            <img title="{$cust_flash.title}" alt="{$cust_flash.title}" src="{$cust_flash.pic}"/>
+                        </a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+            <!--e轮播图-->
+            <div class="main_r">
+                <img src="/Public/Images/front/bz.png" alt="" class="huangtu">
+                <!--s公告-->
+                {include file="../common_notice.html"}
+                <!--e公告-->
+            </div>
+
+        </div>
+        <!-- s主体 -->
+        <div class="col-main">
+            <!-- 今日推荐 -->
+            <div class="today_rec_box">
+                <div class="mt" clstag="h|keycount|2015|11a">
+                    <div class="jd-clock-wrap">
+                        <div class="jd-clock">
+                            <div class="jd-clock-h" id="jdClockHours" style="transform: rotate(61deg);"></div>
+                            <div class="jd-clock-m"></div>
+                            <div class="jd-clock-s"></div>
+                        </div>
+                    </div>
+                </div>
+                {foreach from=$rec_item_list item=item}
+                <div class="today_rec">
+                  <a href="{$item_detail_link}{$item.item_id}">
+                    <p class="rec_name">{$item.item_name}</p>
+                    <div class="rec_item">
+                        <div class="rec_price">
+                            <p class="price_new">￥{$item.mall_price}</p>
+                            <p class="price_old">￥{$item.market_price}</p>
+                        </div>
+                        <img src="{$item.middle_img}" alt="{$item.item_name}" class="rec_img" onerror="no_pic(this);">
+                    </div>
+                  </a>
+                </div>
+                {/foreach}
+            </div>
+
+            {if $guess_my_like}
+            <div class="guess_box">
+                <div class="guess_head">
+                    <p class="guess_title">猜你喜欢</p>
+                </div>
+                <div class="guess_c">
+                    <i></i>
+                {foreach from=$guess_my_like item=item}
+                <div class="guess_item">
+                    <a href="{$item_detail_link}{$item.item_id}">
+                        <img src="{$item.base_pic}" alt="{$item.item_name}" class="guess_img" onerror="no_pic(this);">
+                    </a>
+                    <div class="guess_info">
+                        <p class="guess_name">{$item.item_name|default:'--'}</p>
+                        <p class="guess_price">￥{$item.mall_price|default:0}</p>
+                    </div>
+                </div>
+                {/foreach}
+
+                </div>
+            </div>
+            {/if}
+
+
+            <!-- s热卖滚动产品 -->
+            <div class="heading-block" id="index-hot-sale">
+                <div class="heading-title">热卖排行</div>
+            </div>
+            <div class="feature-block">
+                <ul id="mix" class="product-grid">
+                    {foreach from=$hot_item_list item=item}
+                    <li>
+                        <div class="pro-img"><img title="{$item.item_name}" alt="{$item.item_name}"
+                                                  src="{$item.middle_img}" onerror="no_pic(this);"/></div>
+                        <div class="pro-hover-block">
+                            <h4 class="pro-name">{$item.item_name}</h4>
+
+                            <div class="link-block">
+                                <a href="{$item_detail_link}{$item.item_id}" class="quickproLink" title="Link">{$item.item_name}</a>
+                            </div>
+                            <div class="pro-price">￥{$item.mall_price}</div>
+                            <del class="pro-price del-price">￥{$item.market_price}</del>
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+            <!-- e热卖滚动产品 -->
+            <!-- s增长排行滚动产品 -->
+            {if $up_item_list}
+            <div class="heading-block" id="index-grow-sale">
+                <div class="heading-title">增长排名</div>
+            </div>
+            <div class="feature-block">
+                <ul id="mix1" class="product-grid">
+                    {foreach from=$up_item_list name=loop item=items}
+                    {foreach from=$items.item_arr item=item}
+                    <li>
+                        <div class="pro-img"><img title="{$item.item_name}" alt="{$item.item_name}"
+                                                  src="{$item.middle_img}" onerror="no_pic(this);"/></div>
+                        <div class="pro-hover-block">
+                            <h4 class="pro-name">{$item.item_name}</h4>
+
+                            <div class="link-block">
+                                <a href="{$item_detail_link}{$item.item_id}" class="quickproLink" title="Link">{$item.item_name}</a>
+                            </div>
+                            <div class="pro-price">￥{$item.mall_price}</div>
+                            <del class="pro-price del-price">￥{$item.market_price}</del>
+                        </div>
+                    </li>
+                    {/foreach}
+                    {/foreach}
+
+                </ul>
+            </div>
+            {/if}
+            <!-- e增长排行滚动产品 -->
+            <!-- s首页分类产品 -->
+            <div id="index_cate_prd">
+                {foreach from=$category_list item=class}
+                <div class="heading-block cate_heading">
+                    <div class="heading-title">{$class.class_name}</div>
+                    <ul class="two-level-cate">
+                        {foreach from=$class.sort_list item=sort}
+                        <li>
+                            <a href="{$item_list_link}sort_id/{$sort.sort_id}">{$sort.sort_name}</a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                <div class="new-product-block">
+                    <ul class="product-grid">
+                        {foreach from=$class.item_list item=item}
+                        <li>
+                            <a href="{$item_detail_link}{$item.item_id}" class="prod-link">
+                                <div class="prod-img">
+                                    <img title="{$item.item_name}" alt="{$item.item_name}" src="{$item.middle_img}"
+                                         height="128px" onerror="no_pic(this);"/>
+                                </div>
+                                <div class="prod-content">
+                                    <span class="pcont-txt">{$item.item_name}</span>
+                                </div>
+                                <div class="prod-price">￥{$item.mall_price}</div>
+                                <del class="prod-price del-price">￥{$item.market_price}</del>
+                            </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+
+                </div>
+                {/foreach}
+                {foreach from=$sort_list item=sort}
+                <div class="heading-block cate_heading">
+                    <div class="heading-title">{$sort.sort_name}</div>
+                </div>
+                <div class="new-product-block">
+                    <ul class="product-grid">
+                        {foreach from=$sort.item_list item=item}
+                        <li>
+                            <a href="{$item_detail_link}{$item.item_id}" class="prod-link">
+                                <div class="prod-img">
+                                    <img title="{$item.item_name}" alt="{$item.item_name}" src="{$item.middle_img}"
+                                         height="128px" onerror="no_pic(this);">
+                                </div>
+                                <div class="prod-content">
+                                    <span class="pcont-txt">{$item.item_name}</span>
+                                </div>
+                                <div class="prod-price">￥{$item.mall_price}</div>
+                                <del class="prod-price del-price">￥{$item.market_price}</del>
+                            </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                {/foreach}
+            </div>
+            <!-- e首页分类产品 -->
+        </div>
+        <!-- e主体 -->
+        <div class="brand_box">
+            <div class="brand_c">
+              {foreach from=$brand_list item=brand}
+                <div class="brand_item">
+                    <div class="brand_img_box">
+                        <img src="{$brand.brand_logo}" alt="{$brand.brand_name}" class="brand_img">
+                    </div>
+                </div>
+              {/foreach}
+            </div>
+        </div>
+
+    </div>
+</section>
+<!--e主体内容-->
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+//    猜你喜欢动画条
+    var $lLine = $(".guess_c i"),
+            $lBox = $(".guess_c");
+    window.onload = lA();
+    $lBox.on("mouseenter",function(){
+        lA();
+    });
+
+    function lA(){
+        $lLine.css({"left":"0","opacity":"0"});
+        $lLine.animate({left: "415px","opacity":"1"});
+    }
+
+</script>
+
+{/literal}
+{/block}

@@ -1,0 +1,108 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s分类 -->
+    <div class="col-left">
+    {include file="../common_personal_nav.html"}
+	</div>	
+    <!-- e分类 -->
+    <!-- s主内容 -->
+    <div class="col-main">
+		{include file="../common_personal_header.html"}
+		<div class="user-main">
+			<!-- s修改密码 -->
+	  		<form id="form_1" action="" method="post">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>修改密码</th>
+					</tr>
+				</thead>
+		        <tbody>
+		          <tr>
+		            <td><span class="form-must">*</span>原有密码</td>
+		            <td><input type="text" name="oldpassword"></td>
+		          </tr>
+		          <tr>
+		            <td><span class="form-must">*</span>您要的新密码</td>
+		            <td><input type="password" name="password"></td>
+		          </tr>
+		          <tr>
+		            <td><span class="form-must">*</span>再输入新密码</td>
+		            <td><input type="password" name="rePassword"></td>
+		          </tr>
+		        </tbody>
+		      </table>
+		      <a href="javascript:submit();" class="btn btn-primary">确认修改</a>
+		  	</form>
+		      <!-- e修改密码 -->
+		</div>
+	</div>
+	<div class="clearfix"></div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+function submit(){
+	var form = $("#form_1")[0];
+	var req = {
+		pcard_password:$.trim(form.oldpassword.value),
+		pass1: $.trim(form.password.value),
+		pass2: $.trim(form.rePassword.value),
+	}
+	if(req.pcard_password.length<1){
+		alert('请输入原有密码');
+		return false;
+	}
+	if(req.pass1.length<1){
+		alert('请输入新密码');
+		return false;
+	}
+	if(req.pass2.length<1){
+		alert('请输入重复密码');
+		return false;
+	}
+	if(req.pass1==req.pcard_password){
+		alert('新旧密码不能一致');
+		return false;
+	}
+	if(req.pass1!=req.pass2){
+		alert('两次输入的密码不一致');
+		return false;
+	}
+
+	$.ajax({
+		url: "/FrontPassword/change_password",
+		type:"post",
+		data:req,
+		dataType:"JSON",
+		success: function(res){
+			if(res.error == undefined || res.success == '修改成功'){
+				alert('修改成功');
+				location.href = '/FrontUser/personal_center';
+			}else if(res.error == '密码不正确'){
+				alert('原始密码不正确');
+			}
+		}
+	});
+}
+
+</script>
+{/literal}
+{/block}

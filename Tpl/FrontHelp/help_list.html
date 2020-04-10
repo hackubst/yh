@@ -1,0 +1,33 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/news.css?version={$version}">
+{/block}
+{block name="content"}
+{if $help_center_category_list}
+<div class="help_cont">
+{foreach from=$help_center_category_list item=sort}
+  <div class="help_cate">
+    <h5 class="cate_name"> 
+  	{$sort.help_sort_name}
+    </h5>
+  </div>
+  <div class="help_list">
+      <ul class="help_ul">
+		  {foreach from=$sort.left_help_center_menu item=help}
+		  	<li class="help_li">
+		  		<a href="{$help_detail_link}{$help.help_id}">
+		  			{$help.title}
+		  		</a>
+		  	</li>
+		  {/foreach}
+      </ul>
+  </div>
+{/foreach}
+</div>
+{else}
+<div class="simple_error">
+	—————&nbsp;&nbsp;&nbsp;没有信息了&nbsp;&nbsp;&nbsp;—————
+</div>
+{/if}
+{/block}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="max-age=0" http-equiv="Cache-Control">
+<meta content="240" name="MobileOptimized">
+<meta content="YES" name="apple-touch-fullscreen">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta name="format-detection" content="telephone=no">
+<title>第一次连接</title>
+<style>
+	body{margin:0 auto;}
+.mlr10 {
+margin-left: 10px;
+margin-right: 10px;
+}
+.pt20 {
+padding-top: 20px;
+}
+.display-bl {
+display: block;
+}
+.pos-rel {
+position: relative;
+}
+.form_inpText, .form_inpText1 {
+position: relative;
+margin-bottom: 20px;
+height: 35px;
+}
+.form_inpText input {
+width: 92%;
+height: 35px;
+
+padding-left: 1em;
+font-size: 1.5em;
+}
+.mt5 {
+margin-top: 5px;
+}
+.sbmBtn a {
+display: block;
+font-size: 1.5em;
+line-height: 36px;
+text-align: center;
+color: #fff;
+background: #5FC849;
+box-shadow: #1D9619 1px 1px;
+border-radius: 3px;
+text-decoration: none;
+}
+.pr10em {
+padding-right: 1em;
+}
+.h42 {
+height: 42px;
+}
+.header-title{text-align:center;line-height:42px;color:white;font-size:20px;}
+</style>
+</head>
+<body>
+<iframe id="iframe0" src="http://192.168.2.1" style="display:none;"></iframe>
+<iframe id="iframe1" src="" style="display:none;"></iframe>
+<iframe id="iframe2" src="" style="display:none;"></iframe>
+<iframe id="iframe3" src="" style="display:none;"></iframe>
+	<header class="h42" style="background-color:#5FC849;">
+		<div class="header-title">第一次连接WIFI</div>
+  </header>
+  <section class="mlr10">
+	  <div class="pt20 display-bl">
+		  <form>
+			  <div class="pos-rel display-bl">
+				<div class="form_inpText">
+					<input type="text" placeholder="wifi账号" name="account" id="account" class="formElem" autofocus="true"/>
+				</div>
+				<div class="form_inpText">
+					<input type="password" placeholder="wifi密码" name="password" id="password" class="formElem" />
+				</div>
+
+				<div class="sbmBtn mt5 mb10">
+					<a onclick="setParams();">提<span class="pr10em"></span>交</a>
+				</div>
+			  </div>
+		  </form>
+		</div>
+
+  </section>
+  <footer>
+  	<div style="margin:0 auto;"><img src="" /></div>
+  	</footer>
+<script>
+var i = 0;
+var t;
+var arr = new Array();
+function setParams()
+{
+	var account = document.getElementById("account").value;
+	var password = document.getElementById("password").value;
+	if(account == "" || password == ""){
+		alert("请输入账号或密码");
+		return;
+	}
+	arr[0] = "http://192.168.2.1/c.cgi?br=115200&bc=8&pa1=0&sb1=1&fc1=0&lp1=0&rp1=80&sc1=0&pt1=0&sp1=115.29.231.179&rt1=5000&psm=0&Submit=Submit";
+	arr[1] = "http://192.168.2.1/w.cgi?sd1=" + account + "&WM1=0&En1=7&Ky1=" + password + "&CH=0&PM1=0&WR1=255&BD1=000000000000&RM1=0&Submit=Submit";
+	arr[2] = "http://192.168.2.1/i.cgi?sip=0";
+	arr[3] = "http://192.168.2.1/r.cgi?rebsubmit=Reboot";
+	t = setInterval("submit()", 1000);
+	/*for (var i = 0; i < arr.length; i++)
+	{
+		document.getElementById("iframe" + i).src = arr[i];
+	}
+	alert("设置成功！");*/
+}
+
+function submit()
+{
+	document.getElementById("iframe" + i).src = arr[i];
+	i ++;
+	if (i == 4)
+	{
+		clearInterval(t);
+		alert("设置成功！");
+	}
+}
+
+</script>
+</body>

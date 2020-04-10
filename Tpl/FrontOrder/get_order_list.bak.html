@@ -1,0 +1,224 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<!-- 	<header class="list-head">
+		<div class="search_cnt">
+			<form class="search_form" method="get" action="" id="searchForm">
+				<div class="head_cnt">
+					<a class="back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#backg"></use></svg></a>
+					<div class="head_cnt_input" style="position: absolute;left: 52px;">
+						<input type="search" id="item_name" name="item_name" onclick="search();" class="search_input" placeholder="输入商品搜索订单" autocomplete="off" />
+						<svg class="sear_icon"><use xlink:href="#search"></use></svg>
+					</div>
+				</div>
+			</form>
+		</div>
+	</header> -->
+	<!--主内容区-->
+	<div class="order_wrap">   		
+		<!-- S 导航 -->
+		<div class="my_order_nav">
+			<ul id="nav" style="padding:0;">
+				<li class="order_nav {if $opt == 'all'}cur{/if}" id="all_order">
+					<a href="{$all_order_link}"> 全部 </a>
+				</li>
+				<li class="order_nav {if $opt == 'pre_pay'}cur{/if}" id="n_pay">
+					<a href="{$pre_pay_order_link}">
+						待支付
+						{if $pre_pay_order_num}<span class="num" id="payDeaLNum">{$pre_pay_order_num}</span>{/if}
+					</a>
+				</li>
+				<li class="order_nav {if $opt == 'payed'}cur{/if}" id="n_send">
+					<a href="{$pre_deliver_order_link}">
+						待发货
+						{if $pre_deliver_order_num}<span class="num" id="receiveDeaLNum">{$pre_deliver_order_num}</span>{/if}
+					</a>
+				</li>
+				<li class="order_nav {if $opt == 'delivered'}cur{/if}" id="n_query">
+					<a href="{$pre_confirm_order_link}">
+						待确认
+						{if $pre_confirm_order_num}<span class="num" id="queryDeaLNum">{$pre_confirm_order_num}</span>{/if}
+					</a>
+				</li>
+				<!--<li class="order_nav" id="n_assess">
+					<a href="{$pre_review_order_link}">
+						待评价
+						{if $pre_review_order_num}<span class="num" id="assessDeaLNum">{$pre_review_order_num}</span>{/if}
+					</a>
+				</li>-->
+			</ul>
+		</div>
+		<!-- E 导航 -->
+	
+		<!-- S 内容 -->
+		<div class="my_order_wrap">
+			<div class="my_order_inner" id="cont">
+				<!-- S 所有订单 -->
+				<div class="my_order">
+					<div id="going_list">
+					{foreach from=$order_list item=order}
+						<div class="order">
+							<div class="order_head">
+								<a href="{$order_detail_link}{$order.order_id}" class="oh_content">
+									<p>
+										<span>状态：</span>
+										<em class="status_txt">
+											{$order.order_status_name}
+										</em>
+									</p>
+									<p>
+										 <span>总价：</span>
+										<em class="com_txt">
+											￥{$order.pay_amount}
+										</em>
+									</p>
+									<p>
+										<span>配送费：</span>
+										<em class="com_txt">
+											￥{$order.express_fee}
+										</em>
+									</p>
+									<p>
+										<span>商品：</span>
+										<em class="com_txt">
+											{$order.item_str}
+										</em>
+									</p>
+									<p>
+										 <span>下单时间：</span>
+										<em>
+											{$order.addtime|date_format:"%Y-%m-%d %H:%M:%S"}
+										</em>
+									</p>
+                                    {if $order.send_way}
+									<p style="font-color:blue">
+										 <span>门店：</span>
+										<em>
+                                            {$order.send_way}
+										</em>
+									</p>
+                                    {/if}
+								</a>	
+								<div class="my_order_btns clearfix">
+									{if $order.order_status == OrderModel::PRE_PAY}
+										<a href="javascript:;" onclick="goPay({$order.order_id});" class="oh_btn toPay"> 去支付 </a>
+									{elseif $order.order_status == OrderModel::DELIVERED}
+										<a href="javascript:;" class="oh_btn toPay" onclick="confirm_order({$order.order_id}, {OrderModel::CONFIRMED})"> 确认收货 </a>
+									{elseif $order.order_status == OrderModel::CONFIRMED}
+										<a href="{$assessment_link}/order_id/{$order.order_id}" class="oh_btn toPay">评价</a>
+									{/if}	
+								</div>							
+							</div>
+						</div>
+					{/foreach}
+					</div>
+					<div class="simple_error" id="order_ending" style="display:none;margin-bottom:70px;">
+						—————&nbsp;&nbsp;&nbsp;没有更多订单啦&nbsp;&nbsp;&nbsp;—————
+					</div>
+					<!-- 当没有订单时显示 -->
+					{if !$order_list}
+						<div class="error_cont">
+							<div class="error_img"><svg class="error_icon"><use xlink:href="#error"></use></svg></div>
+							<div class="error_txt">您暂时没有订单！</div>
+							<a href="{$mall_home_link}" id="button" class="go_btn">马上逛逛</a>
+						</div>
+					{/if}
+				</div>
+			</div>
+		</div>
+		<!-- E 内容 -->
+	</div>
+<!-- END wx_wrap -->
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/Js/front/order.js?version={$version}"></script>
+<script>
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+var item_name = '{$item_name}';
+var opt = '{$opt}';
+var pre_pay = '{$pre_pay}';
+var delivered = '{$delivered}';
+var confirmed = '{$confirmed}';
+var order_id = 0; 
+{literal}
+$(function()
+{
+	var range = 50; //距下边界长度/单位px  
+	var elemt = 500; //插入元素高度/单位px  
+	var num = firstRow;  
+	var totalheight = 0;  
+	var main = $("#going_list"); //主体元素  
+	$(window).scroll(function()
+	{
+		var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)    
+		totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+
+		if(($(document).height()-range) <= totalheight  && total > num)
+		{
+			num = parseInt(num) + parseInt(firstRow);
+			//获取订单列表
+			$.post('/FrontOrder/order_list', {"firstRow":num - parseInt(firstRow), "item_name":item_name, "opt":opt}, function(data, textStatus) 
+			 {
+				if (data != 'failure')
+				{
+					var len = data.length;
+					for (i = 0; i < len; i++)
+					{
+						var html = '<div class="order"> <div class="order_head"> <a href="/FrontOrder/order_detail/order_id/' + data[i].order_id + '" class="oh_content"> <p> <span>状态：</span> <em class="status_txt"> ' + data[i].order_status_name + ' </em> </p> <p> <span>总价：</span> <em class="com_txt"> ￥' + data[i].pay_amount + ' </em> </p><p> <span>配送费：</span> <em class="com_txt"> ￥' + data[i].express_fee + ' </em> </p><p> <span>商品：</span> <em class="com_txt"> ' + data[i].item_str + ' </em> </p> <p> <span>下单时间：</span> <em class=""> ' + data[i].addtime + ' </em> </p> </a><div class="my_order_btns clearfix"> ';
+						if (data[i].order_status == pre_pay)
+						{
+							html += '<a href="javascript:;" onclick="goPay(' + data[i].order_id + ');" class="oh_btn toPay"> 去支付 </a>';
+						}
+						else if (data[i].order_status == delivered)
+						{
+							html += ' <a href="javascript:;" class="oh_btn toPay" onclick="confirm_order(' + data[i].order_id + ', ' + confirmed + ')"> 确认收货 </a>';
+						}
+						html += ' </div> </div></div>';
+						main.append(html);
+					}
+				}
+			}, 'json');
+		}  
+		/*else
+		{
+			$('#order_ending').show();
+		}*/
+	}); 
+	
+	$('.order_nav').click(function(){
+		$(this).addClass("cur").siblings().removeClass("cur");
+		$(".my_order").hide().eq($('.order_nav').index(this)).show();
+	});	
+});	
+
+function confirm_order(o_id, confirmed)
+{
+	order_id = o_id;
+	confirm("您确认要确认收货吗？", "set_order_state(order_id, confirmed)");
+	/*if (confirm("您确认要确认收货吗？"))
+	{
+		set_order_state(order_id, confirmed);
+	}*/
+}
+
+function search()
+{
+	if ($('#item_name').val())
+	{
+		$('#searchForm').submit();
+	}
+}
+
+</script>       
+{/literal}
+{/block}

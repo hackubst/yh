@@ -1,0 +1,93 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='edit_item_gift' class="bs-docs-example" >
+	<!-- end tabs -->
+	   <div class="tc"  data-index="1"> 
+	    	<div class="formitems inline">  
+	            <label class="fi-name">活动类型：</label>  
+	            <div class="form-controls" style="line-height:32px;">指定商品送礼品</div>  
+	        </div>
+	        <div class="formitems inline type">  
+		            <label class="fi-name">参与活动的商品：</label>  
+		            <div class="form-controls" style="line-height:32px;">{$promo_info.item_name}</div>  
+		    </div>
+	        <div class="formitems inline type">  
+		            <label class="fi-name"><span class="colorRed">*</span>需要购买多少件商品：</label>  
+		            <div class="form-controls">
+		             	<input type="text" name='i_total' placeholder="" value='{$promo_info.item_total}' class="mini">
+		                <span class="fi-help-text">请填写数字(达到购买数量时进行赠送)</span>   
+		            </div>  
+		    </div>
+	        <div class="formitems inline">  
+    			<label class="fi-name"><span class="colorRed">*</span>选择要赠送的礼品：</label>  
+    			<div class="form-controls">
+    				{if $gift_list}  
+        			<select name="gift">
+        				<option value selected>--请选择--</option>
+            			{section name='row' loop=$gift_list}
+            			<option value="{$gift_list[row].gift_id}" {if $gift_list[row].gift_id == $promo_info.gift_id}selected{/if}>{$gift_list[row].gift_name}</option>
+            			{/section}
+        			</select>
+        			<span class="fi-help-text">选择一件礼品</span> 
+        			{else}
+            			您还没有可赠送的礼品	
+            		{/if}  
+    			</div>  
+			</div>
+			<input type='hidden' name='f' value="{url_jiami($promo_info.promotion_item_gift_id)}" />
+			<div class="formitems inline type">  
+		            <label class="fi-name"><span class="colorRed">*</span>赠送件数：</label>  
+		            <div class="form-controls">
+		             	<input type="text" name='g_total' placeholder="" value='{$promo_info.gift_total}' class="mini">
+		                <span class="fi-help-text">请填写一个正整数(该礼品赠送多少件)</span>   
+		            </div>  
+		    </div>
+	        <div class="formitems inline">  
+	            <label class="fi-name"><span class="colorRed"></span>开始日期：</label>  
+	            <div class="form-controls">  
+	                <input type="text" autocomplete="off" class="Wdate" name='time1' value='{$promo_info.start_time}' onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">  
+	                <span class="fi-help-text">只有达到开始日期，活动才会生效。若不指定开始时间，则表示活动即可生效</span>  
+	            </div>  
+	        </div> 
+	        <div class="formitems inline">  
+	            <label class="fi-name"><span class="colorRed"></span>结束日期：</label>  
+	            <div class="form-controls">  
+	                <input type="text" autocomplete="off" class="Wdate" name='time2' value='{$promo_info.end_time}' onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">  
+	                <span class="fi-help-text">当达到结束日期时，活动会结束。若不指定结束时间，则表示活动长期有效</span>  
+	            </div>  
+	        </div> 
+	         
+	        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>活动是否启用：</label>  
+		            <div class="radio-group">  
+            			<label><input type="radio" name="used" value='1' {if $promo_info.isuse == 1}checked{/if}>是</label>  
+            			<label><input type="radio" name="used" value='2' {if $promo_info.isuse == 2}checked{/if}>否</label> 
+        			</div>  
+        			<span class="fi-help-text"></span> 
+		        </div>
+	        <div class="formitems inline"> 
+		        	<label class="fi-name">&nbsp;</label> 
+		        	<div class="radio-group">
+		        		<input type='hidden' name='act' value='edit' />
+        				<button type="submit" class="btn btn-blue">提交</button>
+		        	</div>
+		    </div> 
+	    </div>  
+</form> 
+<!-- end tabs-content -->  
+
+<script>
+  	var item_arr = new Array();
+</script>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpPromo/add_item_gift.js"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpPromo/add_list_item_discount.css" />
+{/block}

@@ -1,0 +1,86 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span> 种植机在线定义：</label>  
+    <div class="form-controls">  
+        <input type="text" name='planter_online_time' value='{$config.PLANTER_ONLINE_TIME}' placeholder=""> 秒内访问过视为在线
+        <span class="fi-help-text"></span>  
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name">种植机请求时间间隔：</label>  
+    <div class="form-controls">  
+		<input type="text" name='planter_visit_time_interval' value='{$config.PLANTER_VISIT_TIME_INTERVAL}' placeholder=""> 毫秒访问一次（范围<label style="color:red;">500-9999</label>）
+        <span class="fi-help-text" style="color:red;">(不要设太小，否则服务器压力会很大，造成网站访问很卡。该选项用于在服务器比较卡的情况下，将值设大以缓解服务器压力。)</span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>商城首页每分类显示商品数：</label>  
+    <div class="form-controls">  
+		<input type="text" name='item_num_per_sort' value='{$config.ITEM_NUM_PER_SORT}' placeholder=""> <a href="/FrontMall/mall_home" target="_blank" style="color:blue;font-size:15px;text-decoration:underline;">查看效果</a>
+        <span class="fi-help-text">在分类和商品比较多的情况下，将该值设小；在分类和商品比较少的情况下，将该值设稍大些以充实内容。</span>  
+    </div>
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>商城列表页每页显示商品数：</label>  
+    <div class="form-controls">  
+        <input type="text" name='item_num_per_page' value='{$config.ITEM_NUM_PER_PAGE}' placeholder=""> <a href="/FrontMall/mall_list" target="_blank" style="color:blue;font-size:15px;text-decoration:underline;">查看效果</a>
+        <span class="fi-help-text"></span>  
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>我种植的植物每页记录数：</label>  
+    <div class="form-controls">  
+        <input type="text" name='item_num_per_my_plant_page' value='{$config.ITEM_NUM_PER_MY_PLANT_PAGE}' placeholder=""> <a href="/FrontPlanter/my_plant" target="_blank" style="color:blue;font-size:15px;text-decoration:underline;">查看效果</a>
+        <span class="fi-help-text"></span>  
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>我的收藏每页显示记录数：</label>  
+    <div class="form-controls">  
+        <input type="text" name='item_num_per_collect_page' value='{$config.ITEM_NUM_PER_COLLECT_PAGE}' placeholder=""> <a href="/FrontMall/my_collect" target="_blank" style="color:blue;font-size:15px;text-decoration:underline;">查看效果</a>
+        <span class="fi-help-text"></span>  
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>充值/财务明细每页记录：</label>  
+    <div class="form-controls">  
+        <input type="text" name='item_num_per_recharge_log_page' value='{$config.ITEM_NUM_PER_RECHARGE_LOG_PAGE}' placeholder=""> <a href="/FrontUser/account_list" target="_blank" style="color:blue;font-size:15px;text-decoration:underline;">查看效果</a>
+        <span class="fi-help-text"></span>  
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>  
+</div>
+</form> 
+{/block} 
+
+{block name="js"}
+<script>
+	var w1 = {if $w1}"{$w1}"{else}false{/if};
+	var w2 = {if $w2}"{$w2}"{else}false{/if};
+	var t1 = {if $t1}"{$t1}"{else}false{/if};
+	var t2 = {if $t2}"{$t2}"{else}false{/if};
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src='__ACPJS__/AcpConfig/edit_config.js?version={$version}'></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

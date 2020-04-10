@@ -1,0 +1,149 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<section class="mlr10">
+	  <div class="pt20 display-bl">
+		  <form id="findPwdMbl_form" name="findPwdMbl_form" action="" method="post">
+			  <div class="pos-rel display-bl">
+				<div class="form_inpText">
+					<input type="tel" placeholder="请输入已验证手机号" name="findPwd-tel" id="findPwd-tel" class="formElem" autofocus="true"/>
+				</div>
+				<div class="form_inpText">
+					<input type="password" placeholder="输入新密码（6位以上字符）" name="findPwd-password" id="findPwd-password" class="formElem" />
+				</div>
+				<div class="form_inpText1">
+					<input type="text" placeholder="输入验证码" name="findPwd-valNum" id="findPwd-valNum" class="formElem" />
+					<div class="sendBtn">
+						<a class="sendValNum" id="code">获取验证码</a>
+					</div>
+				</div>
+
+				<div class="sbmBtn mt5 mb10">
+					<a id="findPwd-submit">提<span class="pr10em"></span>交</a>
+				</div>
+			  </div>
+
+			  <input type="hidden" name="action" value="findPwd">
+			  <input type="hidden" name="msign" value="">
+		  </form>
+		</div>
+
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+	$( function(){
+			var sec = 60;
+			var enabled = true;
+			function goTimer(){
+				enabled = false;
+				$("#code").html(sec+"秒后重发");
+				$("#code").addClass("sendBtn_grey");
+				setTimeout(loop,1000);
+			}
+
+			function loop(){
+				sec --;
+				$("#code").html(sec+"秒后重发");
+				$("#code").addClass("sendBtn_grey");
+
+				if(sec > 0){
+					setTimeout(loop,1000);
+				}else{
+					$("#code").html("重新发送");
+					$("#code").removeClass("sendBtn_grey");
+					sec = 60;
+					enabled = true;
+				}
+			}
+
+			$('#code').click(function(e){
+				e.preventDefault();
+				if(!enabled){
+					return;
+				}
+				if(!$("input[name=findPwd-tel]").val() || !/\d{11}/.test( $("input[name=findPwd-tel]").val() ) ){
+					var error="请输入正确的手机号码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+				var thiz = this;
+				$.ajax({
+					url:"/h5/train/trainordersendvcode?_="+(+new Date),
+					type:"POST",
+					data:{
+						mobile : $("input[name=findPwd-tel]").val(),
+						type : 1
+					},
+					dataType:"json",
+					timeout:10000,
+					error:function(){
+						var error="网络请求错误，请重试";
+						$("#tan").html(error);
+						tishi();
+					},
+					success:function(d){
+						if(d && d.msg) {
+							if(d.code == 100016){
+								goTimer();
+								$('input[name="msign"]').val(d.msign)
+							}
+							alert(d.msg);
+						}
+					}
+				});
+			});
+			
+			$('.sbmBtn a').click(function(e){
+				e.preventDefault();
+				if(!$("input[name=findPwd-tel]").val() || !/\d{11}/.test( $("input[name=findPwd-tel]").val() ) ){
+					var error="请输入正确的手机号码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+				if(!$("input[name=findPwd-password]").val() || !/^[0-9a-zA-z_]{6,}$/.test( $("input[name=findPwd-password]").val() ) ){
+					var error="密码只能为字母，数字和下划线";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+				if(!$("input[name=findPwd-valNum]").val()){
+					var error="请输入正确的验证码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+
+				$("#findPwdMbl_form").submit();
+			});
+		});
+
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		// $('.black-bg').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+		// $('.black-bg').fadeOut(1500);
+	  }
+</script>
+{/literal}
+{/block}

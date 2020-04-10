@@ -1,0 +1,65 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+    	<a href="/AcpItemType/add_type" class="btn btn-blue">添加商品类型</a>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+        <col width="5%">
+        <col width="20%">
+        <col width="55%">
+        <col width="20%">
+        </colgroup>
+        <thead>
+            <tr>
+                <td>选择</td>
+                <td>类型名称</td>
+                <td>备注</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$arr_type item=row}
+            <tr>
+                <td>
+                	<input type="checkbox" class="checkbox" name="checkIds[]" value="{$row.item_type_id}">
+                </td>
+                <td>{$row.item_type_name}</td>
+                <td>{$row.remark}</td>
+                <td>
+	                <a href={"/AcpItemType/edit_type/id/{$row.item_type_id}"|U} class="btn" title="编辑">编辑</a>
+	                <a href="javascript:;" class="btn J_del" title="删除">删除</a>
+                    <input type="hidden" name="item_id" value="{$row.item_type_id}">
+                </td>
+            </tr>
+            {foreachelse}
+            <tr><td colspan="4">没有找到任何记录</td></tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="###" class="btn btn-blue J_batch_del">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$page->show()}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+</div>
+<!-- end tablesWrap --> 
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItemType/list_type.js?version={$version}"></script>
+{/block}

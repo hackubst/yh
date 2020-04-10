@@ -1,0 +1,182 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+	<!--主内容-->
+  <div class="pay_main">
+	  <div class="pay_cont">
+			 <!-- {if $act == 'pay'}
+				<div class="pay_cont_wrap">
+					<div class="pay_top_total">
+						<h5 class="pay_total_tit">充值金额：</h5>
+						<div class="pay_total_price"><span class="pay_rmb_sym">&yen;</span>{$amount}</div>
+					</div>
+
+					{if $pay_tag == 'wxpay'}
+						<script type="text/javascript">
+						//调用微信JS api 支付
+						
+
+						callpay();
+						</script>
+
+						<div class="submit_btn" id="sbmBtn">
+							<a href="javascript:void(0);" class="submit" onclick="callpay()">立即支付</a>
+						</div>
+					{/if}
+				 </div>
+			  {else}-->
+			  <form id="recharge_form" name="recharge_form" action="" method="post">
+				  <div class="pay_cont_wrap">
+						<div class="rcg_top_num">
+							<label>金额</label>
+							<input type="number" style="width:70%;" placeholder="请输入充值金额" name="coin_num" id="" class="formElem" autofocus="true"/>
+						</div>
+	
+						<div class="pay_rechrg_style">
+							<div class="pay_rechrg_tit">选择支付方式：</div>
+							{foreach from=$payway_list item=payway}
+								{if $payway.pay_tag == 'mobile_wxpay'}
+									<div class="pay_rechrg_select selected">
+										<i class="icon_select" onclick="toggleRadio(this);"></i>
+										<label for="{$payway.payway_id}" onclick="toggleRadio(this);">{$payway.pay_name}</label>
+										<input type="radio" id="{$payway.payway_id}" name="payway_id" value="{$payway.payway_id}" checked/>										
+									</div>
+								{/if}
+							{/foreach}
+						</div>
+						<div class="pay_rechrg_tishi">
+							<svg class="rechrg_warn_icon"><use xlink:href="#warn"></use></svg>
+							<h6>1元=1{$SYSTEM_MONEY_NAME}</h6>
+						</div>						
+	
+						<input type="hidden" name="act" value="pay">
+						<div class="submit_btn" id="sbmBtn">
+							<a class="submit">立即支付</a>
+						</div>
+				  </div>
+			 <!-- {/if}-->
+		  </form>
+		</div>
+  </div>
+{/block}
+{block name="js"}
+{literal}
+<script>
+var jsApiParameters;
+$(function()
+{
+	$('#chinabank_pay').click(function(e){
+		$("#chinabank_pay_form").submit();
+	});
+	$('#sbmBtn').click(function(e){
+		//e.preventDefault();
+		var coin_num = $("input[name=coin_num]").val();
+		if(!coin_num)
+		{
+			var error="请填写充值金额";
+			$("#tan").html(error);
+			tishi();
+			$("input[name=coin_num]").focus();
+			return;
+		}
+
+		if(isNaN(coin_num) || parseFloat(coin_num) < 0.01)
+		{
+			var error="请填写正确的金额，不得小于1元";
+			$("#tan").html(error);
+			tishi();
+			$("input[name=coin_num").focus();
+			return;
+		}
+		payway_id = $('input[name="payway_id"]:checked').val();
+		//recharge(coin_num);
+		native_listen('wx_recharge',{
+		    coin_num : coin_num,
+		    payway_id : payway_id
+		});
+		//$("#recharge_form").submit();
+	});
+});
+function toggleRadio(obj){
+	var has_slbing_selted = $(obj).parent().siblings().hasClass("selected");
+	if(has_slbing_selted){
+		$(obj).parent().siblings().removeClass("selected");
+	}
+	$(obj).parent().addClass("selected");
+	$(obj).parent().find("input:radio").attr("checked", "checked");
+}
+
+function recharge(coin_num)
+{
+	//提交
+	$.ajax({
+		url:"/FrontUser/get_wx_param",
+		type:"POST",
+		dataType:"json",
+		data:{
+			coin_num: coin_num,
+		},
+		timeout:10000,
+		success:function(d){
+			if(d)
+			{
+				//微信支付
+				jsApiParameters = d.msg;
+				callpay();
+			}
+		}
+	});
+}
+
+function jsApiCall()
+{
+//alert(jsApiParameters);
+	WeixinJSBridge.invoke(
+		'getBrandWCPayRequest',
+		jQuery.parseJSON(jsApiParameters),
+		function(res)
+		{
+			if(res.err_msg == "get_brand_wcpay_request:ok" )
+			{
+				//跳转链接
+				location.href = '/FrontUser/personal_center';
+			}
+			else
+			{
+				//WeixinJSBridge.log(res.err_msg);
+				//alert(res.err_code);
+				//alert(res.err_desc);
+				//alert(res.err_msg);
+			}
+		}
+	);
+}
+
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		}
+	}else{
+		jsApiCall();
+	}
+}
+
+
+</script>
+{/literal}
+{/block}
+
+

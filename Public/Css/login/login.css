@@ -1,0 +1,132 @@
+*{margin:0;padding:0;outline:none;}
+body {
+	font:normal 12px "Microsoft YaHei",Tahoma,Sans-serif;
+	line-height: 1;
+	background-color:#368EE0;
+}
+ol, ul {
+	list-style: none;
+}
+a{color: #000;text-decoration:none;}
+a:hover{color:#368EE0;}
+.lgbox-logo{
+	display:block;
+	width: 173px;
+	height: 40px;
+	margin: 10px auto;
+	background: url(/Public/Images/login/logo.png) no-repeat;
+	text-indent:-9999px;
+}
+.hide{display:none;}
+.lgbox{
+	position: absolute;
+	top:50%;
+	left:50%;
+	margin:-175px 0 0 -210px;
+	width:420px;
+	height: 350px;
+}
+.copyright{
+	position: absolute;
+	bottom:0;
+	padding:15px 0;
+	left:50%;
+	margin-left:-350px;
+	width:700px;
+	text-align:center;
+	color:#fff;
+}
+
+.lgbox-form{
+	padding:10px 10px 20px;
+	background: #fff;
+}
+.lgbox-form-title{
+	padding:15px 20px;
+	font-weight: normal;
+	font-size:24px;
+	color:#333;
+}
+#verifyImg{
+	vertical-align:middle;
+	height: 35px;
+	width:auto;
+	margin-bottom: 6px;
+	cursor: pointer;
+}
+#submit_b{
+	display:block;
+	color:#fff;
+	width: 360px;
+	padding:10px;
+	margin:0 auto;
+	border:none;
+	background: #368EE0;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+.formitems {
+    display:block;
+    line-height: 20px;
+    padding: 0 0 8px 0; 
+}
+
+/*clear float*/
+.formitems,.fi-imgslist{*zoom:1;}
+.formitems:after,.fi-imgslist:after{display: block;content: " ";height:0;visibility:hidden;clear: both;}
+
+.fi-name{
+    line-height: 26px;
+    font-weight:bold;
+}
+
+/*form*/
+.formitems .fi-name{
+    float:left;
+    width: 110px;
+    text-align:right;
+}
+
+.form-controls{
+    margin-left: 20px;
+}
+
+.fi-name,
+.fi-help-text{
+    display:block;
+}
+
+.fi-text{
+    margin-right:5px;
+}
+/*form element*/
+.input{
+    display:inline-block;
+    padding: 8px;
+    margin-right:5px;
+    margin-bottom:5px;
+    width: 340px;
+    border:1px solid #ccc;
+    line-height: 16px;
+    font-size:12px;
+    vertical-align:middle;
+    font-family:"Microsoft YaHei","微软雅黑",Helvetica,"黑体",Arial,Tahoma;
+}
+.input.special{
+	width: 178px;
+}
+.input:focus{
+    border-color: #368EE0;
+    background-color:#fff;
+}
+.input:disabled{
+    background:#eee;
+    cursor:no-drop;
+}
+.input.error{
+    border-color: red;
+}
+.fi-help-text.error{
+	color:red;
+}

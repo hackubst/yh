@@ -1,0 +1,62 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='add_admin'>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>标题：</label>
+    <div class="form-controls">
+		<input type="text" name='title' value='{$title}' id='title' placeholder="" class="small">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><!-- <span class='colorRed'>*</span> -->链接：</label>
+    <div class="form-controls">
+		<input type="text" name='link' value='{$cust_flash_link}' id='realname' placeholder="" class="small">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>排序号：</label>
+    <div class="form-controls">
+		<input type="text" name='serial'  id='serial' value='{$serial}' class="small">
+    	<span class="fi-help-text"></span>
+    </div>
+</div>
+
+{upload_image_widget($pic_data)}
+
+<div class="formitems inline">
+	<label class="fi-name">是否显示：</label>
+	<div class="form-controls">
+		<div class="radio-group">
+			<label><input type="radio" name="isuse" class="j-skupanelCtrl" value="1" {if $isuse == 1 || !isset($isuse)}checked{/if}>是</label>
+			<label><input type="radio" name="isuse" class="j-skupanelCtrl" value="0" {if isset($isuse) && $isuse == 0}checked{/if}>否</label>
+		</div>
+	</div>
+</div>
+
+    <div class="formitems inline">
+	<label class="fi-name">类型：</label>
+	<div class="form-controls">
+		<div class="radio-group">
+			<label><input type="radio" name="adv_tyep" class="j-skupanelCtrl" value="0" {if $adv_type == 0 || !isset($adv_type)}checked{/if}>PC端</label>
+			<label><input type="radio" name="adv_tyep" class="j-skupanelCtrl" value="1" {if isset($isuse) && $isuse == 1}checked{/if}>APP端</label>
+		</div>
+	</div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+    	<input type='hidden' name='submit' value='submit' />
+    	<button type="submit" class="btn btn-blue"><i class="gicon-ok white"></i>保存</button>
+    	<button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form>
+{/block}

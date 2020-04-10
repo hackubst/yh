@@ -1,0 +1,57 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+
+<header class="common_head" style="background-color:red;">
+    <a class="back" id="redir_back" href="{if $cart_url}{$cart_url}{else}javascript:history.go(-1);{/if}"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+    <div class="header_title">{$head_title}</div>
+</header>
+{include file="./addr_list_common.html"}
+
+	<div class="btn_wrap" style="width:100%;margin-top:40px;text-align: center;position:fixed;bottom:0;">
+    	<a href="{$jump}"  class="submit" style="width:100%;">完成修改</a>
+	</div>
+	<!--提示层-->
+  <div id="tan_wrap"><div id="tan"></div></div>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="__JS__/front/bbc.districtdata.js?version={$version}"></script>
+<!--
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8904f42a99f576207303619b99e50d52"></script>
+-->
+<script src="__JS__/front/position.js?version={$version}"></script>
+<script type="text/javascript">
+{literal}
+$(function()
+{
+	$(".def_click_area").click(function(){
+		$(this).parent().addClass("selected").siblings().removeClass("selected");
+		$(this).find(".default_txt").html("[默认]&nbsp;");
+		$(this).parent().siblings().find(".default_txt").html("");
+		set_default(this);
+	});
+
+});
+function set_default(obj)
+{
+	var cur_addr_id = $(obj).siblings('#user_addr_id').val();
+	$.post('/FrontAddress/set_default_address', {"user_address_id":cur_addr_id}, function(data){});
+}
+function deleteaddress(obj,id){
+		//confirm("是否删除？",function(){
+			var postdata = {
+					address_id: id,
+			}
+			$.post("/FrontAddress/delete_address",postdata,function(data){
+				if(data == 'success'){
+					$(obj).parent().remove();
+				}
+			});
+		//});
+	}
+</script>
+{/literal}
+{/block}

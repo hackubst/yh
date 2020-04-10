@@ -1,0 +1,67 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{literal}
+<style type="text/css">
+.help_page{word-break: break-all;word-wrap: break-word;background: #f8f7f5;color: #222;height: 100%;padding: 15px 15px 0;position: relative;}
+ .page-bizinfo .header #post-date{color:#8c8c8c;font-size:11px;margin:0;}
+ .page-content{margin:18px 0 0;padding-bottom:18px;}
+.page-content .media{margin:18px 0;}
+ .page-content .media img{width:100%;}
+.page-content .text{color:#3e3e3e;font-size:1.5;line-height:1.5;width:100%;overflow: hidden;zoom:1;}
+.page-content .text p{word-wrap: break-word;word-break: break-all;width: 100%;height: 37px;line-height: 37px;padding-left:7px;background-color: white;margin-bottom: 5px;font-size: 1.2em;}
+.page-content .text p a{line-height: 37px;padding: 0 20px 0 20px;color: grey;}
+.header{font-size:20px;}
+.text img{max-width:100%;}
+table{border-collapse:collapse;margin-bottom:10px;border:1px;solid #DDD;}
+td{padding:5px 10px;border:1px solid #DDD;}
+.page-content .text p:after{content: "";position: relative;float: right;right: 10px;top: 14px;display: inline-block;font-size: 0;border-top: 1px solid #CFCFCF;border-left: 1px solid #CFCFCF;width: 8px;height: 8px;background-color: transparent;-webkit-transform: rotate(140deg);}
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+	body{font-size:24px;}
+	.header-title{font-size:1em;}	
+	.mt13{margin-top:13px;}
+	.header {font-size: 1.2em;}
+	.page-content .text p{height: 70px;line-height: 70px;font-size:1em;}
+	.page-content .text p:after{right: 20px;top: 25px;width:14px;height:14px;}
+
+}
+</style>
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<div class="help_page">
+{foreach from=$help_center_category_list item=sort}
+  <div class="page-bizinfo">
+      <div class="header">
+          <h1 id="activity-name">
+			  {$sort.help_sort_name}
+          </h1>
+          <span id="post-date">
+          </span>
+      </div>
+  </div>
+  <div class="page-content">
+      <!--<div class="media">
+          <img src="__PUBLIC__/Images/front/help_header.jpg">
+	  </div>-->
+      <div class="text">
+		  {foreach from=$sort.left_help_center_menu item=help}
+		  <a href="{$help_detail_link}{$help.help_id}"><p> {$help.title} </p>  </a>
+		  {/foreach}
+      </div>
+  </div>
+{/foreach}
+</div>
+{/block}
+
+{block name="js"}
+{literal}
+{/literal}
+{/block}

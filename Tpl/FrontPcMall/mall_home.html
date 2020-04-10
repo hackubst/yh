@@ -1,0 +1,222 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/mall_home.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<div class="index-wrap" id="indexWrap" style="display: block;">
+		<!-- 搜索条 -->
+	<div class="hd_bar" id="J_bar1">
+		{include file="./search_form.html"}
+	    <!--div class="hd_search_tit hide" id="resFilterTipBlock"></div-->
+	    <div class="hd_me">
+	        <a href="javascript:" id="filterBtn" class="hd_search_btn">
+	            搜索
+	        </a>
+	    </div>
+	</div> 	
+	<!-- pic slide -->
+	<div class="index-slide" id="J_index_slide">
+		<div id="change_screen_div">
+			<ul id="change_screen_ul">
+				{foreach from=$cust_flash_list item=img}
+					<li><img src="{$img}"></li>
+				{/foreach}
+			</ul>
+			<div class="slider_status">
+				<span id="slider_status_span"></span>
+			</div>
+		</div>
+	</div>
+
+	<!-- navigation -->
+	<div class="nav-carousel" id="navCarousel_box">
+		<div class="nav-carousel-box" id="navCarousel">
+			<ul class="slide_ul">
+				<li>
+					<a href="{$mall_plant_list_link}" class="left_slide">
+						<img src="__PUBLIC__/Images/front/1_1.jpg" alt="">
+						<span>全部分类</span>
+					</a>
+				</li>
+				<li>
+					<a href="{$all_order_link}" class="left_slide">
+						<img src="__PUBLIC__/Images/front/1_2.jpg" alt="">
+						<span>我的订单</span>
+					</a>
+				</li>
+				<li>
+					<a href="{$my_collect_link}" class="right_slide">
+						<img src="__PUBLIC__/Images/front/1_3.jpg" alt="">
+						<span>我的收藏</span>
+					</a>
+				</li>
+				<li>
+					<a href="{$cart_link}" class="right_slide">
+						<img src="__PUBLIC__/Images/front/1_4.jpg" alt="">
+						<span>购物车</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- S 导航 -->
+	<div class="my_nav">
+	  <ul id="nav">
+		  {foreach from=$class_list item=class}
+			  <li class="order_nav{if $class.class_id == $class_id} cur{/if}" id="all_order">
+			  <a href="{$mall_home_link}/class_id/{$class.class_id}"> {$class.class_name} </a>
+			  </li>
+		  {/foreach}
+	  </ul>
+	</div>
+	<!-- E 导航 -->	
+
+	<!--	种子推荐 -->
+	<div class="row_floor floor_miao">
+	 {foreach from=$item_list item=sort}
+		<div class="floor_hd">
+			<h3 class="tit"> {$sort.sort_name} </h3>
+			<a class="more" href="{$mall_list_link}/sort_id/{$sort.sort_id}"> 更多 </a>
+		</div>
+		<div class="rec_list_div">
+		{foreach from=$sort.item_list item=item}
+		<ul class="rec_list">
+			<li id="">
+				<a class="url" href="{$detail_link}{$item.item_id}"> <img class="photo" alt="{$item.item_name}" src="{$item.small_img}"> </a>
+				<div class="info_wrap">
+					<div class="fn"> {$item.item_name} </div>
+					<div class="price_wrap">
+						<div class="col_left">
+							<div class="price"> 价格： <em> ￥{$item.mall_price} </em> </div>
+							<div class="old_price"> 销量： <em> {$item.sales_num} </em> </div>
+						</div>
+						<!--<a class="btn_buy" href="{$detail_link}{$item.item_id}"> 立即购买 </a>-->
+					</div>
+				</div>
+			</li>
+		</ul>
+		{/foreach}
+		</div>
+	{/foreach}
+	</div>
+	<!--底部导航-->
+	<section>
+		<div id="fb" class="bd-top-l-grey">
+			<div class="indexmenu">
+				<div class="boxflex">
+					<div class="boxflex_col1">
+						<a href="{$mall_home_link}">
+							<i class="i1 cur">
+							</i>
+						</a>
+					</div>
+					<div class="boxflex_col1">
+						<a href="{$mall_plant_list_link}">
+							<i class="i2">
+							</i>
+						</a>
+					</div>
+					<div class="boxflex_col1">
+						<a href="{$cart_link}">
+							<i class="i3">
+							</i>
+						</a>
+					</div>
+					<div class="boxflex_col1">
+						<a href="{$personal_center_link}">
+							<i class="i4">
+							</i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!--浮动功能按钮start-->
+	<!--<div class="fix-wrap">
+		<ul class="fix-nav">
+			<li><a href="{$mall_home_link}"><em class="fix-index"></em>首页<i class="fr"></i></a></li>
+			<li><a href="{$mall_plant_list_link}"><em class="fix-search"></em>搜索<i class="fr"></i></a></li>
+			<li><a href="{$cart_link}"><em class="fix-car"></em>购物车<i class="fr"></i></a></li>
+			<li><a href="{$mall_plant_list_link}"><em class="fix-type"></em>全部分类<i class="fr"></i></a></li>
+			<li><a href="{$personal_center_link}"><em class="fix-mySuning"></em>个人中心<i class="fr"></i></a></li>
+		</ul>
+		<a href="javascript:void(0);" class="fix-link" onclick="$('.fix-nav').toggleClass('show');$('#screenIfm').toggle();$(this).toggleClass('gray');"></a>
+	</div>
+	<div id="screenIfm" class="screenIfm" onclick="$('.fix-nav').removeClass('show');$('.fix-link').removeClass('gray');$(this).hide();" style="display: none;">
+	</div>-->
+	<!--浮动功能按钮end-->
+</div>
+{include file="$footer_path"}
+{/block}
+
+{block name="js"}
+{literal}
+<script src="__PUBLIC__/Js/front/slip-min.js?version={$version}" type="text/javascript"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+	var change_screen_ul = document.getElementById("change_screen_ul");
+	slip_status_span = document.getElementById("slider_status_span");
+	function changeScreenEndFun() {
+		var clientWidth = document.body.clientWidth;
+		if(clientWidth >= 540){
+				slip_status_span.style['webkitTransform'] = 'translateX('+this.page * 768/3+'px) translateZ(0)';	
+			}else{
+				slip_status_span.style['webkitTransform'] = 'translateX('+this.page * 320/3+'px) translateZ(0)';	
+				}
+		
+	}
+	slip('page',change_screen_ul,{
+	change_time: 3000,
+			num: 3,
+			loop: true,
+		 endFun: changeScreenEndFun
+	});
+	 
+}, false);
+
+function search2(){
+	window.location.href="search.html";}
+
+var my_nav = document.querySelector('.my_nav');
+	
+document.addEventListener('touchmove', function() {
+    checkBar();
+});
+document.addEventListener('scroll', function() {
+    checkBar();
+});
+function checkBar() {
+
+    if (window.scrollY > 380) {
+        if (my_nav.className.indexOf('my_nav_fixed') === -1) {
+            my_nav.className += ' my_nav_fixed';
+        }
+    } else {
+        if (my_nav.className.indexOf('my_nav_fixed') > -1) {
+            my_nav.className = my_nav.className.replace(' my_nav_fixed', '');
+        }
+    }
+
+  }
+function preLoadImg(url) {
+ var img = new Image();
+ img.src = url;
+}
+
+$(document).ready(function(){
+  preLoadImg("__PUBLIC__/Images/front/quit.png");
+
+});
+</script>
+{/literal}
+{/block}

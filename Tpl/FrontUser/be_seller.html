@@ -1,0 +1,45 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/be_seller.css?version={$version}">
+{/block}
+{block name="content"}
+<!-- 广告图 -->
+<div class="banner">
+	<img src="/Public/Images/front/seller_banner.jpg" class="banner_img">
+</div>
+<div class="seller_cont">
+<!-- 说明文字 -->
+<div class="txt_info">本店累计消费满<span class="red">12800</span>元，才可以成为云代理分销商，您已消费<span class="red">0.1</span>元，请继续努力！</div>
+<a href="#" class="vip_rule">会员条件详细说明</a>
+<!-- 购物按钮 -->
+<div class="seller_btn">
+	<a href="{$mall_home_link}" class="go_buy">
+		<i class="seller_icon cart"></i>
+		<span>继续去购物</span>
+	</a>
+</div>
+<!-- 特权说明 -->
+<div class="right_wrap">
+	<p class="title">分销商特权</p>
+	<ul class="clearfix">
+		<li class="right_li">
+			<i class="seller_icon merchant"></i>
+			<p class="tit">独立微店</p>
+			<p class="info">拥有自己的微店及推广二维码</p>
+		</li>
+		<li class="right_li">
+			<i class="seller_icon income"></i>
+			<p class="tit">销售拿收益</p>
+			<p class="info">代理卖出商品，您可以获得利益</p>
+		</li>
+		<li class="right_li">
+			<i class="seller_icon award"></i>
+			<p class="tit">福利奖项</p>
+			<p class="info">每年每月的福利奖项拿到手抽筋</p>
+		</li>
+	</ul>
+	<p class="over_info">分销商的商品销售统一由厂家直接收款、直接发货，并提供产品的售后服务，分销佣金由厂家统一设置</p>
+</div>
+</div>
+{/block}

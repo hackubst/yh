@@ -1,0 +1,110 @@
+{extends file="../acp.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+<link rel="stylesheet" type="text/css" href="/Public/Css/front/shared_css/tankaung.css?version={$version}"/>
+<style>
+    .store_code_contain{
+        width: 100%;
+        height: 100%;
+    }
+    .store_code_con{
+        width: 93.6%;
+        height: 100%;
+        margin: 0 auto;
+    }
+    .store_code{
+        height: 14.95rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .store_code p {
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+
+        line-height:1.1rem;
+        margin-top: 0.75rem;
+    }
+    .mendian{
+        color:rgba(57,148,242,1);
+    }
+    .meixiong{
+        color: #F84C46;
+    }
+    .qr{
+        width: 7.5rem;
+        height: 7.5rem;
+    }
+    .qr img{
+        width: 100%;
+        height: 100%;
+        background-color: red;
+    }
+    .box .p3 span{
+        float: left;
+    }
+    .box .p3 .fangqi{
+        border-right: 1px solid #F0F0F0;
+        box-sizing: border-box;
+        color: #CCCCCC;
+    }
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<div class="store_code_contain">
+    <div class="store_code_con">
+        <div class="store_code" style="border-bottom: 1px solid #E0E0E0;">
+            <div class="qr">
+                <img src=""/>
+            </div>
+            <p class="mendian">门店签到码</p>
+        </div>
+        <div class="store_code">
+            <div class="qr">
+                <img src=""/>
+            </div>
+            <p class="meixiong">美胸体验码</p>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+{literal}
+<script>
+    postAjax();
+    //ajax轮询
+    function postAjax()
+    {
+        var str = 1;
+        var time1 = window.setInterval(function(){
+            $.ajax({
+                url: "/AcpZhishidian/ajax_round_robin",
+                type: "POST",
+                dataType: 'json',
+                data: {"str":str},
+                timeout: 10000,
+                success: function (res) {
+                    if (res.status == 1)
+                    {
+                        // 有数据 需清除定时器
+                        clearInterval(time1);     //清除定时器
+
+                    }
+                }
+            });
+        },2000); // 2秒请求一次一次
+    }
+</script>
+{/literal}
+{/block}
+
+
+
+
+
+

@@ -1,0 +1,291 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="map_container" id="map_container" style="width:800px;height:500px;"></div><br>
+<form id="J_FormArticle" action="" method="post">
+
+
+<!-- <div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>地理围栏：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="wl" id="wl" value="">  
+        <span class="fi-help-text hide"></span>
+
+    </div>  
+</div>  -->
+
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="save" />
+        <input type="hidden" name="school_id" value="{$school_info.school_id}" />
+        <input type="hidden" name="points" id='points' value="{$school_info.points}" />
+        <button type="button" id='cancle'  onclick='wl_cancle()' class="btn btn-blue"></i>撤销</button>
+        <button type="button" onclick="wl_finish()" id='finish' class="btn btn-blue">结束</button>
+        <button type="button" id='reset' onclick="reset_wl()" class="btn btn-blue"></i>重置</button>
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>修改</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BQLHGlffjbXC30bFDcpIQkHIkaxKBBe6"></script>
+<script>
+var lat = '{$school_info.center_lat}' || '28.1255940';
+var lng = '{$school_info.center_lng}' || '120.9820840';
+var p = [];
+var wl = '{$wl}' || '';
+var wl2 = '';
+var customOverlays=[];
+{literal}
+// if(lat == ''){
+//     lat = '28.1255940';
+// }
+// if(lng == ''){
+//     lng = '120.9820840';
+// } 
+// 百度地图API功能
+ var map;
+var finish;
+    map = new BMap.Map("map_container");
+ // map.addEventListener("onload",function(){alert();});
+            map.addEventListener("onload",function(){
+// alert();
+drawCenterPoint(new BMap.Point(lng, lat));
+wl= wl && JSON.parse(wl);
+            for(var i in wl.points){
+            mk = new BMap.Marker(wl.points[i]);
+           map.addOverlay(mk);
+           // p.push(wl.points[i]);
+            p.push(new BMap.Point(wl.points[i].lng, wl.points[i].lat) );
+          if(p.length > 1){
+            var polyline = new BMap.Polyline(p, {strokeColor:"red",//设置颜色 
+            strokeWeight:3, //宽度
+            strokeOpacity:1});//透明度
+            map.addOverlay(polyline);
+          }
+
+          
+           wl2 += '['+wl.points[i].lng+','+wl.points[i].lat+'],';
+           $('#wl').val(wl2);
+           
+        }
+        wl_finish();
+});
+ // map.addEventListener("onload",function(){alert()});
+    map.addControl(new BMap.NavigationControl()); //初始化地图控件
+    map.addControl(new BMap.ScaleControl());                     
+    map.addControl(new BMap.OverviewMapControl());
+    //MapTypeControl：地图类型控件，默认位于地图右上方。
+    map.addControl(new BMap.MapTypeControl());
+
+    map.setDefaultCursor("url('bird.cur')");  //设置地图默认的鼠标指针样式
+    map.enableScrollWheelZoom();        //启用滚轮放大缩小，默认禁用。
+
+    //console.log("lng:"+lng+",lat:"+lat);
+    var point = new BMap.Point(lng, lat);
+    map.centerAndZoom(point,14);         //初始化地图中心点
+
+
+
+    // var marker = new BMap.Marker(point); //初始化地图标记  
+    // var gc = new BMap.Geocoder();//地址解析类  
+    // //marker.enableDragging();             //标记开启拖拽 
+    // map.addOverlay(marker);              //将标记添加到地图中  
+    // marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+
+function drawCenterPoint(point){
+        var marker = new BMap.Marker(point); //初始化地图标记  
+    var gc = new BMap.Geocoder();//地址解析类  
+    //marker.enableDragging();             //标记开启拖拽 
+    map.addOverlay(marker);              //将标记添加到地图中  
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+}
+
+    map.addEventListener("click", function(e){//设置地里围栏
+
+       mk = new BMap.Marker(e.point);
+       map.addOverlay(mk);
+       p.push(e.point);
+       wl2 += '['+e.point.lng+','+e.point.lat+'],';
+       $('#wl').val(wl2);
+       if(p.length > 1){
+            
+            var polyline = new BMap.Polyline(p, {strokeColor:"red",//设置颜色 
+            strokeWeight:3, //宽度
+            strokeOpacity:1});//透明度
+            map.addOverlay(polyline);
+       } 
+       console.log(p);
+    });
+  
+
+    $(function(){
+// return;
+
+        /*for (var j = 0; j < p.length; j++) {
+           var pl;
+            if(j != p.length-1){
+  // var pl;
+                
+                 pl = new BMap.Polyline([p[j],p[j+1]], {strokeColor:"red",//设置颜色 
+                strokeWeight:3, //宽度
+                strokeOpacity:1});//透明度
+            }else{
+                   // var pl;
+                  pl = new BMap.Polyline([p[j],p[0]], {strokeColor:"red",//设置颜色 
+                strokeWeight:3, //宽度
+                strokeOpacity:1});//透明度
+            }
+            
+                map.addOverlay(pl);
+        }*/
+            
+        
+        
+        console.log(p);
+    })
+    //地理围栏结束
+    function wl_finish(){
+        var polyline = new BMap.Polyline([p[p.length-1], p[0]], {strokeColor:"red",//设置颜色 
+            strokeWeight:3, //宽度
+            strokeOpacity:1});//透明度
+            map.addOverlay(polyline);
+        finish = 1;
+        // console.log(JSON.parse(p));
+        // 
+        var result = [];
+
+        var str='{"points":['
+        for(var i in p){
+            str+='{"lat":"'+p[i].lat+'","lng":"'+p[i].lng+'"}';
+            if(i != p.length-1){
+                str+=",";
+            }
+               
+           
+        }
+        str+="]}";
+        $('#points').val(str);
+        console.log(JSON.parse(str));
+
+    }
+
+    //撤销
+    function wl_cancle(){
+        var allOverlay = map.getOverlays();
+       // console.log(allOverlay);
+        for (var i = allOverlay.length -1; i > 0; i = i-2){
+
+                map.removeOverlay(allOverlay[i]);
+                if(i - 1 != 0){
+                    map.removeOverlay(allOverlay[i-1]);
+                }
+                if(finish == 1){
+                    map.removeOverlay(allOverlay[i-2]);
+                    finish = 0;
+                }
+                p.pop();
+                return false;
+            
+        }
+       
+        
+    }
+
+    //重置地理围栏
+    function reset_wl(){
+        var allOverlay = map.getOverlays();
+       for (var i = allOverlay.length -1; i > 0; i--){
+
+                map.removeOverlay(allOverlay[i]);
+            
+        }
+        p = [];
+    }
+    
+
+
+    upload_file('class_icon');
+    function upload_file(div_id)
+    {
+        // ajax上传图片
+        new AjaxUpload("#" + div_id + "_uploader", {
+            action: "/AcpArticleAjax/uploadHandler",
+            name: "imgFile",
+            responseType: "json",
+            onSubmit: function(){
+                //alert('正在上传');
+                //preview处的图片改为loading图片
+                $('#' + div_id).find('.preview').removeClass('hide');
+            },
+            onChange: function(file, extension){
+                if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+                    return true;
+                }
+                else {
+                    alert('暂不支持该图片格式！');
+                    return false;
+                }
+            },
+            onComplete: function(file, response){
+                console.log(response);
+                if (response.status === 0) {
+                    alert(response.msg);
+                }
+                else if (response.status === 1) {
+                    $('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+                    $('#' + div_id).find('.preview').show();
+                    $('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+                    $('#' + div_id).find('#add_li').hide();
+                }
+            }
+        });
+    }
+
+    function delImage(div_id)
+    {
+        var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+        var preview = $('#' + div_id).find('#J_Preview');
+        var param = {};
+        var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+        var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+        
+        if (_id != '') {
+            param.id = _id;
+        }
+        if (imgUrl != '') {
+            param.img_url = imgUrl;
+        }
+        $.ajax({
+            url: '/AcpArticleAjax/delImage',
+            type: 'post',
+            data: param,
+            dataType: 'json',
+            beforeSend: function(){
+                ajaxLoading.show();
+            },
+            success: function(data){
+            //  console.log(data);
+                if (data.status === 1) {
+                    $('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+                    $('#' + div_id).find('#J_Del').off('click', delImage);
+                    preview.removeAttr('src').parent().parent().addClass('hide');
+                    $('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+                    $('#' + div_id).find('#add_li').show();
+                }
+                ajaxLoading.fadeOut();
+            }
+        });
+    }
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+{/block}

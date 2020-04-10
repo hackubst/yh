@@ -1,0 +1,35 @@
+
+<div class="cart-block">
+	<a href="{if $user_id}{$cart_link}{else}{$login_link}{/if}" title="购物车">
+		<ul>
+			<li>({$cart_total_num})</li>
+			<li><img title="购物车" alt="购物车" src="__PUBLIC__/Images/front/item_icon.png" /></li>
+			<li>购物车</li>
+		</ul>
+	</a>
+	<div id="minicart" class="remain_cart" style="display: none;">
+		 <p class="empty">你的购物车有{$cart_total_num}个商品</p>
+		 <ol>
+			{foreach from=$cart_list item=item}		 	
+		 	<li>
+				<div class="img-block"><img src="{$item.small_pic}" title="{$item.item_name}" alt="{$item.item_name}" /></div>
+				<div class="detail-block">
+					<h4><a href="{if $item.item_package_id}{$item_detail_link}{$item.item_package_id}/package/1{else}{$item_detail_link}{$item.item_id}{/if}" title="{$item.item_name}">{$item.item_name}</a></h4>
+					<p>
+						<strong>{$item.number}</strong> x ￥{$item.mall_price}
+					</p>
+					<a href="{if $item.item_package_id}{$item_detail_link}{$item.item_package_id}/package/1{else}{$item_detail_link}{$item.item_id}{/if}" title="点击看详情">详情</a>
+				</div>
+				<!-- <div class="edit-delete-block">
+					<a href="javascript:;" class="remove_item" title="删除" onClick=""><img src="__PUBLIC__/Images/front/delete_item_btn.png" alt="删除" title="删除" /></a>
+				</div> -->
+			</li>
+			{/foreach}
+			<li>
+				<div class="total-block">总计:<span>￥{$cart_total_amount}</span></div>
+				<a href="{if $user_id}{$cart_link}{else}{$login_link}{/if}" title="去购物车" class="colors-btn">去购物车</a>
+				<div class="clear"></div>
+			</li>
+		 </ol>
+	</div>
+</div>

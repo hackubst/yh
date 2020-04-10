@@ -1,0 +1,189 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>商家：</label>
+    <div class="form-controls">
+        <select name="merchant_id" class='xlarge'>
+            <option value="0">系统优惠券</option>
+            {foreach from=$merchant_list item=merchant_item}
+            <option value="{$merchant_item.merchant_id}" {if $merchant_item.merchant_id EQ $vouchers_info.merchant_id}selected{/if}>{$merchant_item.shop_name}</option>
+            {/foreach}
+        </select>
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>标题或描述：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="title" id="title" value="{$vouchers_info.title}">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>订单满足金额：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="amount_limit" id="amount_limit" value="{$vouchers_info.amount_limit}">
+		<span class="fi-help-text">订单满多少(此处指合并支付的总金额)可使用该优惠券</span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>面额：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="num" id="num" value="{$vouchers_info.num}">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>活动时间：</label>
+    <div class="form-controls">
+        <input type="text" autocomplete="off" class="Wdate" name="start_time"
+        value="{if $vouchers_info.start_time}{date('Y-m-d H:i:s',$vouchers_info.start_time)}{/if}"
+        onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+
+        <span class="fi-text">-</span>
+
+        <input type="text" autocomplete="off" class="Wdate" name="end_time"
+        value="{if $vouchers_info.end_time}{date('Y-m-d H:i:s',$vouchers_info.end_time)}{/if}"
+        onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+    </div>
+</div>
+
+<!-- <div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>可使用次数：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="use_time" id="use_time" value="{$vouchers_info.use_time}">
+		<span class="fi-help-text">用户可享受几次这样的折扣，0表示无限制</span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>使用范围：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="scope" value="1"
+                {if $vouchers_info.scope EQ 1} checked{/if} >仅限微信</label>
+            <label><input type="radio" name="scope" value="2"
+                {if $vouchers_info.scope EQ 2} checked{/if} >仅限APP</label>
+            <label><input type="radio" name="scope" value="0"
+                {if $vouchers_info.scope EQ 0 || !$vouchers_info.scope} checked{/if} >全部</label>
+        </div>
+    </div>
+</div>  -->
+
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>是否生效：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="isuse" value="1"
+                {if $vouchers_info.isuse EQ 1} checked{/if} >生效</label>
+            <label><input type="radio" name="isuse" value="0"
+                {if $vouchers_info.isuse EQ 0} checked{/if} >不生效</label>
+        </div>
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+        <input type="hidden" name="action" value="{$action}" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>
+            {if $action == 'add'}添加{else}修改{/if}
+        </button>
+    </div>
+</div>
+</form>
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+{literal}
+	upload_file('pic');
+	function upload_file(div_id)
+	{
+		// ajax上传图片
+		new AjaxUpload("#" + div_id + "_uploader", {
+			action: "/AcpArticleAjax/uploadHandler",
+			name: "imgFile",
+			responseType: "json",
+			onSubmit: function(){
+				//alert('正在上传');
+				//preview处的图片改为loading图片
+				$('#' + div_id).find('.preview').removeClass('hide');
+			},
+			onChange: function(file, extension){
+				if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+					return true;
+				}
+				else {
+					alert('暂不支持该图片格式！');
+					return false;
+				}
+			},
+			onComplete: function(file, response){
+				console.log(response);
+				if (response.status === 0) {
+					alert(response.msg);
+				}
+				else if (response.status === 1) {
+					$('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+					$('#' + div_id).find('.preview').show();
+					$('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+					$('#' + div_id).find('#add_li').hide();
+				}
+			}
+		});
+	}
+
+	function delImage(div_id)
+	{
+		var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+		var preview = $('#' + div_id).find('#J_Preview');
+		var param = {};
+		var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+		var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+
+		if (_id != '') {
+			param.id = _id;
+		}
+		if (imgUrl != '') {
+			param.img_url = imgUrl;
+		}
+		$.ajax({
+			url: '/AcpArticleAjax/delImage',
+			type: 'post',
+			data: param,
+			dataType: 'json',
+			beforeSend: function(){
+				ajaxLoading.show();
+			},
+			success: function(data){
+			//	console.log(data);
+				if (data.status === 1) {
+					$('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+					$('#' + div_id).find('#J_Del').off('click', delImage);
+					preview.removeAttr('src').parent().parent().addClass('hide');
+					$('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+					$('#' + div_id).find('#add_li').show();
+				}
+				ajaxLoading.fadeOut();
+			}
+		});
+	}
+{/literal}
+</script>
+
+{/block}
+
+{block name="css"}
+{/block}

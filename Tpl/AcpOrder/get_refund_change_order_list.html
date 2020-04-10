@@ -1,0 +1,130 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+{include file="./Public_forms.html"}
+<!-- end tables-searchbox -->  
+<table class="wxtables">  
+    <colgroup>  
+    <col width="5%">  
+    <col width="8%">  
+    <col width="8%"> 
+    <col width="8%"> 
+     <col width="8%">  
+    <col width="8%">  
+    <col width="12%">  
+    <col width="15%">  
+    <col width="8%"> 
+    <col width="20%">  
+    </colgroup>  
+    <thead>  
+        <tr>
+            <td>选择</td>
+            <td>订单编号</td>
+            <td>订单金额</td>  
+            <td>订单实付款</td>  
+            <td>返还金额</td>
+            <td>返还积分</td>  
+            <td>申请时间</td>  
+            <td>备注</td>  
+            <td>处理状态</td>  
+            <td>操作</td>
+        </tr>  
+    </thead>  
+    <tbody>  
+        {foreach from=$order_list item=refund_change_info}
+			<tr>
+				<td><input type="checkbox" class="checkbox" name="a[]" value="{$refund_change_info.item_refund_change_id}"></td>
+				<td>{$refund_change_info.order_sn}</td>
+				<td>  
+					<span>￥</span>  
+					<span>{$refund_change_info.total_amount + $refund_change_info.express_fee}</span>  
+				</td>  
+				<td>  
+					<span>￥</span>  
+					<span>{$refund_change_info.pay_amount}</span>  
+				</td>  
+				<td>
+					<span>￥</span>  
+					<span>{$refund_change_info.refund_money}</span>
+				</td>
+				<td> 
+					<span>{$refund_change_info.integral_amount}</span>
+				</td>  
+				<td>{$refund_change_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>  
+				<td>{$refund_change_info.reason}</td>  
+				<td>
+					{if $refund_change_info.state == 0}
+						待处理
+					{elseif $refund_change_info.state == 1}
+						已受理
+					{elseif $refund_change_info.state == 1}
+						已拒绝
+					{/if}
+				</td>  
+				<td>  
+					<a href="/AcpOrder/order_refund_change_apply_detail/item_refund_change_id/{$refund_change_info.item_refund_change_id}/order_id/{$refund_change_info.order_id}/redirect/{$redirect}" class="btn" title="查看">查看</a>   
+					{if $refund_change_info.state == 0}
+						<a href="javascript:;" class="btn" title="受理" onclick="passItemRefundChangeApply({$refund_change_info.item_refund_change_id})">受理</a>   
+						<a href="javascript:;" class="btn" title="拒绝" onclick="refuseItemRefundChangeApply({$refund_change_info.item_refund_change_id})">拒绝</a>   
+					{/if}
+				</td>  
+			</tr>
+		{foreachelse}      
+		<tr>
+			<td colspan="9">
+				没有符合条件的记录
+			</td>
+		<tr>
+		{/foreach}
+    </tbody>  
+</table>  
+<!-- end wxtables -->  
+<div class="tables-btmctrl clearfix">  
+    <!--<div class="fl">  
+        <a href="###" class="btn btn-blue" onclick="Select()">全选</a>  
+        <a href="###" class="btn btn-blue" onclick="Cancel()">取消</a>  
+        <a href="###" class="btn btn-blue">删除</a> 
+	</div>-->
+    <div class="fr">  
+		{$show} 
+        <!-- end paginate -->  
+    </div>  
+</div>  
+<!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<script>
+	//全选
+	function Select(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=true;
+		}
+	}
+	//取消全选
+	function Cancel(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=false;
+		}
+	}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/get_pre_pay_order_list.css" type="text/css" />
+{literal}
+<style>
+#jpops .fi-name{width:50px;}
+#jpops .form-controls{margin-left:50px;}
+</style>
+{/literal}
+{/block} 

@@ -1,0 +1,419 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/detail.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/loading.css?version={$version}">
+<style>
+	.cart{
+		bottom: 51px;
+	}
+	#load_wrapper{
+		right:0px!important;
+		left: auto!important;
+		width:72%!important;
+		padding-bottom: 0;
+	}
+</style>
+{/block}
+{block name="content"}
+<!-- 头部模块 -->
+<!-- <header class="common_head">
+		<a class="back" id="redir_back" href="{$home_link}"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+		<div class="header_title{if $merchant_info.online == 0} offline{/if}">
+			{$head_title}
+		</div>
+</header> -->
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+{if $merchant_info.busy_level == 1}
+<!-- <div class="item_line_tip">
+	<div class="tip_txt">店铺状态：繁忙，可能会拒单或没法及时接单</div>
+</div> -->
+{/if}
+<div class="item_cate">
+	{if count($class_list) <= 5}
+	<ul class="cate_first clearfix">
+		{foreach from=$class_list item=class key=key}
+		<li class="cate_li">
+			<a href="/FrontMall/item_list/class_id/{$class.class_id}" class="cate_link">{$class.class_name}</a>
+		</li>
+		{/foreach}
+	</ul>
+	{else}
+	<ul class="cate_first clearfix">
+		{foreach from=$class_list item=class key=key}
+		{if $key <= 4}
+		<li class="cate_li">
+			<a href="/FrontMall/item_list/class_id/{$class.class_id}" class="cate_link">{$class.class_name}</a>
+		</li>
+		{/if}
+		{/foreach}
+		<li class="cate_li_btn" id="cate_li_btn">
+			<a href="#"><i class="arrow_icon"></i></a>
+		</li>
+	</ul>
+	<ul class="cate_second clearfix" id="cate_second">
+		{foreach from=$class_list item=class key=key}
+		{if $key > 4}
+		<li class="cates_li">
+			<a href="/FrontMall/item_list/class_id/{$class.class_id}" class="cate_link">{$class.class_name}</a>
+		</li>
+		{/if}
+		{/foreach}
+	</ul>
+	{/if}
+</div>
+<!--菜单主内容-->
+<div id="menuwrap" class="menuwrap">	
+	<!--左边导航-->
+	<div id="asidewrap" class="asidewrap">
+		<div class="taglist">
+			{foreach from=$sort_list item=class}
+				{if count($item_list[$class.sort_id]['item_list']) > 0}
+					<div class="tag{if $cur_sort_id == $class.sort_id} focus{/if}">
+						<a href="{$item_list_link}/class_id/{$class_id}/sort_id/{$class.sort_id}">{$class.sort_name}</a>
+					</div>
+				{/if}
+			{/foreach}
+			<div class="datail_link_placeholder"></div>
+			<div class="cart_placeholder"></div>
+		</div>
+	</div>
+	<!--右边菜单详情-->
+	<div id="load_wrapper" class="mainwrap">
+		<div class="foodlistwrap" id="scroller">
+			<ul class="foodlist" id="new_list">
+				{foreach from=$item_list[$cur_sort_id]['item_list'] item=item}
+				<div class="foodlist_wrap">
+					<li class="fooditem" onclick="show_detail(this);">
+						<input type="hidden" id="item_id" value="{$item.item_id}">
+						<input type="hidden" id="item_unit" value="{$item.unit}">
+						<input type="hidden" id="base_img" value="{$item.base_pic}">
+						<input type="hidden" id="item_price" value="{$item.mall_price}">
+						<div class="food_content1">
+							<div class="food_pic_wrap">
+								<img onerror="no_pic(this);" class="food_pic" src="{$item.small_img}">
+							</div>
+							<div class="foodname" id="foodname">
+								{$item.item_name}
+							</div>
+							<div class="food_price_region">
+								<span class="food_price" id="mall_price">
+									{$item.mall_price}
+								</span>
+								<span class="food_price_unit">
+									元{if $item.unit}/{$item.unit}{/if}
+								</span>
+							</div>
+							<div class="sale_num_wrap">
+									<i class="sale_num">{$item.sales_num}</i>销量
+									<span id="desc" style="display:none;">{$item.item_desc}</span>
+							</div>
+						</div>
+						<span class="sales_num" style="position:absolute;right:8px;bottom:15px;color:#FFD057">
+							{if $item.purchase_limit}
+								限购{$item.purchase_limit}{$item.unit}
+							{else}
+								剩余{$item.stock}{$item.unit}
+							{/if}
+						</span>
+					</li>
+					<div class="foodop" style="width:100%;">
+						<!--<span class="foodop_tit">数量</span>-->
+						<a class="add addto_cart" href="javascript:void(0);">＋</a>
+						<span class="add_num popone" id="popone">+1</span>
+					</div>
+				</div>
+				{/foreach}
+			</ul>
+			<div id="pullUp">
+				<span class="pullUpLabel">上拉加载...</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--底部固定购物车商品数量-->
+<div id="cart" class="cart">
+	<div class="cart_tip">
+		<a href="{$cart_link}">
+		<div class="cart_icon_wrap">
+			<svg class="detail_cart_icon"><use xlink:href="#detailcart"></use></svg>
+			<div class="cart_num {if !$total_num}hide{/if}" id="cartNum" num="{$total_num}">{$total_num}</div>
+			<span class="add_num popone" id="popone" style="">+1</span>
+		</div>
+		</a>
+		<h3 class="cart_price_tit">总价：</h3>
+		<span class="cart_p_sym">￥</span><span class="cart_price" id="cart_price" price="{$total_amount}">{$total_amount|default:0}</span>
+	</div>
+	<div class="cart_btns" style="">
+		<a class="cart_btn_confirm" href="{$cart_link}"><span class="combtn inner">结算</span></a>
+	</div>
+</div>
+
+<!--商品详情弹出层-->
+<div class="item_fix_box" id="fix_box">
+	<div class="fix-box-img"><img onerror="no_pic(this);" src="{$item_info.base_pic}"/></div>
+	<div class="item_box_rlt">
+		<div class="fix-box-title"><span class="item_box_name">{$item_info.item_name}</span></div>
+	</div>
+	<div class="item_box_rlt">
+		<div class="fix-box-price"><span>{$item_info.mall_price}元/{$item_info.unit}</span></div>
+		<a class="item_detail_link" href="{$item_detail_link}{$item_info.item_id}">查看详情</a>
+		<div class="fix-box-add">
+			<span class="add_num popone" id="popone">+1</span>
+			<a href="javascript:;" class="addto_cart">加购物车</a>
+		</div>
+		<div class="fix-box-desc"><span class="item_box_desc">{$item_info.item_desc}</span></div>
+	</div>
+	<div class="close_pic" id="close_pic" onclick="$('#fix_box').hide();$('#screenIfm').hide();"><svg class="close_icon"><use xlink:href="#close"></use></svg></div>
+</div>
+
+<!--详情弹出层背景透明化-->
+<div id="screenIfm" style="z-index:10;" class="screenIfm" onclick="$('#fix_box').hide();$(this).hide();" style="display: none;">
+</div>
+{/block}
+{block name="js"}
+<script src="__PUBLIC__/Js/front/item.js?version={$version}"></script>
+<script src="__PUBLIC__/Js/front/iscroll.js?version={$version}"></script>
+<script src="__PUBLIC__/Js/front/fastclick.js?version={$version}"></script>
+
+<script>
+var cur_item_id = 0;
+var cur_item_price = 0.00;
+//判断是否是商品详情以及它当前id和price
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+var merchant_id = parseInt('{$merchant_id}');
+var is_item = '{$is_item}';
+var temp_item_id = '{$item_info.item_id}';
+var temp_item_price = '{$item_info.mall_price}';
+var cur_sort_id = '{$cur_sort_id}';
+var item_detail_link = '{$item_detail_link}';
+var item_nav_list = '{count($class_list)}'
+{literal}
+
+	$(function() {  
+		FastClick.attach(document.body);  
+	}); 
+	var Win_H =$(window).height();
+	var Nav_h1 =$(".cate_first").height();
+	var Nav_h2 =$(".cate_second").height();
+	var foot_H1=$(".cart").height();
+	var foot_H2=$("#fb").height();
+window.onload =function(){
+	console.log(Win_H);
+	console.log(Nav_h1);
+	console.log(foot_H1);
+	console.log(foot_H2);
+	$("#load_wrapper").height(Win_H-Nav_h1-foot_H1-foot_H2-16-50);
+	console.log($("#load_wrapper").height());
+	myScroll.refresh();
+	// console.log(Win_H);
+	// console.log(item_nav_list);
+	// var nav_row
+	// var nav_row_y = parseInt(item_nav_list)%5
+	// var nav_row_x =parseInt(parseInt(item_nav_list)/5)
+	// if(nav_row_x>)
+	// console.log(nav_row_y);
+	// console.log(nav_row_x);
+}
+function show_detail(obj)
+{
+	cur_item_id = $(obj).find('#item_id').val();
+	cur_item_price = $(obj).find('#item_price').val();
+	var unit = $(obj).find('#item_unit').val();
+	var base_img = $(obj).find("#base_img").val();	
+	var item_name = $(obj).find("#foodname").html();
+	var item_desc = $(obj).find("#desc").html();
+	$('.fix-box-img img').attr('src', base_img);
+	$('.item_detail_link').attr('href', item_detail_link + cur_item_id);
+	$('.fix-box-title').find('span').html(item_name);
+	$('.fix-box-price').find('span').html(cur_item_price + '元/' + unit);
+	$('.fix-box-desc').find('span').html(item_desc);
+	//$('#fix_box,#screenIfm').show();
+	addClickdot(cur_item_id);
+    {/literal}
+    location.href="{$item_detail_link}"+cur_item_id;
+    {literal}
+}
+
+$(function()
+{
+	if(is_item)
+	{
+	 	$('#fix_box,#screenIfm').show();
+		addClickdot(temp_item_id);
+	}
+	$('.addto_cart').on('click',function(e)
+	{
+			e.stopPropagation();
+			var siblings = $(this).parent().siblings();
+			var popone = $(this).siblings('.popone');
+			var item_price = $(siblings).find("#item_price").val();
+			item_price = item_price == undefined ? (cur_item_price == 0.00 ? temp_item_price : cur_item_price) : item_price;
+			var item_id = $(siblings).find('#item_id').val();
+			item_id = item_id == undefined ? (cur_item_id == 0 ? temp_item_id : cur_item_id) : item_id;
+			console.log("item_id="+item_id+"mall_price="+mall_price);
+			if (!item_id)
+			{
+				alert('抱歉，请选择商品！');
+				return false;
+			}
+			
+			$.post('/FrontCart/add_cart', {'item_id': item_id}, function(data){
+				if (data != 'failure')
+				{
+					//加购物车成功的代理写这里，主要是在页面上的反馈，具体有哪些元素，查看打印出来的data
+					$(popone).fadeIn(500).fadeOut(2000);
+					var num = $("#cartNum").attr("num");
+					var numb = parseInt(num) + 1;
+					numb = data.totalNum;
+					$('#cartNum').attr("num",numb).html(numb).show();
+					var price = $('#cart_price').attr("price");
+					var nprice = parseFloat(price) + parseFloat(item_price);
+					var float_nprice = nprice.toFixed(2);//保留两位小数
+					float_nprice = data.totalPrice;
+					$('#cart_price').attr("price",float_nprice).html(float_nprice);
+					console.log(data);
+				}
+				else
+				{
+					//添加失败的代码写这里
+				}
+			}, 'json');
+	});	
+	
+	$('body').on('click','.addto_cart2',function(e)
+	{
+			e.stopPropagation();
+			var siblings = $(this).parent().siblings();
+			var popone = $(this).siblings('.popone');
+			var item_price = $(siblings).find("#item_price").val();
+			item_price = item_price == undefined ? (cur_item_price == 0.00 ? temp_item_price : cur_item_price) : item_price;
+			var item_id = $(siblings).find('#item_id').val();
+			item_id = item_id == undefined ? (cur_item_id == 0 ? temp_item_id : cur_item_id) : item_id;
+			console.log(item_id);
+			if (!item_id)
+			{
+				alert('抱歉，请选择商品！');
+				return false;
+			}
+			
+			$.post('/FrontCart/add_cart', {'item_id': item_id}, function(data){
+				if (data != 'failure')
+				{
+					//加购物车成功的代理写这里，主要是在页面上的反馈，具体有哪些元素，查看打印出来的data
+					$(popone).fadeIn(500).fadeOut(2000);
+					var num = $("#cartNum").attr("num");
+					var numb = parseInt(num) + 1;
+					numb = data.totalNum;
+					$('#cartNum').attr("num",numb).html(numb).show();
+					var price = $('#cart_price').attr("price");
+					var nprice = parseFloat(price) + parseFloat(item_price);
+					var float_nprice = nprice.toFixed(2);//保留两位小数
+					float_nprice = data.totalPrice;
+					$('#cart_price').attr("price",float_nprice).html(float_nprice);
+					console.log(data);
+				}
+				else
+				{
+					//添加失败的代码写这里
+				}
+			}, 'json');
+	});	
+	//一级菜单展开
+	$('#cate_li_btn').click(function(event) {
+		var cate_obj = $('#cate_second');
+		if(cate_obj.is(':visible') == true)
+		{
+			cate_obj.hide();
+			$('.arrow_icon').css({ 
+			    transform: "rotate(0deg)",
+
+			 });
+			$("#load_wrapper").height(Win_H-Nav_h1-foot_H1-foot_H2-16);
+			 myScroll.refresh();
+		}
+		else
+		{
+			cate_obj.show();
+
+			$('.arrow_icon').css({ 
+			    transform: "rotate(180deg)",
+			 });
+			$("#load_wrapper").height(Win_H-Nav_h1-Nav_h2-foot_H1-foot_H2-16);
+			 myScroll.refresh();
+		}
+	});
+
+	// //商品下拉异步加载
+	// var range = 20; //距下边界长度/单位px  
+	// var elemt = 500; //插入元素高度/单位px  
+	// var num = firstRow;  
+	// var totalheight = 0;  
+	// var main = $("#going_list"); //主体元素  
+	// $(window).scroll(function()
+	// {
+	// 	var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)   
+	// 	totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+	// 	if(($(document).height()-range) <= totalheight  && total > num)
+	// 	{
+	// 		num = parseInt(num) + parseInt(firstRow);
+	// 		//获取订单列表
+	// 		$.post('/FrontMall/get_item_list', {"firstRow":num - parseInt(firstRow), "cur_sort_id":cur_sort_id, "merchant_id":merchant_id}, function(data, textStatus) 
+	// 		 {
+	// 			if (data != 'failure')
+	// 			{
+	// 				var len = data.length;
+	// 				for (i = 0; i < len; i++)
+	// 				{
+	// 					var html = '<div class="foodlist_wrap"><li class="fooditem" onclick="show_detail(this);"><input type="hidden" id="item_id" value="' + data[i].item_id + '"><input type="hidden" id="item_unit" value="' + data[i].unit + '"><input type="hidden" id="base_img" value="' + data[i].base_pic + '"><input type="hidden" id="item_price" value="' + data[i].mall_price + '"><div class="food_content1"><div class="food_pic_wrap"><img onerror="no_pic(this);" class="food_pic" src="' + data[i].small_img + '"></div><div class="foodname" id="foodname">' + data[i].item_name + '</div><div class="food_price_region"><span class="food_price" id="mall_price">' + data[i].mall_price + '</span><span class="food_price_unit">元/' + data[i].unit + '</span></div><div class="sale_num_wrap"><i class="sale_num">' + data[i].sales_num + '</i>销量<span id="desc" style="display:none;">' + data[i].item_desc + '</span></div></div></li><div class="foodop"><span class="foodop_tit">数量</span><a class="add addto_cart" href="javascript:void(0);">＋</a><span class="add_num popone" id="popone">+1</span></div></div>';
+	// 					main.append(html);
+	// 				}
+	// 			}
+	// 		}, 'json');
+	// 	}  
+	// 	else
+	// 	{
+	// 		$('#order_ending').show();
+	// 	}
+	// }); 
+});
+/*function addCart(item_id)
+{
+	item_id = item_id ? item_id : cur_item_id;
+	if (!item_id)
+	{
+		alert('抱歉，请选择商品！');
+		return false;
+	}
+
+	$.post('/FrontCart/add_cart', {'item_id': item_id}, function(data){
+		if (data != 'failure')
+		{
+			//加购物车成功的代理写这里，主要是在页面上的反馈，具体有哪些元素，查看打印出来的data
+			$('#popone').fadeIn(500).fadeOut(2000);
+			var num = $("#cartNum").attr("num");
+			var numb = parseInt(num) + 1;
+			$('#cartNum').attr("num",numb).html(numb).show();
+			var item_price = $(this).parent().siblings().find("#item_price").val();
+			var price = $('#cart_price').attr("price");
+			var nprice = parseInt(price) + parseInt(item_price);
+			$('#cart_price').attr("price",nprice).html(nprice);
+			console.log(data);
+		}
+		else
+		{
+			//添加失败的代码写这里
+		}
+	}, 'json');
+}*/
+</script>
+ <script src="__PUBLIC__/Js/front/item_list_orange.js?version={$version}"></script>
+{/literal}
+{/block}

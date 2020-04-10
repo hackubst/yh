@@ -1,0 +1,37 @@
+/** by zhengzhen */
+
+.transMask {
+	background: #fff;
+	opacity: 0;
+	filter: alpha(opacity=0);
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 999;
+}
+.popTip {
+	position: fixed;
+	left: 50%;
+	padding-left: 42px;
+	padding-right: 10px;
+	height: 50px;
+	line-height: 50px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	color: #666;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.3),1px 1px 0 #fff inset;
+	background: #fff;
+	z-index: 99;
+}
+.popTip i {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	display: block;
+	width: 28px;
+	height: 28px;
+	background: url(/Public/Images/acp/loading.gif) no-repeat;
+}

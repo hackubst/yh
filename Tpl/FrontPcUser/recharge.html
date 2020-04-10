@@ -1,0 +1,179 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/front/mall_pay.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+  <section class="mlr10">
+	  <div class="pt20 display-bl">
+			  {if $act == 'pay'}
+				<div class="pos-rel display-bl">
+					<div class="recharge_style">
+						<!--<div class="recharge_select">订单号：<span>1233333333</span></div>-->
+						<div class="recharge_select"><img src="__PUBLIC__/Images/front/{$pay_tag}_logo.jpg" style="width:80px;height:40px;" /></div>
+						<div class="recharge_text">
+							充值金额：<span class="price">&yen;{$amount}元</span>
+						</div>
+					</div>
+
+					{if $pay_tag == 'alipay'}
+					<div class="sbmBtn mt5 mb10">
+						<a href="{$qr_pay_mode_link}" id="editPwd-submit" style="background: #589403;">扫码支付</a>
+					</div>
+					<div class="sbmBtn mt5 mb10">
+						<a href="{$link}" id="editPwd-submit" style="background: #e4393c;">立即支付</a>
+					</div>
+					{elseif $pay_tag == 'chinabank'}
+						<form method="POST" action="https://pay3.chinabank.com.cn/PayGate" target="_blank" id="chinabank_pay_form">
+							<input type="HIDDEN" name='v_mid' value='{$parameter.v_mid}'>
+							<input type="HIDDEN" name='v_oid' value='{$parameter.v_oid}'>
+							<input type="HIDDEN" name='v_amount' value='{$parameter.v_amount}'>
+							<input type="HIDDEN" name='v_moneytype'  value='{$parameter.v_moneytype}'>
+							<input type="HIDDEN" name='v_url'  value='{$parameter.v_url}'>
+							<input type="HIDDEN" name='v_md5info' value='{$parameter.v_md5info}'>
+							<div class="sbmBtn mt5 mb10">
+								<a style="background: #e4393c;" id="chinabank_pay">立即支付</a>
+							</div>
+						</form>
+					{elseif $pay_tag == 'wxpay'}
+						<script type="text/javascript">
+						//调用微信JS api 支付
+						function jsApiCall()
+						{
+							WeixinJSBridge.invoke(
+								'getBrandWCPayRequest',
+								{$jsApiParameters},
+								function(res)
+								{
+									if(res.err_msg == "get_brand_wcpay_request:ok" )
+									{
+										//跳转链接
+										location.href = '/FrontUser/personal_data';
+									}
+									else
+									{
+										//WeixinJSBridge.log(res.err_msg);
+										//alert(res.err_code);
+										//alert(res.err_desc);
+										//alert(res.err_msg);
+									}
+								}
+							);
+						}
+
+						function callpay()
+						{
+							if (typeof WeixinJSBridge == "undefined"){
+								if( document.addEventListener ){
+									document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+								}else if (document.attachEvent){
+									document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+									document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+								}
+							}else{
+								jsApiCall();
+							}
+						}
+
+						callpay();
+						</script>
+
+						<div class="sbmBtn mt5 mb10">
+							<a href="javascript:;" style="background: #e4393c;" onclick="callpay()">立即支付</a>
+						</div>
+					{/if}
+				 </div>
+			  {else}
+			  <form id="recharge_form" name="recharge_form" action="" method="post">
+				  <div class="pos-rel display-bl">
+					<div class="form_inpText" style="color:grey;font-size:1.2em;">
+						<label>充值金额</label>
+						<input style="width:70%;" placeholder="" name="coin_num" id="" class="formElem" autofocus="true"/>
+						<i>元</i>
+					</div>
+					<div style="margin-bottom:10px;color:grey;font-size:1em;">
+						<label>(1元=<font color="red;">1</font>{$SYSTEM_MONEY_NAME})</label>
+					</div>
+
+					<div class="recharge_style">
+						<div class="recharge_title">选择支付方式</div>
+						{foreach from=$payway_list item=payway}
+							{if $payway.pay_tag != 'wallet'}
+								<div class="recharge_select">
+									<label for="{$payway.payway_id}">{if $payway.pay_tag == 'wallet'}{$SYSTEM_MONEY_NAME}支付{else}{$payway.pay_name}{/if}</label>
+									<input type="radio" id="{$payway.payway_id}" name="payway_id" value="{$payway.payway_id}" {if $payway.pay_tag == 'alipay'}checked{/if}/>
+									
+								</div>
+							{/if}
+						{/foreach}
+					</div>
+
+					<input type="hidden" name="act" value="pay">
+					<div class="sbmBtn mt5 mb10" id="sbmBtn">
+						<a id="editPwd-submit">立即支付</a>
+					</div>
+				  </div>
+			  {/if}
+		  </form>
+		</div>
+
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+$(function()
+{
+	$('#chinabank_pay').click(function(e){
+		$("#chinabank_pay_form").submit();
+	});
+	$('#sbmBtn').click(function(e){
+		//e.preventDefault();
+		var coin_num = $("input[name=coin_num]").val();
+		if(!coin_num)
+		{
+			var error="请填写充值金额";
+			$("#tan").html(error);
+			tishi();
+			$("input[name=coin_num]").focus();
+			return;
+		}
+
+		if(isNaN(coin_num) || parseFloat(coin_num) < 0.01)
+		{
+			var error="请填写正确的金额，不得小于1元";
+			$("#tan").html(error);
+			tishi();
+			$("input[name=coin_num").focus();
+			return;
+		}
+		
+		$("#recharge_form").submit();
+	});
+});
+
+//弹出提示
+function tishi()
+{
+	$('.kuan-cont').fadeIn(1500);
+	//$('.black-bg').fadeIn(1500);
+	$('.kuan-cont').fadeOut(1500);
+	//$('.black-bg').fadeOut(1500);
+}
+</script>
+{/literal}
+{/block}

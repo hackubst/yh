@@ -1,0 +1,217 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <!-- end tables-searchbox -->  
+    <button type="button" class="btn" style="background-color:#FF9900;color:#FFF" onclick="sync_data();">同步资料</button>
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="10%">  
+        <col width="25%">  
+        <col width="25%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="20%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>门店编码</td>  
+                <td>门店名称</td>  
+                <td>门店地址</td>  
+                <td>门店电话</td>  
+                <td>是否有效</td>  
+                <td>排序</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+		{foreach from=$dept_list item=row}
+            <tr>  
+                <td>{$row.node_code|default:'--'}</td>  
+                <td>{$row.node_name|default:'--'}</td>  
+                <td>{$row.address|default:'--'}</td>  
+                <td>{$row.phone_number|default:'--'}</td>  
+                <td>{if $row.isuse eq 1}有效{else}禁用{/if}</td>  
+                <td class="serial">
+                    <img src="__IMAGES__/ajax-loading.gif" class="hide" />
+                    <input type="text" title="点击更改排序" style="width:40px; text-align:center; border-color: #fff;" value="{$row.serial|default:0}" onblur="setSerial({$row.dept_id}, this);">
+                </td>
+                <td>
+					<img src="__IMAGES__/ajax-loading.gif" class="hide" />
+				{if $row.isuse eq 0}
+					<a href="javascript:;" title="点击启用" onclick="set_enable({$row.dept_id}, 1);"><i class="gicon-ok black"></i>启用</a>
+				{elseif $row.isuse eq 1}
+					<a href="javascript:;" title="点击禁用" onclick="set_enable({$row.dept_id}, 0);"><i class="gicon-remove black"></i>禁用</a>
+				{/if}
+				</td>   
+            </tr>
+		{foreachelse}
+        <tr><td>暂无纪录</td></tr>
+		{/foreach}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+           
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$pagination}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+$(function(){
+	
+	$('.J_Del').on('click', function(){
+		var _this = this;
+		var _id = $(this).data('id');
+		
+	});
+
+    $('.serial input').mouseenter(function(){
+		$(this).css('cursor', 'pointer');
+	})
+	.click(function(){
+		$(this).css('cursor', 'text');
+		$(this).css('border-color', '#72b7cd');
+	})
+	.blur(function(){
+		$(this).css('border-color', '#fff');
+	});
+	
+
+});
+
+function sync_data() {
+    $.jPops.confirm({
+        title:"提示",
+        content:'您确定要进行这项操作吗？同步操作比较费时!',
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r){
+            if (r) {
+                $.ajax({
+                    url: '/AcpDept/sync_data',
+                    beforeSend: function(){
+                        $.jPops.showLoading();
+                    },
+                    success: function(data){
+                        $.jPops.hideLoading();
+                        var msg;
+                        if (data == 'success') msg = "操作成功";
+                        else msg = "操作失败，请稍后再试";
+
+                        $.jPops.alert({
+                            title:"提示",
+                            content:msg,
+                            okBtnTxt:"确定",
+                            callback:function(){
+                                location.reload();
+                                return true;
+                            }
+                        });
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+function set_enable(_id, st){
+    $.jPops.confirm({
+        title:"提示",
+        content:'您确定要进行这项操作吗？',
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r){
+            if (r) {
+                $.ajax({
+                    url: '/AcpDept/set_enable',
+                    data: {id: _id, st: st},
+                    beforeSend: function(){
+                        $.jPops.showLoading();
+                    },
+                    success: function(data){
+                        $.jPops.hideLoading();
+                        var msg;
+                        if (data == 'success') msg = "操作成功";
+                        else msg = "操作失败，请稍后再试";
+
+                        $.jPops.alert({
+                            title:"提示",
+                            content:msg,
+                            okBtnTxt:"确定",
+                            callback:function(){
+                                location.reload();
+                                return true;
+                            }
+                        });
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+function setSerial(_id, _this){
+	var initVal = _this.defaultValue;
+	var curVal = $(_this).val();
+	if(curVal == ''){
+		$(_this).val(initVal);
+		return false;
+	}
+	if(curVal == initVal){
+		return false;
+	}
+    console.log(_id);
+    console.log(curVal);
+	$.ajax({
+		url: '/AcpDept/edit_serial',
+		data: {id: _id, serial: curVal},
+		dataType: 'json',
+		beforeSend: function(){
+			$(_this).prev().removeClass('hide');
+			$(_this).addClass('hide');
+		},
+		success: function(data){
+        console.log(data);
+    
+			$(_this).prev().addClass('hide');
+			$(_this).removeClass('hide');
+			if(data.status === 1){
+				_this.defaultValue = curVal;
+			} else {
+				$(_this).val(initVal);
+			}
+			$.jPops.alert({
+				title:"提示",
+				content:data.msg,
+				okBtnTxt:"确定",
+				callback:function(){
+					return true;
+				}
+			});
+		}
+	});
+}
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+
+{/block}

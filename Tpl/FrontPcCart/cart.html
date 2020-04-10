@@ -1,0 +1,151 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s流程状态 -->
+  	<div class="cartWrap pdt20">
+		<div class="cart-status clearfix">
+			<div class="cs-logo fl"></div>
+			<div class="cs-bar cs-bar-st1 fr">
+				<div class="cs-bar-bg"></div>
+				<div class="cs-bar-txt">
+					<span class="cs-bar-txt-step1" style="color:#ff7f00;">1.我的购物车</span>
+					<span class="cs-bar-txt-step2">2.填写核对订单信息</span>
+					<span class="cs-bar-txt-step3">3.成功提交订单</span>
+				</div>
+			</div>
+		</div>
+	</div>
+  	<!-- e流程状态 -->
+  	<!-- s购物车内容 -->
+	<table class="cart-itemsTable mgt10">
+		<colgroup>
+			<col width="5%">
+			<col width="8%">
+			<col width="27%">
+			<col width="10%">
+			<col width="10%">
+			<col width="15%">
+			<col width="10%">
+			<col width="8%">
+		</colgroup>
+		<thead>
+			<tr>
+				<td>选择 </td>
+				<td>图片</td>
+				<td style="text-align:left; padding-left:10px;">商品名</td>
+				<td>单价（元）</td>
+				<td>数量</td>
+				<td>可抵扣</td>
+				<td>小计（元）</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="8" class="left secondhd">
+					<span>商品总计 <i id="total_item_num">{$total_num}</i> 个</span>
+				</td>
+			</tr>
+			<!-- 一个商品 -->
+			{foreach from=$cart_list item=item}
+			<tr>
+				<input type="hidden" class="shopping_cart_id" value="{$item.shopping_cart_id}">
+				<td class="noBdR">
+					<input type="checkbox" class="item_check" name="shopping_cart_ids[]" value="{$item.shopping_cart_id}" data-price="{$item.mall_price}" data-from_virtual_stock="0" checked="checked">
+				</td>
+				<td>
+					<a href="{if $item.item_package_id}{$item_detail_link}{$item.item_package_id}/package/1{else}{$item_detail_link}{$item.item_id}{/if}" title="{$item.item_name}" class="cit-item-img" target="_blank"><img src="{$item.small_pic}" alt="{$item.item_name}" width="65"></a>
+				</td>
+				<td class="left noBdL">
+					<p class="cit-item-info">
+						<a href="{if $item.item_package_id}{$item_detail_link}{$item.item_package_id}/package/1{else}{$item_detail_link}{$item.item_id}{/if}" title="{$item.item_name}" target="_blank" id="item_names">{$item.item_name}</a>
+						<span style="color:#666666">
+						</span><br>
+						<span style="color:red"></span>
+						
+					</p>
+				</td>
+				<td>
+					<span class="market_pri">￥{$item.mall_price}<br></span>
+					<!-- <span class="list_price_delete">￥{$item.mall_price}元</span> -->	
+				</td>
+				<td>
+					<div class="cit-buynums">
+						<a href="javascript:;" class="cut j-buynums" data-id="{$item.shopping_cart_id}" data-type="cut" data-price="{$item.mall_price}" data-from_virtual_stock="0"></a>
+						<input type="text" id="number" value="{$item.number}" maxlength="5" class="j-buynums-input number_{$item.shopping_cart_id}" data-id="{$item.shopping_cart_id}" data-price="{$item.mall_price}" data-integral-rate="{$item.integral_rate}" data-from_virtual_stock="0">
+						<a href="javascript:;" class="plus j-buynums" data-id="{$item.shopping_cart_id}" data-type="add" data-price="{$item.mall_price}" data-from_virtual_stock="0"></a>
+					</div>
+
+				</td>
+				<td>
+					<span>￥</span>
+					<span class="integral_total" id="integral_{$item.shopping_cart_id}">{$item.integral_num}</span>
+				</td>
+				<td class="bold">
+					<span>￥</span>
+					<span class="list_price_total">{$item.total_price}</span>
+				</td>
+				<td>
+					<a href="javascript:;" onClick="deleteCartItem({$item.shopping_cart_id},this)" class="btn">删除</a>
+				</td>
+			</tr>
+			{/foreach}
+			<!-- 一个商品 -->				
+		</tbody>
+	</table>
+	<!-- 购物车选择面板 -->
+	<div class="cit-ctrlPanel">
+		<div class="clearfix">
+			<div class="cit-ctrl fl">
+				<span>
+					<input type="checkbox" id="select_all" onclick="selectAll()" checked="checked">
+					<a href="javascript:;" onclick="selectAll()">全选</a>
+				</span>
+				<a href="javascript:;" onclick="delet();">批量删除</a>
+			</div>
+			<div class="cit-ctrl-info fr">
+				<span>总金额</span>：<b><label id="pay_amount_label">{$total_amount}</label></b>元
+				<!-- <span id="span_order_discount_total" data-order_discount_total="0" data-order_discount_ary="" data-order_newuser="0">可抵扣</span>：<label id="total_integral_label">30</label></b> -->
+
+				<!-- <span style="font-weight:normal;" class="J_order_discount  hide">
+                    <img src="/Public/pub/Images/checkmark.png" align="absmiddle" width="15">
+                    <span class="J_discount_price"></span>
+                </span> -->
+			</div>
+		</div>
+
+		<!-- <div class="cit-ctrl-total">
+						
+			<div class="cit-ctrl-total-ri">优惠后总计<b>￥<label id="selected_item_price_label">367.80</label></b>元</div>
+		</div>
+		 -->
+	</div>
+	
+	<!-- 去支付 -->
+	<div class="cart-actions clearfix">
+      	<div class="form-button btn" style="float:left;background: #ddd;"><a href="{$home_link}" style="color: #575555;">再逛逛</a></div>	
+		<!-- <a href="{$home_link}" class="btn fl">再逛逛</a> -->
+		<form method="POST" action="{$order_submit_link}" id="cart_form">
+			<input type="hidden" name="number_list" id="number_list">
+			<input type="hidden" name="shopping_cart_id_list" id="shopping_cart_id_list">
+			<button type="submit" class="form-button fr">去结算</button>
+		</form>
+	</div>
+	<!-- e购物车内容 -->
+    
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/Js/front/cart.js?version={$version}"></script>
+{/block}

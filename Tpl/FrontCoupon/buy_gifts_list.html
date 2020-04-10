@@ -1,0 +1,172 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+    <style>
+        a{
+            display: block;
+            overflow: hidden;
+        }
+        .shop{
+            background-color: #fff;
+            border-bottom: 1px solid #e9e9e9;
+            padding: 10px;
+        }
+        .info{
+            float: left;
+            position: relative;
+            min-width: 180px;
+        }
+        .img{
+            float: left;
+            width: 68px;
+            height: 68px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+        .name{
+            font-size: 17px;
+            color: #333;
+        }
+        .tip{
+            font-size: 11px;
+            color: #9a9a9a;
+            margin-top: 5px;
+            margin-bottom: 3px;
+            height: 28px;
+            overflow: hidden;
+        }
+        .star{
+            display: inline-block;
+            width: 13px;
+            height: 12px;
+            background-position: -161px -26px;
+        }
+        .star:nth-child(5){
+            background-position: -148px -26px;
+        }
+        .score{
+            font-size: 10px;
+            color: #abca26;
+        }
+        .sales{
+            font-size: 10px;
+            color: #ddd;
+        }
+        .jian{
+            float: left;
+            margin-left: 80px;
+            margin-bottom: 6px;
+            font-size: 10px;
+            color: #ff3600;
+            padding-left: 2px;
+            padding-right: 2px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            border: 1px solid #ff3600;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            position: relative;
+            top: 5px;
+        }
+        .rate{
+            height: 19px;
+        }
+        .name,.jian{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+{/literal}
+{/block}
+{block name="content"}
+<script>
+    function infoW(){
+        var totalW = $(".shop").width()-20,
+                imgW = $(".img").width()+10,
+                $jian = $(".jian"),
+                $info = $(".info");
+        $info.width(totalW-imgW);
+        $jian.css("max-width",$info.width());
+    }
+    $(function(){
+        infoW();
+    });
+</script>
+{include file="../header.html"}
+<div class="main">
+    <a href="http://www.baidu.com" class="shop">
+        <img src="shop1.jpg" class="img"/>
+        <div class="info">
+            <h2 class="name">九井精致料理（星光店）</h2>
+            <p class="tip">仅限食堂，不提供餐前外带，餐毕未吃完可打包</p>
+            <div class="rate">
+                <span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span>
+                <span class="score">4.0分</span>
+                <span class="sales">销量1776单</span>
+            </div>
+        </div>
+        <div class="jian">满100赠50元店铺抵用券</div>
+    </a>
+    <a href="http://www.baidu.com" class="shop">
+        <img src="shop1.jpg" class="img"/>
+        <div class="info">
+            <h2 class="name">九井精致料理（星光店）</h2>
+            <p class="tip">仅限食堂，不提供餐前外带，餐毕未吃完可打包</p>
+            <div class="rate">
+                <span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span>
+                <span class="score">4.0分</span>
+                <span class="sales">销量1776单</span>
+            </div>
+        </div>
+        <div class="jian">满100赠50元店铺抵用券</div>
+    </a>
+    <a href="http://www.baidu.com" class="shop">
+        <img src="shop1.jpg" class="img"/>
+        <div class="info">
+            <h2 class="name">九井精致料理（星光店）</h2>
+            <p class="tip">仅限食堂，不提供餐前外带，餐毕未吃完可打包</p>
+            <div class="rate">
+                <span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span>
+                <span class="score">4.0分</span>
+                <span class="sales">销量1776单</span>
+            </div>
+        </div>
+        <div class="jian">满100赠50元店铺抵用券</div>
+    </a>
+    <a href="http://www.baidu.com" class="shop">
+        <img src="shop1.jpg" class="img"/>
+        <div class="info">
+            <h2 class="name">九井精致料理（星光店）</h2>
+            <p class="tip">仅限食堂，不提供餐前外带，餐毕未吃完可打包</p>
+            <div class="rate">
+                <span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span>
+                <span class="score">4.0分</span>
+                <span class="sales">销量1776单</span>
+            </div>
+        </div>
+        <div class="jian">满100赠50元店铺抵用券</div>
+    </a>
+    <a href="http://www.baidu.com" class="shop">
+        <img src="shop1.jpg" class="img"/>
+        <div class="info">
+            <h2 class="name">九井精致料理（星光店）</h2>
+            <p class="tip">仅限食堂，不提供餐前外带，餐毕未吃完可打包</p>
+            <div class="rate">
+                <span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span><span class="star icon"></span>
+                <span class="score">4.0分</span>
+                <span class="sales">销量1776单</span>
+            </div>
+        </div>
+        <div class="jian">满100赠50元店铺抵用券</div>
+    </a>
+</div>
+<div class="kongbai"></div>
+{include file="../footer.html"}
+{/block}
+
+{block name="js"}
+{/block}

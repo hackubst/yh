@@ -1,0 +1,123 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+		<link rel="stylesheet" href="/Public/Css/front/ticket_css/base.css" />
+
+		<link rel="stylesheet" href="/Public/Css/front/ticket_css/global.css" />
+
+	</head>
+
+{/block}
+{block name="content"}
+        <header class="common_head">
+		<a class="back" id="redir_back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+		<div class="header_title{if $merchant_info.online == 0} offline{/if}">
+			{$head_title}
+		</div>
+        </header>
+        <ul class="tab clearfix" id="ul">
+			<li id="li_1" class="active">未使用</li>
+			<li id="li_2">已使用</li>
+			<li id="li_3">已过期</li>
+		</ul>
+		<div id="main_1" class="index_main">
+        {foreach from=$list_one item=item_one}
+		<div class="box">
+			<div class="icon icon_quan bg_img1"></div>
+			<div class="box_top clearfix">
+				<p>￥</p>
+                <p>{$item_one.num}</p>
+                <p>{$item_one.use_limit_desc}</p>
+			</div>
+			<div class="box_mid clearfix">
+                <p>{if $item_one.isuse}未使用{else}已使用{/if}</p>
+			</div>
+			<div class="box_bottom1">
+				<div class="box_bottom clearfix">
+                    <p>{$item_one.start_time|date_format:"%Y.%m.%d"}开始</p>
+                    <p>{$item_one.end_time|date_format:"%Y.%m.%d"}过期</p>
+				</div>
+			</div>
+		</div>
+        {foreachelse}
+		<div class="box" style="text-align:center; padding-top:10%;font-size:16px;">
+            没有发现可用的券，您可以去<a href="/FrontCoupon/get_coupon" style="color:blue;font-size:18px;text-decoration:underline;">领券中心</a>瞧瞧～
+        </div>
+        {/foreach}
+		</div>
+
+		<div id="main_2" class="coupon1_main">
+        {foreach from=$list_two item=item_two}
+		<div class="box">
+			<div class="icon icon_gray_quan bg_img1"></div>
+			<div class="icon icon_yishiyong bg_img2"></div>
+			<div class="box_top clearfix top_out">
+				<p>￥</p>
+                <p>{$item_two.num}</p>
+                <p>{$item_two.use_limit_desc}</p>
+			</div>
+			<div class="box_mid clearfix mid_out">
+                <p>{if $item_two.isuse}未使用{else}已使用{/if}</p>
+			</div>
+			<div class="box_bottom1 bottom_out1">
+				<div class="box_bottom clearfix bottom_out">
+                    <p>{$item_two.start_time|date_format:"%Y.%m.%d"}开始</p>
+                    <p>{$item_two.end_time|date_format:"%Y.%m.%d"}过期</p>
+				</div>
+			</div>
+		</div>
+        {foreachelse}
+		<div class="box" style="text-align:center; padding-top:10%;">
+            没有发现任何踪迹~
+        </div>
+        {/foreach}
+        </div>
+		<div id="main_3" class="coupon2_main">
+        {foreach from=$list_three item=item_three}
+		<div class="box">
+			<div class="icon icon_gray_quan bg_img1"></div>
+			<div class="icon icon_yiguoqi bg_img2"></div>
+			<div class="box_top clearfix top_out">
+				<p>￥</p>
+                <p>{$item_three.num}</p>
+                <p>{$item_three.use_limit_desc}</p>
+			</div>
+			<div class="box_mid clearfix mid_out">
+                <p>{if $item_two.isuse}未使用{else}已使用{/if}</p>
+			</div>
+			<div class="box_bottom1 bottom_out1">
+				<div class="box_bottom clearfix bottom_out">
+                    <p>{$item_three.start_time|date_format:"%Y.%m.%d"}开始</p>
+                    <p>{$item_three.end_time|date_format:"%Y.%m.%d"}过期</p>
+				</div>
+			</div>
+		</div>
+        {foreachelse}
+		<div class="box" style="text-align:center; padding-top:10%;">
+            没有发现任何踪迹~
+        </div>
+        {/foreach}
+		</div>
+        {/block}
+        {block name="js"}
+		<script type="text/javascript" src="/Public/Js/front/ticket_js/jquery-1.12.1.min.js" ></script>
+		<script>
+			$(function()
+        	{
+            	var num;
+           		$("#ul li").on("click",function()
+           		{
+                	var Obj = $(this).attr("id");
+               		num = Obj.substring(2, Obj.length);
+                	$("#main"+num).show().siblings().hide();
+                	$("#ul").show();
+                    $(".common_head").show();
+           		});
+            	$("#ul li").on("click",function()
+            	{
+                	$(this).addClass("active").siblings().removeClass("active");
+            	});
+        	});
+		</script>
+        {/block}

@@ -1,0 +1,204 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<div class="tablesWrap">  
+	<form action="" method="post" >
+    <div class="tables-searchbox">
+
+        <span class="tbs-txt">ID：</span>
+        <input type="text" name="id" value="{if $id}{$id}{else}{/if}">
+
+        <span class="tbs-txt">用户昵称：</span>  
+        <input type="text" name="username" value="{$username}">  
+    
+        <span class="tbs-txt">手机号：</span>  
+        <input type="text" name="mobile" value="{$mobile}">
+
+        <span class="tbs-txt">用户姓名：</span>  
+        <input type="text" placeholder="" name="alipay_account_name" value="{$alipay_account_name}">
+
+        <div class="formitems inline" style="float:left;">  
+            <label class="fi-name" style="width:60px; font-weight:normal;">起始时间：</label>  
+            
+			<div class="form-controls" style="margin-left:80px;">  
+                <input type="text" id="start_time" name="start_time" value="{$start_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">  
+                <span class="fi-text">-</span>  
+                <input type="text" id="end_time"name="end_time" value="{$end_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">  
+            </div>   
+			
+        </div> 
+
+        <span class="tbs-txt">变动类型：</span>
+        <select name="change_type">
+            <option value="">--请选择--</option>
+            {foreach from= $change_type_list item=change k}
+            <option value="{$k}" {if $k == $change_type}selected{/if}>{$change}</option>
+            {/foreach}
+        </select>
+
+        <button class="btn" type="submit" style="clear: both"><i class="gicon-search"></i>搜索</button>
+    </div>  
+	</form>
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>    
+        <col width="10%">
+        <col width="10%">
+        <col width="10%">
+        <col width="8%">
+        <col width="5%">
+        <col width="5%">  
+        <col width="10%">
+            {if $opt == 3}
+            <col width="10%">
+            {/if}
+        <col width="12%">
+        <col width="10%">
+        </colgroup>
+        <thead>  
+            <tr>  
+                <td>用户</td>  
+                <td>用户ID</td>
+                <td>时间</td>
+                <td>类型</td> 
+                <td>收入</td>  
+                <td>支出</td>  
+                <td>当前预存款</td>
+                {if $opt == 3}
+                <td>当前银行存款</td>
+                {/if}
+                <td>备注</td>  
+                <td>操作</td>
+            </tr>
+        </thead>  
+        <tbody> 
+
+			{foreach from=$changed_list key=key name=loop item=v}
+            <tr>  
+                <td>{if $v.nickname}{$v.nickname}{else}--{/if}</td>
+                <td><a href="/AcpUser/user_detail/user_id/{$v.user_id}" title="查看用户详情"><span style="color: blue">{$v.id}</span></a></td>
+
+                <!--<td>{if $v.id}{$v.id}{else}&#45;&#45;{/if}</td>-->
+                <td>{$v.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                <td>{$v.change_type_name}</td>
+                <td>+{$v.amount_in}</td>  
+                <td>-{$v.amount_out}</td> 
+                <td>{$v.amount_after_pay}</td>
+                {if $opt == 3}
+                <td>{$v.bank_money_after}</td>
+                {/if}
+                <td>{$v.remark}</td>
+                {if $v.state == 1}
+                <td>已撤销</td>
+                {else if $v.change_type == 13 || $v.change_type == 14 || $v.change_type == 9}
+                <td><a href="javascript:;" class="btn" title="撤回" onclick="set_back({$v.account_id})">撤销</a></td>
+                {/if}
+            </tr>
+			{foreachelse}
+			<tr>  
+                <td colspan="20" style="text-align:center">对不起,暂无您要查询的数据!</td>  
+            </tr>  
+			{/foreach}
+            
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+            <a href="javascript:;" class="btn btn-blue" onclick='copy_link()'>复制财务明细链接</a>
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page}  
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/clipboard.min.js"></script>
+<script type="text/javascript">
+    //复制链接
+    function copy_link() {
+        var link = 'http://' + document.domain + '/FrontUser/account_list';
+        $.jPops.custom({
+            title: "请复制链接",
+            content: '<div>财务明细链接：' + link + '</div>',
+            okBtnTxt: "复制",
+            cancelBtnTxt: "关闭",
+            callback: function (r) {
+                if (r) {
+                    text = link;
+                    copy_text('jpops-btn-ok');
+                }
+                else {
+                    return true;
+                }
+            }
+        });
+    }
+
+    function copy_text(id) {
+        var clipboard = new Clipboard('#' + id, {
+            text: function () {
+                return text;
+            }
+        });
+
+        clipboard.on('success', function (e) {
+            console.log(e);
+            alert('复制成功');
+        });
+
+        clipboard.on('error', function (e) {
+            console.log(e);
+            alert('复制失败，请手动复制');
+        });
+    }
+
+
+    {literal}
+    function set_back(id)
+    {
+        $.jPops.confirm({
+            title:"提示",
+            content:"您确定要撤销吗？",
+            okBtnTxt:"确定",
+            cancelBtnTxt:"取消",
+            callback:function(r) {
+                if(r) {
+                    $.post('/AcpFinance/set_back', {"account_id":id}, function(data, textStatus)
+                    {
+                        if (data == 'success') {
+                            alert('恭喜您，撤销成功！');
+                            location.reload();
+                        }else if(data == 'lack_left_money')
+                        {
+                            alert('金豆余额不足，充值金豆和活动赠送银行金豆扣除失败！');
+                        }else if(data == 'lack_left_bank')
+                        {
+                            alert('银行余额不足，充值金豆和活动赠送银行金豆扣除失败！');
+                        }
+                        else{
+                            alert('对不起，撤销失败！');
+                        }
+                    });
+                }
+                return true;
+            }
+        });
+    }
+    {/literal}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/user_list.css" type="text/css" />
+{/block} 

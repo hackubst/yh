@@ -1,0 +1,83 @@
+{if $pc_site eq 1}
+<!--s尾部-->
+<section class="footer-wrapper">
+	<div class="bot_img_box"><img src="/Public/Images/front/footer_bz.png" alt="" class="bot_img"></div>
+	<footer class="container">
+  	<!-- s底部分类导航 -->
+  	<div id="J_Helper" class="helper">
+		{foreach from=$help_center_category_list item=sort}
+	  	<div class="mod">
+	  	  <div class="mod-wrap">
+	  	    <h4>
+	  	      <i class="iconfont"></i>
+	  	      <span class="s-adults">{$sort.help_sort_name}</span>
+	  	    </h4>
+	  	    <ul>  
+	  	    {foreach from=$sort.left_help_center_menu item=help}    
+	  	        <li>
+	  	          <a title="{$help.title}" href="{$help_detail_link}{$help.help_id}">{$help.title}</a>
+	  	        </li>
+	  	    {/foreach}	              
+	  	    </ul>
+	  	  </div>
+	  	</div>
+	  	{/foreach}
+  	</div>
+  	<!-- e底部分类导航 -->
+    <div class="footer-bottom-block">
+      <p class="copyright-block">{$official_record}</p>
+      <p class="copyright-block">
+      </p>
+    </div>
+  </footer>
+</section>
+<!--e尾部-->
+{else}
+{if $APP_TYPE == ''}
+<footer style="display:none;">
+	<div id="fb">
+		<div class="indexmenu">
+			<div class="boxflex">
+				<div class="boxflex_col1">
+					<a href="{$mall_home_link}" {if $nav == 'home'}class="cur"{/if}>
+						<svg class="b_icon"><use xlink:href="#home"></use></svg>
+						首页
+					</a>
+				</div>
+				<div class="boxflex_col1">
+					<a href="{$all_order_link}" {if $nav == 'order'}class="cur"{/if}>
+						<svg class="b_icon" style="width:19px;"><use xlink:href="#order"></use></svg>
+						订单
+					</a>
+				</div>				
+				<div class="boxflex_col1">
+					<!-- <div class="circle"></div> -->
+					<a href="{$cart_link}">
+						<svg class="b_icon cart_icon"><use xlink:href="#cart"></use></svg>
+						购物车
+					</a>
+				</div>
+				<div class="boxflex_col1">
+					<a href="{$wallet_link}" {if $nav == 'wallet'}class="cur"{/if}>
+						<svg class="b_icon" style="width:25px;"><use xlink:href="#wallet"></use></svg>
+						钱包
+					</a>
+				</div>
+				<div class="boxflex_col1">
+					<a href="{$integral_mall_home_link}" {if $nav == 'integral_home'}class="cur"{/if}>
+						<svg class="b_icon" style="width:25px;"><use xlink:href="#integral"></use></svg>
+						积分商城
+					</a>
+				</div>
+				<div class="boxflex_col1">
+					<a href="{$personal_center_link}" {if $nav == 'per_center'}class="cur"{/if}>
+						<svg class="b_icon" style="width:22px;"><use xlink:href="#my"></use></svg>
+						个人
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+{/if}
+{/if}

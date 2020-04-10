@@ -1,0 +1,156 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<div class="tablesWrap">
+
+<div class="tables-searchbox">
+    <form method="post">
+        <div class="mgt10">
+            <div class="formitems inline" style="float:left;">
+                <label class="fi-name" style="width:60px; font-weight:normal;">起始时间：</label>
+
+                <div class="form-controls" style="margin-left:80px;">
+                    <input type="text" id="start_time" name="start_time" value="{$start_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+                    <span class="fi-text">-</span>
+                    <input type="text" id="end_time"name="end_time" value="{$end_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </div>
+    </form>
+</div>
+    <table class="wxtables">
+        <colgroup>
+            <col width="33%">
+            <col width="33%">
+            <col width="33%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>昵称</td>
+            <td>ID</td>
+            <td>有效流水数</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$daily_win_list item=v}
+        <tr>
+
+            <td>{$v.nickname}</td>
+            <td>{$v.id}</td>
+            <td>{$v.daily_flow}</td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+        </div>
+    </div>
+
+    <!-- end tables-btmctrl -->
+
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+
+
+
+function set_enable(id, enable,type)
+{
+    if(type == 2){
+        var opt = enable ? '启用':'禁用';
+    }else if(type == 1){
+        var opt = enable ? '显示':'隐藏';
+    }
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定要执行这个操作吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/type_set_enable', {"type_id":id, "opt":enable,"type":type}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您，' + opt + '成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，'+ opt +'失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+function setSerial(_id, _this){
+    var initVal = _this.defaultValue;
+    var curVal = $(_this).val();
+    if(curVal == ''){
+        $(_this).val(initVal);
+        return false;
+    }
+    if(curVal == initVal){
+        return false;
+    }
+    $.ajax({
+        url: '/AcpGame/edit_valid_flow',
+        data: {id: _id, valid_flow: curVal},
+        dataType: 'json',
+        type: 'post',
+        beforeSend: function(){
+            $(_this).prev().removeClass('hide');
+            $(_this).addClass('hide');
+        },
+        success: function(data){
+            $(_this).prev().addClass('hide');
+            $(_this).removeClass('hide');
+            if(data.status === 1){
+                _this.defaultValue = curVal;
+            } else {
+                $(_this).val(initVal);
+            }
+            $.jPops.alert({
+                title:"提示",
+                content:data.msg,
+                okBtnTxt:"确定",
+                callback:function(){
+                    location.reload();
+                    return true;
+                }
+            });
+        }
+    });
+}
+
+
+</script>
+{/literal}
+{/block}

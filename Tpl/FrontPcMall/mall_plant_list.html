@@ -1,0 +1,143 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/category.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/search_panel.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<div class="WX_search">
+    <form action="{$mall_list_link}" class="WX_search_frm" method="POST">
+        <input type="search" class="WX_search_txt" name="item_name" id="topSearchTxt" placeholder="搜索全部商品">
+    </form>
+    <div class="WX_me">
+        <div>
+			<a href="javascript:;" onclick="search();" id="filterBtn" class="hd_search_btn" style="display:none;">
+				搜索
+			</a>
+            <a href="javascript:" id="topSearchCbtn" class="WX_search_btn" style="display:none;">
+                取消
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="smartboxBlock" style="display:none;">
+    <div>
+        <div class="s_tab" dtab="s-tab">
+            <a href="javascript:" ind="2" cg="1-6-2">
+                热门搜索
+            </a>
+        </div>
+        <div class="s_tag">
+			{foreach from=$hot_keywords item=keyword}
+				<a href="{$mall_list_link}/item_name/{$keyword}">
+					{$keyword}
+				</a>
+			{/foreach}
+		</div>
+    </div>
+</div>
+<div class="wx_wrap">
+    <div id="yScroll1" class="yScroll1">
+        <ul class="category1" id="allcontent">
+			{foreach from=$class_list key=key item=class}
+				<li class="cate_li{if $class.class_id == $class_id} cur{/if}">
+					{$class.class_name}
+					<input type="hidden" id="class_id" value="{$class.class_id}">
+				</li>
+			{/foreach}
+        </ul>
+    </div>
+    <div id="yScroll2" class="yScroll2">
+        <div class="cate_content">
+            <!--<a class="guanggao" id="guanggaoBanner1" href="">
+                <img src="__PUBLIC__/Images/front/acpc-541A5935-000000010000000155810000000526F8.1.jpg"
+                alt="">
+			</a>-->
+            <dl class="category2" id="category1">
+                <dd id="areaC_1">
+					{foreach from=$sort_list item=sort}
+					<a href="{$mall_list_link}/sort_id/{$sort.sort_id}">
+						<!--<img src="__PUBLIC__/Images/front/index_111208579.png" alt="">-->
+                        <span class="tit">
+							{$sort.sort_name}
+                        </span>
+                    </a>
+					{/foreach}
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<section>
+<div id="fb" class="bd-top-l-grey">
+	<div class="indexmenu">
+		<div class="boxflex">
+			<div class="boxflex_col1">
+				<a href="{$mall_home_link}">
+					<i class="i1">
+					</i>
+				</a>
+			</div>
+			<div class="boxflex_col1">
+				<a href="{$mall_plant_list_link}">
+					<i class="i2 cur">
+					</i>
+				</a>
+			</div>
+			<div class="boxflex_col1">
+				<a href="{$cart_link}">
+					<i class="i3">
+					</i>
+				</a>
+			</div>
+			<div class="boxflex_col1">
+				<a href="{$personal_center_link}">
+					<i class="i4">
+					</i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+$(function(){
+	
+	$('.cate_li').click(function(){
+		var class_id = $(this).find('#class_id').val();
+		location.href = '/FrontMall/mall_plant_list/class_id/' + class_id;
+		//$(this).addClass("cur").siblings().removeClass("cur");
+		//$(".cate_content").hide().eq($('.cate_li').index(this)).show();
+	});	
+	
+	$("#topSearchTxt").click(function(){
+			$(".wx_wrap").hide();
+			$("#smartboxBlock").show();
+			$(".WX_search_txt").css("width","85%");
+			$("#topSearchCbtn").show();
+		
+	});
+	
+	$("#topSearchCbtn").click(function(){
+			$("#smartboxBlock").hide();
+			$("#topSearchCbtn").hide();
+			$(".WX_search_txt").css("width","100%");
+			$(".wx_wrap").show();
+		
+	});
+});	
+</script>       
+{/literal}
+{/block}

@@ -1,0 +1,130 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/share.css?version={$version}">
+{literal}
+<style>
+</style>
+{/literal}
+{/block}
+
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/front/logo.png");
+    }
+</script>
+	<div class="wrapper" style="background:url({$freight_activity_info.bg_pic}) repeat-y;background-size:contain;">	
+		<!--s分享到朋友圈-->
+		<div class=" win-mask" style="display: none;"></div>
+		<div class="fx_font  text-center" style="display: none;">
+			<img src="__PUBLIC__/Images/front/fx_font.png" width="100%" />
+			<span class="share_txt">分享给好友，抢马上到优惠券</span>
+		</div>
+		<!--e分享到朋友圈-->
+
+		{if $state >= 2}
+			<!--s广告图和头像说明-->
+			<div class="goods_pic">
+				<a href="javascript:;"><img id="ad_img" src="{$freight_activity_info.activity_pic}"></a>
+				<div class="head_img"><img src="{$user_info.headimgurl}" alt="" onerror="no_pic(this);"></div>
+				<div class="share_txt_info">
+					<div class="s_txt_wrap">
+						<div class="s_txt">我是{$user_info.nickname}，</div>
+						<div class="s_txt">
+							<!-- 如果是非默认类型，显示主人寄语，否则显示广告语 -->
+							{if $freight_activity_info.activity_type == 0}
+								恭喜你抢到了我的红包，下次购物上亲，马上到呗！
+							{else}
+								{$freight_activity_info.activity_name}
+							{/if}
+						</div>
+					</div>
+				</div>
+			</div> 
+			<!--e广告图和头像说明-->
+		{/if}
+
+		{if $state == 2}
+		<!--s优惠券和分享按钮-->
+		<div class="btns">
+			<div class="s_award">
+				<div class="s_award_tit">优惠券</div>
+				<div class="s_award_cont">{$freight_coupon_info.num}元</div>
+			</div>
+			<a href="{if $freight_activity_info.adv_link}{$freight_activity_info.adv_link}{else}#{/if}" class="btn" id="useBtn" style="display:inline-block;">
+					使用红包
+			</a>
+			<div class="btn" id="robBtn" style="display:inline-block;" onclick="ask_for_help();">
+					分享红包
+			</div>
+		</div>
+		<!--e优惠券和分享按钮-->
+		{/if}
+		
+		{if $state >= 2}
+		<!--s好友红包列表-->
+		<div class="frd_list">
+			<div class="frd_tit">————————看朋友们手气如何————————</div>
+			<ul class="frd_list_ul">
+				{foreach from=$freight_coupon_list item=row}
+					<li class="frd_li">
+						<div class="frd_avatar"><img src="{$row.headimgurl}" alt="" onerror="no_pic(this);"></div>
+						<div class="frd_name_time">
+							<span class="frd_name">{$row.nickname}</span>
+							<span class="frd_time">{$row.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</span>
+						</div>
+						<div class="frd_tip_txt">感谢，以后托镖就靠你了~</div>
+						<div class="frd_money">{$row.num}元</div>
+					</li>
+				{/foreach}
+			</ul>
+		</div>
+		<!--e好友红包列表-->
+		{/if}
+		
+		{if $state == 1 || $state == 3}
+		<!--s已过期已抢完-->
+		<div class="share_over">
+			<div class="share_over_txt">
+				{if $state == 3}红包已抢完{elseif $state == 1}这个红包过期了...{/if}
+			</div>
+		</div>
+		<!--e已过期已抢完-->
+		{/if}
+	</div>
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan_min" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+<script>
+{literal}
+$(function(){
+	//广告图自适应屏幕
+	//轮播图自适应手机
+	var windowWith = window.innerWidth;
+	var slide_height = windowWith * 71 / 80;	
+	$('#ad_img').width(windowWith);
+	$('#ad_img').height(slide_height);	
+	
+	//隐藏弹出框	
+		$('.win-mask,.fx_font').click(function(){
+			$('.win-mask').hide();
+			$('.fx_font').hide();
+		});
+})
+
+function ask_for_help()
+{
+	$(".win-mask").height($( document).height());
+	$(".win-mask").show();
+	$(".fx_font").show();
+	$('html, body').animate({scrollTop:0}, 'slow'); 
+}
+</script>
+{/literal}
+{/block}

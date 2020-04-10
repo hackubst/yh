@@ -1,0 +1,120 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<div class="t-a-wait-con">
+    <div class="tablesWrap">  
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="5%">  
+            <col width="15%">  
+            <col width="14%">  
+            <col width="14%">  
+            <col width="40%">  
+            <col width="20%">  
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>选择</td>  
+                    <td>标题</td>  
+                    <td>发件人</td>  
+                    <td>时间</td>  
+                    <td>内容</td>  
+                    <td>操作</td>  
+                </tr>  
+            </thead>  
+            <tbody>  
+                <tr>  
+                    <td><input type="checkbox" class="checkbox" name="a[]"></td>  
+                    <td>毛泽东东家衣服问题</td>  
+                    <td>习近平</td>  
+                    <td>2014-12-29 24:59:59</td>  
+                    <td>我的商品买了,但是我不知道怎么用啊!麻烦你了哦,真的是个麻烦啊!! </td>   
+                    <td>     
+                        <a href="http://fx.taodiantong.com/AcpUser/reply_message" class="btn" title="回复">回复</a>   
+                        <a href="javascript:;" class="btn" title="删除">删除</a>   
+                    </td>  
+                </tr> 
+                <tr>  
+                    <td><input type="checkbox" class="checkbox" name="a[]"></td>  
+                    <td>毛泽东东家衣服问题</td>  
+                    <td>习近平</td>  
+                    <td>2014-12-29 24:59:59</td>  
+                    <td>我的商品买了,但是我不知道怎么用啊!麻烦你了哦,真的是个麻烦啊!! </td>   
+                    <td>     
+                        <a href="http://fx.taodiantong.com/AcpUser/reply_message" class="btn" title="回复">回复</a>   
+                        <a href="javascript:;" class="btn" title="删除">删除</a>   
+                    </td>  
+                </tr>
+                <tr>  
+                    <td><input type="checkbox" class="checkbox" name="a[]"></td>  
+                    <td>毛泽东东家衣服问题</td>  
+                    <td>习近平</td>  
+                    <td>2014-12-29 24:59:59</td>  
+                    <td>我的商品买了,但是我不知道怎么用啊!麻烦你了哦,真的是个麻烦啊!! </td>   
+                    <td>     
+                        <a href="http://fx.taodiantong.com/AcpUser/reply_message" class="btn" title="回复">回复</a>   
+                        <a href="javascript:;" class="btn" title="删除">删除</a>   
+                    </td>  
+                </tr>
+                <tr>  
+                    <td><input type="checkbox" class="checkbox" name="a[]"></td>  
+                    <td>毛泽东东家衣服问题</td>  
+                    <td>习近平</td>  
+                    <td>2014-12-29 24:59:59</td>  
+                    <td>我的商品买了,但是我不知道怎么用啊!麻烦你了哦,真的是个麻烦啊!! </td>   
+                    <td>     
+                        <a href="http://fx.taodiantong.com/AcpUser/reply_message" class="btn" title="回复">回复</a>   
+                        <a href="javascript:;" class="btn" title="删除">删除</a>   
+                    </td>  
+                </tr> 
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fl">  
+                <a href="###" class="btn btn-blue" onclick="Sel()">全选</a>  
+                <a href="###" class="btn btn-blue" onclick="Can()">取消</a>  
+                <a href="###" class="btn btn-blue">删除</a>  
+            </div>  
+            <div class="fr">  
+                <div class="paginate">  
+                    <a class="shang" href="#">上一页</a>  
+                    <span class="current">1</span>  
+                    <a class="shuzi" href="#">2</a>  
+                    <a class="shuzi" href="#">3</a>  
+                    <a class="xia" href="#">下一页</a>  
+                    <span class="total_page">共: 1/7 页</span>  
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script>
+	function Sel(){
+		var id=document.getElementsByName("a[]");
+		for(var i=0;i<id.length;i++){
+			id[i].checked=true;
+		}	
+	}
+	
+	function Can(){
+		var id=document.getElementsByName("a[]");
+		for(var i=0;i<id.length;i++){
+			id[i].checked=false;
+		}	
+	}
+
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

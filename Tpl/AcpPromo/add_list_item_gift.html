@@ -1,0 +1,214 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tabs wizardstep clearfix">  
+    <a href="javascript:;" class=" tabs_a active fl" data-origin="test">  
+        <span class="wizardstep-num">1</span>添加商品促销活动  
+    </a>  
+    <a href="javascript:;" class="tabs_a fl" data-origin="test">  
+        <span class="wizardstep-num">2</span>添加商品促销 
+    </a>  
+    <a href="javascript:;" class="tabs_a fl" data-origin="test">  
+        <span class="wizardstep-num">3</span>完成  
+    </a>  
+</div>  
+<!-- end tabs -->  
+<div class="tabs-content" data-origin="test">  
+    <div class="tc"> 
+    	<div class="formitems inline">  
+            <label class="fi-name">活动类型：</label>  
+            <div class="form-controls" style="line-height:32px;">指定商品送礼品</div>  
+        </div>
+        <div class="formitems inline">  
+            <label class="fi-name"><span class="colorRed">*</span>促销活动名称：</label>  
+            <div class="form-controls">  
+                <input type="text" placeholder="" class="xlarge">  
+                <span class="fi-help-text">活动的名称，在1至60个字符之间</span>  
+            </div>  
+        </div>
+        <div class="formitems inline">  
+            <label class="fi-name"><span class="colorRed"></span>开始日期：</label>  
+            <div class="form-controls">  
+                <input type="text" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm'})">  
+                <span class="fi-help-text">只有达到开始日期，活动才会生效。</span>  
+            </div>  
+        </div> 
+        <div class="formitems inline">  
+            <label class="fi-name"><span class="colorRed"></span>结束日期：</label>  
+            <div class="form-controls">  
+                <input type="text" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm'})">  
+                <span class="fi-help-text">当达到结束日期时，活动会结束。</span>  
+            </div>  
+        </div> 
+        <div class="formitems inline">  
+            <label class="fi-name"><span class="colorRed">*</span>适合的客户：</label>  
+            <div class="form-controls">  
+                <div class="checkbox-group">  
+                    <label><input type="checkbox" name="test">普通会员</label>  
+                    <label><input type="checkbox" name="test">高级会员</label>  
+                    <label><input type="checkbox" name="test">VIP会员</label>  
+                </div>  
+                <span class="fi-help-text"></span>  
+            </div>  
+        </div> 
+        <div class="formitems inline">  
+            <label class="fi-name">促销信息：</label>  
+            <div class="form-controls">  
+                <textarea name="contents" id="" class="large"></textarea>  
+            </div>  
+        </div> 
+        <div class="wizardstep-actions mgt10">  
+            <a href="###" class="btn btn-blue j-wizardstep" data-origin="test" data-type="next">下一步</a>  
+        </div>  
+    </div>  
+    <div class="tc hide">  
+		<div class="tablesWrap">  
+    		<div class="tables-searchbox"> 
+            	<div class="t-dis-list">
+                    <span class="tbs-txt">名称：</span>  
+                    <input type="text">
+                </div> 
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择分类：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="">  
+                                <option value="0" selected="">--请选择--</option>  
+                                <option value="1">--北京--</option>  
+                                <option value="2">--上海--</option>  
+                            </select>  
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择品牌：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="">  
+                                <option value="0" selected="">--请选择--</option>  
+                                <option value="1">--北京--</option>  
+                                <option value="2">--上海--</option>  
+                            </select>  
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list"><button class="btn"><i class="gicon-search"></i>查询</button></div>
+            </div>  
+    		<!-- end tables-searchbox -->  
+   			<table class="wxtables">  
+                <colgroup>  
+                <col width="10%">  
+                <col width="10%">  
+                <col width="25%">  
+                <col width="12%">  
+                <col width="12%">  
+                <col width="12%">  
+                <col width="30%">  
+                </colgroup>  
+                <thead>  
+                    <tr>  
+                        <td>选择</td> 
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>批发价</td>  
+                        <td>折扣</td>  
+                        <td>折后价</td>  
+                        <td>操作</td>  
+                    </tr>  
+                </thead>  
+                <tbody>  
+                    <tr>  
+                        <td><input type="checkbox" class="checkbox" name="checkIds[]"> </td>  
+                        <td><img src=""  width="50" height="50" /></td>  
+                        <td>波士顿男士羽绒服</td>  
+                        <td><span>¥</span><span>200.00</span></td>  
+                        <td>0.8</td>  
+                        <td><span>¥</span><span>160.00</span></td>  
+                        <td>  
+                            <a href="javascript:;" class="btn" title="查看">查看</a>   
+                            <a href="javascript:;" class="btn" title="修改">编辑</a>   
+                            <a href="javascript:;" class="btn" title="删除">删除</a>   
+                        </td>  
+                    </tr>  
+                </tbody>  
+            </table>  
+    		<!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">  
+                <div class="fl">  
+                    <a href="javascript:selall()" class="btn btn-blue">全选</a>  
+                    <a href="javascript:clearall()" class="btn btn-blue">取消</a>  
+                </div>  
+                <div class="fr">  
+                    <div class="paginate">  
+                        <a class="shang" href="#">上一页</a>  
+                        <span class="current">1</span>  
+                        <a class="shuzi" href="#">2</a>  
+                        <a class="shuzi" href="#">3</a>  
+                        <a class="xia" href="#">下一页</a>  
+                        <span class="total_page">共: 1/7 页</span>  
+                    </div>  
+                    <!-- end paginate -->  
+                </div>  
+            </div>  
+    		<!-- end tables-btmctrl -->  
+		</div>  
+		<!-- end tablesWrap --> 
+        <div class="wizardstep-actions mgt10">  
+            <a href="###" class="btn j-wizardstep" data-origin="test" data-type="prev">上一步</a>  
+            <a href="###" class="btn btn-blue j-wizardstep" data-origin="test" data-type="next">下一步</a>  
+        </div>  
+    </div>  
+    <div class="tc hide">  
+        添加成功!  
+        <div class="wizardstep-actions mgt10">  
+            <a href="###" class="btn j-wizardstep" data-origin="test" data-type="prev">上一步</a>  
+            <a href="###" class="btn btn-blue">保存</a>  
+        </div>  
+    </div>  
+</div>  
+<!-- end tabs-content -->  
+
+
+  
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script charset="utf-8" src="__KD__/kindeditor.js" > </script>
+<script charset="utf-8" src="__KD__/lang/zh_CN.js" > </script>
+<script >
+	KindEditor.ready( function (K) {
+		var editor1 = K.create( 'textarea[name="contents"]' , {
+		uploadJson : '__KD__/php/upload_json.php' ,
+		fileManagerJson : '__KD__/php/file_manager_json.php' ,
+		width : '498px' ,
+		height : '200px' ,
+		minWidth : '498px' ,
+		minHeight : '200px' ,
+		fillDescAfterUploadImage : true,
+		allowFileManager : true,
+		items : [ 'bold' , 'italic' , 'underline' , '|' , 'insertorderedlist' , 'insertunorderedlist' , 'image' , 'multiimage' , 'link' , '|' , 'unlink' , 'removeformat' , 'forecolor' , 'hilitecolor' , 'fullscreen' ],
+		afterCreate : function () {
+		var self = this;
+		K.ctrl(document, 13 , function () {
+		self.sync();
+		K( 'form[name=form12]' )[ 0 ].submit();
+		});
+		K.ctrl(self.edit.doc, 13 , function () {
+		self.sync();
+		K( 'form[name=form12]' )[ 0 ].submit();
+		});
+		K('#gethtml').click(function(e) {
+		alert(editor1.html());
+		});
+		
+		}
+		});
+	});
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpPromo/add_list_item_discount.css" />
+{/block}

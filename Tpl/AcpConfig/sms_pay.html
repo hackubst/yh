@@ -1,0 +1,206 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+
+{block name="content"}
+    <div class="suer-con-right">
+	  <div class="infor-tit"><b>短信充值</b></div>
+
+	{if isset($pay_tag) && $pay_tag}
+		<div class="cart-co-panel">
+			<div class="ct-cp-title">
+					<h3>额度：{if $amount == 50}50元 = 500条{else if $amount == 100}100元 = 1200条{else if $amount == 200}200元 = 2500条{else if $amount == 500}500元 = 7800条{/if}</h3>
+			</div>
+				<div class="ct-cp-con">
+				<ul class="ct-cp-con-PayWay j-payway">
+					{if $pay_tag == 'alipay'}
+						<a class="alipay" href="###"></a>
+					{elseif $pay_tag == 'chinabank'}
+						<a class="chinabank" href="###"></a>
+					{elseif $pay_tag == 'offline'}
+						<div><a class="offline" href="###"></a></div>
+						<div class="red" style="text-align:left;">
+						{$payway_info.pay_desc}</div>
+					{/if}
+				</ul>
+				
+			</div>
+		</div>
+		
+		<div class="cit-ctrl-total" style="margin-right:60px;font-size:20px;">
+			充值金额<b>&yen;&nbsp;<font color="red" size="5">{$amount}</font></b>&nbsp;元
+		</div>
+		
+		<div class="order-success-bottom" style="text-align:right;">
+			{if $pay_tag == 'alipay'}
+				<a href="{$qr_pay_mode_link}" class="osb-btnpaynow" target="_blank">扫码支付</a>
+				<a href="{$links}" class="osb-btnpaynow" target="_blank">立即支付</a>
+			{elseif $pay_tag == 'chinabank'}
+				<form method="POST" action="https://pay3.chinabank.com.cn/PayGate" target="_blank">
+					<input type="HIDDEN" name='v_mid' value='{$parameter.v_mid}'>
+					<input type="HIDDEN" name='v_oid' value='{$parameter.v_oid}'>
+					<input type="HIDDEN" name='v_amount' value='{$parameter.v_amount}'>
+					<input type="HIDDEN" name='v_moneytype'  value='{$parameter.v_moneytype}'>
+					<input type="HIDDEN" name='v_url'  value='{$parameter.v_url}'>
+					<input type="HIDDEN" name='v_md5info' value='{$parameter.v_md5info}'>
+					<input type="submit" class='osb-btnpaynow' value="立即支付">
+				</form>
+			{elseif $pay_tag == 'offline'}
+				<span class="red" style="font-size:15px;">汇款成功后请保留凭证，并到会员中心【我的财务】->【线下汇款入账申请】->【添加申请】处申请一笔充值。</span>
+			{/if}
+			<!--<div class="ost-qrcode-wrap">
+				<img src="__IMAGES__/ewm.png" alt="" class="qrcode"><span class="ost-icon qrcodetip"></span>
+			</div>-->
+		</div>
+	{else}
+		<form method="POST" action="" name="howtopay" id="howtopay" onsubmit="return submit_howtopay(this);">
+<style>
+	.text-box { width: 100%;overflow: hidden;padding: 10px 0;}
+	.te-name { width: 160px;color: #838383;float: left;text-align: right;line-height: 32px;}
+	.te-input { float: left;line-height: 32px;}
+	.te-input input { border: #d1d1d1 solid 1px;padding: 6px 10px;color: #838383;background: none;}
+</style>
+			<div class="text-box">
+				<label class="te-name" style="width:110px;font-size:20px;">充值金额：</label>  
+				<div class="te-input">  
+					<!-- <input type="text" class="t-t" id="total_fee" name="total_fee" style="width:80px;font-size:15px;font-weight:700;">
+						 <span class="te-er" style="font-size:20px;">元</span> 
+					-->
+					<div>
+						&nbsp;&nbsp;<img src='__ACPIMAGES__/sms_buy.gif'>
+						&nbsp;50元&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;500条短信
+						&nbsp;&nbsp;<input type='radio' name='total_fee' value='50.00' checked/>
+					</div>
+					<div>
+						&nbsp;&nbsp;<img src='__ACPIMAGES__/sms_buy.gif'>
+						&nbsp;100元&nbsp;&nbsp;=&nbsp;&nbsp;1200条短信
+						&nbsp;<input type='radio' name='total_fee' value='100.00' />
+					</div>
+					<div>
+						&nbsp;&nbsp;<img src='__ACPIMAGES__/sms_buy.gif'>
+						&nbsp;200元&nbsp;&nbsp;=&nbsp;&nbsp;2500条短信
+						&nbsp;<input type='radio' name='total_fee' value='200.00' />
+					</div>
+					<div>
+						&nbsp;&nbsp;<img src='__ACPIMAGES__/sms_buy.gif'>
+						&nbsp;500元&nbsp;&nbsp;=&nbsp;&nbsp;7800条短信
+						&nbsp;<input type='radio' name='total_fee' value='500.00' />
+					</div>
+						
+					<span class="te-er error" id="error_total_fee" style="font-size:15px;"></span> 
+				</div>  
+			</div>
+			<!--<div class="rech-but">
+				<input type="hidden" name="act" value="voucher">
+				<button type="submit" id="submit">确定充值</button>
+			</div>-->
+
+		<div class="cart-co-panel">
+			<div class="ct-cp-title">
+				<h3>选择支付方式</h3>
+			</div>
+			<div class="ct-cp-con">
+				<ul class="ct-cp-con-PayWay j-payway">
+					{foreach key=key from=$payway_list item=payway_info}
+						{if $payway_info.pay_tag != 'wallet' && $payway_info.pay_tag != 'offline'}
+							<li {if $payway_info.pay_tag == "alipay"}class="selected"{/if}>
+								<input type="radio" name="payway_id" value="{$payway_info.payway_id}" data-payway_name="{$payway_info.pay_name}" {if $payway_info.pay_tag == "alipay"}checked{/if}>
+								<a href="###" class="{$payway_info.pay_tag}">{$payway_info.pay_name}</a>
+							</li>
+						{/if}
+					{/foreach}
+				</ul>
+				<div class="ct-cp-con-PayWay paybank j-paybank">
+					<span class="paybank-title">请选择银行：</span>
+					<ul class="mgt10">
+						<li>
+							<input type="radio" name="bank" value="中国农业银行">
+							<a href="###" class="bk1">中国农业银行</a>
+						</li>
+						<li>
+							<input type="radio" name="bank" value="招商银行">
+							<a href="###" class="bk2">招商银行</a>
+						</li>
+						<li>
+							<input type="radio" name="bank" value="中国银行">
+							<a href="###" class="bk3">中国银行</a>
+						</li>
+						<li>
+							<input type="radio" name="bank" value="中国建设银行">
+							<a href="###" class="bk4">中国建设银行</a>
+						</li>
+						<li>
+							<input type="radio" name="bank" value="中国工商银行">
+							<a href="###" class="bk5">中国工商银行</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="order-success-bottom" style="float:right;">
+			<input type="hidden" name="act" value="pay">
+		<!-- 	<button type="button" class="osb-btnpaynow"  style="float:right;" 
+			onclick="setOrderConfirmed('/UcpOrder/confirm_order/order_id/{$order_info.order_id}.html')">立即支付</button>-->
+			
+			<button type="button" class="osb-btnpaynow"  style="float:right;" 
+			onclick="setOrderConfirmed('')">立即支付</button>
+		</div>
+		<!-- end cart-actions -->
+		</form>
+	{/if}
+  </div>
+{/block} 
+{block name="js"}
+{literal}
+<script src="__UCPJS__/confirm_order.js?version={$version}"></script>
+<script>
+//设置订单预存款支付
+function setOrderConfirmed(link)
+{
+	var total_fee = $('input[name="total_fee"]').val();
+	if (total_fee == '')
+	{
+		$('#error_total_fee').html('对不起，请选择要充值的金额');
+		$('#total_fee').focus();
+		return false;
+	}
+	else if (isNaN(total_fee))
+	{
+		$('#error_total_fee').html('对不起，充值金额必须是整数');
+		$('#total_fee').focus();
+		return false;
+	}
+	else if (total_fee < 0.1)
+	{
+		$('#error_total_fee').html('对不起，充值金额不得低于0.1元');
+		$('#total_fee').focus();
+		return false;
+	}
+	else
+	{
+		$('#error_total_fee').html('');
+	}
+	//弹层
+	$.jPops.confirm({
+		title:"提示",
+		content:"您确认要支付吗?",
+		okButton:"确定",
+		cancelButton:"取消",
+		callback: function(r){
+			if(r)
+			{
+				$("#howtopay").action = link;
+				$("#howtopay").submit();
+			}
+			return true;
+		}
+	});
+}
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__UCPCSS__/cartAndorder.css">
+{/block} 

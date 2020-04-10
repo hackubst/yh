@@ -1,0 +1,1585 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="max-age=0" http-equiv="Cache-Control">
+<meta content="240" name="MobileOptimized">
+<meta content="YES" name="apple-touch-fullscreen">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta name="format-detection" content="telephone=no">
+    <!--样式-->  
+	<link rel="stylesheet" href="__PUBLIC__/Css/front/jquery.mobile-1.4.3.min.css?version={$version}" />
+	<link rel="stylesheet" href="__PUBLIC__/Css/front/common.css?version={$version}"  type="text/css" />
+    <!--end--> 
+    <!--导入的js框架--> 
+	<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js?version={$version}"></script>
+	<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.circliful.js?version={$version}"></script>
+	<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.roundabout.min.js?version={$version}"></script> 
+    <script type="text/javascript" src="__PUBLIC__/Js/front/jquery.mobile-1.4.3.min.js?version={$version}"></script>
+
+    <!--end--> 
+    <!--滚动图片模拟数据初始化--> 
+    <script type="text/javascript">
+
+    var arr1 = new Array();
+    var arr2 = new Array();
+    var arr3 = new Array();
+    var arr4 = new Array();
+    var arr5 = new Array();
+    var arr6 = new Array();
+    var arr7 = new Array();
+    var arr8 = new Array();
+    var arr9 = new Array();
+    var imgarrinit=false;
+
+    function imgArrInit()
+    {
+        if(!imgarrinit)
+        {       
+        	arr1=["__PUBLIC__/Images/front/1.jpg","__PUBLIC__/Images/front/1.jpg","__PUBLIC__/Images/front/1.jpg"];
+            arr2=["__PUBLIC__/Images/front/2.jpg","__PUBLIC__/Images/front/2.jpg","__PUBLIC__/Images/front/2.jpg"];
+            arr3=["__PUBLIC__/Images/front/3.jpg","__PUBLIC__/Images/front/3.jpg","__PUBLIC__/Images/front/3.jpg"];
+            arr4=["__PUBLIC__/Images/front/4.jpg","__PUBLIC__/Images/front/5.jpg","__PUBLIC__/Images/front/6.jpg"];
+            arr5=["__PUBLIC__/Images/front/4.jpg","__PUBLIC__/Images/front/4.jpg","__PUBLIC__/Images/front/4.jpg"];
+            arr6=["__PUBLIC__/Images/front/2.jpg","__PUBLIC__/Images/front/1.jpg","__PUBLIC__/Images/front/3.jpg"];
+            arr7=["__PUBLIC__/Images/front/4.jpg","__PUBLIC__/Images/front/2.jpg","__PUBLIC__/Images/front/1.jpg"];
+            arr8=["__PUBLIC__/Images/front/5.jpg","__PUBLIC__/Images/front/3.jpg","__PUBLIC__/Images/front/2.jpg"];
+            arr9=["__PUBLIC__/Images/front/5.jpg","__PUBLIC__/Images/front/1.jpg","__PUBLIC__/Images/front/3.jpg"];
+            imgarrinit=true;
+        }
+   } 
+
+		
+    </script>
+    <script type="text/javascript">
+var command_arr = new Array();
+{foreach from=$command item=c key=key}
+command_arr[{$key}] = {$c};
+{/foreach}
+var alarm = {$user_info.alarm};
+{literal}
+
+function hide_img()
+{
+	$('#fullscreen_img').hide();
+	$('#home').show();
+}
+function enlarge_img()
+{
+	$('#home').hide();
+	$('#fullscreen_img').show();
+}
+function initialize_btn()
+{
+	var len = command_arr.length;
+	for (var i = 1; i <= len; i++)
+	{
+		set_btn_css(i, command_arr[i - 1]);
+	}
+}
+
+function send_command(btn_serial, command)
+{
+	$.ajax({
+		url:"/Index/send_command",
+		type:"POST",
+		data:{
+			btn_serial: btn_serial,
+			command: command,
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {
+				if(d != 'failure')
+				{
+					set_btn_css(btn_serial, command);
+				}
+				else
+				{
+					//alert("网络请求错误，请重试");
+				}
+			}
+		}
+	});	
+}
+
+function set_spray_time()
+{
+	$.ajax({
+		url:"/Index/set_spray_time",
+		type:"POST",
+		data:{
+			ton: $("input[name=g-time]").val(),
+			toff: $("input[name=g-interval]").val()
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {
+				if(d != 'failure')
+				{
+					//返回成功，代码写这里
+				}
+				else
+				{
+				}
+			}
+		}
+	});
+}
+
+function set_btn_css(btn_serial, command)
+{
+	var clientWidth = document.body.clientWidth;
+	switch (btn_serial)
+	{
+		case 1:
+			if (command == 1)
+			{
+				$("#i6 a").css("color","#19c54f");
+				if(clientWidth >= 540)
+					$("#i6 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -198px -368px");
+				else
+					$("#i6 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat -42px -256px");
+
+			}
+			else if (command == 0)
+			{
+				$("#i6 a").css("color","#707070");
+				if(clientWidth >= 540)
+					$("#i6 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -200px -296px");
+				else
+					$("#i6 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat -44px -210px");
+
+			}
+			break;
+		case 2:
+			if (command == 1)
+			{
+				$("#i7 a").css("color","#f08519");
+				if(clientWidth >= 540)
+					$("#i7 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -290px -369px");
+				else
+					$("#i7 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat -102px -255px");
+
+			}
+			else if (command == 0)
+			{
+				$("#i7 a").css("color","#707070");
+				if(clientWidth >= 540)
+					$("#i7 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -294px -296px");
+				else
+					$("#i7 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat -101px -212px");
+
+			}
+			break;
+		case 3:
+			if (command == 1)
+			{
+				$("#i5 a").css("color","#00a2e9");
+				if(clientWidth >= 540)
+					$("#i5 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -96px -374px");
+				else
+					$("#i5 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat 7px -255px");
+			}
+			else if (command == 0)
+			{
+				$("#i5 a").css("color","#707070");
+				if(clientWidth >= 540)
+					$("#i5 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -97px -290px");
+				else
+					$("#i5 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat 7px -210px");
+			}
+			break;
+		case 4:
+			if (command == 1)
+			{
+				$("#i8 a").css("color","#e62129");
+				if(clientWidth >= 540)
+					$("#i8 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -386px -365px");
+				else
+					$("#i8 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat -159px -255px");
+			}
+			else if (command == 0)
+			{
+				$("#i8 a").css("color","#707070");
+				if(clientWidth >= 540)
+					$("#i8 i").css("background","url(__PUBLIC__/Images/front/main_sprite_pad.png) no-repeat -387px -295px");
+				else
+					$("#i8 i").css("background","url(__PUBLIC__/Images/front/main_sprite.png) no-repeat -160px -212px");
+			}
+			break;
+		case 5:
+			if (command == 1)
+			{
+				$("#waterFish").css("background-color","rgb(63, 164, 238)");
+				$("#waterFish img").css("opacity","1");
+			}
+			else if (command == 0)
+			{
+				$("#waterFish").css("background-color","rgb(151, 156, 159)");
+				$("#waterFish img").css("opacity","0.2");
+			}
+			break;
+		default:
+			break;
+	}
+}
+$.fn.toggler = function( fn, fn2 ) {
+    var args = arguments,guid = fn.guid || $.guid++,i=0,
+    toggler = function( event ) {
+      var lastToggle = ( $._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
+      $._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
+      event.preventDefault();
+      return args[ lastToggle ].apply( this, arguments ) || false;
+    };
+    toggler.guid = guid;
+    while ( i < args.length ) {
+      args[ i++ ].guid = guid;
+    }
+    return this.click( toggler );
+  };
+$(function(){
+//灌溉
+
+	var start0 = command_arr[2];
+	var end0 = start0 ? 0 : 1;
+	$("#i5 a").toggler(
+		function(){
+			send_command(3, end0);
+		},
+		function(){
+			send_command(3, start0);
+		}
+	);
+
+	
+	//灯光
+	var start1 = command_arr[1];
+	var end1 = start1 ? 0 : 1;
+	$("#i7 a").toggler(
+		function(){
+			send_command(2, end1);
+		},
+		function(){
+			send_command(2, start1);
+		}
+	);
+	//风扇
+	var start2 = command_arr[0];
+	var end2 = start2 ? 0 : 1;
+	$("#i6 a").toggler(
+		function(){
+			send_command(1, end2);
+		},
+		function(){
+			send_command(1, start2);
+		}
+	);
+	//加热
+	var start3 = command_arr[3];
+	var end3 = start3 ? 0 : 1;
+	$("#i8 a").toggler(
+		function(){
+			send_command(4, end3);
+		},
+		function(){
+			send_command(4, start3);
+		}
+	);
+});
+	</script>
+
+    
+    <!--select界面的js--> 
+<script type="text/javascript">
+	//$.mobile.loading( "hide" );
+    var select_init_is_over=false;
+    $(document).on("pageinit","#select",function(){
+    		
+        if(!select_init_is_over)
+         {
+        	select_init()
+	     }
+      });
+	function select_init()
+	{
+	      select_fillstat();
+	      var clientWidth = document.body.clientWidth;
+	      if(clientWidth >= 540){
+	      		select_setDivs_pad();
+	      	}else{
+		  			select_setDivs();
+			}
+	}
+
+    function select_fillstat()
+	{
+	     $('#myStat_select1').circliful();
+		 $('#myStat_select2').circliful();
+		 $('#myStat_select3').circliful();
+	}
+
+    function select_setDivs()//手机布局
+	 {	
+		var dotLeft = $("#img_lb_div_select").offset().left-23+($("#img_lb_div_select").width()-$(".dot_select").width())/2;
+        //中心点纵坐标
+        //var dotTop = $("#img_lb_div_select").offset().top-20+($("#img_lb_div_select").height()-$(".dot_select").height())/2;
+		var dotTop=55;
+		
+        //起始角度
+        var stard = 0;
+        //半径
+        var radius = 105;
+        //每一个BOX对应的角度;
+        var avd = 360/$(".d_jd_select").length;
+        //每一个BOX对应的弧度;
+        var ahd = avd*Math.PI/180;
+        
+        //设置圆的中心点的位置
+        $(".dot_select").css({"left":dotLeft,"top":dotTop});
+        $(".d_jd_select").each(function(index, element){
+            $(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+        });
+	 }
+	 function select_setDivs_pad()//pad布局
+	 {	
+		var dotLeft = $("#img_lb_div_select").offset().left-40+($("#img_lb_div_select").width()-$(".dot_select").width())/2;
+        //中心点纵坐标
+        //var dotTop = $("#img_lb_div_select").offset().top-20+($("#img_lb_div_select").height()-$(".dot_select").height())/2;
+		var dotTop=160;
+		
+        //起始角度
+        var stard = 0;
+        //半径
+        var radius = 245;
+        //每一个BOX对应的角度;
+        var avd = 360/$(".d_jd_select").length;
+        //每一个BOX对应的弧度;
+        var ahd = avd*Math.PI/180;
+        
+        //设置圆的中心点的位置
+        $(".dot_select").css({"left":dotLeft,"top":dotTop});
+        $(".d_jd_select").each(function(index, element){
+            $(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+        });
+	 }
+     var select_plant_num=1;//被选中的阶段
+	 function select_beTouch(obj)
+	 {
+		 //清除被选择的状态
+	     select_reSetAllImg();
+		 var url=$(obj).attr('src').split(".");
+		 var newurl='';
+		 var t=$(obj).attr('src').split('selected'); 
+		 
+		 var num=$(obj).parent().attr('value');//取得哪个阶段
+		 if(t.length>1)
+		 {
+		   
+		 }
+		 else
+		 { 
+		    //各种阶段被选中时的代码
+		    newurl=url[0]+'_selected.png';
+		    $(obj).attr('src',newurl);
+			$('#select_p').html($('#jd_img'+num+'_select').prev().html());	
+		 }
+		 
+		  select_plant_num=num;
+          var t=5;
+		  var d=5;
+		  var l=5;
+
+		  switch(num)
+		   {
+		       case '1':t=20;d=15;l=330;break;
+			   case '2':t=27;d=21;l=400;break;
+			   case '3':t=22;d=42;l=340;break;
+			   case '4':t=33;d=15;l=760;break;
+			   case '5':t=27;d=21;l=400;break;
+			   case '6':t=27;d=21;l=500;break;
+			   case '7':t=27;d=21;l=600;break;
+			   case '8':t=27;d=21;l=700;break;
+			   case '9':t=27;d=21;l=800;break;
+			   default:break;
+		   }
+
+		 $('#myStat_select1').attr('data-part',t);
+         $('#myStat_select1').attr('data-text',t+'℃');
+		 $('#myStat_select2').attr('data-part',d);
+         $('#myStat_select2').attr('data-text',d+'%');
+		 $('#myStat_select3').attr('data-part',parseFloat(l) / 10);
+         $('#myStat_select3').attr('data-text',l+'Lux');
+		 select_fillstat();	 
+	 }
+
+	  //取消其他阶段的选中情况
+	 function select_reSetAllImg()
+	 {
+	   //var imgs=$('.plant_img');
+	   $('.plant_img_select').each(function(){
+	     var url=$(this).attr('src').replace('_selected',"");
+         $(this).attr('src',url);
+	   });
+	 }
+
+   
+	     //底部导航切换按钮事件
+	 function select_btn_click(num)
+	 {
+	 		var numb = num;
+	 		if(numb == 0){
+	 			$("#slt_menu_switch").hide();
+	 			$("#slt_menu_shop").show();
+	 		}else if(numb == 1){
+	 			$("#slt_menu_shop").hide();
+	 			$("#slt_menu_switch").show();
+	 		} 
+		  
+	 }
+     //编辑按钮事件，num就是选定的阶段，调用diy_sel_plant(num)设置DIY界面的选中值
+	 function select_setPlaneNum()
+	 {
+          var num=select_plant_num;
+		  diy_sel_plant(num);
+
+		 // diy_img_list=$('#images_ul_diy').html();
+	 }
+
+	 function select_startPlaneNum()
+	 {
+          var num=select_plant_num;
+		  home_sel_plant(num);
+		  isend=false;
+		  isfinal=false;
+	 }
+
+</script>
+
+<!--select界面的css--> 
+<style type="text/css">
+
+.dot_select
+	 { 
+	 position:absolute;
+	 width:0px;
+	 height:0px;
+	 }
+
+.plant_img_select
+    {
+        width:100%;
+		height:100%;
+	}
+
+
+</style>
+{/literal}
+<!--select页面-->
+<div data-role="page" id="select"> 
+    <header class="h42 bk-green pos-rel">
+	<div class="pos-abs"><a href="javascript:history.go(-1);"><div class="goback-btn"></div></a></div>
+			<div class="header-title"><span>Jerry Wang</span>'s<span class="pr5em"></span><span>番茄</span></div>
+			<div id="no_water" style='width:100px;float:right;margin-right:36px;' class="text-center lh40 red01 txt-shd0 boxflex_col2 display-no"><span>缺水</span><img src='__PUBLIC__/Images/front/water.png' style="height:30px;" /></div>
+			<div id="no_close" style='width:100px;float:right;margin-right:36px;' class="text-center lh40 red01 txt-shd0 display-no"><span>抽屉分离</span><img src='__PUBLIC__/Images/front/chouti.png' style="height:30px;" /></div>
+			<a href="/Index/setup.html" rel="external"><div class="header-list"></div></a>
+	  </header>
+    <div data-role="content" id="select_content" style='margin:0px auto;'>
+	   <!--植物标题-->
+	   <div class="text-center">
+	   		<p class="main_plant_name">番茄</p>
+	   		<p class="main_plant_desc">这是番茄种植的一个详细过程</p>
+	   	</div>
+	    <!--植物各个阶段-->
+	   <div id='img_lb_div_select'>
+       <div id='plant_m_select'>
+       	<div id='select_info'>
+         <p id='select_p'>点击每个种植阶段，查看种植信息</p>
+       	</div>
+		<div class="dot_select"></div>
+	    <div class='d_jd_select'></div>
+	   		<div id='jd9_select' value='9' class='d_jd_select'><span style='display:none;'>种子形成期：植物器官脱落，成熟种子落回土壤</span><img id='jd_img9_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase9.png'></img></div>
+	   			<div id='jd8_select' value='8' class='d_jd_select'><span style='display:none;'>结果期：果实经过生化转变，色香味变得香甜</span><img id='jd_img8_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase8.png'></img></div>
+	   			<div id='jd7_select' value='7' class='d_jd_select'><span style='display:none;'>传粉期：成熟的花粉落在雌蕊柱头受精</span><img id='jd_img7_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase7.png'></img></div>
+	   			<div id='jd6_select' value='6' class='d_jd_select'><span style='display:none;'>开花期：花瓣打开，在激素作用下花粉成熟</span><img id='jd_img6_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase6.png'></img></div>
+	   			<div id='jd5_select' value='5' class='d_jd_select'><span style='display:none;'>花芽期：花芽分化、花器官形成和性别分化</span><img id='jd_img5_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase5.png'></img></div>
+	   			<div id='jd4_select' value='4' class='d_jd_select'><span style='display:none;'>根茎叶期：光合作用帮助根茎叶快速生长</span><img id='jd_img4_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase4.png'></img></div>
+	   			<div id='jd3_select' value='3' class='d_jd_select'><span style='display:none;'>幼苗期：在光的作用下，嫩芽显绿色</span><img id='jd_img3_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase3.png'></img></div>
+	   			<div id='jd2_select' value='2' class='d_jd_select'><span style='display:none;'>萌芽期：配合酶的作用种子吸水并萌芽</span><img id='jd_img2_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase2.png'></img></div>
+	   			<div id='jd1_select' value='1' class='d_jd_select'><span style='display:none;'>种子期：埋于松紧适中土壤中</span><img id='jd_img1_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase1.png'></img></div>
+	   </div>
+	   </div>  
+	   <!--select统计图-->
+	   <script>
+			
+	   		var screenWidth = document.body.clientWidth;
+	   		if(screenWidth >= 540){
+	   				document.write('<div id="stats_select" class="stats_select"><div class="stat" id="myStat_select1" data-dimension="150" data-text="{$user_info.outside_temperature}℃"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.outside_temperature}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select2" data-dimension="150" data-text="{$user_info.humidity}%"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.humidity}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select3" data-dimension="150" data-text="{$user_info.illuminance}Lux"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.illuminance / 10}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	   			}else{
+	   				document.write('<div id="stats_select" class="stats_select"><div class="stat" id="myStat_select1" data-dimension="80" data-text="{$user_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.outside_temperature}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select2" data-dimension="80" data-text="{$user_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.humidity}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select3" data-dimension="80" data-text="{$user_info.illuminance}Lux"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.illuminance / 10}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	   				}
+	   	
+	   	</script>
+
+	 <!--  <div id='stats_select' class="stats_select">
+		   <div class='stat' id="myStat_select1" data-dimension="80" data-text="{$user_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.outside_temperature}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div>
+		   <div class='stat' id="myStat_select2" data-dimension="80" data-text="{$user_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.humidity}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div>
+			 <div class='stat' id="myStat_select3" data-dimension="80" data-text="{$user_info.illuminance}Lux"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="{$user_info.illuminance / 10}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div><div style='clear:both;'></div> 
+	   </div>-->
+	   <!--三个图标-->
+	   <div class="param_icon">
+	   	<div class="param_icon_temp"></div>
+	   	<div class="param_icon_humit"></div>
+			<div class="param_icon_light"></div>
+	   	</div>
+	   <!--说明文字-->
+	   <div id='select_info' class="select_info">
+	     <label id="select_info_txt"><p><span class="bold green01">温度</span>：番茄是喜温性蔬菜，在正常条件下，同化作用最适温度为20～25℃;</p><p><span class="bold green01">光照</span>：番茄是喜光作物，光饱和点为70000lx，适宜光照强度为30000～50000lx;</p><p><span class="bold green01">水分</span>：番茄既需要较多的水分，但又不必经常大量的灌溉，一般以土壤湿度60～80%、空气湿度45～50%为宜。</p></label>
+	   </div>
+	   <!--按钮-->
+	   <div class="select_btn">
+	   <a href="#diy" class="main-btn txt-shd0" style="color:white;font-weight:normal;" onclick='select_setPlaneNum()' data-prefetch="ture">编<span class="pr10em"></span>辑</a>
+	   <a href="#home" class="main-btn txt-shd0" style="color:white;font-weight:normal;" onclick='select_startPlaneNum()' data-prefetch="ture">开<span class="pr10em"></span>始</a>
+	   </div>
+    </div> 
+	<!--底部导航-->
+
+    <div id="fb" class="bd-top-l-grey">
+   	<div class="indexmenu" id="slt_menu_switch">
+			<div class="boxflex" id="ul_select_zw">
+				<div class="boxflex_col3">
+					<a href="javascript:;" onclick='select_btn_click(0)'>
+						<i class="i0">
+						</i>
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i6">
+					<a href="javascript:;">
+						<i class="i6">
+						</i>
+						排风
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i7">
+					<a href="javascript:;">
+						<i class="i7">
+						</i>
+						灯光
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i5">
+					<a href="javascript:;">
+						<i class="i5">
+							<span class="dian">
+							</span>
+						</i>
+						灌溉
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i8">
+					<a href="javascript:;">
+						<i class="i8">
+						</i>
+						加热
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="indexmenu" id="slt_menu_shop" style="display:none;">
+			<div class="boxflex" id="ul_select_c">
+				<div class="boxflex_col3">
+					<a href="javascript:;" onclick='select_btn_click(1);'>
+						<i class="i0">
+						</i>
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/mall_home.html" rel="external">
+						<i class="i1">
+						</i>
+						商城
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/search.html" rel="external">
+						<i class="i2">
+						</i>
+						搜索
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/cart.html" rel="external">
+						<i class="i3">
+							<span class="dian">
+							</span>
+						</i>
+						购物车
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/personal_center.html" rel="external">
+						<i class="i4">
+						</i>
+						我的
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+
+
+{literal}
+    <!--主控页面的js--> 
+    <script type="text/javascript"> 
+
+		
+     var imglist='';
+     var main_init_is_over=false;
+	 $(document).on("pageinit","#home",function(){
+				//$.mobile.loading( "hide" );
+        if(!main_init_is_over)
+        {
+          init();
+        }
+
+      });
+     function init()
+	 {
+	 		var clientWidth = document.body.clientWidth;
+	   fillstat();
+	   if(clientWidth >= 540){
+	   	setDivs_pad();
+	  }else{
+		 	setDivs();
+		} 
+		 imglist=$('#images_ul').html();
+		 imginit();
+		 imgArrInit();
+		 var obj=$('#jd_img1');
+		 beTouch(obj);
+		 //diy_init();
+		
+	 }
+	 //旋转图片的初始化
+	 function imginit(imgurl,num)
+	 {
+
+		if((imgurl!=undefined)&&(num!=undefined))
+		 {
+		  
+           switch(num)
+		      {
+		       case '1':arr1.push(imgurl);break;
+			   case '2':arr2.push(imgurl);break;
+			   case '3':arr3.push(imgurl);break;
+			   case '4':arr4.push(imgurl);break;
+			   case '5':arr5.push(imgurl);break;
+			   case '6':arr6.push(imgurl);break;
+			   case '7':arr7.push(imgurl);break;
+			   case '8':arr8.push(imgurl);break;
+			   case '9':arr9.push(imgurl);break;
+			   default:break;
+		       }
+
+		  var str='<li><a href="#" onclick="enlarge_img()"><img src="'+imgurl+'" alt="" /></a></li>';
+		  //$('#fullscreen_img').find('img').attr('src', imgurl);
+		  imglist=str+imglist;
+		 
+		 }
+		  $('#images_ul').empty();
+		  $('#images_ul').html(imglist);
+		  $('#featured-area ul').roundabout({
+          //easing: 'easeOutInCirc',
+          });
+
+	 }
+     
+     //植物阶段改变时，图片切换
+     function imgChange(arr)
+	 {
+
+		if(arr!=undefined)
+		 {
+		  var str='';
+		  for(var i=0;i<arr.length;i++)
+		  {
+            str+='<li><a href="#"><img src="'+arr[i]+'" alt="" /></a></li>';
+            imglist=str;
+		  }
+		 }
+		 
+
+		  $('#images_ul').empty();
+		  $('#images_ul').html(imglist);
+
+		  $('#featured-area ul').roundabout({
+          //easing: 'easeOutInCirc',
+          });
+	 }
+
+	 //绘制圆形统计图
+     function fillstat()
+	 {
+	     $('#myStat').circliful();
+		 $('#myStat2').circliful();
+		 $('#myStat3').circliful();	  
+	 }
+	 //测试圆形统计图的重新绘制
+     function set(t)
+	 {
+	     $('#myStat').attr('data-part',t);
+         $('#myStat').attr('data-text',t+'℃');
+		 $('#myStat').circliful();
+	 }
+	 //phone圆形排列div
+     function setDivs()
+	 {	
+		var dotLeft = $("#img_lb_div").offset().left-20+($("#img_lb_div").width()-$(".dot").width())/2;
+        //中心点纵坐标
+       // var dotTop = $("#img_lb_div").offset().top-20+($("#img_lb_div").height()-$(".dot").height())/2;
+		var dotTop=55;
+		//alert("dotLeft:"+dotLeft+"---dotTop"+dotTop);
+        //起始角度
+        var stard = 0;
+        //半径
+        var radius = 105;
+        //每一个BOX对应的角度;
+        var avd = 360/$(".d_jd").length;
+        //每一个BOX对应的弧度;
+        var ahd = avd*Math.PI/180;
+        
+        //设置圆的中心点的位置
+        $(".dot").css({"left":dotLeft,"top":dotTop});
+        $(".d_jd").each(function(index, element){
+            $(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+        });
+	 }
+	 
+	 function setDivs_pad()//pad布局
+	 {	
+		var dotLeft = $("#img_lb_div").offset().left-40+($("#img_lb_div").width()-$(".dot").width())/2;
+        //中心点纵坐标
+        //var dotTop = $("#img_lb_div_select").offset().top-20+($("#img_lb_div_select").height()-$(".dot_select").height())/2;
+		var dotTop=160;
+		
+        //起始角度
+        var stard = 0;
+        //半径
+        var radius = 245;
+        //每一个BOX对应的角度;
+        var avd = 360/$(".d_jd").length;
+        //每一个BOX对应的弧度;
+        var ahd = avd*Math.PI/180;
+        
+        //设置圆的中心点的位置
+        $(".dot").css({"left":dotLeft,"top":dotTop});
+        $(".d_jd").each(function(index, element){
+            $(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+        });
+	 }
+	 var isend=false;//最后一个阶段
+
+      //植物各阶段选中
+	 function beTouch(obj)
+	 {
+		 //清除被选择的状态
+		 infoShow();
+	     reSetAllImg();
+		 var url=$(obj).attr('src').split(".");
+		 var newurl='';
+		 var t=$(obj).attr('src').split('_s');
+		 var num=$(obj).parent().attr('value');//取得哪个阶段
+		 $('#images_ul').attr('value',num);
+		 if(t.length>1)
+		 {
+		   
+		 }
+		 else
+		 { 
+		    //各种阶段被选中时的代码
+		    var clientWidth = document.body.clientWidth;
+		    newurl=url[0]+'_s.png';
+		    $(obj).attr('src',newurl);
+			$('#p_info').html($(obj).prev().html());
+			$('#p_info').attr('value',$(obj).parent().attr('value'));
+			if(clientWidth >= 540){
+					$('#img_lb_div').css('background-image','url(__PUBLIC__/Images/front/b'+$('#p_info').attr('value')+'_pad.png)');//改变pad状态圆图
+			}else{
+					$('#img_lb_div').css('background-image','url(__PUBLIC__/Images/front/b'+$('#p_info').attr('value')+'.png)');//改变phone状态圆图
+			}
+			 //各阶段植物的图片切换
+              var arr = new Array();
+              switch(num)
+		      {
+		       case '1':arr=arr1;break;
+			   case '2':arr=arr2;break;
+			   case '3':arr=arr3;break;
+			   case '4':arr=arr4;break;
+			   case '5':arr=arr5;break;
+			   case '6':arr=arr6;break;
+			   case '7':arr=arr7;break;
+			   case '8':arr=arr8;break;
+			   case '9':arr=arr9;break;
+			   default:arr=arr1;break;
+		       }
+		   
+		   $('#images_ul').empty();
+		   imgChange(arr);//初始化图片
+		   if(num=='9')
+		   	{isend=true;}
+		 }
+   
+         var t=0;
+		 var d=0;
+		 var l=0;
+		  switch(num)
+		   {
+		       case '1':t=20;d=15;l=330;break;
+			   case '2':t=27;d=21;l=400;break;
+			   case '3':t=22;d=42;l=340;break;
+			   case '4':t=33;d=15;l=760;break;
+			   case '5':t=27;d=21;l=400;break;
+			   case '6':t=27;d=21;l=500;break;
+			   case '7':t=27;d=21;l=600;break;
+			   case '8':t=27;d=21;l=700;break;
+			   case '9':t=27;d=21;l=800;break;
+			   default:break;
+		   }
+		 $('#myStat').attr('data-part',t);
+         $('#myStat').attr('data-text',t+'℃');
+		 $('#myStat2').attr('data-part',d);
+         $('#myStat2').attr('data-text',d+'%');
+		 $('#myStat3').attr('data-part',parseFloat(l) / 10);
+         $('#myStat3').attr('data-text',l+'Lux');
+         fillstat();
+	 }
+
+     //取得随机数
+	 function getRandom(n){
+        return Math.floor(Math.random()*n+1)
+        }
+        
+
+     //拍照按钮点击事件
+	 function addPic()
+	 {
+		  var url="__PUBLIC__/Images/front/ajax-loader.gif";
+	  
+          var obj=$('#images_ul .roundabout-in-focus a img');
+		  $(obj).attr('src',url);
+		  var screenWidth = document.body.clientWidth;
+		  if(screenWidth >= 540){
+		  	$(obj).css('width','250');
+		  	$(obj).css('height','150');
+		  }else{
+		  	$(obj).css('width','160');
+		  	$(obj).css('height','100');
+			}
+	   setTimeout(function () {    
+		  var url="__PUBLIC__/Images/front/pic.jpg";
+		  var num=$('#images_ul').attr('value');
+		  imginit(url,num);
+	   }, 2000);
+	 }
+     //取消其他阶段的选中情况
+	 function reSetAllImg()
+	 {
+	   //var imgs=$('.plant_img');
+	   $('.plant_img').each(function(){
+	     var url=$(this).attr('src').replace('_s',"");
+         $(this).attr('src',url);
+	   });
+	 }
+
+	 	     //底部导航切换按钮事件
+	 function btn_click(num)
+	 {
+	 		var numb = num;
+	 		if(numb == 0){
+	 			$("#main_menu_switch").hide();
+	 			$("#main_menu_shop").show();
+	 		}else if(numb == 1){
+	 			$("#main_menu_shop").hide();
+	 			$("#main_menu_switch").show();
+	 		} 
+		  
+	 }
+     var isfinal=false;//是否最后一个阶段YES已被点击
+	 function ask()
+	 {
+	    if(!isfinal)
+	    {
+	        infoUnShow();	        
+	    }
+
+	 }
+	 //显示说明文字
+	 function infoShow()
+	 {
+	    $('#p_info').css('display','block');
+		$('#p_yes').css('display','none');
+		$('#p_no').css('display','none');
+		$('#d_line').css('background-image','');
+	 }
+	 //隐藏说明文字，显示yes和no按钮
+	 function infoUnShow()
+	 {
+	    $('#p_info').css('display','none');
+		$('#p_yes').css('display','block');
+		$('#p_no').css('display','block');
+		var clientWidth = document.body.clientWidth;
+		if(clientWidth >= 540){
+				$('#d_line').css('background-image','url(__PUBLIC__/Images/front/line_pad.png)');
+		}else{
+			$('#d_line').css('background-image','url(__PUBLIC__/Images/front/line.png)');
+		}
+	 }
+     
+	 function no()
+	 {
+	    infoShow();
+	 }
+	 function yes()
+	 {
+	    var i=$('#p_info').attr('value')*1;		
+	    if(isend)
+	        {
+               isfinal=true;
+	        }
+		if(i==9)
+		 {
+		    infoShow();
+			$('#p_info').html('恭喜~收货啦');//最后的提示语
+			return;
+		 }
+		var obj=$('#jd_img'+(i+1));
+		beTouch(obj);
+	 }
+
+     //在select页面中被调用，用来传入开始的植物阶段
+	 function home_sel_plant(num)
+	 {
+	   var obj=$('#jd_img'+num);
+	   beTouch(obj);
+	 }
+	 
+	 
+    </script> 
+
+     
+    <!--end--> 
+    <!--主控界面的css--> 
+    <style type="text/css">
+	.liwidth
+	{
+	   width:80px;
+	}
+	.liwidth2
+	{
+	   width:23%;
+	}
+   	.stat{
+	   float:left;
+	}
+	
+	
+	.plant_img{
+        width:100%;
+		height:100%;
+	}
+	
+	
+
+
+	.ui-icon-me:after {  
+           background-image: url("__PUBLIC__/Images/front/tb_1.png");  /**你的图片，路径是相对于当前使用文件可以访问到的*/         
+           background-size: 18px 18px;  
+           /*border-radius: 0; 图标形态，0=方形，不设置就是默认的圆形*/  
+     } 
+	.ui-icon-sd:after {  
+           background-image: url("__PUBLIC__/Images/front/tb_2.png");    
+           background-size: 18px 18px;         
+     } 
+	 .ui-icon-ss:after {  
+           background-image: url("__PUBLIC__/Images/front/tb_3.png");    
+           background-size: 18px 18px;         
+     } 
+	 .ui-icon-gw:after {  
+           background-image: url("__PUBLIC__/Images/front/tb_4.png");    
+           background-size: 18px 18px;         
+     } 
+	 
+	 
+
+	 .dot
+	 { 
+	 position:absolute;
+	 width:0px;
+	 height:0px;
+	 }
+     #img_lb_div{
+	 position:relative;
+	 }
+	 .boxflex_col2 a{font-weight:normal;color:rgb(112,112,112);}
+	 .boxflex_col2 a:hover{color:#68b300;}
+
+    </style>
+
+</head> 
+{/literal}
+<body> 
+<div id="fullscreen_img" style="background:url(__PUBLIC__/Images/front/pic.jpg); display:none;height:100%;width:100%;background-size:cover;" onclick="hide_img()"></div>
+<div data-role="page" id="home"> 
+	  <header class="h42 bk-green pos-rel">
+	<div class="pos-abs"><a href="javascript:history.go(-1);"><div class="goback-btn"></div></a></div>
+		<div class="header-title"><span>Jerry Wang</span>'s<span class="pr5em"></span><span>番茄</span></div>
+		<div id="no_water" style='width:100px;float:right;margin-right:36px;' class="text-center lh40 red01 txt-shd0 display-no"><span>缺水</span><img src='__PUBLIC__/Images/front/water.png' style="height:30px;" /></div>
+			<div id="no_close" style='width:100px;float:right;margin-right:36px;' class="text-center lh40 red01 txt-shd0 display-no"><span>抽屉分离</span><img src='__PUBLIC__/Images/front/chouti.png' style="height:30px;" /></div>
+		<a href="/Index/setup.html" rel="external"><div class="header-list"></div></a>
+	  </header>
+       <div data-role="content" id="instwo_content"> 
+		 <!--圆形统计图-->
+		 <script>
+			
+	   		var screenWidth = document.body.clientWidth;
+	   		if(screenWidth >= 540){
+	   				document.write('<div id="stats" class="stat_home"><div class="stat" id="myStat" data-dimension="150" data-text="{$user_info.outside_temperature}℃"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat2" data-dimension="150" data-text="{$user_info.humidity}%"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat3" data-dimension="150" data-text="{$user_info.illuminance}Lux"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	   			}else{
+	   				document.write('<div id="stats" class="stat_home"><div class="stat" id="myStat" data-dimension="80" data-text="{$user_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat2" data-dimension="80" data-text="{$user_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat3" data-dimension="80" data-text="{$user_info.illuminance}Lux"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	   				}
+	   	
+	   	</script>
+	   <!--<div id='stats'>
+		   <div class='stat' id="myStat" data-dimension="80" data-text="{$user_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="20" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div>
+		<div class='stat' id="myStat2" data-dimension="80" data-text="4{$user_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="40" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div>
+		<div class='stat' id="myStat3" data-dimension="80" data-text="{$user_info.illuminance}Lux"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="60" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div><div style='clear:both;'></div>
+       
+	   </div>-->
+	   <!--三个图标-->
+	   <div class="param_icon">
+	   	<div class="param_icon_temp"></div>
+	   	<div class="param_icon_humit"></div>
+			<div class="param_icon_light"></div>
+	   	</div>
+	   <!--图片切换-->
+       <div  id='tp_lb' class="tp_lb">
+           <div id="featured-area"> 
+              <ul id='images_ul' value=''> 
+               <li><a href="#"><img src="__PUBLIC__/Images/front/1.jpg" alt="" /></a></li>
+               <li><a href="#"><img src="__PUBLIC__/Images/front/2.jpg" alt="" /></a></li> 
+               <li><a href="#"><img src="__PUBLIC__/Images/front/3.jpg" alt="" /></a></li> 
+               <li><a href="#"><img src="__PUBLIC__/Images/front/4.jpg" alt="" /></a></li> 
+               <li><a href="#"><img src="__PUBLIC__/Images/front/5.jpg" alt="" /></a></li>
+              </ul> 
+           </div>
+	   </div>
+	   <div class="take_photo">
+	       <a class="tk_photo_lik" href="javascript:void(0);" data-role="button" onclick='addPic()' data-corners="false" data-inline="true"></a>
+	   </div>
+	   <!--植物各个阶段-->
+	   <div id='img_lb_div' class='container'>
+       <div id='plant_m'>
+       	  <div id='d_info'>
+		      <div id='d_line'>
+	            <p id='p_info' class="p_info" value='' onclick='ask()'></p>
+			    <p id='p_yes' onclick='yes()'>YES</p>
+			    <p id='p_no' onclick='no()'>NO</p>
+		      </div>
+		  </div>
+		<div class="dot"></div>
+	    <div class='d_jd'></div>
+        <div id='jd9' value='9' class='d_jd'><span style='display:none;'>果实成熟了吗？</span><img id='jd_img9' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase9.png'></img></div>
+		<div id='jd8' value='8' class='d_jd' ><span style='display:none;'>叶子开始脱落了吗?</span><img id='jd_img8' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase8.png'></img></div>
+		<div id='jd7' value='7' class='d_jd'><span style='display:none;'>果实结了很多了吗?</span><img id='jd_img7' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase7.png'></img></div>
+		<div id='jd6' value='6' class='d_jd'><span style='display:none;'>请问果实变多了吗?</span><img id='jd_img6' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase6.png'></img></div>
+		<div id='jd5' value='5' class='d_jd'><span style='display:none;'>请问看到果实了吗?</span><img id='jd_img5' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase5.png'></img></div>
+		<div id='jd4' value='4' class='d_jd'><span style='display:none;'>请问叶子很茂盛了吗?</span><img id='jd_img4' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase4.png'></img></div>
+		<div id='jd3' value='3' class='d_jd'><span style='display:none;'>请问看到很多叶子了吗?</span><img id='jd_img3' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase3.png'></img></div>
+		<div id='jd2' value='2' class='d_jd'><span style='display:none;'>请问长出叶子了吗?</span><img id='jd_img2' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase2.png'></img></div>		
+		<div id='jd1' value='1' class='d_jd'><span style='display:none;'>请问种子发芽了吗?</span><img id='jd_img1' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase1.png'></img></div>
+	   </div>
+	   </div>
+	   <div class="mainH_btn">
+	   <a href="#diy" class="main-btn txt-shd0" style="color:white;font-weight:normal;">DIY<span class="pr5em"></span>编辑</a>
+	   <a href="/Index/mall_home.html" class="main-btn txt-shd0" style="color:white;font-weight:normal;" rel="external"><span class="pr20em"></span>商<span class="pr10em"></span>店<span id='span_sc'>2</span></a>
+	   </div>
+    </div> 
+	<!--底部导航-->
+    
+   <div id="fb" class="bd-top-l-grey">
+   	<div class="indexmenu" id="main_menu_switch">
+			<div class="boxflex" id="ul_zw">
+				<div class="boxflex_col3">
+					<a href="javascript:;" onclick='btn_click(0)'>
+						<i class="i0">
+						</i>
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i6">
+					<a href="javascript:;">
+						<i class="i6">
+						</i>
+						排风
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i7">
+					<a href="javascript:;">
+						<i class="i7">
+						</i>
+						灯光
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i5">
+					<a href="javascript:;">
+						<i class="i5">
+							<span class="dian">
+							</span>
+						</i>
+						灌溉
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i8">
+					<a href="javascript:;">
+						<i class="i8">
+						</i>
+						加热
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="indexmenu" id="main_menu_shop" style="display:none;">
+			<div class="boxflex" id="ul_c">
+				<div class="boxflex_col3">
+					<a href="javascript:;" onclick='btn_click(1)'>
+						<i class="i0">
+						</i>
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/mall_home.html" rel="external">
+						<i class="i1">
+						</i>
+						商城
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/search.html" rel="external">
+						<i class="i2">
+						</i>
+						搜索
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/cart.html" rel="external">
+						<i class="i3">
+							<span class="dian">
+							</span>
+						</i>
+						购物车
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/personal_center.html" rel="external">
+						<i class="i4">
+						</i>
+						我的
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+
+
+<!--DIY界面的js--> 
+{literal}
+<script type="text/javascript">
+
+      //$.mobile.loading( "hide" );
+     var diy_img_list='';//存储9个阶段的图片html代码
+     var diy_init_is_over=false;
+     $(document).on("pageinit","#diy",function(){
+		   
+			if(!diy_init_is_over)
+			{
+			  diy_img_list=$('#images_ul_diy').html();
+			  diy_init();
+		    }
+			initialize_btn();
+      });
+
+
+	 	     //底部导航切换按钮事件
+	 function diy_btn_click(num)
+	 {
+	 		var numb = num;
+	 		if(numb == 0){
+	 			$("#diy_menu_switch").hide();
+	 			$("#diy_menu_shop").show();
+	 		}else if(numb == 1){
+	 			$("#diy_menu_shop").hide();
+	 			$("#diy_menu_switch").show();
+	 		} 
+		  
+	 }
+
+	 function diy_init()
+	 {
+	   diy_statfill();
+	   diy_imginit();
+	   //绑定鼠标点击和触摸事件
+	   bindUpEvent();
+	   clickEvent();
+	   getFirstObj();
+	 }
+
+     //绑定触摸事件
+	 function bindUpEvent()
+	 {
+	     $('#d_diy_hk a').bind('mouseup',function(){hk_change(this);});//电脑上测试用，鼠标点击事件
+	     $('#d_diy_hk a').bind('touchstart',function(){hk_change(this);});//手机触摸事件
+	     $('#d_diy_hk a').bind('touchmove',function(){hk_change(this);});//手机触摸事件
+		 $('#d_diy_hk a').bind('touchend',function(){hk_change(this);});//手机触摸事件
+		 $('#d_diy_hk .ui-slider-track').bind('touchend',function(){hk_change_track(this);});//手机触摸事件
+		 
+	 }
+	 //绑定点击事件
+	 function clickEvent()
+	 {
+	     $('#images_ul_diy img').bind('click',function(){diy_click_statfill(this)});	 
+	 }
+     
+
+	 function getFirstObj()
+	 {
+	     var firstObj=$('#diy_plant_1').children().children();
+		 diy_click_statfill(firstObj);//初始化页面时选中第一个阶段
+	 }
+     //圆形统计图填充
+	 function diy_statfill()
+	 {
+	       $('#myStat_diy1').circliful();
+		   $('#myStat_diy2').circliful();
+		   $('#myStat_diy3').circliful();
+	 }
+     //点击阶段图的事件
+     function diy_click_statfill(obj)
+	 {
+		   var tobj=$(obj).parent().parent();
+		   var num=$(tobj).attr('value');
+
+		   var t=0;
+		   var d=0;
+		   var l=0;
+		   //温度，湿度，光照
+		   switch(num)
+		   {
+		       case '1':t=20;d=15;l=330;break;
+			   case '2':t=27;d=21;l=400;break;
+			   case '3':t=22;d=42;l=340;break;
+			   case '4':t=33;d=15;l=760;break;
+			   case '5':t=27;d=21;l=400;break;
+			   case '6':t=27;d=21;l=500;break;
+			   case '7':t=27;d=21;l=600;break;
+			   case '8':t=27;d=21;l=700;break;
+			   case '9':t=27;d=21;l=800;break;
+			   default:break;
+		   }
+		   
+		   $('#myStat_diy1').attr('data-text',t+'℃');
+		   $('#myStat_diy1').attr('data-part',t);
+		   $('#myStat_diy1').circliful();
+		   $('#points_wd').val(t);
+		   $('#points_wd').next().find('div').css('width',t+'%');
+           $('#points_wd').next().find('a').css('left',t+'%');
+
+		   $('#myStat_diy2').attr('data-text',d+'%');
+		   $('#myStat_diy2').attr('data-part',d);
+		   $('#myStat_diy2').circliful();
+		   $('#points_sd').val(d);
+		   $('#points_sd').next().find('div').css('width',d+'%');
+           $('#points_sd').next().find('a').css('left',d+'%');
+
+		   $('#myStat_diy3').attr('data-text',l+'Lux');
+		   $('#myStat_diy3').attr('data-part',parseFloat(l) / 10);
+		   $('#myStat_diy3').circliful();
+		   $('#points_gz').val(l);
+		   $('#points_gz').next().find('div').css('width',(l-300)/7+'%');//(parseFloat(l) / 10)
+           $('#points_gz').next().find('a').css('left',(l-300)/7+'%');
+	 }
+
+    //旋转图片初始化
+    function diy_imginit()
+	 {
+		  $('#featured-area_diy ul').roundabout({
+		  //startingChild:1 //用来指定初始化后焦点的图片的编号0为第一个
+		  });
+	 }
+
+    //修改指定的圆形统计图
+    function fillOneStat(num,v)
+	 {
+         if(num==1)
+		 {
+			 //修改统计图中间的文字
+		     $('#myStat_diy'+num).attr('data-text',v+'℃');
+			// v = parseFloat(v) * 2;
+		 }
+		 else if (num == 2)
+		 {
+		      $('#myStat_diy'+num).attr('data-text',v+'%');
+		 }
+		 else if (num == 3)
+		 {
+		      $('#myStat_diy'+num).attr('data-text',v+'Lux');
+			  v = parseFloat(v) / 10;
+		 }
+		 //统计图的百分比==（data-part/data-total）,我设的total是100
+		 $('#myStat_diy'+num).attr('data-part',v);
+		 //重新绘制
+		 $('#myStat_diy'+num).circliful();
+	 }
+
+    //滑动条a链接绑定的事件
+	function hk_change(obj)
+	{
+	  //获得滑动条的值
+	  var v=$(obj).parent().prev().val();
+	  //获得第n个参数1是温度，2是适度，3是光度
+	  var num=$(obj).parent().parent().prev().attr('value');
+	  console.log("植物状态num="+num+"滑动条植v="+v);
+	  fillOneStat(num,v);
+	}
+	    //滑动条轨道绑定的事件
+	function hk_change_track(obj)
+	{
+	  //获得滑动条的值
+	  var v=$(obj).prev().val();
+	 //获得第n个参数1是温度，2是适度，3是光度
+	  var num=$(obj).parent().prev().attr('value');
+	  console.log("植物状态num="+num+"滑动条植v="+v);
+	  fillOneStat(num,v);
+	}
+	function diy_save()
+	{
+	   var num=$('#images_ul_diy .roundabout-in-focus').attr('value');//植物阶段
+	   var url='';//请求的连接
+       var dam=0;//湿度
+	   var tem=0;//温度
+	   var light=0;//光照
+       
+	   tem=($('#points_wd')).val();
+	   dam=($('#points_sd')).val();
+	   light=($('#points_gz')).val();
+       //alert('温度:'+tem+'——'+'湿度:'+dam+'——'+'光照:'+light+'——'+'植物阶段:'+num);
+      var save_msg="阶段"+num+"：保存成功";
+					$("#tan").html(save_msg);
+					tishi(); 
+	   
+	   //ajax url你们自己设定
+	   /*$.ajax({
+              type: 'POST',
+              url: url,
+		      {tem:tem,dam:dam,light:light},
+              success: function(data) 
+			           {    
+                         if(data =="success" )
+					     {     
+                             alert("成功！");      
+                         }
+					     else
+					     {    
+                             alert(data);    
+                         }    
+                       },
+			  error:function(){}
+             }); */ 
+	}
+    //选中指定阶段
+	function diy_sel_plant(num)
+	{
+	        $('#images_ul_diy').empty();
+	        $('#images_ul_diy').html(diy_img_list);
+	        $('#featured-area_diy ul').roundabout({
+		     startingChild:(num-1)
+		     });
+	        var obj=$('#diy_li_img'+num);
+	        diy_click_statfill(obj);
+	        clickEvent();
+	}
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+	}
+
+initialize_btn();
+if (alarm == 1)
+{
+	$('#select #no_water').show();
+	$('#home #no_water').show();
+	$('#diy #no_water').show();
+}
+
+</script>
+{/literal}
+<!--DIY页面-->
+<div data-role="page" id="diy"> 
+    <header class="h42 bk-green pos-rel">
+	<div class="pos-abs"><a href="javascript:history.go(-1);"><div class="goback-btn"></div></a></div>
+			<div class="header-title"><span>Jerry Wang</span>'s<span class="pr5em"></span><span>番茄</span></div>
+			<div id="no_water" style='width:100px;float:right;margin-right:36px;' class="text-center lh40 red01 txt-shd0 display-no"><span>缺水</span><img src='__PUBLIC__/Images/front/water.png' style="height:30px;" /></div>
+			<div id="no_close" style='width:100px;float:right;margin-right:36px;' class="text-center lh40 red01 txt-shd0 display-no"><span>抽屉分离</span><img src='__PUBLIC__/Images/front/chouti.png' style="height:30px;" /></div>
+			<a href="/Index/setup.html" rel="external"><div class="header-list"></div></a>
+	  </header> 
+       <div data-role="content" id="diy_content" style='margin:0px auto;'>
+	   
+	   <!--植物阶段-->
+	   <div id='plant_jd'class="plant_jd">
+	   <div id="featured-area_diy"> 
+              <ul id='images_ul_diy'> 
+               <li id='diy_plant_1' value='1'><a href="#"><img id='diy_li_img1' src="__PUBLIC__/Images/front/diy/diy01.png" alt="" /></a></li>
+               <li id='diy_plant_2' value='2'><a href="#"><img id='diy_li_img2' src="__PUBLIC__/Images/front/diy/diy02.png" alt="" /></a></li> 
+               <li id='diy_plant_3' value='3'><a href="#"><img id='diy_li_img3' src="__PUBLIC__/Images/front/diy/diy03.png" alt="" /></a></li> 
+               <li id='diy_plant_4' value='4'><a href="#"><img id='diy_li_img4' src="__PUBLIC__/Images/front/diy/diy04.png" alt="" /></a></li> 
+               <li id='diy_plant_5' value='5'><a href="#"><img id='diy_li_img5' src="__PUBLIC__/Images/front/diy/diy05.png" alt="" /></a></li>
+			   			 <li id='diy_plant_6' value='6'><a href="#"><img id='diy_li_img6' src="__PUBLIC__/Images/front/diy/diy06.png" alt="" /></a></li>
+               <li id='diy_plant_7' value='7'><a href="#"><img id='diy_li_img7' src="__PUBLIC__/Images/front/diy/diy07.png" alt="" /></a></li> 
+               <li id='diy_plant_8' value='8'><a href="#"><img id='diy_li_img8' src="__PUBLIC__/Images/front/diy/diy08.png" alt="" /></a></li> 
+               <li id='diy_plant_9' value='9'><a href="#"><img id='diy_li_img9' src="__PUBLIC__/Images/front/diy/diy09.png" alt="" /></a></li> 
+              </ul> 
+       </div>
+	   </div>
+	   <!--DIY统计图-->
+	   <script>
+			
+	   		var screenWidth = document.body.clientWidth;
+	   		if(screenWidth >= 540){
+	   				document.write('<div id="stats_diy" class="stats_diy"><div class="stat" id="myStat_diy1" data-dimension="150" data-text="{$user_info.outside_temperature}℃"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy2" data-dimension="150" data-text="{$user_info.humidity}%"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy3" data-dimension="150" data-text="{$user_info.illuminance}Lux"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	   			}else{
+	   				document.write('<div id="stats_diy" class="stats_diy"><div class="stat" id="myStat_diy1" data-dimension="80" data-text="{$user_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy2" data-dimension="80" data-text="{$user_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy3" data-dimension="80" data-text="{$user_info.illuminance}Lux"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	   				}
+	   	
+	   	</script>
+	   <!--<div id='stats_diy' style='margin:0 auto;width:272px;'>
+	   <div class='stat' id="myStat_diy1" data-dimension="90" data-text="{$user_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#f00" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div>
+	   <div class='stat' id="myStat_diy2" data-dimension="90" data-text="{$user_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#00A2E9" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div>
+		<div class='stat' id="myStat_diy3" data-dimension="90" data-text="{$user_info.illuminance}Lux"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#FF9630" data-bgcolor="#f8f8f8" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"></div><div style='clear:both;'></div>
+
+	   </div>-->
+	   <!--三个图标-->
+	    <div class="param_icon">
+	   	<div class="param_icon_temp"></div>
+	   	<div class="param_icon_humit"></div>
+			<div class="param_icon_light"></div>
+	   	</div>
+	   <!--DIY滑块-->
+	   <div id='d_diy_hk' class="diy_param_slide" data-role="fieldcontain">
+         <label for="points_wd" value='1'></label>
+         <input  type="range" data-highlight="true" name="points_wd" id="points_wd" value="18" min="18" max="50">
+		  	<label  for="points_sd" value='2'></label>
+         <input  type="range" data-highlight="true"  name="points_sd" id="points_sd" value="60" min="40" max="100">
+		  	<label for="points_gz" value='3'></label>
+         <input  type="range" data-highlight="true"  name="points_gz" id="points_gz" value="300" min="300" max="1000">
+       </div>
+	   <div class="diy_btn">
+	   <a href="" class="main-btn txt-shd0" style="color:white;font-weight:normal;" onclick='diy_save()'>保<span class="pr10em"></span>存</a>
+	   <a href="/Index/mall_home.html" class="main-btn txt-shd0" style="color:white;font-weight:normal;" rel="external"><span class="pr20em"></span>商<span class="pr10em"></span>店<span id='span_sc'>2</span></a>
+	   </div>
+    </div> 
+    <!--浮框开始-->
+	<div class="kuan-cont" style="display: none;">
+	 <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+	</div>
+	<div class="black-bg" style="display: none;"></div>
+	<!--底部导航-->
+
+    <div id="fb" class="bd-top-l-grey">
+   	<div class="indexmenu" id="diy_menu_switch">
+			<div class="boxflex" id="ul_diy_zw">
+				<div class="boxflex_col3">
+					<a href="javascript:;" onclick='diy_btn_click(0)'>
+						<i class="i0">
+						</i>
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i6">
+					<a href="javascript:;">
+						<i class="i6">
+						</i>
+						排风
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i7">
+					<a href="javascript:;">
+						<i class="i7">
+						</i>
+						灯光
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i5">
+					<a href="javascript:;">
+						<i class="i5">
+							<span class="dian">
+							</span>
+						</i>
+						灌溉
+					</a>
+				</div>
+				<div class="boxflex_col2" id="i8">
+					<a href="javascript:;">
+						<i class="i8">
+						</i>
+						加热
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="indexmenu" id="diy_menu_shop" style="display:none;">
+			<div class="boxflex" id="ul_diy_c">
+				<div class="boxflex_col3">
+					<a href="javascript:;" onclick='diy_btn_click(1)'>
+						<i class="i0">
+						</i>
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/mall_home.html" rel="external">
+						<i class="i1">
+						</i>
+						商城
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/search.html" rel="external">
+						<i class="i2">
+						</i>
+						搜索
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/cart.html" rel="external">
+						<i class="i3">
+							<span class="dian">
+							</span>
+						</i>
+						购物车
+					</a>
+				</div>
+				<div class="boxflex_col2">
+					<a href="/Index/personal_center.html" rel="external">
+						<i class="i4">
+						</i>
+						我的
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+<!--end-->
+
+</body> 
+</html> 

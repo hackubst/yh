@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台登录 - {$system_config.SHOP_TITLE}</title>
+	<link rel="stylesheet" href="__CSS__/login/login-min.css">
+	<link rel="stylesheet" href="__PLG__/jPops/jquery.jpops.min-v3.css">
+</head>
+<body>
+	<div class="lgbox">
+		<div class="lgbox-form">
+			<h2 class="lgbox-form-title">{if $jifen}积分管理员登录{else}管理员登录{/if}</h2>
+			<form name="form1" id="form1" method="post" action="">
+				<div class="formitems inline">  
+				    <div class="form-controls">  
+				        <input type="text" placeholder="用户名" name="user" id="user" class="input">  
+				        <span class="fi-help-text hide"></span>  
+				    </div>  
+				</div> 
+				<div class="formitems inline">  
+				    <div class="form-controls">  
+				        <input type="password" placeholder="密码" name="pass" id="pass" class="input">  
+				        <span class="fi-help-text hide"></span>  
+				    </div>  
+				</div>
+				<div class="formitems inline">  
+				    <div class="form-controls">  
+				        <input type="text" name="vdcode" id="vdcode" placeholder="验证码" class="input special">
+				        <img id="verifyImg" src='__APP__/Public/verify/' onclick="this.src=this.src+'?'+Math.random()"   alt="看不清？点击更换" />
+				        <a href="javascript:;" onClick="fleshVerify()">看不清？</a> 
+				        <span class="fi-help-text hide"></span>
+				    </div>  
+				</div>
+				<div class="formitems inline">
+					<input type="hidden" name="ajax" value="1">
+                    <input type="hidden" name="act" value="submit">
+                    <input type="hidden" name="redirect" value="{$redirect}" />
+					<input type="submit" name="submit" value="登录" id="submit_b" />
+				</div>
+			</form>
+		</div>
+		<!-- end lgbox-form -->
+	</div>
+	<!-- end lgbox -->
+
+	<div class="copyright">
+		&copy; {$system_config.CUR_TIME|date_format:"%Y"} Copyright {$system_config.WEBSITE_DOMAIN} All Rights Reserved</div>
+	</div>
+
+	<script src="__JS__/jquery/jquery-1.8.3.min.js?version={$version}"></script>
+	<script src="__JS__/jquery/jquery.validate-min.js?version={$version}"></script>
+	<script src="__JS__/jquery/jquery.form.min.js?version={$version}"></script>
+	<script src="__PLG__/jPops/jquery.jpops.min-v3.js?version={$version}"></script>
+	<script src="__JS__/login/login-min.js?version={$version}"></script>
+
+	<script>
+	var app="__APP__";
+	</script>
+
+</body>
+</html>

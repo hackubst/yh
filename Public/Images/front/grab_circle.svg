@@ -1,0 +1,15 @@
+﻿<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <title>抢单动画</title>
+  <g> 
+    <circle cx="37" cy="37" r="10" stroke="white" stroke-width="2" fill="#d11271"/>
+    <animateTransform
+      attributeName="transform"
+      begin="0s"
+      dur="4s"
+      type="rotate"
+      from="0 100 100"
+      to="360 100 100"
+      repeatCount="indefinite" 
+    />
+  </g>
+</svg>

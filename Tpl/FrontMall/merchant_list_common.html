@@ -1,0 +1,180 @@
+<!--筛选导航排序-->
+<div class="cate-nav">
+  <div class="mall-cate-box">
+	  <ul class="mall-cate">
+		  <li>
+			  <a href="javascript:void(0);" data-type="category">
+				  {if $class_id}
+					  {foreach from=$class_list item=class}
+						{if $class_id == $class.class_id}
+							{$class.class_name}
+						{/if}
+					  {/foreach}
+				  {else}
+					全部分类
+				  {/if}
+				  <em>
+				  </em>
+			  </a>
+		  </li>
+		  <li>
+			  <a href="javascript:void(0);" data-type="district" id="districtLine">
+				  {if $trading_area_id}
+					  {foreach from=$trading_area_list item=trading_area}
+						{if $trading_area_id == $trading_area.trading_area_id}
+							{$trading_area.trading_area_name}
+						{/if}
+					  {/foreach}
+				  {else}
+					  全部商圈
+				  {/if}
+				  <em>
+				  </em>
+			  </a>
+		  </li>
+		  <li>
+			  <a href="javascript:void(0);" data-type="sort">
+				  {if $orderby}
+					  {foreach from=$orderby_list key=key item=order}
+						{if $orderby == $key}
+							{$order}
+						{/if}
+					  {/foreach}
+				  {else}
+					  默认排序
+				  {/if}
+				  <em>
+				  </em>
+			  </a>
+		  </li>
+	  </ul>
+  </div>
+  <!--弹出分类-->
+  <div class="sortdrop-wrapper hide" data-type="category">
+	  <div class="sort-wrapper">
+		  <div class="sort-view" style="min-width: 160px;">
+			  <div>
+				  <section class="select">
+					  <a href="{$link}/class_id/0{if $trading_area_id}/trading_area_id/{$trading_area_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+						  <span class="foods">
+							  全部分类
+						  </span>
+					  </a>
+				  </section>
+				  {foreach from=$class_list item=class}
+					  <section>
+						  <a href="{$link}/class_id/{$class.class_id}{if $trading_area_id}/trading_area_id/{$trading_area_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+							  <span class="foods">
+								  {$class.class_name}
+							  </span>
+						  </a>
+					  </section>
+				  {/foreach}
+			  </div>
+			  <i class="m-down hide">
+			  </i>
+		  </div>
+		  <div class="sort-sider hide" data-main="category_emptyMenu">
+			  <div>
+			  </div>
+		  </div>
+	  </div>
+  </div>
+  <div class="sortdrop-wrapper hide" data-type="district">
+	  <div class="sort-wrapper">
+		  <div class="sort-view">
+			  <div>
+				  <section class="select">
+				  <a href="{$link}/trading_area_id/0{if $class_id}/class_id/{$class_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+						  <span class="foods">
+							  全部商圈
+						  </span>
+					  </a>
+				  </section>
+				  {foreach from=$trading_area_list item=trading_area}
+					  <section>
+						  <a href="{$link}/trading_area_id/{$trading_area.trading_area_id}{if $class_id}/class_id/{$class_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+							  <span>
+								  {$trading_area.trading_area_name}
+							  </span>
+						  </a>
+					  </section>
+				  {/foreach}
+			  </div>
+			  <i class="m-down hide">
+			  </i>
+		  </div>
+		  <div class="sort-sider hide" data-main="district_emptyMenu">
+			  <div>
+			  </div>
+		  </div>
+	  </div>
+  </div>
+  <div class="sortdrop-wrapper hide" data-type="sort">
+	  <div class="sort-wrapper">
+		  <div class="sort-view">
+			  <div>
+				  {foreach from=$orderby_list key=key item=orderby}
+					  <section>
+						  <a href="{$link}/orderby/{$key}{if $class_id}/class_id/{$class_id}{/if}{if $trading_area_id}/trading_area_id/{$trading_area_id}{/if}/keyword/{$keyword}">
+							  <span>
+								  {$orderby}
+							  </span>
+						  </a>
+					  </section>
+				  {/foreach}
+			  </div>
+		  </div>
+	  </div>
+  </div>
+</div>
+<!-- 排序结束 -->
+<!--商家结果list-->
+{if $merchant_list}
+<div class="conter sort-conter" id="content">
+  <!--list-view1-->
+  <div class="list-view">
+	  <ul class="list-ul" id="going_list">
+		{foreach from=$merchant_list item=merchant}
+			<li class="shop_cont{if $merchant.online == 0} offline{/if}">
+				<a class="shop_link" href="{$item_list_link}/merchant_id/{$merchant.merchant_id}">
+					<div class="shop_pic_wrap">
+						<div class="shop_pic">
+							<img src="{$merchant.logo}" />
+						</div>
+					</div>
+					<div class="shop_content">
+						<div class="shop_name_wrap">
+							<span class="shop_name_txt">{$merchant.shop_name}{if $merchant.busy_level == 1}<span class="busy_state"><svg class="busy_icon"><use xlink:href="#busy"></use></svg></span>{/if}<span class="shop_online"><svg class="closed_icon"><use xlink:href="#closed"></use></svg></span></span>
+							<span class="shop_sale_num"><i class="shop_sale_txt">{$merchant.total_sales_num}</i>销量</span>
+						</div>
+						<div class="shop_type fresh">
+							{$merchant.class_name}              
+						</div>
+						<div class="shop_desc">
+							<span class="shop_time_txt"><svg class="time_loct_icon"><use xlink:href="#madetime"></use></svg>制作时间：{$merchant.make_time_avg}分钟</span>
+							<span class="shop_intime_rate">准时率：{$merchant.on_time_rate}%</span>
+						</div>
+						<div class="shop_intro">
+							<span class="shop_area"><svg class="time_loct_icon"><use xlink:href="#location"></use></svg>{$merchant.trading_area_name}</span>
+							<span class="sale_distance">距离：{$merchant.distance}米</span>
+						</div>
+					</div>
+				</a>
+			</li>
+		{/foreach}
+	  </ul>
+  </div>
+  <!--分类筛选下的透明背景-->
+  <div class="pop-shade hide">
+  </div>
+</div>
+{else}
+<!--未搜到-->
+<div class="pop-shade hide"></div>
+<div class="error_cont">
+	<div class="error_img"><svg class="error_icon"><use xlink:href="#error"></use></svg></div>
+	<div class="error_txt">抱歉，未搜到相关店铺！</div>
+	<a href="{$mall_home_link}" class="go_btn">马上逛逛</a>
+</div>
+{/if}

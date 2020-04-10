@@ -1,0 +1,220 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<a href="/AcpPost/add_gift"  class="btn btn-blue">添加</a>
+	    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+          
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>名称</td>
+            <td>图片</td>
+            <td>是否上架</td>
+            <td>添加时间</td>
+            <td>操作</td> 
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$post_list item=post_item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$post_item.gift_id}" name="a[]"></td>
+            
+            <td>{$post_item.gift_name}</td>
+            <td><img src="{$post_item.pic}"></td>
+            <td>{$post_item.status}</td>  
+            <td>{$post_item.addtime}</td>
+            <td>
+            	 
+            	<a href ="/AcpPost/editor_gift/gift_id/{$post_item.gift_id}" class='btn' title='打赏记录'>编辑</a>
+            <!--     <a href ="/AcpPost/comment_list/post_id/{$post_item.id}" class='btn' title='打赏记录'>删除</a>    -->    {if $post_item.isuse == 0}
+                    <a href="javascript:;" class="btn" title="删除" onclick="undercarriage({$post_item.gift_id})">上架</a>  
+                {else}
+                    <a href="javascript:;" class="btn" title="删除" onclick="undercarriage({$post_item.gift_id})">下架</a>  
+                {/if}       
+				
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:;" onclick="Select()" class="btn btn-blue">全选</a>
+            <a href="javascript:;" onclick="Cancel()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" onclick="batch_set_enable(0)" class="btn btn-blue">下架</a>
+            <a href="javascript:;" onclick="batch_set_unenable()" class="btn btn-blue">上架</a>
+            <a href="javascript:;" onclick="batch_delete_gift()" class="btn btn-blue">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+            {$show}
+            </div>
+        </div>
+    </div>
+
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script>
+{literal}
+
+//下架功能
+undercarriage = function(id)
+{
+
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+
+			 		$.post('/AcpPost/undercarriage', {"id":id}, function(data, textStatus) 
+				 {
+                    console.log(data);
+					if (data == 'success') {
+						alert('恭喜您，操作成功！');
+						
+						location.reload();
+					} else {
+						alert('对不起，操作失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+
+//全选功能
+Select = function ()
+{
+    $(".checkbox").prop('checked',true);       
+}
+
+
+//取消全选
+Cancel = function ()
+{
+    $(".checkbox").prop('checked',false);     
+}
+
+//批量下架功能
+batch_set_enable = function ()
+{
+    var all_id = [];
+
+    $.each($('input:checkbox:checked'),function(){
+
+        all_id.push($(this).val());
+    })
+
+    $.ajax({
+
+        url:'/AcpPost/set_all_input',
+        type:'post',
+        data:{'all_id':all_id},
+        dataType:'text',
+        success:function(d)
+        {
+            console.log(d);
+            if(d == 'success'){
+                alert('操作成功');
+                window.location.reload();
+            }else{
+                alert('操作失败');
+            }
+        }
+    })
+}
+
+//批量上架功能
+batch_set_unenable = function ()
+{
+
+
+    var all_id = [];
+    $.each($('input:checkbox:checked'),function(){
+        all_id.push($(this).val());
+    })
+     
+    $.ajax({
+
+        url:'/AcpPost/set_all_out',
+        type:'post',
+        data:{'all_id':all_id},
+        dataType:'text', //success成功后返回的数据格式,如果格式不匹配,会不执行;
+        success:function(d){
+            console.log(d)
+            if(d == 'success'){
+                alert('上架成功');
+                window.location.reload();
+            } else{
+                alert('上架失败');
+            }
+        }
+
+    })
+}
+
+
+
+//批量删除功能
+batch_delete_gift = function ()
+{
+
+    $.jPops.confirm({
+        title:"提示",  
+        content:"您确定要执行这个操作吗？",  
+        okBtnTxt:"确定",  
+        cancelBtnTxt:"取消", 
+        callback:function(r){
+            if(r){
+                var all_id = [];
+                $.each($('input:checkbox:checked'),function(){
+                    all_id.push($(this).val());
+                })
+                $.ajax({
+                    url:'/AcpPost/delete_checkbox',
+                    type:'post',
+                    data:{'all_id':all_id},
+                    dataType:'text',
+                    success:function(d){
+                        if(d == 'success') {
+                            alert('删除成功');
+                            window.location.reload();
+                        } else {
+                            alert('删除失败');
+                        }
+                    }
+                })
+            }
+            return true;
+        }   
+    })
+}
+
+
+//pilaing
+
+{/literal}
+</script>
+{/block}

@@ -1,0 +1,85 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+    	<a href="/AcpBrand/add_brand" class="btn btn-blue">添加品牌</a>
+        <a href="javascript:;" class="btn J_save_order">保存排序</a>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+        <col width="5%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col width="15%">
+        </colgroup>
+        <thead>
+            <tr>
+                <td>选择</td>
+                <td>品牌LOGO</td>
+                <td>品牌名称</td>
+                <td>品牌网址</td>
+                <td>排序</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$arr_brand item=row}
+            <tr>
+                <td>
+                    <input type="checkbox" class="checkbox" name="checkIds[]" value="{$row.brand_id}">
+                </td>
+                <td>
+                    <img src="{$row.brand_logo}" alt="{$row.brand_name}" height="50px" onerror="no_pic(this);">
+                </td>
+                <td>{$row.brand_name}</td>
+                <td>
+                    <a href="{$row.brand_url}" target="_blank">{$row.brand_url}</a>
+                </td>
+                <td>
+                    <input type="text" class="mini" name="serial" value="{$row.serial}" data-id="{$row.brand_id}">
+                </td>
+                <td>
+                    <a href={"/AcpBrand/edit_brand/id/{$row.brand_id}"|U} class="btn">编辑</a>
+                    <a href="javascript:;" class="btn J_del">删除</a>
+                    <input type="hidden" name="item_id" value="{$row.brand_id}">
+                </td>
+            </tr>
+            {foreachelse}
+            <tr><td colspan="6">没有找到任何记录</td></tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_del">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$page->show()}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+</div>
+<!-- end tablesWrap --> 
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js"></script>
+<script src="__ACPJS__/AcpBrand/list_brand.js"></script>
+{/block}
+

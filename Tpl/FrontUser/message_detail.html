@@ -1,0 +1,19 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/news.css?version={$version}">
+{literal}
+<style>
+body{background-color:#fff;}	
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<div class="help_detail_cont">
+	<div class="help_header">
+        <div class="article_tit"><h1>{$type_text}</h1></div>
+		<div class="article_time">{$message_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</div>
+	</div>
+	<div class="article_cont">{$message_info.message_contents}</div>
+</div>
+{/block}

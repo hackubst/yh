@@ -1,0 +1,371 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<!--end--> 
+<!--导入的js框架--> 
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.circliful.js?version={$version}"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.roundabout.min.js?version={$version}"></script> 
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.mobile-1.4.3.min.js?version={$version}"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/control.js?version={$version}"></script>
+<!--end--> 
+{/block}
+
+{block name="content"}
+<!--滚动图片模拟数据初始化--> 
+<script type="text/javascript">
+var command_arr = new Array();
+{foreach from=$command item=c key=key}
+	command_arr[{$key}] = {$c};
+{/foreach}
+
+var seed_state_list = new Array();
+var current_seed_state_id = {$seed_state_id};
+var current_state = {$state_info.state};
+{foreach from=$seed_state_list item=state key=key1}
+	seed_state_list[{$key1}] = new Array();
+	arr{$state.state} = ['{$state.img_path}', '{$state.img_path}', '{$state.img_path}'];
+	{foreach from=$state item=data key=key2}
+		seed_state_list[{$key1}]['{$key2}'] = '{$data}';
+	{/foreach}
+	if ({$state.state} == {$state_info.state})
+	{
+		seed_state_list[{$key1}]['outside_temperature'] = '{$state_info.outside_temperature}';
+		seed_state_list[{$key1}]['humidity'] = '{$state_info.humidity}';
+		seed_state_list[{$key1}]['illuminance_limit'] = '{$state_info.illuminance_limit}';
+	}
+{/foreach}
+
+var alarm = {$planter_info.alarm};
+var planter_id = {$planter_info.planter_id};
+var seed_id = {$item_info.item_id};
+var current_t = {$state_info.outside_temperature};
+var current_h = {$state_info.humidity};
+var current_i = {$state_info.illuminance_limit};
+var seed_state_id = {$seed_state_id};
+var is_diy = {$is_diy};
+var planter_seed_id = {$planter_seed_id};
+{literal}
+</script>
+
+<!--DIY界面的js--> 
+<script type="text/javascript">
+var diy_img_list='';//存储9个阶段的图片html代码
+var diy_init_is_over=false;
+$(document).on("pageinit","#diy",function()
+{
+	if(!diy_init_is_over)
+	{
+		diy_img_list=$('#images_ul_diy').html();
+		diy_init();
+	}
+	initialize_btn();
+});
+
+function diy_init()
+{
+	diy_imginit();
+	diy_statfill();
+	//绑定鼠标点击和触摸事件
+	bindUpEvent();
+	clickEvent();
+	getFirstObj();
+	diy_click_statfill($('#diy_li_img5'));
+	//去除主内容区自动生成的空text节点
+	var content_text = document.getElementById('diy').firstChild;
+	$(content_text).remove();
+}
+
+//绑定触摸事件
+function bindUpEvent()
+{
+	$('#d_diy_hk a').bind('mouseup',function(){hk_change(this);});//电脑上测试用，鼠标点击事件
+	$('#d_diy_hk a').bind('touchstart',function(){hk_change(this);});//手机触摸事件
+	$('#d_diy_hk a').bind('touchmove',function(){hk_change(this);});//手机触摸事件
+	$('#d_diy_hk a').bind('touchend',function(){hk_change(this);});//手机触摸事件
+	$('#d_diy_hk .ui-slider-track').bind('touchend',function(){hk_change_track(this);});//手机触摸事件
+}
+
+//绑定点击事件
+function clickEvent()
+{
+	$('#images_ul_diy .diy_text').bind('click',function(){diy_click_statfill(this)});	 
+}
+
+function getFirstObj()
+{
+	var firstObj=$('#diy_plant_' + current_state).children().children();
+	diy_click_statfill(firstObj);//初始化页面时选中一个阶段
+}
+
+//圆形统计图填充
+function diy_statfill()
+{
+	$('#myStat_diy1').circliful();
+	$('#myStat_diy2').circliful();
+	$('#myStat_diy3').circliful();
+}
+
+//点击阶段图的事件
+function diy_click_statfill(obj)
+{
+	var tobj=$(obj).parent().parent();
+	var num=$(tobj).attr('value');
+
+	var t=0;
+	var d=0;
+	var l=0;
+
+	len = seed_state_list.length;
+	for (var j = 0; j < len; j++)
+	{
+		if (seed_state_list[j]['state'] == num)
+		{
+			current_seed_state_id = seed_state_list[j]['seed_state_id'];
+			current_state = num;
+			t = seed_state_list[j]['outside_temperature'];
+			d = seed_state_list[j]['humidity'];
+			l = seed_state_list[j]['illuminance_limit'];
+		}
+	}
+	current_t = t;
+	current_h = d;
+	current_i = l;
+
+	$('#myStat_diy1').attr('data-text',t+'℃');
+	$('#myStat_diy1').attr('data-part',(t-18)*25/8);
+	$('#myStat_diy1').circliful();
+	$('#points_wd').val(t);
+	$('#points_wd').next().find('div').css('width',(t-18)*25/8+'%');
+	$('#points_wd').next().find('a').css('left',(t-18)*25/8+'%');
+
+	$('#myStat_diy2').attr('data-text',d+'%');
+	$('#myStat_diy2').attr('data-part',(d-40)*5/3);
+	$('#myStat_diy2').circliful();
+	$('#points_sd').val(d);
+	$('#points_sd').next().find('div').css('width',(d-40)*5/3+'%');
+	$('#points_sd').next().find('a').css('left',(d-40)*5/3+'%');
+
+	$('#myStat_diy3').attr('data-text',l+'lx');
+	$('#myStat_diy3').attr('data-part',(l-300)/7);
+	$('#myStat_diy3').circliful();
+	$('#points_gz').val(l);
+	$('#points_gz').next().find('div').css('width',(l-300)/7+'%');//(parseFloat(l) / 10)
+	$('#points_gz').next().find('a').css('left',(l-300)/7+'%');
+}
+
+//旋转图片初始化
+function diy_imginit()
+{
+	$('#featured-area_diy ul').roundabout({
+		//startingChild:1 //用来指定初始化后焦点的图片的编号0为第一个
+	});
+}
+
+//修改指定的圆形统计图
+function fillOneStat(num,v)
+{
+	if(num==1)
+	{
+		//修改统计图中间的文字
+		$('#myStat_diy'+num).attr('data-text',v+'℃');
+		$('#myStat_diy'+num).attr('data-part',(v-18)*25/8);
+		// v = parseFloat(v) * 2;
+	}
+	else if (num == 2)
+	{
+		$('#myStat_diy'+num).attr('data-text',v+'%');
+		$('#myStat_diy'+num).attr('data-part',(v-40)*5/3);
+	}
+	else if (num == 3)
+	{
+		$('#myStat_diy'+num).attr('data-text',v+'lx');
+		$('#myStat_diy'+num).attr('data-part',(v-300)/7);
+		//v = parseFloat(v) / 10;
+	}
+
+	//统计图的百分比==（data-part/data-total）,我设的total是100
+	//$('#myStat_diy'+num).attr('data-part',v);
+
+	//重新绘制
+	$('#myStat_diy'+num).circliful();
+}
+
+//滑动条a链接绑定的事件
+function hk_change(obj)
+{
+	//获得滑动条的值
+	var v=$(obj).parent().prev().val();
+	//获得第n个参数1是温度，2是适度，3是光度
+	var num=$(obj).parent().parent().prev().attr('value');
+	//console.log("植物状态num="+num+"滑动条植v="+v);
+	fillOneStat(num,v);
+}
+
+//滑动条轨道绑定的事件
+function hk_change_track(obj)
+{
+	//获得滑动条的值
+	var v=$(obj).prev().val();
+	//获得第n个参数1是温度，2是适度，3是光度
+	var num=$(obj).parent().prev().attr('value');
+	//console.log("植物状态num="+num+"滑动条植v="+v);
+	fillOneStat(num,v);
+}
+
+function diy_save()
+{
+	var num=$('#images_ul_diy .roundabout-in-focus').attr('value');//植物阶段
+	var url='';//请求的连接
+	var dam=0;//湿度
+	var tem=0;//温度
+	var light=0;//光照
+
+	tem=($('#points_wd')).val();
+	dam=($('#points_sd')).val();
+	light=($('#points_gz')).val();
+	//alert('温度:'+tem+'——'+'湿度:'+dam+'——'+'光照:'+light+'——'+'植物阶段:'+current_seed_state_id);
+	save_state(tem, dam, light, current_seed_state_id);
+}
+
+//选中指定阶段
+function diy_sel_plant(num)
+{
+	$('#images_ul_diy').empty();
+	$('#images_ul_diy').html(diy_img_list);
+	$('#featured-area_diy ul').roundabout({
+		startingChild:(num-1)
+	});
+
+	var obj=$('#diy_li_img'+num);
+	diy_click_statfill(obj);
+	clickEvent();
+}
+
+//弹出提示
+function tishi()
+{
+	$('.kuan-cont').fadeIn(1500);
+	$('.kuan-cont').fadeOut(1500);
+}
+
+initialize_btn();
+if (alarm == 1)
+{
+	$('#select #no_water').show();
+	$('#home #no_water').show();
+	$('#diy #no_water').show();
+}
+</script>
+<style>
+.bd-btm-grey01{border-bottom:none;}
+#points_wd+.ui-slider-track	a{background-color: #ff1919;}
+#points_wd+.ui-slider-track	a:focus{box-shadow:0 0 12px #ff1919;-webkit-box-shadow:0 0 12px #ff1919;}
+#points_sd+.ui-slider-track	a{background-color: #22AEEB;}
+#points_sd+.ui-slider-track	a:focus{box-shadow:0 0 12px #22AEEB;-webkit-box-shadow:0 0 12px #22AEEB;}
+#points_gz+.ui-slider-track	a{background-color: #ff9834;}
+#points_gz+.ui-slider-track	a:focus{box-shadow:0 0 12px #ff9834;-webkit-box-shadow:0 0 12px #ff9834;}
+#d_save_btn{width:250px;}
+#diy{width:100%;position:absolute;}
+.ui-field-contain{padding: .8em 0;}
+.ui-mobile label{display: block;margin: 0 0 .4em;}
+.ui-field-contain>label~[class*=ui-]{margin:0;}
+div.ui-slider {height: 30px;}
+.ui-page-theme-a .ui-bar-inherit{background-color: #e9e9e9;}
+.ui-slider-track {position: relative;overflow: visible;border-width: 1px;height: 3px;margin: 0 15px 0 15px;}
+.ui-page-theme-a #points_wd+.ui-slider-track .ui-btn-active {background-color: #f00;}
+.ui-slider-track .ui-slider-bg {height: 100%;}
+.ui-slider-track .ui-btn.ui-slider-handle {position: absolute;z-index: 1;top: 100%;background-color: rgba(255, 255, 255, 0.5);width: 20px;height: 20px;margin: -13px 0 0 -12px;border: none;border-radius: 10px;outline: 0;padding: 0;}
+.ui-page-theme-a #points_sd+.ui-slider-track .ui-btn-active {background-color: #00A2E9;}
+.ui-page-theme-a #points_gz+.ui-slider-track .ui-btn-active {background-color: #FF9630;}
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+	#d_save_btn{width:522px;}
+}
+
+</style>
+{/literal}
+
+<!--DIY页面-->
+<div data-role="page" id="diy"> 
+	{include file="$header_path"}
+	<div data-role="content" id="diy_content" style='margin:0px auto;width: 100%;overflow: hidden;'>
+
+	<!--植物阶段-->
+	<div id='plant_jd'class="plant_jd">
+		<div id="featured-area_diy"> 
+			<ul id='images_ul_diy'> 
+			{foreach from=$seed_state_list item=state}
+				{if $state.state == 1}
+					<li id='diy_plant_1' value='1'><a href="#"><div id='diy_li_img1' class="diy_text">种子期</div></a></li>
+				{elseif $state.state == 2}
+					<li id='diy_plant_2' value='2'><a href="#"><div id='diy_li_img2' class="diy_text">萌发期</div></a></li> 
+				{elseif $state.state == 3}
+					<li id='diy_plant_3' value='3'><a href="#"><div id='diy_li_img3' class="diy_text">幼苗期</div></a></li> 
+				{elseif $state.state == 4}
+					<li id='diy_plant_4' value='4'><a href="#"><div id='diy_li_img4' class="diy_text">根茎叶期</div></a></li> 
+				{elseif $state.state == 5}
+					<li id='diy_plant_5' value='5'><a href="#"><div id='diy_li_img5' class="diy_text">花芽期</div></a></li>
+				{elseif $state.state == 6}
+					<li id='diy_plant_6' value='6'><a href="#"><div id='diy_li_img6' class="diy_text">开花期</div></a></li>
+				{elseif $state.state == 7}
+					<li id='diy_plant_7' value='7'><a href="#"><div id='diy_li_img7' class="diy_text">传粉期</div></a></li> 
+				{elseif $state.state == 8}
+					<li id='diy_plant_8' value='8'><a href="#"><div id='diy_li_img8' class="diy_text">结果期</div></a></li> 
+				{elseif $state.state == 9}
+					<li id='diy_plant_9' value='9'><a href="#"><div id='diy_li_img9' class="diy_text">种子形成期</div></a></li> 
+				{/if}
+			{/foreach}
+			</ul> 
+		</div>
+	</div>
+	<!--DIY统计图-->
+	<script>
+	var screenWidth = document.body.clientWidth;
+	if(screenWidth >= 540)
+	{
+		document.write('<div id="stats_diy" class="stats_diy"><div class="stat" id="myStat_diy1" data-dimension="170" data-text="{$state_info.outside_temperature}℃"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#ff1919" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy2" data-dimension="170" data-text="{$state_info.humidity}%"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#22AEEB" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy3" data-dimension="170" data-text="{$state_info.illuminance_limit}lx"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#ff9834" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	}
+	else
+	{
+		document.write('<div id="stats_diy" class="stats_diy"><div class="stat" id="myStat_diy1" data-dimension="90" data-text="{$state_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#ff1919" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy2" data-dimension="90" data-text="{$state_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#22AEEB" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_diy3" data-dimension="90" data-text="{$state_info.illuminance_limit}lx"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#ff9834" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+	}
+	</script>
+
+	<!--三个图标-->
+	<div class="param_icon3">
+		<div class="param_icon_temp"></div>
+		<div class="param_icon_humit"></div>
+		<div class="param_icon_light"></div>
+	</div>
+
+	<!--DIY滑块-->
+	<div id='d_diy_hk' class="diy_param_slide" data-role="fieldcontain">
+		<label for="points_wd" value='1'></label>
+		<input  type="range" data-highlight="true" name="points_wd" id="points_wd" value="18" min="18" max="50">
+		<label  for="points_sd" value='2'></label>
+		<input  type="range" data-highlight="true"  name="points_sd" id="points_sd" value="40" min="40" max="100">
+		<label for="points_gz" value='3'></label>
+		<input  type="range" data-highlight="true"  name="points_gz" id="points_gz" value="300" min="300" max="1000">
+	</div>
+		<!--说明文字-->
+	<div id='select_info' class="select_info">
+		<label id="select_info_txt"><p><span class="bold green01">温度</span>：番茄是喜温性蔬菜，在正常条件下，同化作用最适温度为20～25℃;</p><p><span class="bold green01">光照</span>：番茄是喜光作物，光饱和点为70000lx，适宜光照强度为30000～50000lx;</p><p><span class="bold green01">水分</span>：番茄既需要较多的水分，但又不必经常大量的灌溉，一般以土壤湿度60～80%、空气湿度45～50%为宜。</p></label>
+	</div>
+	<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+	<div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+
+<div class="black-bg" style="display: none;"></div>
+<!--浮框结束-->
+	<div class="diy_btn">
+		<a href="javascript:;" id="d_save_btn" class="main-btn1 txt-shd0" onclick='diy_save()'>保<span class="pr10em"></span>存</a>
+
+
+<!--底部导航-->
+{include file="./footer.html"}
+{/block}

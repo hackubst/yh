@@ -1,0 +1,180 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tabs clearfix">
+    <a href="javascript:;" class="active tabs_a fl" data-origin="additem" data-index="1">基本信息</a>
+	<a href="javascript:;" class="tabs_a fl" data-origin="additem" data-index="2">管理的门店</a>
+</div>
+<!-- end tabs -->
+<div class="tabs-content" data-origin="additem">
+<form method="post" id="form_addItem" enctype="multipart/form-data">
+    <!-- end 详细描述 -->
+			<table class='hide' class='display:none;' id='J_add_sku_rank_price'>
+				{foreach from=$arr_agent_rank item=row}
+				<tr>
+                	<td class="tables-form-title">{$row.rank_name}</td>
+                    <td>
+                        <input type="hidden" name="new_sku_rank_id[]" value="{$row.agent_rank_id}">
+                        <input type="text" class="mini" name="new_sku_rank_price[]" value="">元
+                    </td>
+                </tr>   
+                {/foreach}
+            </table>
+<div class="tc hide" data-index="2">
+    <div class="add_role_box">
+			<div class="add-role-list">
+				<div class="add-role-tit">
+					<input type="checkbox" name="checkbox" id="checkbox" class="che-t"/>
+					<label for="checkbox">所有的门店</label>
+                </div>
+                <ul>
+                    {foreach from=$dept_list item=dept}
+                    <li><input type="checkbox" name="priv" id="{$dept.node_code}" class="che-li" value="{$dept.node_code}" {if in_array($dept.node_code, $user_info.dept_list)}checked{/if}/><label for="{$dept.node_code}">{$dept.node_name}</label></li>
+                    {/foreach}
+                </ul>
+			</div>
+		<input type="hidden" name="priv_list" id="priv_list">
+		<span class="fi-help-text"></span>
+	</div>
+	
+    <div class="formactions mgl180">
+		<input type="hidden" name="act" value="add">
+        <button class="btn btn-blue"><i class="gicon-ok white"></i>提交</button>
+    </div>
+
+</div>
+
+<!-- end 规格属性 -->
+<div class="tc" data-index="1">
+    <div class="formitems inline">  
+        <label class="fi-name"><span class='colorRed'>*</span>联系人：</label>  
+        <div class="form-controls">  
+            <input type="text" name='linkman' id='linkman' placeholder="" class="small" value="{$user_info.realname}"> 
+            <span class="fi-help-text"></span>   
+        </div>  
+    </div>
+    <div class="formitems inline">  
+        <label class="fi-name"><span class='colorRed'>*</span>登录用户名：</label>  
+        <div class="form-controls">
+            <input type="text" name='name'  id='name' class="small" value="{$user_info.username}">
+            <span class="fi-help-text">全站唯一</span>    
+        </div>  
+    </div>
+    <div class="formitems inline">  
+        <label class="fi-name">初始密码：</label>  
+        <div class="form-controls">  
+            <input type="password" placeholder="" name='password' id='password' value='' class="small">
+            <span class="fi-help-text">若不填写，则默认与登录名相同(不能少于6位)</span>    
+        </div>  
+    </div>
+    <div class="formitems inline">  
+        <label class="fi-name">重复密码：</label>  
+        <div class="form-controls">  
+            <input type="password" placeholder="" name='re_password' id='re_password' value='' class="small">
+            <span class="fi-help-text" id='notice_re_password'>当手动设置密码时，请在此处再次输入密码</span>    
+        </div>  
+    </div>
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class='colorRed'>*</span>手机：</label>  
+        <div class="form-controls">  
+            <input type="text" name='mobile' value='{$user_info.mobile}' id='mobile' placeholder="" class="default">
+            <span class="fi-help-text" id='notice_mobile'>手机和固话至少填写一个</span>    
+        </div>  
+    </div>
+    <div class="formitems inline">  
+        <label class="fi-name">固话：</label>  
+        <div class="form-controls">  
+            <input type="text" name='tel' value='{$user_info.tel|default:''}' id='tel' placeholder="" class="default">
+            <span class="fi-help-text"></span>    
+        </div>  
+    </div>
+    <div class="formitems inline">  
+        <label class="fi-name"><span class='colorRed'>*</span>电子邮件：</label>  
+        <div class="form-controls">  
+            <input type="text" name='email' value='{$user_info.email}' id='email' placeholder="" class="default">
+            <span class="fi-help-text">必填</span>    
+        </div>  
+    </div>
+    <div class="formitems inline">  
+        <label class="fi-name">性别：</label>  
+        <div class="form-controls">  
+            <div class="radio-group">
+                <label><input type="radio" name="sex" value='0'{if $user_info.sex == 0}checked{/if} >女</label>  
+                <label><input type="radio" name="sex" value='1' {if $user_info.sex == 1}checked{/if}>男</label>   
+                <label><input type="radio" name="sex" value='2' {if $user_info.sex == 2}checked{/if} >保密</label>  
+            </div>  
+            <span class="fi-help-text"></span>
+        </div>  
+    </div>
+    <div class="formactions mgl180">
+            <input type="hidden" name="action" value="add">
+            <span class="btn btn-blue jump" data-value='2'>下一步</span>
+        </div>
+</div>
+
+<!-- end 基本信息 -->
+</form>
+</div>
+{/block}
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpRole/add_role.css" type="text/css" />
+{literal}
+<style>
+    #jpops .fi-name{width:65px;}
+    #jpops .form-controls{margin-left:75px;}
+    #j-item-extend li{margin-bottom:10px;}
+    .edit_item_tip{font-size: 18px;color: #a0a0a0;background-color: inherit;text-decoration: none;margin: 20px 180px;}
+</style>
+{/literal}
+{/block}
+{block name="js"}
+<script>
+$(".che-t").click(function(){
+	$(this).parents(".add-role-list").find("input:checkbox[name=priv]").attr("checked",this.checked);
+})
+
+$(".che-t").each(function(){
+	var all_checked = true;
+	$(this).parents(".add-role-list").find("input:checkbox[name=priv]").each(function()
+	{
+		if ($(this).attr('checked') != 'checked')
+		{
+			all_checked = false;
+		}
+	});
+
+	if (all_checked == true)
+	{
+		$(this).attr('checked', true);
+	}
+})
+
+$(document).ready(function(){
+	generate_priv_list();
+})
+
+$('input:checkbox').click(function(){
+	generate_priv_list();
+});
+
+function generate_priv_list()
+{
+	var priv_list = '';
+	$('input:checkbox[name="priv"]:checked').each(function(){
+		priv_list += $(this).val() + ',';
+	});
+	$('#priv_list').val(priv_list);
+}
+
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="__KD__/kindeditor.js?version={$version}" > </script>
+<script src="__KD__/lang/zh_CN.js?version={$version}" > </script>
+<script src="__ACPJS__/AcpItem/add_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_validate.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_step2.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_step3.js?version={$version}"></script>
+<!--<script src="__ACPJS__/AcpItem/add_item_step4.js?version={$version}"></script>-->
+{/block}

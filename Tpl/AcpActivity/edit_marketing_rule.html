@@ -1,0 +1,81 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='add_admin'>
+
+<div class="formitems inline">
+    <label class="fi-name">活动类型：</label>
+    <div class="form-controls">
+        <select name="marketing_type">
+            <option value="0">--请选择活动类型--</option>
+            <option value="1" {if $marketing_rule_info.marketing_type == 1}selected="selected"{/if}>每周亏损返利</option>
+            <option value="2" {if $marketing_rule_info.marketing_type == 2}selected="selected"{/if}>每日首充返利</option>
+            <option value="3" {if $marketing_rule_info.marketing_type == 3}selected="selected"{/if}>下线投注返利</option>
+            <option value="4" {if $marketing_rule_info.marketing_type == 4}selected="selected"{/if}>每日救济</option>
+            <option value="5" {if $marketing_rule_info.marketing_type == 5}selected="selected"{/if}>经验换豆</option>
+            <option value="6" {if $marketing_rule_info.marketing_type == 6}selected="selected"{/if}>每日排行上榜有礼</option>
+        </select>
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>活动标题：</label>
+    <div class="form-controls">
+        <input type="text" name='marketing_rule_name' value='{$marketing_rule_info.marketing_rule_name}' id='marketing_rule_name' placeholder="" class="xxlarge">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+
+<!-- <div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>排序号：</label>
+    <div class="form-controls">
+        <input type="text" name='serial'  id='serial' value='{$serial}' class="small">
+        <span class="fi-help-text"></span>
+    </div>
+</div> -->
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>活动有效期：</label>
+    <div class="form-controls">
+        <input type="text" autocomplete="off" class="Wdate" name="start_time" value="{$marketing_rule_info.start_time|date_format:'%Y-%m-%d %H:%M:%S'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">至
+        <input type="text" autocomplete="off" class="Wdate" name="end_time" value="{$marketing_rule_info.end_time|date_format:'%Y-%m-%d %H:%M:%S'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+{upload_image_widget($pic_data)}
+
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>活动内容：</label>
+    <div class="form-controls" id="J_KindEditor">
+        <script id="editor" name="contents" type="text/plain" style="width:700px;height:500px;">{$marketing_rule_info.contents}</script>
+    </div>
+</div>
+
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+        <input type='hidden' name='submit' value='submit' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-ok white"></i>保存</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form>
+{/block}
+{block name="js"}
+    <!-- 编辑器 -->
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__UE__/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+</script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 

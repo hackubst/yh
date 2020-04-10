@@ -1,0 +1,199 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<div class="tablesWrap">
+
+<div class="tables-searchbox">
+    <form method="post">
+        <div class="mgt10">
+            <span "tbs-txt">查询开始日期：</span>  
+                <input type="text" style="width:150px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+            <span "tbs-txt">查询结束日期：</span>  
+                <input type="text" style="width:150px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+
+            <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </div>
+    </form>
+</div>
+    <table class="wxtables">
+
+        <thead>
+            <tr>
+                <td rowspan="6">日期</td>
+            </tr>
+        <tr>
+            <td>注册</td>
+            <td>输赢</td>
+            <td>盈利</td>
+            <td>在线充值</td>
+            <td>返点分</td>
+            <td>救济分</td>
+            <td>排名奖</td>
+            <td>兑奖</td>
+            <td>充卡</td>
+            <td>代理收</td>
+            <td>代理充</td>
+            <td>代理提现</td>
+            <td>代理进货</td>
+        </tr>
+        <tr>
+            {foreach from=$game_type_list item=type key}
+            {if $key < 13}
+                <td>{$type.game_type_name}</td>
+            {/if}
+            {/foreach}
+        </tr>
+        <tr>
+            {foreach from=$game_type_list item=type key}
+            {if $key < 26 && $key >12}
+            <td>{$type.game_type_name}</td>
+            {/if}
+            {/foreach}
+        </tr>
+        <tr>
+            {foreach from=$game_type_list item=type key}
+            {if $key < 39 && $key >25}
+            <td>{$type.game_type_name}</td>
+            {/if}
+            {/foreach}
+        </tr>
+        <tr>
+            {foreach from=$game_type_list item=type key}
+            {if $key < 52 && $key >38}
+            <td>{$type.game_type_name}</td>
+            {/if}
+            {/foreach}
+            <td>代理总提现</td>
+            <td>代理总充值</td>
+            <td>首充奖励</td>
+            <!--<td>游戏税收</td>-->
+            <td>活动奖励</td>
+            <td>用户总分</td>
+            <td>银行资金</td>
+        </tr>
+        
+        </thead>
+        <tbody>
+        {foreach from=$list item=data}
+        <tr>
+            <td rowspan="6">{$data.data.start_time}</td>
+        </tr>
+        <tr>
+            <td>{$data.data.reg_number}</td>
+            <td>{$data.data.gain_money}</td>
+            <td>{$data.data.gain_money_two}</td>
+            <td>{$data.data.recharge}</td>
+            <td>{$data.data.return_money}</td>
+            <td>{$data.data.relief}</td>
+            <td>{$data.data.reward}</td>
+            <td>{$data.data.user_gift_password_num}</td>
+            <td>{$data.data.user_gift_num}</td>
+            <td>{$data.data.daily_recharge_out}</td>
+            <td>{$data.data.daily_recharge}</td>
+            <td>{$data.data.daily_deposit}</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            {foreach from=$data.game_type_list item=v k}
+            {if $k < 13 && $k >=0}
+                <td {if $v.last_money > 0}style="color:red;"{/if}>{$v.last_money}</td>
+            {/if}
+            {/foreach}
+        </tr>
+        <tr>
+            {foreach from=$data.game_type_list item=v k}
+            {if $k < 26 && $k >12}
+            <td {if $v.last_money > 0}style="color:red;"{/if}>{$v.last_money}</td>
+            {/if}
+            {/foreach}
+        </tr>
+        <tr>
+            {foreach from=$data.game_type_list item=v k}
+            {if $k < 39 && $k >25}
+            <td {if $v.last_money > 0}style="color:red;"{/if}>{$v.last_money}</td>
+            {/if}
+            {/foreach}
+        </tr>
+        <tr>
+            {foreach from=$data.game_type_list item=v k}
+            {if $k < 52 && $k >38}
+            <td {if $v.last_money > 0}style="color:red;"{/if}>{$v.last_money}</td>
+            {/if}
+            {/foreach}
+            <td {if $data.data.total_deposit > 0}style="color:red;"{/if} >{$data.data.total_deposit}</td>
+            <td {if $data.data.total_recharge > 0}style="color:red;"{/if} >{$data.data.total_recharge}</td>
+            <td {if $data.data.recharge_money > 0}style="color:red;"{/if} >{$data.data.recharge_money}</td>
+            <td {if $data.data.activity_reward > 0}style="color:red;"{/if} >{$data.data.activity_reward}</td>
+            <td {if $data.data.left_money > 0}style="color:red;"{/if} >{$data.data.left_money}</td>
+            <td {if $data.data.frozen_money > 0}style="color:red;"{/if} >{$data.data.frozen_money}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+
+        <div class="fr">
+            <div class="paginate">
+                {$page}
+            </div>
+        </div>
+    </div>
+
+    <!-- end tables-btmctrl -->
+
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+
+
+
+function set_enable(id, enable,type)
+{
+    if(type == 2){
+        var opt = enable ? '启用':'禁用';
+    }else if(type == 1){
+        var opt = enable ? '显示':'隐藏';
+    }
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定要执行这个操作吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/type_set_enable', {"type_id":id, "opt":enable,"type":type}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您，' + opt + '成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，'+ opt +'失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+
+</script>
+{/literal}
+{/block}

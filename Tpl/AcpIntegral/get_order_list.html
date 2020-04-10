@@ -1,0 +1,122 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+
+{block name="content"}
+<div class="tablesWrap">
+    {include file="./Public_forms.html"}
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <!--
+        <colgroup>
+        <col width="5%">
+        <col width="8%">
+        <col width="8%">
+        <col width="7%">
+        <col width="8%">
+        <col width="8%">
+        <col width="10%">
+        <col width="9%">
+        <col width="12%">
+        <col width="30%">
+        </colgroup>
+        -->
+        <thead>
+            <tr>
+                <td>积分兑换编号</td>
+                <td>兑换时间</td>
+                <td>收货人</td>
+                <td>订单状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        {foreach from=$order_list item=order_info}
+        <tbody class="combo-tbody">  
+        	<tr>  
+				<td><span class="t-le">{$order_info.exchange_record_sn}</span></td>
+				<td><span class="t-le">{$order_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</span></td>
+                <td>{$order_info.consignee}</td>  
+				<td>{$order_info.order_status_name}</td> 
+                <td>  
+                    <a href="/AcpIntegral/order_detail/order_id/{$order_info.exchange_record_id}/mod_id/{$mod_id}" class="btn" title="查看">查看</a>   
+					{if $order_info.order_status == OrderModel::PRE_PAY}
+						<a href="javascript:;" class="btn" title="发货" onclick="deliver_gift_order({$order_info.exchange_record_id})">发货</a>  
+					{/if}
+                </td>  
+            </tr>
+        </tbody> 
+		{foreachelse}
+        <tbody>       
+			<tr>
+				<td colspan="7">
+					没有符合条件的记录
+				</td>
+			<tr>
+        </tbody>
+		{/foreach} 
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+ <!--       <div class="fl">  
+            <a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+            <a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+            <a href="javascript:;" class="btn btn-blue" onclick="batch_delete()">关闭</a>  
+				<a href="javascript:;" class="btn btn-blue" onclick="print_packing_list();">批量打印配货单</a>  
+				<a href="javascript:;" class="btn btn-blue" id="print_selected">批量打印快递单</a>  
+				<a href="javascript:;" onclick="print_invoice()" class="btn btn-blue">批量打印发货单</a>  
+				<a href="javascript:;" onclick="batch_deliver()" class="btn btn-blue">批量发货</a>
+        </div>  -->
+        <div class="fr">  
+            <div class="paginate">
+				{$show}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+
+<object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+	<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+
+<div id="globalPop"></div>
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/get_pre_stockup_order_list.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/get_pre_deliver_order_list.js?version={$version}"></script>
+<script src="__JS__/lodop/LodopFuncs.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/print_shipping.js?version={$version}"></script>
+{literal} 
+<script>
+	//全选
+	function Select(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=true;
+		}
+	}
+	//取消全选
+	function Cancel(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=false;
+		}
+	}
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/get_pre_pay_order_list.css" type="text/css" />
+{literal}
+<style>
+#jpops .fi-name{width:80px;}
+#jpops .form-controls{margin-left:100px;}
+</style>
+{/literal}
+{/block} 

@@ -1,0 +1,180 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <form   method="post" action="">
+    <div class="tables-searchbox">
+
+        <span class="tbs-txt">ID：</span>
+        <input type="text" name="id" value="{if $id}{$id}{else}{/if}">
+
+        <span class="tbs-txt">用户昵称：</span>  
+        <input type="text" name="username" value="{$username}">  
+  	
+  		<span class="tbs-txt">手机号：</span>  
+        <input type="text" name="mobile" value="{$mobile}">
+
+        <span class="tbs-txt">用户姓名：</span>  
+        <input type="text" placeholder="" name="alipay_account_name" value="{$alipay_account_name}">
+        <button class="btn" type="submit"><i class="gicon-search"></i>搜索</button>  
+    </div>  
+	</form> 
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="10%">
+        <col width="15%">  
+        <col width="15%">  
+        <col width="15%">
+        <col width="15%">  
+        <col width="15%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <!--<td>编号</td>  -->
+                <td>用户ID</td>
+                <td>用户昵称</td>
+                <td>用户姓名</td>
+                <td>手机号</td>  
+                <td>账户金豆</td>
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+			
+			{foreach from=$data key=key name=loop item=v}
+            <tr>  
+                <!--<td>{$smarty.foreach.loop.iteration}</td>  -->
+                <!--<td>{$v.id}</td>-->
+                <td><a href="/AcpUser/user_detail/user_id/{$v.user_id}" title="查看用户详情"><span style="color: blue">{$v.id}</span></a></td>
+
+                <td>{$v.nickname|default:'--'}</td>
+                <td>{if $v.role_type == 4}{$v.realname|default:'--'}{else}{$v.alipay_account_name|default:'--'}{/if}</td>
+                <td>{$v.mobile|default:'--'}</td>  
+                <td>
+                    <span>{$v.left_money}</span>
+                </td>  
+                <td>  
+                    <a href="javascript:;" class="btn j_form" title="充值" data-id="{$v.user_id}" >充值</a>
+                    <a href="/AcpFinance/get_account_log/user_id/{$v.user_id}" class="btn" title="明细">明细</a>    
+                </td>  
+            </tr>  
+			{foreachelse}
+			<tr>  
+                <td colspan="20" style="text-align:center">对不起,暂无您要查询的数据!</td>  
+            </tr>  
+			{/foreach}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+{literal}
+<script>
+$(function() {
+
+	var html='<form id="pop_demo">                                                                '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>变动金豆：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="amount" name="amount" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,\'\');}).call(this)" onblur="this.v();">                                 '+
+			'		<span class="fi-help-text" id="amount_ts">格式如: 10000</span>       '+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed"></span>操作备注：</label>           '+
+			'	<div class="form-controls">                                                       '+
+			'		<textarea name="remark" id="remark"></textarea>                               '+
+			'		<span class="fi-help-text">一般在200字以内</span>                             '+
+			'	</div>                                                                            '+
+			'</div>																			      '+
+			'</form>                                                                              ';
+			
+	$(".j_form").click(function(){
+		var user_id = $(this).data('id');
+		$.jPops.custom({
+			title:"金豆充值",
+			content:html,
+			callback:function(r){
+				acp.popFormStatus=false;//弹窗表单验证状态
+				if(r){
+					$.validator.setDefaults({
+						submitHandler: function() {
+							acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+							var amount=$("#jpops #amount").val();
+							var remark=$("#jpops #remark").val();
+						
+							$.ajax({
+								url : '/AcpFinance/do_recharge', 
+								type : 'POST', 
+								dataType : 'JSON',
+								timeout : 1000,
+								data : {action : "set",user_id : user_id,amount : amount, remark : remark},
+								error : function() {
+									$.jPops.message({title:"操作提示",content: "操作失败请重试",timing:3000});
+								},
+								success : function(result) {
+									if(result.code == 200)
+									{
+										$.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+										//刷新页面
+										setTimeout(function(){window.location.reload() },2000);
+									}
+									else
+									{
+										$.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+									}
+								}
+							});
+							
+						}
+					});
+
+					//表单验证规则
+					$("#pop_demo").validate({
+						rules: {
+							amount: {required: true}
+						},
+						messages: {
+							amount: {required: "请输入变动金额", check_float: "格式如: 10000"}
+						},
+						errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+						success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+					});
+
+					//模拟提交表单
+					$("#pop_demo").submit();
+
+					return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+				}
+				else{//点击取消按钮执行的事件
+					return true;
+				}
+			}
+			
+		});
+	})
+ });
+
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/user_list.css" type="text/css" />
+{/block} 

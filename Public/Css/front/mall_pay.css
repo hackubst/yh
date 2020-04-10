@@ -1,0 +1,53 @@
+﻿input[type="radio"] {
+-webkit-appearance: radio;
+box-sizing: border-box;
+}	
+.recharge_style{width:100%;}
+.recharge_title{height: 40px;
+line-height: 40px;
+font-size: 1.4em;
+border-bottom: 1px solid #c8c8c8;
+text-align:center;
+color: grey;}
+.recharge_select{
+	text-align: center;
+height: 40px;
+line-height: 40px;
+border-bottom: 1px solid #c8c8c8;
+font-size: 1.2em;
+color: grey;
+}
+.recharge_select input{
+	width: 20px;
+height: 20px;
+float: left;
+position: relative;
+top: 11px;
+left: 5px;}
+.recharge_select label{
+	letter-spacing: 5px;color: grey;display: inline-block;}
+.recharge_text .price{
+		color: #e4393c;
+font-weight: bold;}
+.recharge_text{
+	text-align: center;
+height: 30px;
+line-height: 30px;
+font-size: 1.2em;}
+
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+	body{font-size:24px;}
+	.header-title{font-size:1em;}
+	.mt13{margin-top:13px;}
+	.recharge_title {height: 70px;line-height: 70px;}
+	.recharge_select {height: 75px;line-height: 75px;}
+	.recharge_select input {width: 30px;height: 35px;top:21px;}
+	.recharge_text {height: 60px;line-height: 60px;}
+	.sbmBtn a {font-size:1em;}
+	
+	
+	
+}

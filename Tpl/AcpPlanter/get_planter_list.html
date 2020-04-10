@@ -1,0 +1,203 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+        <form method="post">
+            <span class="tbs-txt">种植机名称：</span>
+            <input type="text" name="planter_name" value="{$planter_name}">
+
+            <span class="tbs-txt">种植机机器码：</span>
+            <input type="text" class="mini" name="planter_code" value="{$planter_code}">
+
+            <select name="is_bind">
+                <option value="-" selected="">--请选择绑定状态--</option>
+                {foreach from=$is_bind_list item=val key=key}
+                <option value="{$key}" {if ctype_digit($is_bind) && $key == $is_bind}selected{/if}>{$val}</option>
+                {/foreach}
+            </select>
+
+            <select name="is_risk_mode">
+				<option value="-" selected="">--开启冒险模式{$is_risk_mode}--</option>
+                {foreach from=$is_risk_mode_list item=val key=key}
+				<option value="{$key}" {if ctype_digit($is_risk_mode) && $key == $is_risk_mode}selected{/if}>{$val}</option>
+                {/foreach}
+            </select>
+
+            <div class="mgt10">
+                <span class="tbs-txt">绑定时间：</span>
+                <input type="text" autocomplete="off" class="Wdate" name="start_date" value="{$start_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <span class="tbs-txt">至</span>
+                <input type="text" autocomplete="off" class="Wdate" name="end_date" value="{$end_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+            </div>
+
+        </form>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="15%">
+            <col width="8%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="10%">
+            <col width="7%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>机器码</td>
+            <td>机器名称</td>
+            <td>拥有者</td>
+            <td>状态码</td>
+            <td>液位报警</td>
+            <td>模拟种子状态</td>
+            <td>冒险模式</td>
+            <td>最后访问时间</td>
+            <td>绑定时间</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$planter_list item=planter name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$planter.planter_id}" name="checkIds[]"></td>
+            <td>{$planter.planter_code}</td>
+            <td>
+                {$planter.planter_name}
+            </td>
+            <td><a href="{$planter.link_user}" target="_blank">{$planter.realname}</td></a>
+            <td>{$planter.box_state}</td>
+            <td>{$planter.alarm}</td>
+            <td>{$planter.seed_state_name}</td>
+            <td>{$planter.is_risk_mode}</td>
+            <td>{$planter.last_visit_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>{$planter.bind_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>
+				{if $planter.bind_time}
+					<a href="javascript:;" onclick="set_command({$planter.planter_id}, '{$planter.box_state}')" class="btn btn-blue">控制</a>
+				{/if}
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_store">下架</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_del">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$page->show()}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var planter_name = '{$ITEM_NAME}';
+{literal}
+
+function set_command(planter_id, box_state)
+{
+	var html='<form id="set_command_form"><div class="formitems inline">'+
+		'<label class="fi-name"><span class="colorRed">*</span>输入新的命令：</label>'+ 
+		'<div class="form-controls">'+
+			'<input name="new_command" id="new_command" value="' + box_state + '"><span class="fi-help-text"> </span>'+
+		'</div></div>'+
+	'</form>';
+	
+	$.jPops.custom({
+		title:"设置新命令",
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+				var new_command = $('#new_command').val();
+				$.validator.setDefaults(
+				{
+					//表单验证通过后的处理，异步提交表单
+					submitHandler: function()
+					{
+						$.post('/AcpPlanter/set_command',{"planter_id":planter_id,"new_command":new_command},function(data)
+						{
+							if (data == 'success')
+							{
+								alert('恭喜您，命令设置成功！');
+location.reload();
+							}
+							else
+							{
+								alert('对不起，命令设置失败！');
+							}
+						})
+						acp.batchDeliverFormStatus = true;
+					}
+				});
+			
+				//表单验证规则
+				$("#set_command_form").validate(
+				{
+					rules: 
+					{
+						new_command: 
+						{
+							required: true,
+						}
+					},
+					messages: 
+					{
+						new_command: 
+						{
+							required: "对不起，请填写新的命令",
+						}
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+
+				//模拟提交表单
+				$("#set_command_form").submit();
+				return acp.batchDeliverFormStatus;
+			}
+			else
+			{
+				return true;  
+			}
+		}
+	});
+}
+
+{/literal}
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_planter.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_planter.js?version={$version}"></script>
+{/block}

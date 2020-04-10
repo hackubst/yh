@@ -1,0 +1,103 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-list-rank">
+    <div class="t-rank-con">
+    <div class="t-rank-tit" style="margin:10px;"><a href="/AcpAppPush/app_push
+    " class="btn btn-blue"><i class="gicon-plus white"></i>发送通知</a></div>
+        <div class="tablesWrap">  
+            <!-- end tables-searchbox -->  
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="80%">  
+                <col width="20%"> 
+                </colgroup>  
+                <thead>  
+                    <tr> 
+                        <td>标题</td> 
+                        <td>时间</td>  
+                    </tr>  
+                </thead>  
+                <tbody>
+                    {foreach from=$push_list item=v}
+                        <tr>
+                            <td>{$v.title}</td>
+                            <td>{date('Y-m-d H:i:s', $v.addtime)}</td>
+                        </tr>
+                    {/foreach}
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">  
+                <div class="fl">  
+                     
+                </div>  
+                <div class="fr">  
+                    <div class="paginate">  
+                        {$show}
+                    </div>  
+                    <!-- end paginate -->  
+                </div>  
+            </div>  
+            <!-- end tables-btmctrl -->  
+        </div>  
+		<!-- end tablesWrap -->       
+    </div>
+    <form action="/AcpUser/add_rank" method="post" enctype="multipart/form-data">
+    <div class="t-alert">
+    	<div class="t-alert-tit"><span class="le">添加{$USER_NAME}等级(带*为必填)：</span><span class="ri"><i class="gicon-remove"></i></span></div>
+        <div class="t-tr">
+            <div class="t-td wid">{$USER_NAME}等级名称：</div>
+            <div class="t-td"><input type="text" name='rankname' placeholder="" class="small"><span class="war">* (请给等级取一个名称)</span></div>
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid">达到该级别所需消费金额：</div>
+            <div class="t-td">
+            	<div class="rmb"> <input type="text" placeholder="" name='money' class="small"><span class="war">* (包含预存款和已消费金额的总额度)</span></div>
+            </div>
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid">{$USER_NAME}采购折扣：</div>
+            <div class="t-td">
+            	<div class="rmb"> <input type="text" placeholder="" name='discount' class="mini" style="width:40px;"><span class="war">* (等级折扣为不能为空，只能是1-100的正整数)</span></div>
+            </div>
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid">备注：</div>
+            <div class="t-td"><textarea name="desc" id="" class="small"></textarea> </div>
+        </div>
+        <div class="t-tr">  
+                <div class="t-td wid">等级图标:</div>
+                <div class="t-td"> 
+                    <div class="fi-img" style='height:45px;width:45px;'>
+                        <img src="/Public/Images/nopic.png" class="J_logo">
+                    </div>
+                    <a href="javascript:;" class="btn">
+                        选择图片
+                        <input type="file" class="fi-btn-upload J_logo_up" name="user_logo">
+                    </a>
+                    <span class="war"> (您可以上传一张您定义的等级logo图片)</span> 
+                </div>  
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid"> </div>
+            <input type="hidden" name="submit" value="add" />
+            <div class="t-td t-but"><button type="submit" name="do"  class="btn">添加</button>  </div>
+        </div>
+        
+    </div>
+   </form>
+</div>
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/edit_rank.js?version={$version}"></script>
+<script>
+
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/list_rank.css" type="text/css" />
+{/block}

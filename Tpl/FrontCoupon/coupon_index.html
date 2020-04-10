@@ -1,0 +1,395 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+<style>
+        a,span{
+            display: inline-block;
+        }
+        .top.swiper-container{
+            width: 100%;
+            height: 110px;
+        }
+        .top.swiper-slide,.ad.swiper-slide{
+            width: 100%;
+            height: 100%;
+        }
+        .ad.swiper-container{
+            width: 94.66667%;
+            height: 85px;
+            margin: 5px auto;
+        }
+        .swiper-pagination-bullet{
+            width:5px;
+            height:5px;
+            border: 2px solid #fff;
+            background: transparent;
+        }
+        .swiper-pagination-bullet-active {
+            background: #fff;
+        }
+        .manjian,.cuxiao,.maizeng{
+            margin-top: 10px;
+            width: 100%;
+            border-top: 1px solid #ff3600;
+            background: #fff;
+            overflow: hidden;
+        }
+        .slogan{
+            display: inline-block;
+            width: 86px;
+            height: 26px;
+            line-height: 26px;
+            font-size: 15px;
+            text-align: center;
+            color: #fff;
+            text-indent: -16px;
+            position: relative;
+        }
+        .slogan .icon{
+            width: 5px;
+            height: 13px;
+            position: absolute;
+            background-position: -107px -26px;
+            top: 6px;
+            right: 20px;
+        }
+        .more{
+            height: 26px;
+            line-height: 26px;
+            font-size: 15px;
+            color: #ff3600;
+            float: right;
+            margin-right: 10px;
+        }
+        .manjian .slogan{
+            background-position: 0 -26px;
+        }
+        .shops,.dishes{
+            overflow: hidden;
+        }
+        .shop,.dish{
+            float: left;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            border-bottom: 1px solid #ddd;
+            padding-top: 10px;
+            padding-bottom: 6px;
+        }
+        .shop{
+            position: relative;
+            width: 33.3%;
+            text-align: center;
+        }
+        .shop:nth-child(2),.shop:nth-child(5){
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+        .shop-name{
+            font-size: 13px;
+            color: #333;
+            margin: 0 auto;
+            width: 90%;
+        }
+        .shop-img{
+            display: block;
+            width: 45px;
+            height: 45px;
+            margin: 5px auto;
+        }
+        .jian,.cu,.zeng{
+            color: #9a9a9a;
+        }
+        .jian{
+            font-size: 10px;
+            max-width: 100px;
+        }
+        .cuxiao{
+            border-top: 1px solid #bd10d0;
+        }
+        .cuxiao .slogan{
+            background-position: -86px 0;
+        }
+        .cuxiao .more{
+            color: #bd10d0;
+        }
+        .dish{
+            width: 49.9%;
+        }
+        .dish:nth-child(1),.dish:nth-child(3){
+            border-right: 1px solid #ddd;
+        }
+        .dish-img{
+            display: block;
+            max-width: 166px;
+            margin: 0 auto 10px auto;
+        }
+        .dish-name{
+            float: left;
+            width: 60%;
+            margin: 0 auto 5px 5%;
+            font-size: 15px;
+            color: #333;
+        }
+        .dish .shop-name{
+            float: right;
+            width: 30%;
+            font-size: 11px;
+            color: #9a9a9a;
+            margin-right: 5%;
+            margin-top: 2px;
+            text-align: right;
+        }
+        .cu,.zeng{
+            display: block;
+            font-size: 13px;
+            width: 90%;
+            margin: 5px auto 0 auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .maizeng{
+            border-top: 1px solid #3ad197;
+        }
+        .maizeng .slogan{
+            background-position: 0 0;
+        }
+        .maizeng .more{
+            color: #3ad197;
+        }
+        .maizeng .shop-name{
+            padding: 0 26px;
+            width: auto;
+        }
+        .freebie{
+            position: absolute;
+            width: 26px;
+            top: 10px;
+            left: 0;
+            padding-top: 17px;
+            background-position: -172px 0;
+        }
+        .freebie-item{
+            width: 28px;
+            height: 28px;
+        }
+        .zeng{
+            font-size: 10px;
+            margin: 0 auto;
+        }
+        .shop-name,.jian,.dish-name,.cu,.zeng{
+            white-space: nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .zeng{
+            height: 28px;
+            white-space: inherit;
+        }
+        .manjian .jian-icon,.cuxiao .cu-icon,.maizeng .zeng-icon{
+            width: 12px;
+            height: 12px;
+            font-size: 9px;
+        }
+        
+    </style>
+{/literal}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/swiper3.08.min.css?version={$version}">
+{/block}
+{block name="content"}
+<script>
+//        轮播
+    $(function () {
+//            头部轮播
+        var topSwiper = new Swiper('.top.swiper-container', {
+            loop: true,
+            pagination: '.top.swiper-pagination',
+            paginationBulletRender: function (index, className) {
+                return '<span class="' + className + '"></span>';
+            },
+            autoplay : 3000,
+        });
+
+//            广告轮播
+        var adSwiper = new Swiper('.ad.swiper-container', {
+            loop: true,
+            pagination: '.ad.swiper-pagination',
+            paginationBulletRender: function (index, className) {
+                return '<span class="' + className + '"></span>';
+            },
+            autoplay : 3000,
+        });
+    })
+//        大促销图片大小
+    function dishWH(){
+        var $dish = $(".dish"),
+                $dishImg = $(".dish-img");
+        $dishImg.width($dish.width()*0.9);
+        $dishImg.height($dishImg.width());
+    }
+    $(function(){
+        dishWH();
+    })
+</script>
+{include file="../header.html"}
+<!--头部轮播-->
+<div class="top swiper-container">
+    <div class="top swiper-wrapper">
+        <a href="#" class="top swiper-slide">
+            <img src="slide1.jpg"/>
+        </a>
+        <a href="#" class="top swiper-slide">
+            <img src="slide2.jpg"/>
+        </a>
+        <a href="#" class="top swiper-slide">
+            <img src="slide3.jpg"/>
+        </a>
+    </div>
+    <div class="top swiper-pagination"></div>
+</div>
+<!--满减-->
+<div class="manjian">
+    <header>
+        <span class="slogan icon">满就减<i class="icon"></i></span>
+        <a href="#" class="more">更多></a>
+    </header>
+    <div class="shops">
+        <a class="shop" href="http://www.baidu.com">
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="jian"><span class="jian-icon"></span>满100减20</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="jian"><span class="jian-icon"></span>满100减20</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="jian"><span class="jian-icon"></span>满100减20</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="jian"><span class="jian-icon"></span>满100减20</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="jian"><span class="jian-icon"></span>满100减20</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="jian"><span class="jian-icon"></span>满100减20</span>
+        </a>
+    </div>
+</div>
+<!--广告-->
+<div class="ad swiper-container">
+    <div class="ad swiper-wrapper">
+        <a href="http://www.baidu.com" class="ad swiper-slide">
+            <img src="ad1.jpg"/>
+        </a>
+        <a href="http://www.163.com" class="ad swiper-slide">
+            <img src="ad2.jpg"/>
+        </a>
+    </div>
+    <div class="ad swiper-pagination"></div>
+</div>
+<!--促销-->
+<div class="cuxiao">
+    <header>
+        <span class="slogan icon">大促销<i class="icon"></i></span>
+        <a href="#" class="more">更多></a>
+    </header>
+    <div class="dishes">
+        <a class="dish" href="http://www.baidu.com">
+            <img class="dish-img" src="dish1.jpg"/>
+            <h2 class="dish-name">菲力牛排一份</h2><span class="shop-name">王品牛排</span>
+            <span class="cu"><span class="cu-icon"></span>满100减20</span>
+        </a>
+        <a class="dish" href="http://www.baidu.com">
+            <img class="dish-img" src="dish1.jpg"/>
+            <h2 class="dish-name">菲力牛排一份</h2><span class="shop-name">王品牛排</span>
+            <span class="cu"><span class="cu-icon"></span>满100减20</span>
+        </a>
+        <a class="dish" href="http://www.baidu.com">
+            <img class="dish-img" src="dish1.jpg"/>
+            <h2 class="dish-name">菲力牛排一份</h2><span class="shop-name">王品牛排</span>
+            <span class="cu"><span class="cu-icon"></span>满100减20</span>
+        </a>
+        <a class="dish" href="http://www.baidu.com">
+            <img class="dish-img" src="dish1.jpg"/>
+            <h2 class="dish-name">菲力牛排一份</h2><span class="shop-name">王品牛排</span>
+            <span class="cu"><span class="cu-icon"></span>满100减20</span>
+        </a>
+    </div>
+</div>
+<!--买赠-->
+<div class="maizeng">
+    <header>
+        <span class="slogan icon">买就赠<i class="icon"></i></span>
+        <a href="#" class="more">更多 ></a>
+    </header>
+    <div class="shops">
+        <a class="shop" href="http://www.baidu.com">
+            <div class="freebie icon">
+                <img src="jdb.jpg" class="freebie-item"/>
+            </div>
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="zeng"><span class="zeng-icon"></span>满100就赠加多宝一罐和50元抵用券一张</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <div class="freebie icon">
+                <img src="jdb.jpg" class="freebie-item"/>
+            </div>
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="zeng"><span class="zeng-icon"></span>满100就赠加多宝一罐和50元抵用券一张</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <div class="freebie icon">
+                <img src="jdb.jpg" class="freebie-item"/>
+            </div>
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="zeng"><span class="zeng-icon"></span>满100就赠加多宝一罐和50元抵用券一张</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <div class="freebie icon">
+                <img src="jdb.jpg" class="freebie-item"/>
+            </div>
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="zeng"><span class="zeng-icon"></span>满100就赠加多宝一罐和50元抵用券一张</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <div class="freebie icon">
+                <img src="jdb.jpg" class="freebie-item"/>
+            </div>
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="zeng"><span class="zeng-icon"></span>满100就赠加多宝一罐和50元抵用券一张</span>
+        </a>
+        <a class="shop" href="http://www.baidu.com">
+            <div class="freebie icon">
+                <img src="jdb.jpg" class="freebie-item"/>
+            </div>
+            <h2 class="shop-name">金桔餐厅</h2>
+            <img class="shop-img" src="shop1.jpg"/>
+            <span class="zeng"><span class="zeng-icon"></span>满100就赠加多宝一罐和50元抵用券一张</span>
+        </a>
+    </div>
+</div>
+<div class="kongbai"></div>
+{include file="../footer.html"}
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/Js/front/swiper3.08.jquery.min.js"></script>
+{/block}

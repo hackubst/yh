@@ -1,0 +1,264 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormNotice" action="" method="post">
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>所属游戏系列：</label>  
+    <div class="form-controls">  
+        <select name="game_series_id" class="small field" disabled="disabled">
+                <option value="" selected="">请选择</option>
+                {section name=row loop=$game_series_list}  
+                <option value='{$game_series_list[row].game_series_id}' {if $game_type_info.game_series_id == $game_series_list[row].game_series_id}selected{/if}>{$game_series_list[row].game_series_name}</option>  
+                {/section}
+            </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>游戏类型名</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="game_type_name" id="game_type_name" value="{$game_type_info.game_type_name}" disabled="disabled">
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>基本奖金池：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="base_bonus_pools" id="base_bonus_pools" value="{$game_type_info.base_bonus_pools}"> 
+    </div>  
+</div>
+<!--
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最大投注人数：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="max_bet_num" id="max_bet_num" value="{$game_type_info.max_bet_num}"> 
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最小投注人数：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="min_bet_num" id="min_bet_num" value="{$game_type_info.min_bet_num}"> 
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最大中奖人数：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="max_win_num" id="max_win_num" value="{$game_type_info.max_win_num}"> 
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最小中奖人数：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="min_win_num" id="min_win_num" value="{$game_type_info.min_win_num}"> 
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最高下注金额：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="max_bet_money" id="max_bet_money" value="{$game_type_info.max_bet_money}"> 
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最高中奖金额：</label>  
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="max_win_money" id="max_win_money" value="{$game_type_info.max_win_money}"> 
+    </div>  
+</div>
+-->
+
+
+<!--    <div class="formitems inline">-->
+<!--    <label class="fi-name"><span class="colorRed">*</span>最大中奖金额：</label>-->
+<!--    <div class="form-controls">-->
+<!--        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="max_win_reward" id="max_win_reward" value="{$game_type_info.max_win_reward}">-->
+<!--    </div>-->
+<!--</div>-->
+<!--    <div class="formitems inline">-->
+<!--    <label class="fi-name"><span class="colorRed">*</span>最小中奖金额：</label>-->
+<!--    <div class="form-controls">-->
+<!--        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="min_win_reward" id="min_win_reward" value="{$game_type_info.min_win_reward}">-->
+<!--    </div>-->
+<!--</div>-->
+<!--    <div class="formitems inline">-->
+<!--    <label class="fi-name"><span class="colorRed">*</span>最大投注金额：</label>-->
+<!--    <div class="form-controls">-->
+<!--        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="max_bet_reward" id="max_bet_reward" value="{$game_type_info.max_bet_reward}">-->
+<!--    </div>-->
+<!--</div>-->
+<!--    <div class="formitems inline">-->
+<!--    <label class="fi-name"><span class="colorRed">*</span>最小投注金额：</label>-->
+<!--    <div class="form-controls">-->
+<!--        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="min_bet_reward" id="min_bet_reward" value="{$game_type_info.min_bet_reward}">-->
+<!--    </div>-->
+<!--</div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>最大抽水比例：</label>
+        <div class="form-controls">
+            <input type="text"  placeholder="" name="max_deduct"
+                   id="max_deduct" value="{$game_type_info.max_deduct}">
+            <span>%</span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>最小抽水比例：</label>
+        <div class="form-controls">
+            <input type="text"  placeholder="" name="min_deduct"
+                   id="min_deduct" value="{$game_type_info.min_deduct}">
+            <span>%</span>
+
+        </div>
+
+    </div>
+
+{upload_image_widget($pic_data)}
+-->
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>是否启用：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="isuse" value="1"{if $game_type_info.isuse eq 1} checked="checked"{/if} />是</label>  
+            <label><input type="radio" name="isuse" value="0"{if $game_type_info.isuse eq 0} checked="checked"{/if} />否</label>   
+        </div>  
+    </div>  
+</div> 
+<!--
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>是否展示在首页：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="is_index" value="1"{if $game_type_info.is_index eq 1} checked="checked"{/if} />是</label>  
+            <label><input type="radio" name="is_index" value="0"{if $game_type_info.is_index eq 0} checked="checked"{/if} />否</label>   
+        </div>  
+    </div>  
+</div> 
+-->
+
+<!--<div class="formitems inline">  -->
+    <!--<label class="fi-name"><span class="colorRed">*</span>表格样式：</label>  -->
+    <!--<div class="form-controls">  -->
+        <!--<input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="table_type" id="table_type" value="{$game_type_info.table_type}"> -->
+    <!--</div>  -->
+<!--</div>-->
+
+<!--<div class="formitems inline">  -->
+    <!--<label class="fi-name"><span class="colorRed">*</span>游戏开奖模式：</label>  -->
+    <!--<div class="form-controls">  -->
+        <!--<select name="result_type" class="field"> -->
+                <!--<option value="" selected="selected">请选择</option>-->
+                <!--<option value="1" {if $game_type_info.result_type eq 1} selected="selected"{/if}>北京快乐8</option>-->
+                <!--<option value="2" {if $game_type_info.result_type eq 2} selected="selected"{/if}>北京PK10</option>-->
+                <!--<option value="3" {if $game_type_info.result_type eq 3} selected="selected"{/if}>加拿大快乐八</option>-->
+                <!--<option value="4" {if $game_type_info.result_type eq 4} selected="selected"{/if}>韩国系列</option>-->
+                <!--<option value="5" {if $game_type_info.result_type eq 5} selected="selected"{/if}>重庆时时彩系列</option>-->
+            <!--</select>   -->
+        <!--<span class="fi-help-text hide"></span>-->
+    <!--</div>  -->
+<!--</div> -->
+
+<!--<div class="formitems inline">-->
+    <!--<div class="form-controls">-->
+        <!--<a href="javascript:;" class="btn btn-blue show">展开投注赔率</a>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--<div class="bet">-->
+<!--<div class="formitems inline">-->
+    <!--<div class="form-controls">-->
+        <!--<a href="javascript:;" class="btn btn-blue added"><i class="gicon-plus white"></i>添加投注赔率</a>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems add">-->
+<!--</div>-->
+
+<!--{foreach from=$game_type_info.bet_json item=row key}-->
+    <!--<div class="formitems inline">-->
+        <!--<label class="fi-name">-->
+            <!--<span class="colorRed">*</span>投注号：</label>-->
+        <!--<div class="form-controls">-->
+            <!--<input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" class="small" name="bet_json[key][]" value="{$row.key}">-->
+            <!--<span class="colorRed">*</span>投注赔率：</label>-->
+            <!--<input type="text"  placeholder="" class="small" name="bet_json[rate][]" value="{$row.rate}"><a href="javascript:void(0);" onclick="rm(this)">删除</a>-->
+            <!--<span class="fi-help-text"></span>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--{/foreach}-->
+
+<!--<div class="school">-->
+    <!--<label class="fi-name">-->
+        <!--<span class="colorRed">*</span>投注赔率：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" class="small" name="bet_json[key][]" value="">-->
+        <!--<input type="text"  placeholder="" class="small" name="bet_json[rate][]" value="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>游戏规则</label>  
+    <div class="form-controls" id="J_KindEditor">
+        <script id="editor" name="game_rule" type="text/plain" style="width:700px;height:500px;">{$game_type_info.game_rule}</script>
+    </div>
+</div> -->
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="submit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+
+{block name="js"}
+<!-- 编辑器 -->
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__UE__/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+</script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+
+<script>
+
+    function rm(a)
+    {
+        $(a).parent().parent().remove();
+    }
+
+    $(".school").hide();
+    $(".bet").hide();
+    $(".added").click(function(){
+        
+        $('.add').append($('.school').html());
+        
+        $(".add").addClass("  inline ");
+    });
+
+    $(".show").click(function(){
+
+        if($(".bet").is(":hidden")){
+            $(".bet").show();
+            $('.show').html('收起投注倍率');
+        }else{
+            $(".bet").hide();
+            $('.show').html('展开投注倍率');
+        }
+        
+        
+    });
+
+</script>
+{/block} 
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

@@ -1,0 +1,239 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="map_container" id="map_container" style="width:800px;height:500px;"></div><br>
+<div class="formitems inline">  
+    <label class="fi-name">搜索：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="suggestId" id="suggestId" value="">  
+        <div id="searchResultPanel" class="xlarge" style="border:1px solid #C0C0C0;height:auto; display:none;"></div>
+        <span class="fi-help-text hide"></span>
+    </div>  
+</div>
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>学校名称：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="school_name" id="school_name" value="">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>特征码：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="school_code" id="school_code" value="">  
+        <span class="fi-help-text hide"></span>
+    </div>
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>排序号：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="serial" id="serial" value="">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>学校中心点经度：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="center_lng" id="center_lng" value="">  
+        <span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>学校中心点纬度：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="center_lat" id="center_lat" value="">  
+        <span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="add" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>添加</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BQLHGlffjbXC30bFDcpIQkHIkaxKBBe6"></script>
+<script>
+var lat = '{$school_info.center_lat}' || '28.1255940';
+var lng = '{$school_info.center_lng}' || '120.9820840';
+{literal}
+ var map;
+    map = new BMap.Map("map_container");
+            map.addControl(new BMap.NavigationControl()); //初始化地图控件
+    map.addControl(new BMap.ScaleControl());                     
+    map.addControl(new BMap.OverviewMapControl());
+    //MapTypeControl：地图类型控件，默认位于地图右上方。
+    map.addControl(new BMap.MapTypeControl());
+
+    map.setDefaultCursor("url('bird.cur')");  //设置地图默认的鼠标指针样式
+    map.enableScrollWheelZoom();        //启用滚轮放大缩小，默认禁用。
+
+    //console.log("lng:"+lng+",lat:"+lat);
+    var point = new BMap.Point(lng, lat);
+    map.centerAndZoom(point,14);         //初始化地图中心点
+
+    var marker = new BMap.Marker(point); //初始化地图标记  
+    var gc = new BMap.Geocoder();//地址解析类  
+    marker.enableDragging();             //标记开启拖拽 
+    map.addOverlay(marker);              //将标记添加到地图中  
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+    marker.addEventListener("dragend",dragend);
+    //添加标记拖拽监听  
+    /*marker.addEventListener("dragend", function(e){  
+        //获取地址信息  
+        //经度
+        window.parent.document.getElementById("center_lng").value=e.point.lng;
+        //维度
+        window.parent.document.getElementById("center_lat").value=e.point.lat;
+        gc.getLocation(e.point, function(rs){  
+            showLocationInfo(e.point, rs);  
+        });  
+    });*/
+    function dragend(e){
+         window.parent.document.getElementById("center_lng").value=e.point.lng;
+        //维度
+        window.parent.document.getElementById("center_lat").value=e.point.lat;
+        gc.getLocation(e.point, function(rs){  
+            showLocationInfo(e.point, rs);  
+        });  
+    }
+
+    function G(id) {
+        return document.getElementById(id);
+    }
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+        {"input" : "suggestId"
+        ,"location" : map
+    });
+
+    ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+    var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }    
+        str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+        
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }    
+        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+        G("searchResultPanel").innerHTML = str;
+    });
+
+    var myValue;
+    ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+    var _value = e.item.value;
+        myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+        
+        setPlace();
+    });
+
+    function setPlace(){
+        map.clearOverlays();    //清除地图上所有覆盖物
+        function myFun(){
+            var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            map.centerAndZoom(pp, 18);
+            marker = new BMap.Marker(pp);
+            marker.enableDragging();
+            map.addOverlay(marker);    //添加标注
+             marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+             marker.addEventListener("dragend",dragend);
+        }
+        var local = new BMap.LocalSearch(map, { //智能搜索
+          onSearchComplete: myFun
+        });
+        local.search(myValue);
+    }
+
+
+    upload_file('class_icon');
+    function upload_file(div_id)
+    {
+        // ajax上传图片
+        new AjaxUpload("#" + div_id + "_uploader", {
+            action: "/AcpArticleAjax/uploadHandler",
+            name: "imgFile",
+            responseType: "json",
+            onSubmit: function(){
+                //alert('正在上传');
+                //preview处的图片改为loading图片
+                $('#' + div_id).find('.preview').removeClass('hide');
+            },
+            onChange: function(file, extension){
+                if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+                    return true;
+                }
+                else {
+                    alert('暂不支持该图片格式！');
+                    return false;
+                }
+            },
+            onComplete: function(file, response){
+                console.log(response);
+                if (response.status === 0) {
+                    alert(response.msg);
+                }
+                else if (response.status === 1) {
+                    $('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+                    $('#' + div_id).find('.preview').show();
+                    $('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+                    $('#' + div_id).find('#add_li').hide();
+                }
+            }
+        });
+    }
+
+    function delImage(div_id)
+    {
+        var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+        var preview = $('#' + div_id).find('#J_Preview');
+        var param = {};
+        var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+        var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+        
+        if (_id != '') {
+            param.id = _id;
+        }
+        if (imgUrl != '') {
+            param.img_url = imgUrl;
+        }
+        $.ajax({
+            url: '/AcpArticleAjax/delImage',
+            type: 'post',
+            data: param,
+            dataType: 'json',
+            beforeSend: function(){
+                ajaxLoading.show();
+            },
+            success: function(data){
+            //  console.log(data);
+                if (data.status === 1) {
+                    $('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+                    $('#' + div_id).find('#J_Del').off('click', delImage);
+                    preview.removeAttr('src').parent().parent().addClass('hide');
+                    $('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+                    $('#' + div_id).find('#add_li').show();
+                }
+                ajaxLoading.fadeOut();
+            }
+        });
+    }
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+{/block}

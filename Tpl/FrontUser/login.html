@@ -1,0 +1,46 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" href="__PUBLIC__/Css/front/login.css">
+{/block}
+
+{block name="content"}
+	<div class="logHeader">
+		<div class="headMain">
+			<ul>
+				<li class="logo"><a href="{$home_link}"><img src="__PUBLIC__/Images/front/logo_min.png" width="120px" style="margin-top:10px;"/></a></li>
+				<li class="reg">车奇士官方微电商平台</li>
+				<!-- <li class="has">没有客悦账号?<span><a style="color:white;" href="{$regist_link}">注册</a></span></li> -->
+			</ul>
+			<div style="clear:both;"></div>			
+		</div>		
+	</div>
+	<div class="regMain loginMain">
+		<form name="login" method="POST" action="" id="login_form">
+		<div class="loginPic"><img src="{$config.SYSTEM_LOGO}" style="width:600px;height:375px;" /></div>		
+		<ul class="logininfor">
+			<li class="logintitle"><label>账号登录</label></li>
+			<li><input type="text" name="username" class="regInput" placeholder="用户名"/></li>
+			<li><input type="password" name="password" class="regInput" placeholder="密码" /></li>
+			<input type="hidden" name="action" value="login">
+			
+			<li><a id="login_submit" class="sure btn btn-primary" href="javascript:;"><input style="display:none;" type="submit" value="">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</a></li>
+		</ul>
+		</form>
+	
+	</div>
+{/block} 
+
+{block name="js"}
+{literal}
+<script>
+	$(function(){
+		$('#login_submit').click(function(event) {
+			event.preventDefault();
+			$('#login_form').submit();
+		});
+	});
+</script>
+{/literal}
+{/block}

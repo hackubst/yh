@@ -1,0 +1,87 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" id="form_addAgent" enctype="multipart/form-data">
+
+    <div class="tc" data-index="1">
+
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>单项限额：</label>
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="limit" id="limit" value="{$water_info.limit}">
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>最高单注限额：</label>
+    <div class="form-controls">  
+        <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="high_limit" id="high_limit" value="{$water_info.high_limit}">
+    </div>  
+</div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>最低单注限额：</label>
+        <div class="form-controls">
+            <input type="text" oninput = "value=value.replace(/[^\d]/g,'')" placeholder="" name="low_limit" id="low_limit" value="{$water_info.low_limit}">
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>a盘退水比例：</label>
+        <div class="form-controls">
+            <input type="text"  placeholder="" name="a"
+                   id="a" value="{$water_info.a}">
+            <span>%</span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>b盘退水比例：</label>
+        <div class="form-controls">
+            <input type="text"  placeholder="" name="b"
+                   id="b" value="{$water_info.b}">
+            <span>%</span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>c盘退水比例：</label>
+        <div class="form-controls">
+            <input type="text"  placeholder="" name="c"
+                   id="c" value="{$water_info.c}">
+            <span>%</span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>d盘退水比例：</label>
+        <div class="form-controls">
+            <input type="text"  placeholder="" name="d"
+                   id="d" value="{$water_info.d}">
+            <span>%</span>
+        </div>
+    </div>
+
+        <div class="formactions mgl180">
+            <input type="hidden" name="action" value="edit">
+            <button class="btn btn-blue"><i class="gicon-ok white"></i>提交</button>
+        </div>
+</div>
+</form>
+{/block} 
+
+
+{block name="js"}
+<!-- 编辑器 -->
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__UE__/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+
+<script>
+
+
+
+</script>
+{/block} 
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

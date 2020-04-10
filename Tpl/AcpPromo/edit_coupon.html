@@ -1,0 +1,61 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+
+<div class="formitems inline">  
+    <label class="fi-name">优惠券名称：</label>  
+    <div class="form-controls">  
+        <span>{$coupon_info.coupon_name}</span>
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name">用户：</label>  
+    <div class="form-controls">  
+        <span>{$coupon_info.realname}</span>
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>优惠卷面额(元)：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="coupon_value" id="serial" value="{$coupon_info.num}">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>优惠券使用条件( > 元)：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="coupon_limit" id="serial" value="{$coupon_info.price_limit}">  
+		<span class="fi-help-text hide">订单金额大于</span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>有效期(天)：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="day_left" id="serial" value="{$coupon_info.day_left}">  
+    </div>  
+</div> 
+
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="edit" />
+        <input type="hidden" name="coupon_id" value="{$coupon_info.coupon_id}" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>添加</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+{/block} 
+
+{block name="css"}
+{/block}

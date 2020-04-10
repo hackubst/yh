@@ -1,0 +1,91 @@
+body{
+	background-color: #f0f0f0;
+}
+.od_item_cont {
+    background-color: #fff;
+}
+.case_item li {
+    position: relative;
+    min-height: 155px;
+        border-bottom: 1px solid #ddd;
+}
+.od_item_link {
+    display: inline-block;
+    width: 100%;
+}
+.order_d_info {
+    height: 45px;
+    line-height: 45px;
+    width: 90%;
+    margin: 0 5%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ddd;
+}
+.order_sn {
+    float: left;
+    color: #333;
+}
+.order_status {
+    float: right;
+    color: #FF5B6F;
+}
+.order_d_detail{
+	    position: relative;
+    height: 110px;
+}
+
+.case_item_photo {
+    display: block;
+    position: absolute;
+    left: 44px;
+    top: 15px;
+}
+.case_item_photo .photo {
+    display: block;
+    width: 80px;
+    height: 80px;
+}
+.case_item_name {
+    position: absolute;
+    left: 136px;
+    top: 15px;
+    color: #333;
+    /*white-space: nowrap;*/
+    overflow: hidden;
+    /*text-overflow: ellipsis;*/
+    width: 55%;
+    max-height: 42px;
+}
+.case_item_count {
+    position: absolute;
+    top: 70px;
+    height: 26px;
+    line-height: 26px;
+    width: 180px;
+    left: 136px;
+    color: #999;
+}
+.case_i_count {
+    float: left;
+}
+.case_i_count_txt em{
+	color: #333;
+}
+.foot_man_link:after, .od_shop_link:after, .od_item_link:after {
+    display: block;
+    content: '\20';
+    position: absolute;
+    top: 10px;
+    right: 17px;
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    background: none;
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+.od_item_link:after {
+    top: 75px;
+    right: 10px;
+}

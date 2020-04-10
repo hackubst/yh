@@ -1,0 +1,105 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+	    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+          
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>发布内容</td>
+            <td>发布时间</td>
+            <td>发布人</td>
+            <td>操作</td> 
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$post_list item=post_item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$post_item.id}" name="a[]"></td>
+            
+            <td>{$post_item.content}</td>
+            <td>{$post_item.creattime}</td>  
+            <td>{$post_item.user_name}</td>
+            <td>
+            	{if $post_item.stick == 0}
+            		<a href="javascript:;" class="btn" title="置顶" onclick="set_top({$post_item.id})">置顶</a>
+            	{else}
+            		<a href="javascript:;" class="btn" title="置顶" onclick="set_top({$post_item.id})">取消置顶</a>
+            	{/if}  
+
+            	<a href ="/AcpPost/reward_list/post_id/{$post_item.id}" class='btn' title='打赏记录'>打赏记录</a>
+                <a href ="/AcpPost/comment_list/post_id/{$post_item.id}" class='btn' title='打赏记录'>评论记录</a>              
+				<a href="javascript:;" class="btn" title="删除" onclick="delete_post({$post_item.id})">删除</a>  
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+     <div class="fr">  
+        <div class="paginate">  
+            {$show}
+        </div>  
+    </div>
+
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script>
+{literal}
+delete_post = function(id)
+{
+
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+			 		$.post('/AcpPost/delete_post', {"id":id}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+set_top = function(id)
+{
+	$.post('/AcpPost/set_post', {"id":id}, function(data, textStatus) 
+	{
+		if($data = 'success') {
+			alert('恭喜你,操作成功');
+			window.location.reload();
+		} else {
+			alert('对不起,操作失败');
+		}
+	})
+
+}
+{/literal}
+</script>
+{/block}

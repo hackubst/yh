@@ -1,0 +1,124 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+        <form action='{$form_url}' method='post'>
+            <span class="tbs-txt">群名称：</span>
+            <input type="text" name='group_name' value='{$group_name}' />
+            <input type='hidden' name='submit' value='search' />
+
+            <button class="btn"><i class="gicon-search"></i>查询</button>
+        </form>
+    </div>
+
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <!--<colgroup>-->
+        <!--<col width="15%">-->
+        <!--<col width="15%">-->
+        <!--<col width="20%">-->
+        <!--<col width="25%">-->
+        <!--<col width="25%">-->
+        <!--</colgroup>-->
+        <thead>
+        <tr>
+            <td>群名称</td>
+            <td>群描述</td>
+            <td>创建时间</td>
+            <td>成员总数</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {if $group_list}
+        {foreach from=$group_list item=this}
+        <tr>
+            <td>{$this.hx_group_name}</td>
+            <td>{$this.hx_group_desc}</td>
+            <td>{$this.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>{$this.hx_group_mem_num} 人</td>
+            <td>
+                <a href="javascript:;" onclick="del_group({$this.hx_group_id})" class="btn">删除</a>
+                <a href="/AcpChat/edit_group/group_id/{$this.group_id}" class="btn" title="修改">修改</a>
+                <a  onclick="layer_show('添加群友','/AcpChat/staff_list/hx_group_id/{$this.hx_group_id}')" class="btn" title="添加群友">添加群友</a>
+                <a  onclick="layer_show('群成员列表','/AcpChat/group_member_list/hx_group_id/{$this.hx_group_id}')" class="btn" title="群成员列表">查看群成员</a>
+
+            </td>
+        </tr>
+        {/foreach}
+        {else}
+        <tr><td colspan=10>未找到符合条件的群组</td></tr>
+        {/if}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/front/jquery.showLoading.min.js?version={$version}"></script>
+<script src="/Public/Js/jquery/layer.js"></script>
+<script src="/Public/Js/jquery/jquery.cookie.min.js"></script>
+<script>
+</script>
+<script type="text/javascript">
+    function  del_group(id) {
+        $.jPops.confirm(
+            {
+                title:"提示",
+                content:"您确定要执行这些操作吗？",
+                okBtnTxt:"确定",
+                cancelBtnTxt:"取消",
+                callback:function(r)
+                {
+                    if(r){
+                        $.ajax({
+                            url:'/AcpChat/del_group',
+                            type:'post',
+                            data:{
+                                'id':id
+                            },
+                            success:function (data) {
+                                if(data == 'success'){
+                                    alert('删除成功');
+                                    location.reload();
+                                }else {
+                                    alert('删除失败');
+                                }
+                            }
+                        });
+                    }
+                    return true;
+                }
+            });
+    }
+
+
+    function layer_show(t,u) {
+        layer.open({
+            type: 2,
+            title:t,
+            area: ['1200px', '530px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: u,
+            end:function(){
+            }
+        });
+    }
+</script>
+{/block}

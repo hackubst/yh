@@ -1,0 +1,79 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/base.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/fx_style.css?version={$version}">
+{literal}
+<style type="text/css">
+	.partner_head{
+		padding:.5rem .6rem;
+	}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+		 <div class="partner_head">
+  			<div class="head_box clearfix">
+  				<img src="img/lb_s5.png" class="fl">
+  				<div class="fl">
+  					<h1>小凌一定好运来</h1>
+  					<h2>钻石会员<i class="vip_icon vip_2"></i></h2>
+  					<p>积分：1218</p>
+  				</div>
+  			</div>
+  		</div>
+		<dl class="parner_cont" >
+			<dt>订单列表(198人)</dt>
+			<div id="load_wrapper">
+			 	<div id="scroller">
+					<a class="order" href="javascript:;" id="new_list">
+						<div class="clearfix">
+							<h1 class="fl txt_limit">爱普生打印墨水 佳能墨水佳能墨水</h1>
+							<h2 class="fr">买家已付款</h2>
+						</div >
+						<div class="clearfix mt_6">
+							<h3 class="fl">2016-07-10 11:11:00</h3>
+							<h4 class="fr">¥200.00</h4>
+						</div>
+					</a>
+					<a class="order" href="javascript:;">
+						<div class="clearfix">
+							<h1 class="fl txt_limit">爱普生打印墨水 佳能墨水佳能墨水</h1>
+							<h2 class="fr">买家已付款</h2>
+						</div >
+						<div class="clearfix mt_6">
+							<h3 class="fl">2016-07-10 11:11:00</h3>
+							<h4 class="fr">¥200.00</h4>
+						</div>
+					</a>
+					<a class="order" href="javascript:;">
+						<div class="clearfix">
+							<h1 class="fl txt_limit">爱普生打印墨水 佳能墨水佳能墨水</h1>
+							<h2 class="fr">买家已付款</h2>
+						</div >
+						<div class="clearfix mt_6">
+							<h3 class="fl">2016-07-10 11:11:00</h3>
+							<h4 class="fr">¥200.00</h4>
+						</div>
+					</a>
+					<a class="order" href="javascript:;">
+						<div class="clearfix">
+							<h1 class="fl txt_limit">爱普生打印墨水 佳能墨水佳能墨水</h1>
+							<h2 class="fr">买家已付款</h2>
+						</div >
+						<div class="clearfix mt_6">
+							<h3 class="fl">2016-07-10 11:11:00</h3>
+							<h4 class="fr">¥200.00</h4>
+						</div>
+					</a>
+				</div>
+				<div id="pullUp" class="clearfix">
+					<span class="icon jiazaizhong fl"></span><span class="pullUpLabel fl">努力加载中...</span>
+				</div>
+			</div>
+  		</dl>
+  		{/block}
+{block name="js"}
+  		<script type="text/javascript" src="__PUBLIC__/Js/front/iscroll.js"></script>
+  		<script type="text/javascript" src="__PUBLIC__/Js/front/iscroll_custom.js"></script>
+{/block}

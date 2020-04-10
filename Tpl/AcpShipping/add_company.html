@@ -1,0 +1,80 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form name="form1" id="form1" action="" method="post">
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>快递公司名称：</label>  
+	<div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="shipping_company_name" id="shipping_company_name" />  
+		<span class="fi-help-text">长度限制在32个字符以内</span>
+	</div>  
+</div>  
+<div class="formitems inline">  
+	<label class="fi-name">快递公司网址：</label>  
+	<div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="shipping_company_site" id="shipping_company_site" />
+		<span class="fi-help-text">请输入带协议的完整URL地址，如：http://www.360shop.com.cn</span>
+	</div>  
+</div>  
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>重量设置：</label>  
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 15px;">  
+		<label style="vertical-align: baseline;">首重重量：</label>
+		<input name="start_weight" id="start_weight" class="mini" />
+		<span class="fi-help-text">单位：千克，最多2位小数</span>
+	</div>
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 0;">
+		<label style="vertical-align: baseline;">续重重量：</label>
+		<input name="added_weight" id="added_weight" class="mini" />
+		<span class="fi-help-text">单位：千克，最多2位小数</span>
+	</div>  
+</div>  
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>配送费用：</label>  
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 15px;">  
+		<label style="vertical-align: baseline;">首重费用：</label>
+		<input type="text" placeholder="" class="mini" name="start_weight_price" id="start_weight_price" />
+		<span class="fi-help-text">单位：元，最多2位小数</span>
+	</div>  
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 0;">  
+		<label style="vertical-align: baseline;">续重费用：</label>
+		<input type="text" placeholder="" class="mini" name="added_weight_price" id="added_weight_price" />
+		<span class="fi-help-text">单位：元，最多2位小数</span>
+	</div>  
+</div>  
+<div class="formitems inline">
+	<label class="fi-name">快递公司简介：</label>
+	<div class="form-controls">
+		<textarea name="shipping_desc" id="shipping_desc"></textarea>
+	</div>
+</div>
+<div class="formitems inline">  
+	<label class="fi-name">排列序号：</label>  
+	<div class="form-controls">  
+		<input type="text" placeholder="" class="mini" name="serial" id="serial" />  
+		<span class="fi-help-text hide"></span>
+	</div> 
+</div> 
+<div class="formitems inline">
+	<label class="fi-name">启用：</label>
+	<div class="form-controls">
+		<div class="radio-group">
+			<label><input type="radio" name="isuse" value="1" checked="checked" />是</label>
+			<label><input type="radio" name="isuse" value="0" />否</label>
+		</div>
+	</div>
+</div>
+<div class="formitems inline"> 
+	<div class="form-controls"> 
+		<input type="hidden" name="act" value="submit" />
+		<button type="submit" class="btn btn-blue bigbutton"><i class="gicon-check white"></i>保存</button>    
+		<button type="reset" class="btn bigbutton"><i class="gicon-repeat white"></i>重置</button>  
+	</div>
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__ACPJS__/AcpShipping/shipping_save.js?version={$version}"></script>
+{/block} 

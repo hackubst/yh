@@ -1,0 +1,15 @@
+<div class="block man-block tb-service">
+  <div class="block-title yellow_bk">商品分类</div>
+  <dl class="service-bd"> 
+    {foreach from=$class_list item=class}   
+    <dt>
+      <a href="{$item_list_link}class_id/{$class.class_id}">{$class.class_name}</a>
+    </dt>
+    <dd>
+        {foreach from=$class.sort_list item=sort}
+        <a href="{$item_list_link}sort_id/{$sort.sort_id}">{$sort.sort_name}</a>       
+        {/foreach}
+    </dd> 
+    {/foreach}
+  </dl>
+</div>

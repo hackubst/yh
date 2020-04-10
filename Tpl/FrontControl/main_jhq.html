@@ -1,0 +1,310 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+<style>
+.page-content1{min-height:1px;}
+.goback-btn {
+width: 42px;
+height: 42px;
+background: url(__PUBLIC__/Images/front/main_jhq_sprite.png) 11px -192px no-repeat;
+background-size: 200%;
+-webkit-tap-highlight-color: rgba(0,0,0,0.05);
+}
+.header-list {
+position: absolute;
+right: 0;
+top: 0;
+height: 42px;
+width: 42px;
+background: url(/Public/Images/front/main_jhq_sprite.png) 10px -236px no-repeat;
+background-size: 200%;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+<script type="text/javascript" src="__PUBLIC__/Js/front/control.js?version={$version}"></script>
+{/literal}
+{/block}
+
+{block name="content"}
+<div class="page_container">
+<header class="h42 pos-rel mt13">
+	<div class="pos-abs"><a href="javascript:history.go(-1);"><div class="goback-btn"></div></a></div>
+	<div class="m0a main_jhq_temp">
+		<div class="m0a text-center main_jhq_temp1">{$weather_info.city}{$weather_info.temp2}-{$weather_info.temp1}℃{$weather_info.weather}</div>
+	</div>
+	<a class="deploy-sidebar" href="javascript:void(0);"><div class="header-list"></div></a>
+</header>
+<section>
+<div class="air_quality">
+	<div class="air_index">{$weather_info.aqi}</div>
+</div>
+<div class="air_info">
+	<div class="air_txt"><div class="air_index_text"><span class="addr_air_index">{$weather_info.city}</span><span class="t_air_index">空气指数</span><span class="air_index_num">{$weather_info.aqi}</span></div></div>	
+	<div class="wang_info"></div>	
+</div>
+</section>
+<section>
+<div class="jhq_main_ctrl">
+	<ul class="wind3_dang">
+			<li class="wind1"><a href="javascript:void(0);" id="energy_saving"><i class="energy_saving"></i><i class="energy_sText">节能</i></a></li>
+			<li class="wind1"><a href="javascript:void(0);" id="auto_ctrl"><i class="auto_ctrl"></i><i class="energy_sText">自动</i></a></li>
+			<li class="wind1"><a href="javascript:void(0);" id="disinfect"><i class="disinfect"></i><i class="energy_sText">杀菌</i></a></li>
+	</ul>
+</div>
+<!--<div class="windCtrl">
+	<ul class="wind3_dang">
+			<li class="wind1"><a href="javascript:;" id="weak">弱风</a></li>
+			<li class="wind1"><a href="javascript:;" id="middle">中风</a></li>
+			<li class="wind1"><a href="javascript:;" id="strong">强风</a></li>
+	</ul>
+</div>-->
+<div class="rosebox" style="display:none;">
+	<div class="rosebox_quit"></div>
+	<ul class="rosebox_ul">
+			<li class="rosebox_li"><span class="rosebox_title">剩余寿命：</span><span class="rosebox_cot">2000小时</span></li>
+			<li class="rosebox_li"><span class="rosebox_title">购买网址：</span><span class="rosebox_cot">smartplant.pandorabox.mobi</span></li>
+			<li class="rosebox_li"><span class="rosebox_title">服务电话：</span><span class="rosebox_cot">15158121212</span></li>
+	</ul>
+</div>
+<div id="fb" class="bd-top-l-grey">
+	<div class="indexmenu" id="main_menu_switch">
+		<div class="boxflex" id="ul_zw">
+			<div class="boxflex_col5">
+				<a href="javascript:history.go(-1);">
+					<i class="i0">
+					</i>
+				</a>
+			</div>
+			<div class="wind_ctrl" id="">
+				<a href="javascript:;" id="ctrl_wind">
+					<div class="i6">
+						<span class="wind_text">弱风</span>
+					</div>
+					
+				</a>
+			</div>
+			<a class="os_ctrl_link" href="javascript:;">
+				<div class="os_ctrl" id="">
+				</div>					
+			</a>
+			
+
+		</div>
+	</div>
+</div>
+</section>
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+var command_arr = new Array();
+{foreach from=$command item=c key=key}
+	command_arr[{$key}] = {$c};
+{/foreach}
+var initial_aqi = parseInt('{$weather_info.aqi}');
+var planter_id = {$planter_info.planter_id};
+{literal}
+$.fn.toggler = function( fn, fn2 )
+{
+    var args = arguments,guid = fn.guid || $.guid++,i=0,
+    toggler = function( event ) {
+      var lastToggle = ( $._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
+      $._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
+      event.preventDefault();
+      return args[ lastToggle ].apply( this, arguments ) || false;
+    };
+    toggler.guid = guid;
+    while ( i < args.length ) {
+      args[ i++ ].guid = guid;
+    }
+    return this.click( toggler );
+};
+
+$( function(){
+	//灌溉
+	var clientWidth = document.body.clientWidth;
+	var start0 = command_arr[3];
+	var end0 = start0 ? 0 : 1;
+	$(".os_ctrl").toggler(
+		function(){
+			send_command(4, end0);
+			if(clientWidth >=540)
+				$(this).css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -6px -124px no-repeat", "background-size":"116%" });
+			else
+				$(this).css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -3px -62px no-repeat", "background-size":"116%" });
+		},
+		function(){
+			send_command(4, start0);
+			if(clientWidth >=540)
+				$(this).css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -6px 1px no-repeat", "background-size":"116%" });
+			else
+				$(this).css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -3px 1px no-repeat", "background-size":"116%" });
+		}
+	);
+		
+	//风扇
+	var start2 = command_arr[2];
+	var end2 = start2;
+	$("#ctrl_wind").toggler(
+		function(){
+			end2 = end2 ? 0 : 1;
+			send_command(3, end2);
+			$(".wind_text").text("中风");	
+			if(clientWidth >=540)
+				$(".i6").css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -89px -347px no-repeat", "background-size":"120%" });			
+			else
+				$(".i6").css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -43px -183px no-repeat", "background-size":"120%" });								
+		},
+		function(){
+			end2 = end2 ? 0 : 1;
+			send_command(3, end2);
+			$(".wind_text").text("强风");	
+			if(clientWidth >=540)
+				$(".i6").css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -91px -423px no-repeat", "background-size":"120%" });
+			else
+				$(".i6").css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -44px -224px no-repeat", "background-size":"120%" });
+					
+		},
+		function(){
+			end2 = end2 ? 0 : 1;
+			send_command(3, end2);
+			$(".wind_text").text("弱风");
+			if(clientWidth >=540)
+				$(".i6").css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -93px -269px no-repeat", "background-size":"120%" });
+			else
+				$(".i6").css({ "background":"url(/Public/Images/front/main_jhq_sprite.png) -45px -140px no-repeat", "background-size":"120%" });
+		}
+	);
+	//节能
+	$("#energy_saving").toggler(
+		function(){
+			//send_command(4, start0);
+			$("#energy_saving .energy_sText").css("color","rgb(85,164,246)");
+			if(clientWidth >=540)
+				$(".energy_saving").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -675px -803px no-repeat", "background-size":"1000%" });
+			else
+				$(".energy_saving").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -376px -444px no-repeat", "background-size":"1000%" });
+				
+		},
+		function(){
+			//send_command(4, end0);
+			$("#energy_saving .energy_sText").css("color","#bbbbbb");
+			if(clientWidth >=540)
+				$(".energy_saving").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -811px -803px no-repeat", "background-size":"1000%" });
+			else
+				$(".energy_saving").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -451px -444px no-repeat", "background-size":"1000%" });
+		}
+		
+	);
+	//自动
+	$("#auto_ctrl").toggler(
+		function(){
+			//send_command(4, start0);
+			$("#auto_ctrl .energy_sText").css("color","rgb(85,164,246)");
+			if(clientWidth >=540)
+				$(".auto_ctrl").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -809px -377px no-repeat", "background-size":"1000%" });
+			else
+				$(".auto_ctrl").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -450px -209px no-repeat", "background-size":"1000%" });
+		},
+		function(){
+			//send_command(4, end0);
+			$("#auto_ctrl .energy_sText").css("color","#bbbbbb");
+			if(clientWidth >=540)
+				$(".auto_ctrl").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -811px -247px no-repeat", "background-size":"1000%" });
+			else
+				$(".auto_ctrl").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -451px -138px no-repeat", "background-size":"1000%" });
+		}
+		
+	);
+	//杀菌
+	$("#disinfect").toggler(
+		function(){
+			//send_command(4, start0);
+			$("#disinfect .energy_sText").css("color","rgb(85,164,246)");
+			if(clientWidth >=540)
+				$(".disinfect").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -811px -661px no-repeat", "background-size":"1000%" });
+			else
+				$(".disinfect").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -451px -367px no-repeat", "background-size":"1000%" });
+		},
+		function(){
+			//send_command(4, end0);
+			$("#disinfect .energy_sText").css("color","#bbbbbb");
+			if(clientWidth >=540)
+				$(".disinfect").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -811px -525px no-repeat", "background-size":"1000%" });
+			else
+				$(".disinfect").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -451px -291px no-repeat", "background-size":"1000%" });
+		}
+		
+	);
+	
+	
+	$(".rosebox_quit").click(function(){
+		$(".rosebox").hide();		
+		$(".jhq_main_ctrl").show();	
+	});
+	$(".wang_info").click(function(){
+		$(".jhq_main_ctrl").hide();
+		$(".rosebox").show();			
+	});
+	setTimeout("$('.air_index').text(135);",15000);
+	setTimeout("toMiddle()",35000);
+	setTimeout("toGood()",100000);
+	
+});
+
+if (initial_aqi >= 150)
+{
+	toBad();
+}
+else if(initial_aqi >= 100)
+{
+	toMiddle();
+}
+else
+{
+	toGood();
+}
+
+//变糟糕
+function toBad(){
+	var clientWidth = document.body.clientWidth;
+	$(".air_index").text('' + initial_aqi);
+	if(clientWidth >=540)
+		$(".air_quality").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -401px 1px no-repeat", "background-size":"285%" });
+	else
+		$(".air_quality").css({ "background":"url(/Public/Images/front/main_jhq_other.png) -201px 1px no-repeat", "background-size":"285%" });
+	
+}
+//变普通
+function toMiddle(){
+		var clientWidth = document.body.clientWidth;
+		$(".air_index").text("95");
+		if(clientWidth >=540)
+			$(".air_quality").css({ "background":"url(/Public/Images/front/main_jhq_other.png) 0px -390px no-repeat", "background-size":"285%" });
+		else
+			$(".air_quality").css({ "background":"url(/Public/Images/front/main_jhq_other.png) 0px -196px no-repeat", "background-size":"285%" });
+}
+//变优秀
+function toGood(){
+		$(".air_quality").css({ "background":"url(/Public/Images/front/main_jhq_other.png) 1px 2px no-repeat", "background-size":"285%" });
+		$(".air_index").text("76");
+}
+//弹出提示
+function tishi(){
+	 $('.kuan-cont').fadeIn(1500);
+	 //$('.black-bg').fadeIn(1500);
+	 $('.kuan-cont').fadeOut(1500);
+	 //$('.black-bg').fadeOut(1500);
+  }
+</script>
+{/literal}
+{/block}

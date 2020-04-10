@@ -1,0 +1,81 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormLink" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>网站名称：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="link_name" id="link_name" />
+        <span class="fi-help-text">长度限制在32个字符以内</span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>网站地址：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="link_url" id="link_url" />
+        <span class="fi-help-text">请输入带协议的完整URL地址，如：http://www.baidu.com</span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">友情链接Logo：</label>  
+    <div class="form-controls">  
+        <ul class="fi-imgslist">
+			<li class="fi-imgslist-item pic hide">
+				<div class="pic-wrap">
+					<img id="J_Preview" class="pic-preview" />
+				</div>
+				<input type="hidden" name="img_url" data-id="" id="J_ImgUrl" />
+				<a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove"></i></a>
+				<img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+				<div class="pic-mask" id="J_Mask"></div>
+			</li>
+			<li class="fi-imgslist-item">
+				<a href="javascript:;" class="add" title="上传一张新的图片" id="J_Uploader">+</a>
+			</li>
+		</ul>
+		<span class="fi-help-text">暂时只支持上传单张2M以内JPEG,PNG,GIF格式图片</span>
+    </div>  
+</div>  
+<div class="formitems inline">  
+    <label class="fi-name">排序：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" style="width:45px;" name="serial" id="serial" /> 
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">显示：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="isuse" value="1" checked="checked" />是</label>  
+            <label><input type="radio" name="isuse" value="0" />否</label>  
+        </div>  
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">在页面底部显示：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="is_bottom_show" value="1" checked="checked" />是</label>  
+            <label><input type="radio" name="is_bottom_show" value="0" />否</label>  
+        </div>  
+    </div>  
+</div>
+<div class="formitems inline"> 
+    <div class="form-controls"> 
+		<input type="hidden" name="act" value="submit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>
+</div>
+</form>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpConfig/link_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/add_link.css" type="text/css" />
+{/block}

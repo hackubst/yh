@@ -1,0 +1,44 @@
+<div class="tables-searchbox">
+		<form name="search_form" id="search_form" method="POST" action="">
+        <div class="t-pay-top">
+            <div class="apiece"><span>积分兑换编号：</span><input type="text" placeholder="" class="small" name="order_sn" id="order_sn" value="{$order_sn}"> </div>
+
+			{if isset($show_handling_status) && $show_handling_status}
+			<div class="apiece"><span>处理状态：</span>
+				<select class="small" name="apply_state" id="apply_state">
+					<option value="-1">--选择处理状态--</option>
+					<option value="0" {if isset($state) && $state == 0}selected{/if}>待处理</option>
+					<option value="1" {if isset($state) && $state == 1}selected{/if}>已受理</option>
+					<option value="2" {if isset($state) && $state == 2}selected{/if}>已拒绝</option>
+				</select>
+				</div>
+			{/if}
+
+			{if isset($order_status_list) && count($order_status_list)}
+			<div class="apiece"><span>订单状态：</span>
+				<select class="small" name="order_status" id="order_status">
+					<option value="-1">--选择订单状态--</option>
+					{foreach from=$order_status_list key=key item=status}
+						<option value="{$key}" {if $key == $order_status}selected="selected"{/if}>{$status}</option>
+					{/foreach}
+				</select>
+				</div>
+			{/if}
+            
+        </div>
+        <div class="t-pay-time">
+
+            <div class="t-pay-time-le">
+                <div class="formitems inline">  
+                    <label class="t-pay-time-name">时间：</label>  
+                    <div class="form-controls" style="margin-left:10px;">  
+                        <input type="text" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})" name="start_time" id="start_time" value="{$start_time|date_format:"%Y-%m-%d %H:%M:%S"}">  
+                        <span class="fi-text">-</span>  
+                        <input type="text" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})" name="end_time" id="end_time" value="{$end_time|date_format:"%Y-%m-%d %H:%M:%S"}">  
+                    </div>  
+                </div>  
+            </div>
+            <div class="t-pay-time-ri"><button type="submit" class="btn"><i class="gicon-search"></i>搜索</button> </div>
+        </div>
+		</form>
+</div>  

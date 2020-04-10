@@ -1,0 +1,98 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tables-searchbox"> 
+        <a href="/AcpPromo/add_item_discount/redirect/{$cur_url}" class="btn btn-blue"><i class="gicon-plus white"></i>添加新的商品促销</a> 
+    </div>  
+<div class="tablesWrap">  
+    
+    <div class="tables-searchbox">
+        <form method="post" action='/AcpPromo/list_item_discount'>
+        	<span class="tbs-txt">类型：</span>
+	        <label><input type="radio" name="type" value='0' checked>全部</label> 
+			<label><input type="radio" name="type" value='1' {if $s_type == 1}checked{/if}>打折</label>  
+			<label><input type="radio" name="type" value='2' {if $s_type == 2}checked{/if}/>减价</label>
+         	
+			<span class="tbs-txt">活动时间：</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t1" value="{$s_time1}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">
+	        <span class="tbs-txt">至</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t2" value="{$s_time2}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">
+	        
+	        <span class="tbs-txt">状态：</span>
+	        <label><input type="radio" name="isuse" value='0' checked>全部</label> 
+			<label><input type="radio" name="isuse" value='1' {if $s_isuse == 1}checked{/if}>启用</label>  
+			<label><input type="radio" name="isuse" value='2' {if $s_isuse == 2}checked{/if}/>未启用</label>
+	        
+			
+	        <input type='hidden' name='act' value='search' />
+	        <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </form>
+    </div>
+    <!-- end tables-searchbox --> 
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="13%">  
+        <col width="10%">  
+        <col width="22%">  
+        <col width="15%">  
+        <col width="15%">
+        <col width="10%">   
+        <col width="20%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>活动名称</td>  
+                <td>活动类型</td>  
+                <td>适合的会员级别</td>  
+                <td>开始时间</td>  
+                <td>结束时间</td>
+                <td>状态</td>   
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>
+        	{if $promolist}
+        	{section name=row loop=$promolist}  
+            <tr data_ma={url_jiami($promolist[row].promotion_item_discount_id)}>  
+                <td>{if $promolist[row].title}{$promolist[row].title}{else}<font color='#D2D2D2'>未指定活动名称</font>{/if}</td>  
+                <td>{if $promolist[row].discount_type == 1}打折{else if $promolist[row].discount_type == 2}减价{/if}</td>  
+                <td>{if $promolist[row].rank_need_list}{$promolist[row].rank_need_list}{else}<font color='#D2D2D2'>全部</font>{/if}</td>  
+                <td>{$promolist[row].start_time}</td>  
+                <td>{$promolist[row].end_time}</td>
+                <td>{if $promolist[row].isuse == 2}<i class="gicon-remove" title='未启用'></i>{else}<i class="gicon-ok" title='已启用'></i>{/if}</td>  
+                <td>  
+                <!--     <a href="javascript:;" class="btn" title="查看">查看</a>   -->
+                    <a href="/AcpPromo/edit_item_discount/pi/{url_jiami($promolist[row].promotion_item_discount_id)}/redirect/{$cur_url}" class="btn" title="修改">编辑</a>   
+                    <a href="javascript:;" class="btn del_item_promo" title="删除">删除</a>   
+                </td>  
+            </tr>
+            {/section}
+            {else}
+            <tr><td colspan='6'>没有合适的活动</td></tr>
+            {/if}  
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page_str}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->  {/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpPromo/list_item_discount.js"></script>
+{/block} 
+
+{block name="css"}
+
+{/block}

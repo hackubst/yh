@@ -1,0 +1,123 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>选择种子：</label>  
+    <div class="form-controls">  
+        <select name="seed_id" id="seed_id">  
+            <option value="">--请选择--</option>
+			{foreach from=$item_list item=seed}
+				<option value="{$seed.item_id}" {if $seed.item_id == $seed_id}selected{/if}>{$seed.item_name}</option>
+			{/foreach}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>选择状态：</label>  
+    <div class="form-controls">  
+        <select name="state" id="state">  
+            <option value="">--请选择--</option>
+			{foreach from=$state_list key=key item=s}
+				<option value="{$key}" {if $key == $state}selected{/if}>{$s}</option>
+			{/foreach}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">土壤温度：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" name="temperature" id="temperature" value="{$temperature}">℃
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">空气温度：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" name="outside_temperature" id="outside_temperature" value="{$outside_temperature}">℃
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">空气湿度：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" name="humidity" id="humidity" value="{$humidity}">%
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">光照强度：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" name="illuminance_limit" id="illuminance_limit" value="{$illuminance_limit}">Lux以上
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">光照时长：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" name="illuminance_hour" id="illuminance_hour" value="{$illuminance_hour}">小时以上/天 
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">液位：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" name="liquid_level" id="liquid_level" value="{$liquid_level}"> 
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">该状态持续天数：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" style="width:45px;" name="last_day" id="last_day" value="{$last_day}"> 
+    </div>  
+</div>
+
+<div class="formitems inline">
+	<label class="fi-name">植物在该状态的示例图片：</label>
+	<div class="form-controls">
+		<ul class="fi-imgslist">
+			<li class="fi-imgslist-item pic hide">
+				<div class="pic-wrap">
+					<img id="J_Preview" class="pic-preview" />
+				</div>
+				<input type="hidden" name="img_url" data-id="" id="J_ImgUrl" value="{$img_path}">
+				<a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove"></i></a>
+				<img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+				<div class="pic-mask" id="J_Mask"></div>
+			</li>
+			<li class="fi-imgslist-item">
+				<a href="javascript:;" class="add" title="上传一张新的图片" id="J_Uploader">+</a>
+			</li>
+		</ul>
+		<span class="fi-help-text">暂时只支持上传单张2M以内JPEG,PNG,GIF格式图片</span>
+	</div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="edit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+<link rel="stylesheet" href="__KD__/themes/default/default.css" />
+<script charset="utf-8" src="__KD__/kindeditor.js?version={$version}" > </script>
+<script charset="utf-8" src="__KD__/lang/zh_CN.js?version={$version}" > </script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

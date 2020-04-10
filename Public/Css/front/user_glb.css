@@ -1,0 +1,785 @@
+﻿body{background-color: #efefef;}
+/*无记录*/
+.dlist_error {
+margin: 0 auo;
+text-align: center;
+margin-top: -45px;
+}
+/*钱包*/
+.wal_left_money {
+height: 45px;
+line-height: 45px;
+background-color: #fff;
+padding-left: 10px;
+font-size: 15px;
+}
+.wal_left_money i{
+color: #333;
+font-weight: bold;	
+}
+/*个人中心页*/
+.psnv2_icon{
+	background: url(/Public/Images/front/member_icon.png) no-repeat;
+	background-size: 309px 20px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.psn_info {
+height: 130px;
+position: relative;
+color:#fff;
+background-color: #e0e0e0;
+margin-top: -1px;
+}
+.psn_info1 {
+height: 85px;
+position: relative;
+}
+.psn_pic {
+position: absolute;
+left: 20px;
+top: 10px;
+width: 62px;
+height: 62px;
+border: 2px solid rgba(255,255,255,.5);
+border-radius: 100%;
+}
+.psn_data_link{
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	color: #fff;
+}
+.psn_pic img{
+width: 100%;
+height: 100%;
+border-radius: 30px;
+}
+.psn_nickname {
+position: absolute;
+left: 100px;
+top: 13px;
+}
+.psn_integral {
+position: absolute;
+right: 20px;
+top: 26px;
+width: 130px;
+height: 50px;
+line-height: 50px;
+background-color: rgba(0,0,0,.2);
+border-radius: 26px;
+font-size: 13px;
+}
+.psn_igr_tit{
+width: 64px;
+height: 20px;
+line-height: 20px;
+display: inline-block;
+text-align: center;
+border-right: 1px solid #bfdb45;
+}
+.psn_igr_txt{
+text-align: center;
+display: inline-block;
+width: 60px;
+}
+.psn_vip {
+position: absolute;
+left: 100px;
+top: 39px;
+}
+.psn_jifen{
+position: absolute;
+left: 100px;
+top: 59px;
+}
+.vip_txt {
+margin-right: 3px;
+display: inline-block;
+width: 20px;
+height: 16px;
+line-height: 14px;
+background-color: #fff;
+color: #999;
+border-radius: 3px;
+text-align: center;
+}
+.right_arrow{
+	position: absolute;
+	top: 32px;
+	right: 10px;
+	width: 8px;
+	height: 14px;
+	background-position: -233px 0;
+}
+.psn_info2 {
+height: 45px;
+line-height: 65px;
+background-color: rgba(255,255,255,.2);
+width: 100%;
+font-size: 13px;
+position: relative;
+}
+.psn_info_wrap{
+display: inline-block;
+text-align: center;
+line-height: 16px;	
+margin-top: 6px;
+}
+.psn_l_money {
+width: 49%;
+/*border-right: 1px solid #fff;*/
+margin-top: 6px;
+}
+.v_line{
+	position: absolute;
+	left: 50%;
+	top: 0;
+	width: 1px;
+	height: 45px;
+	background-color: #ff5b6f;
+}
+.psn_gold {
+width: 50%;
+}
+.notice{
+	font-size: 14px;
+    height: 32px;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.notice_icon{
+	width: 12px;
+	height: 9px;
+	background-position: 0 0;
+	position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.notice_txt {
+    line-height: 21px;
+    height: 21px;
+    display: inline-block;
+    padding: 4px 5px 8px 0px;
+    /* text-indent: 34px; */
+    color: #ff5b6f;
+    /* margin-left: 30px; */
+    width: 97%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.marquee {
+	position: absolute;
+    left: 30px;
+    line-height: 23px;
+    width: 90%;
+    height: 23px;
+    overflow: hidden;
+}
+.marquee #totalNum {
+    display: block;
+    width: auto;
+    /* min-width: 190px; */
+    font-size: 12px;
+    white-space: nowrap;
+    height: 23px;
+    line-height: 23px;
+    position: absolute;
+    left: 1%;
+    top: 0;
+    text-align: center;
+    z-index: 10;
+    animation: marquee 10s linear infinite; 
+    -webkit-animation: marquee 10s linear infinite; 
+}
+@-webkit-keyframes marquee{0%{-webkit-transform:translate3d(0,0,0);}100%{-webkit-transform:translate3d(-100%,0,0);}}
+.home_fun {
+margin: 0px 0 70px 0;
+font-size: 15px;
+}
+.home_fun ul{
+margin-bottom:10px;	
+background-color: #fff;
+}
+.home_fun li{
+/*height:45px;*/
+line-height:45px;
+}
+.home_fun li a{
+display: block;
+color: #333;
+position:relative;	
+}
+.home_fun li a:after{
+content: '';
+width: 10px;
+height: 10px;
+border-top: 1px solid #ccc;
+border-right: 1px solid #ccc;
+position: absolute;
+right: 14px;
+top: 17px;
+transform: rotate(45deg);
+-webkit-transform: rotate(45deg);
+}
+.multi_li .red{
+	color: #ff5b6f;
+}
+.parter_icon{
+	background-position: -13px 0;
+	width: 19px;
+	height: 17px;
+}
+.parter_share_icon{
+	background-position: -33px 0;
+	width: 17px;
+	height: 17px;
+}
+.wealth_icon{
+	background-position: -52px 0;
+	width: 16px;
+	height: 17px;
+}
+.getcash_icon{
+	background-position: -70px 0;
+	width: 17px;
+	height: 17px;
+}
+.psn_data_icon{
+	background-position: -88px 0;
+	width: 17px;
+	height: 13px;	
+}
+.order_icon{
+	background-position: -107px 0;
+	width: 16px;
+	height: 18px;	
+}
+.address_icon{
+	background-position: -124px 0;
+	width: 12px;
+	height: 18px;	
+}
+.recharge_icon{
+	background-position: -138px 0;
+	width: 18px;
+	height: 18px;	
+}
+.integral_icon{
+	background-position: -158px 0;
+	width: 18px;
+	height: 17px;	
+}
+.account_icon{
+	background-position: -178px 0;
+	width: 18px;
+	height: 18px;	
+}
+.pay_psd_icon{
+	background-position: -198px 0;
+	width: 14px;
+	height: 18px;	
+}
+.setup_icon{
+	background-position: -213px 0;
+	width: 17px;
+	height: 17px;	
+}
+.multi_li .total_info {
+    position: absolute;
+    right: 35px;
+    font-size: 13px;
+}
+.multi_li .single_li .total_info {
+    right: 15px;
+}
+.multi_li .single_li .psn_svg_txt{
+	font-size: 13px;
+}
+.home_fun li.multi_li a:after{
+border: none;
+width: 14px;
+height: 8px;
+position: absolute;
+right: 14px;
+top: 17px;
+background: url(/Public/Images/front/member_icon.png) no-repeat;
+background-size: 309px 20px;
+display: inline-block;
+vertical-align: middle;
+background-position: -244px 0;
+transform: none;
+-webkit-transform: none;
+}
+.home_fun li.multi_li.cur a:after{
+background-position: -261px 0;
+}
+.home_fun li.single_li a:after{
+	content: none;
+}
+.multi_li .multi_ul{
+	display: none;
+}
+.multi_li.cur .multi_ul{
+	display: block;
+}
+.psn_svg_wrap{
+display: inline-block;
+width: 9%;	
+text-align: center;
+}
+.psn_svg_txt{
+display: inline-block;
+width: 88%;
+border-bottom: 1px solid #efefef;
+}
+.psn_icon{
+width: 20px;
+height: 20px;
+vertical-align: middle;
+margin: 7px;	
+}
+.order_i{fill:#999;}
+.addr_i{fill:#999;}
+.psndata_i{fill:#999;}
+.colet_i{fill:#999;}
+.rechrg_i{fill:#999;}
+.pwd_i{fill:#999;}
+.fregt_i{fill:#999;}
+.acont_i{fill:#999;}
+.intgrl_i{fill:#999;}
+.setup_i{fill:#999;}
+/*申请退款页*/
+.ref_wrap {
+position: relative;
+color: #333;
+}
+.ref_sel_reason {
+width: 100%;
+height: 45px;
+border-bottom: 1px solid #ddd;
+font-size: 15px;
+-webkit-appearance: none;
+}
+.ref_sel_reason option{
+height:	42px;
+line-height:42px;
+background-color:#f7f7f7;
+border-bottom: 1px solid #efefef;
+}
+.ref_sel_opt{
+height:	42px;
+line-height:42px;
+background-color:#f7f7f7;
+border-bottom: 1px solid #efefef;	
+}
+.select_arrow{
+position:absolute;
+top: 11px;
+right: 15px;
+width: 13px;
+height: 13px;
+border-right: 1px solid #A19F9F;
+border-bottom: 1px solid #A19F9F;
+transform:rotate(45deg);	
+-webkit-transform:rotate(45deg);	
+}
+.ref_refund_title {
+display: block;
+height: 37px;
+line-height: 40px;
+margin-left: 20px;
+color: #999;
+}
+.ref_obj_ul{
+background-color: #fff;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+font-size: 15px;	
+}
+.ref_obj_li {
+height: 45px;
+line-height: 45px;
+padding-left: 10px;
+border-bottom: 1px solid #efefef;
+position: relative;
+}
+.ref_obj_label {
+display: inline-block;
+width: 80%;
+}
+.icon_select{
+width: 30px;
+height: 30px;
+display: inline-block;
+background: url(/Public/Images/front/common_png_sprite.png) no-repeat 0px -32px;
+background-size: 324%;
+-webkit-background-size: 324%;
+position: absolute;
+top: 9px;
+right:8px;
+}
+.selected .icon_select{
+background-position:0 -72px;
+}
+.ref_txt_area {
+height: 60px;
+margin-top: 10px;
+width: 100%;
+background-color: #fff;
+border-bottom:1px solid #efefef;
+}
+.ref_assess_box {
+width: 92%;
+border: 0;
+padding: 10px;
+color: #ccc;
+}
+.ref_upload_photo {
+height: 60px;
+background-color: #fff;
+border-bottom: 1px solid #ddd;
+position: relative;
+}
+.ref_upload_photo .add {
+width: 40px;
+height: 40px;
+border: 2px dotted #ddd;
+display: inline-block;
+position: absolute;
+top: 7px;
+left: 10px;
+text-align: center;
+}
+.photo_icon {
+width: 25px;
+height: 25px;
+fill: #A8A8A8;
+margin-top: 7px;
+}
+.ref_upload_photo .preview {
+position: absolute;
+left: 70px;
+top: 9px;
+}
+.preview img{
+width: 40px;
+height: 40px;
+}
+/*支付密码*/
+.pwd_has_cont {
+background-color: #fff;
+width: 100%;
+font-size: 15px;
+}
+.pwd_has_cont tr{
+height: 50px;
+line-height: 50px;
+border-bottom: 1px solid #E54E4E;	
+}
+.pwd_tit {
+color: #333;
+padding-left: 10px;
+width: 80px;
+}
+/*地址列表*/
+.addr_cont {
+color: #333;
+margin-bottom: 70px;
+}
+.addr_location {
+height: 45px;
+line-height: 45px;
+background-color: #fff;
+margin: 10px 0px;
+padding-left: 10px;
+}
+.addr_loc_link {
+display: inline-block;
+color: #333;
+position: relative;
+width: 100%;
+}
+.addr_loc_link h3{
+width: 85%;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;	
+}
+.addr_loc_link em{
+font-size: 12px;
+color: #a4c21d;	
+}
+.location_icon,.edit_addr_icon,.del_addr_icon{
+width: 30px;
+height: 30px;
+fill:#999;
+}
+.location_icon {
+position: absolute;
+right: 20px;
+top: 10px;
+width: 25px;
+height: 25px;
+}
+.del_addr_icon {
+fill: #999;
+}
+.addr_add_wx {
+background-color: #fff;
+margin-bottom: 10px;
+}
+.addr_add_wx a{
+display: block;
+height: 45px;
+line-height: 45px;
+border-bottom: 1px solid#efefef;
+padding-left: 10px;
+color: #333;
+}	
+.addr_history {
+background-color: #fff;
+}
+.addr_list_li {
+position: relative;
+height: 90px;
+border-bottom: 1px solid #efefef;
+font-size: 15px;
+}
+.def_click_area{
+width: 65%;
+position: relative;
+height: 90px;	
+}
+.selected.addr_list_li{
+color:#FF5C5C;	
+}
+.addr_name_tel {
+position: absolute;
+top: 15px;
+left: 15px;
+}
+.addr_name_tel h3{
+font-weight: bold;	
+}
+.addr_name_tel .addr_mobile{
+position: absolute;
+left: 100px;
+top: 3px;	
+}
+.edit_addr_link,.del_addr_link{
+position: absolute;
+right: 50px;
+top: 28px;
+}
+.del_addr_link{
+right: 10px;
+}
+.addr_address {
+position: absolute;
+top: 44px;
+left: 15px;
+width: 95%;
+height: 37px;
+overflow: hidden;
+font-size: 13px;
+line-height: 18px;
+}
+/*编辑地址*/
+.ed_cont {
+margin-top: 10px;
+font-size:15px;
+}
+.ed_cont p{
+height:45px;
+line-height:45px;
+background-color:#fff;
+border-bottom:1px solid #efefef;
+position:relative;
+}
+.build_label:after{
+content: '';
+width: 10px;
+height: 10px;
+border-top: 1px solid #ccc;
+border-right: 1px solid #ccc;
+position: absolute;
+right: 14px;
+top: 17px;
+transform: rotate(45deg);
+-webkit-transform: rotate(45deg);	
+}
+.select_building{
+padding-left: 11px;
+color: #B4B4B4;
+font-size: 14px;
+display: inline-block;
+width: 70%;
+}
+.ed_cont .tit {
+padding-left: 10px;
+}
+.ed_cont label{
+position:relative;	
+width: 100%;
+display: inline-block;
+}
+.ed_cont label.ed_select:after{
+content: '';
+width: 10px;
+height: 10px;
+border-top: 1px solid #ccc;
+border-right: 1px solid #ccc;
+position: absolute;
+right: 14px;
+top: 17px;
+transform: rotate(45deg);
+-webkit-transform: rotate(45deg);	
+}
+.ed_cont input,.ed_cont select,.pd_nickname,.pd_mobile{
+color:#333;
+position: absolute;
+left: 85px;
+top: 14px;
+width: 65%;
+font-size:15px;
+}
+.pd_nickname,.pd_mobile{
+top: 0px;	
+color:#ccc;
+}
+.ed_edit_map {
+margin-top: 15px;
+}
+.ed_edit_map a{
+display: inline-block;
+color: #a4c31d;
+padding-left: 10px;
+width: 90%;
+}
+.ed_tip{
+padding: 6px 0px 0px 10px;	
+font-size:13px;
+}
+/*明细列表*/
+.detail_list_cont{
+margin-bottom:70px;	
+}
+.dlink_record {
+margin-top: 10px;
+background-color: #fff;
+padding: 10px;
+border-bottom: 1px solid #ddd;
+}
+.dlink_record p{
+height: 25px;
+line-height: 25px;
+}
+.dlink_record em,.dlink_record i{
+position: absolute;
+left: 100px;
+color: #333;	
+}
+/*消息中心*/
+.msg_ul{
+margin-top: 10px;	
+}
+.msg_li {
+height: 90px;
+background-color: #fff;
+border-bottom: 1px solid #efefef;
+position: relative;
+}
+.msg_link {
+display: inline-block;
+width: 100%;
+height: 100%;
+}
+.msg_name {
+font-size: 13px;
+color: #333;
+font-weight: bold;
+position: absolute;
+top: 15px;
+left: 10px;
+}
+.msg_cont_txt {
+position: absolute;
+left: 10px;
+top: 43px;
+height: 40px;
+overflow: hidden;
+color: #999;
+line-height: 20px;
+width: 90%;
+}
+.msg_time {
+position: absolute;
+right: 10px;
+top: 15px;
+}
+/*设置页*/
+.setup_main .psn_svg_wrap{
+width:11%;	
+}
+.setup_main .psn_svg_txt{
+width:86%;	
+}
+.setup_icon{
+width: 20px;
+height: 20px;
+vertical-align: middle;
+margin: 9px;	
+}
+.customer_tel,.user_mobi {
+float: right;
+margin-right: 30px;
+color: #BBB;
+font-size: 13px;
+}
+/*意见反馈*/
+.suggest_main textarea{
+padding: 10px;
+width: 90%;
+color: #999;
+min-height: 300px;
+}	
+.submit_sugest{
+position: absolute;
+top: 0px;
+right: 4px;
+color: #fff;
+font-size: 13px;
+width: 50px;
+height: 45px;
+line-height: 45px;
+text-align: center;	
+}
+/*绑定手机*/
+.bind_val_cont {
+height: 45px;
+line-height: 45px;
+background-color: #fff;
+position: relative;
+}
+.ed_cont .bind_val_cont input{
+position: absolute;
+left: 10px;
+top: 0;
+height: 45px;
+width: 60%;
+border-right: 1px solid #efefef;	
+}
+.sendBtn {
+position: absolute;
+right: 10px;
+width: 30%;
+text-align: center;
+}
+.sendValNum{
+color:#a4c31d;	
+}
+

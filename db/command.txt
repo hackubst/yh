@@ -1,0 +1,2 @@
+chmod -R 777 Uploads
+chmod -R 777 Tpl/Public

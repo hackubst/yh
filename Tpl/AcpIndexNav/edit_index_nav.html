@@ -1,0 +1,152 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='add_admin'>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>导航名称：</label>  
+    <div class="form-controls">  
+		<input type="text" name='title' value='{$title}' id='title' placeholder="" class="small"> 
+        <span class="fi-help-text"></span>   
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><!-- <span class='colorRed'>*</span> -->链接：</label>  
+    <div class="form-controls">  
+		<input type="text" name='link' value='{$index_nav_link}' id='realname' placeholder="" class="small"> 
+        <span class="fi-help-text"></span>   
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>排序号：</label>  
+    <div class="form-controls">
+		<input type="text" name='serial'  id='serial' value='{$serial}' class="small">
+    	<span class="fi-help-text"></span>    
+    </div>  
+</div>
+
+<div class="formitems inline" id="pic">
+	<label class="fi-name"><span class="colorRed">*</span>图标：</label>
+	<div class="form-controls">
+		<ul class="fi-imgslist">
+			<li class="preview fi-imgslist-item pic{if !$pic || !file_exists($pic_img_path)} hide{/if}" id="preview">
+				<div class="pic-wrap">
+					<img id="J_Preview" class="pic-preview" src="{$pic}" />
+				</div>
+				<input type="hidden" name="pic" id="J_ImgUrl" data-id="{if $pic}{/if}" value="{$pic}" />
+				<a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('pic');"></i></a>
+				<img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+				<div class="pic-mask" id="J_Mask"></div>
+			</li>
+			<li class="fi-imgslist-item{if $pic && file_exists($pic_img_path)} hide{/if}" id="add_li">
+				<a href="javascript:;" class="add" title="上传一张新的图片" id="pic_uploader">+</a>
+			</li>
+		</ul>
+		<span class="fi-help-text">
+			<span style="color:red;">图片尺寸：100*100像素</span>，暂时只支持上传单张2M以内JPEG,PNG,GIF格式图片</span>
+	</div>
+</div>
+
+<div class="formitems inline">
+	<label class="fi-name">是否显示：</label>
+	<div class="form-controls">
+		<div class="radio-group">
+			<label><input type="radio" name="isuse" class="j-skupanelCtrl" value="1" {if $isuse == 1 || !isset($isuse)}checked{/if}>是</label>
+			<label><input type="radio" name="isuse" class="j-skupanelCtrl" value="0" {if isset($isuse) && $isuse == 0}checked{/if}>否</label>
+		</div>
+	</div>
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='submit' value='submit' />
+    	<button type="submit" class="btn btn-blue"><i class="gicon-ok white"></i>保存</button>  
+    	<button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> 
+    </div>  
+</div>
+</form>  
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script>
+{literal}
+	upload_file('pic');
+	function upload_file(div_id)
+	{
+		// ajax上传图片
+		new AjaxUpload("#" + div_id + "_uploader", {
+			action: "/AcpArticleAjax/uploadHandler",
+			name: "imgFile",
+			responseType: "json",
+			onSubmit: function(){
+				//alert('正在上传');
+				//preview处的图片改为loading图片
+				$('#' + div_id).find('.preview').removeClass('hide');
+			},
+			onChange: function(file, extension){
+				if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+					return true;
+				}
+				else {
+					alert('暂不支持该图片格式！');
+					return false;
+				}
+			},
+			onComplete: function(file, response){
+				console.log(response);
+				if (response.status === 0) {
+					alert(response.msg);
+				}
+				else if (response.status === 1) {
+					$('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+					$('#' + div_id).find('.preview').show();
+					$('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+					$('#' + div_id).find('#add_li').hide();
+				}
+			}
+		});
+	}
+
+	function delImage(div_id)
+	{
+		var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+		var preview = $('#' + div_id).find('#J_Preview');
+		var param = {};
+		var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+		var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+		
+		if (_id != '') {
+			param.id = _id;
+		}
+		if (imgUrl != '') {
+			param.img_url = imgUrl;
+		}
+		$.ajax({
+			url: '/AcpArticleAjax/delImage',
+			type: 'post',
+			data: param,
+			dataType: 'json',
+			beforeSend: function(){
+				ajaxLoading.show();
+			},
+			success: function(data){
+			//	console.log(data);
+				if (data.status === 1) {
+					$('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+					$('#' + div_id).find('#J_Del').off('click', delImage);
+					preview.removeAttr('src').parent().parent().addClass('hide');
+					$('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+					$('#' + div_id).find('#add_li').show();
+				}
+				ajaxLoading.fadeOut();
+			}
+		});
+	}
+{/literal}
+</script>
+{/block} 

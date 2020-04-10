@@ -1,0 +1,309 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s普通商品详情 -->
+    <div class="main">			
+			<div class="product-info-box">
+				<div class="product-essential">
+					<!-- 商品图片区开始 -->
+					<div class="product-img-box">
+						<p class="product-image-zoom">
+							<img src="{$item_info.base_pic}"  alt="{$item.item_name}" title="{$item.item_name}" />
+						</p>
+						<p>
+							点击小图，全屏查看
+						</p>
+						<div class="img-slider">
+							<a href="#" title="Prev" class="prev slider-btn"><img src="__PUBLIC__/Images/front/prev_img_btn.png" title="Prev" alt="Prev" /></a>
+							<a href="#" title="Next" class="next slider-btn"><img src="__PUBLIC__/Images/front/next_img_btn.png" title="Next" alt="Next" /></a>
+							<ul id="moreView">
+								{foreach from=$item_photo_list item=photo}
+								<li><a class="ajax" href="{$photo.base_pic}"><img src="{$photo.small_img}" /></a></li>
+                                {/foreach}				
+							</ul>
+						</div>
+					</div>
+					<!-- 商品图片区结束 -->
+					<div class="product-shop">
+						<!-- 商品基本信息开始 -->					
+						<h3 class="product-name">{$item_info.item_name}</h3>
+						<h4 class="product-num">货号：{$item_info.item_sn}</h4>
+						<div class="model-block price-box">
+							<p>
+								<h6>兑换积分：<span class="red">{$item_info.mall_price}</span></h6>
+							</p>
+							
+						</div>
+						<div class="first-review">
+							<div>描述：{$item_info.item_desc}</div>
+							<div class="yellow">单位：{$item_info.unit}</div>
+						</div>
+						<!-- 商品基本信息结束 -->					
+						<!-- 属性选择区 -->
+						{if $item_sku_list}
+						<div class="box propArea">
+							<form id="buy_form" action="{$cart_link}" method="POST">
+								<div>
+									<table class="table">
+										<thead class="attr_select_header">
+											<tr>
+											{if $item_info.has_sku}
+												<td class="attr_select_h d_w30">规格</td>
+											{/if}
+												<td class="attr_select_h d_w17">库存</td>
+												<td class="attr_select_h d_w18">价格</td>
+												<td class="attr_select_h d_w35">数量</td>
+											</tr>
+										</thead>
+
+										{foreach from=$item_sku_list.sku_info item=sku}
+											<tbody class="attr_select_content">
+												<tr>
+													<td class="attr_cont d_w30" id="">{$sku.property_name1} {$sku.property_name2}</td>
+													<td class="attr_cont d_w17" id="">{$sku.sku_stock}</td>
+													<td class="attr_cont d_w18" id="">&yen;{$sku.sku_price}</td>
+													<td class="attr_cont d_w35" id="">
+														<div class="sn-count add-to-cart-box">
+															<span class="qty-box">
+																<!-- <label for="qty">数量:</label> -->
+																<a href="javascript:void(0)" title="" class="prev add"><img src="__PUBLIC__/Images/front/qty_prev.png" title="" alt="add" />‹</a>
+																<input type="text" value="1" maxlength="12" id="qty" class="input-text qty input-count" name="qty">
+																<a href="javascript:void(0)" title="" class="next dec add"><img src="__PUBLIC__/Images/front/qty_next.png" title="" alt="" />›</a>
+															</span>
+															<!-- <a href="javascript:;" class="min" onClick="sub(this);"></a>
+															<input style="text-align:center;" class="input-count" type="number" value="1">
+															<a href="javascript:;" class="add" onClick="add(this);"></a> -->
+															<input type="hidden" id="property" value="{$item_sku_list.sku_name1}:{$sku.property_name1} {if $item_sku_list.sku_name2}{$item_sku_list.sku_name2}:{$sku.property_name2}{/if}">
+															<input type="hidden" id="item_sku_price_id" value="{$sku.item_sku_price_id}">
+															<input type="hidden" id="real_price" value="{$sku.sku_price}">
+															<input type="hidden" id="stock" value="{$sku.sku_stock}">
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										{foreachelse}
+											<tbody class="attr_select_content">
+												<tr>
+													<td class="attr_cont d_w17" id="">{$item_info.stock}</td>
+													<td class="attr_cont d_w18" id="">&yen;{$item_info.mall_price}</td>
+													<td class="attr_cont d_w35" id="">
+														<div class="sn-count add-to-cart-box">
+															<span class="qty-box">
+																<!-- <label for="qty">数量:</label> -->
+																<a href="javascript:void(0)" title="" class="prev add"><img src="__PUBLIC__/Images/front/qty_prev.png" title="" alt="add" />‹</a>
+																<input type="text" value="1" maxlength="12" id="qty" class="input-text qty input-count" name="qty">
+																<a href="javascript:void(0)" title="" class="next dec add"><img src="__PUBLIC__/Images/front/qty_next.png" title="" alt="" />›</a>
+															</span>
+															<input type="hidden" id="item_sku_price_id" value="{$sku.item_sku_price_id}">
+															<input type="hidden" id="stock" value="{$item_info.stock}">
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										{/foreach}
+										<input type="hidden" name="shopping_cart_id_list" id="shopping_cart_id_list" value="">
+										<input type="hidden" name="number_list" id="number_list" value="">
+									</table>
+								</div>
+							</form>
+						</div>
+						{/if}
+						<!-- 属性选择区结束 -->
+						<!-- 加购物车和数量开始 -->
+						<div class="add-to-cart-box attr_select_content">
+							{if !$item_sku_list}
+							<span class="qty-box">
+								<label for="qty">兑换数量:</label>
+								<a href="javascript:void(0)" title="" class="prev add"><img src="__PUBLIC__/Images/front/qty_prev.png" title="" alt="add" />‹</a>
+								<input type="text" value="1" maxlength="12" id="qty" class="input-text qty input-count" name="qty">
+								<a href="javascript:void(0)" title="" class="next dec add"><img src="__PUBLIC__/Images/front/qty_next.png" title="" alt="" />›</a>
+							</span>
+							{/if}
+                           
+							<button class="form-button" title="加入购物车"><a class="btn_cart" href="javascript:;" onClick="addCart(1);" id="addCart2">立即兑换</a></button>
+							<ul class="add-to-box">
+								<li>
+									<a href="javascript:void(0);" onClick="toggleFav(this);" class="{if $is_collect}fav_checked{/if}" id="fav_btn">
+										<span>
+											<i class="fav-icon"></i>
+										</span>
+										<span class="saveshop">
+											{if $is_collect}取消收藏{else}收藏商品{/if}
+										</span>
+									</a>
+									<!-- <i class="fav-icon"></i><span>收藏商品</span> -->
+								</li>
+								<li class="red">购物遇到问题，请致电{$order_hotline}</li>
+							</ul>
+						</div>
+						<!-- 加购物车和数量结束 -->
+					</div>
+				</div>
+			</div>
+			<!-- 商品详情和清单开始 -->
+			<section class="product-collateral">    	
+				<ul class="tab-block">
+					<li><a href="#pro-detail" title="商品详情" class="active">商品详情</a></li>
+					 <!-- <li><a href="#pro-review" title="商品清单">商品清单</a></li> -->
+				</ul>
+				<div id="pro-detail" class="pro-detail commonContent">
+					<p>
+						{$item_txt}
+					</p>
+				</div>                            
+			</section>
+			<!-- 商品详情和清单结束 -->
+
+	</div>
+	<div class="clearfix"></div>
+    <!-- e普通商品详情 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script src="__JS__/front/collect.js?version={$version}"></script>
+<script type="text/javascript">
+var redirect = '{$cur_url}';
+var user_id = '{$user_id}';
+var item_id = parseInt('{$item_id}');
+var item_name = '{$item_info.item_name}';
+var small_pic = '{$item_info.small_pic}';
+var mall_price = '{$item_info.mall_price}';
+var is_integral = 1;
+var has_sku = parseInt('{$item_info.has_sku}');
+{literal}
+//详情和清单切换标签
+$(function(){
+	var tabContainers=$('section.product-collateral > div.commonContent');
+	tabContainers.hide().filter(':first').show();
+	$('section.product-collateral ul.tab-block a').click(function(){
+		tabContainers.hide();
+		tabContainers.filter(this.hash).show();
+		$('section.product-collateral ul.tab-block a').removeClass('active');
+		$(this).addClass('active');
+		return false;
+	}).filter(':first').click();
+});
+//放大图片插件
+$(document).ready(function(){
+	$(".ajax").colorbox();
+});	
+//加减数量
+$(function() {
+	$(".add").click(function() {
+		var jQueryadd = $(this);
+		var oldValue = jQueryadd.parent().find("input").val();
+		var newVal = 0;
+	
+		if (jQueryadd.text() == "›") {
+		   newVal = parseFloat(oldValue) + 1;
+		  // AJAX save would go here
+		} else {
+		  // Don't allow decrementing below zero
+		  if (oldValue >= 1) {
+			  newVal = parseFloat(oldValue) - 1;
+			  // AJAX save would go here
+		  }
+		  if(oldValue == 0){
+			  newVal = parseFloat(oldValue);
+			  }
+		}
+		jQueryadd.parent().find("input").val(newVal);
+	});
+});
+//收藏切换
+function toggleFav(obj){
+	if (user_id == 0)
+	{
+		alert('抱歉，请先登录');
+		location.href = '/FrontUser/login/redirect/' + redirect;
+		return;
+	}
+	var fav_checked = $(obj).hasClass("fav_checked");
+	if(fav_checked){
+		cancel_collect(item_id);
+
+	}else{
+		collect(item_id);
+	}
+}	
+//加入购物车
+function addCart(type)
+{
+	var add_item_num = 0;
+	var item_str = '';
+	if (has_sku == 1)
+	{
+		$('.attr_select_content').each(function(){
+			var number = parseInt($(this).find('.input-count').val());
+			if (number > 0)
+			{
+				item_str += $(this).find('#property').val() + ',';
+				item_str += $(this).find('#real_price').val() + ',';
+				item_str += number + ',';
+				item_str += $(this).find('#item_sku_price_id').val() + ';';
+				add_item_num += number;
+			}
+		});
+	}
+	else
+	{
+
+		var number = parseInt($('.attr_select_content').find('.input-count').val());
+		item_str += ',';
+		item_str += mall_price + ',';
+		item_str += number + ',';
+		item_str += 0 + ';';
+		add_item_num += number;
+	}
+	item_str = item_str.substr(0, item_str.length - 1);
+
+	if (add_item_num == 0)
+	{
+		alert('抱歉，请至少选择一个商品！');
+		return false;
+	}
+
+	$.post('/FrontCart/add_cart', {'item_id': item_id, 'item_name': item_name, 'small_pic': small_pic, 'is_integral': is_integral, 'item_str': item_str}, function(data){		
+		if (data != 'failure')
+		{
+			if (type == 1)
+			{
+				alert('加入购物车成功');
+				location.href = '/FrontCart/integral_cart';
+			}
+			else
+			{
+				//进入订单购买页
+				$('#shopping_cart_id_list').val(data.shopping_cart_id_list);
+				$('#number_list').val(data.number_list);
+				console.log(data);
+				$('#buy_form').submit();
+
+				//location.href = '/FrontCart/cart.html';
+			}
+
+		}
+		else
+		{
+			alert('对不起，加入购物车失败');
+
+		}
+	}, 'json');
+}
+</script>
+{/literal}
+{/block}

@@ -1,0 +1,72 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+ <div class="tables-searchbox"> 
+        <a href="/AcpRole/add_role/mod_id/0" class="btn btn-blue"><i class="gicon-plus white"></i>添加角色</a>  
+    </div>
+<div class="tablesWrap">  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="80%">  
+        <col width="15%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>序号</td>  
+                <td>角色名称</td>    
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+			{foreach from=$role_list item=role_info}
+				<tr>  
+					<td>{$role_info.i}</td>  
+					<td>{$role_info.group_name}</td>  
+					<td>  
+						<a href="/AcpRole/edit_role/group_id/{$role_info.group_id}" class="btn" title="修改">编辑</a>
+						<a href="javascript:;" class="btn" title="删除" onclick="return del_confirm('/AcpRole/del_role/group_id/{$role_info.group_id}');">删除</a>   
+					</td>  
+				</tr>
+			{/foreach}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fr">  
+            <div class="paginate">  
+				{$show}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+function del_confirm(url)
+{
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要删除这个角色吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",
+		 callback:function(r){  
+			 if(r){  
+				 location.href=url;
+			 }
+			 return true;  
+		 }  
+	 });
+}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/AcpRole/list_role.css" type="text/css" />
+{/block}

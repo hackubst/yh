@@ -1,0 +1,14 @@
+.t-n-s-top{ overflow:hidden;}
+.t-month-title{ width:80%; height:35px; border-bottom:#ddd solid 1px; line-height:35px; overflow:hidden; color:#666;}
+.t-month-con{ width:100%; overflow:hidden; margin-top:10px;}
+.t-con-list{ float:left; height:35px; line-height:35px;}
+.t-con-list .t-zl{ padding:0 20px;}
+.t-con-list .t-zg{ padding-right:20px;}
+.t-con-list .t-s{ padding-left:20px;}
+.t-con-list .t-s a{ color:#368ee0;}
+.t-month-chart{ width:100%;margin-top:10px; overflow:hidden; }
+.t-n-s-bottom{ overflow:hidden; margin-top:35px;} 
+
+
+.t-month-money{ width:80%; height:35px; line-height:35px; background:#f4f4f4; overflow:hidden; color:#666; margin-top:10px;}
+.t-month-money span{ padding:0 10px;}

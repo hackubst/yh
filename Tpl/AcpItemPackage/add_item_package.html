@@ -1,0 +1,291 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<form action='' method='post' class="bs-docs-example" id="add_item_discount">
+        <div class="tabs clearfix">  
+            <a href="javascript:;" class="active tabs_a fl" data-origin="discount" data-index="1"><span class="wizardstep-num">1</span>添加套餐商品信息</a>    
+            <a href="javascript:;" class="tabs_a fl" data-origin="discount" data-index="2"><span class="wizardstep-num">2</span>添加商品</a>   
+        </div>
+        <!-- end tabs -->  
+        <div class="tabs-content" data-origin="discount">
+
+            <div class="tc hide" data-index="2">
+            <div class="tablesWrap tj-all hide">  
+            <div class="tables-searchbox"> 
+                <div class="t-dis-list">
+                    <span class="tbs-txt">名称：</span>  
+                    <input type="text" name='s_name' id='s_name' value='' />
+                </div> 
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择分类：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="s_category" id='s_category'>
+                                <option value="">--请选择--</option>
+                                {foreach from=$arr_category item=row1}
+                                <option value="1.{$row1.class_id}" {if "1."|cat:$row1.class_id EQ $category_id}selected{/if}>{$row1.class_name}</option>
+                                {foreach from=$row1.sort_info item=row2}
+                                <option value="2.{$row2.sort_id}" {if "2."|cat:$row2.sort_id EQ $category_id}selected{/if}>{$row2.sort_name}</option>
+                                {foreach from=$row2.genre_info item=row3}
+                                <option value="3.{$row3.class_genre_id}" {if "3."|cat:$row3.class_genre_id EQ $category_id}selected{/if}>{$row3.genre_name}</option>
+                                {/foreach}
+                                {/foreach}
+                                {/foreach}
+                            </select> 
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择品牌：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="s_brand" id='s_brand'>  
+                                <option value="0" selected>--请选择--</option>
+                                {foreach from=$arr_brand item=row}
+                                <option value="{$row.brand_id}">{$row.brand_name}</option>
+                                {/foreach}  
+                            </select>  
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                    <span class="tbs-txt">售价不少于：</span>  
+                    <input type="text" name='s_mall_price' id='s_mall_price' class="mini" value='' />
+                </div>
+                <div class="t-dis-list search"><span class="btn search_item"><i class="gicon-search"></i>查询</span></div>
+            </div>  
+            <!-- end tables-searchbox -->  
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="10%">  
+                <col width="10%">  
+                <col width="25%">  
+                <col width="12%">  
+                <col width="30%">  
+                </colgroup>  
+                <thead>  
+                    <tr>  
+                        <td>选择</td> 
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>本店价</td>
+                        <td>操作</td>  
+                    </tr>  
+                </thead>  
+                <tbody class='item_list'>
+                    <tr><td colspan='7'>暂无商品可选，点击搜索获取商品信息</td></tr>
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">
+                <div class="fl select">  
+                    <a href="javascript:;" class="btn btn-blue all">全选</a>  
+                    <a href="javascript:;" class="btn btn-blue cancel">取消</a>  
+                </div>  
+                <div class="fr">  
+                    <div class="paginate"> 
+                    
+                    </div>  
+                    <!-- end paginate -->  
+                </div> 
+            </div>  
+            <!-- end tables-btmctrl -->  
+        </div>  
+            <!--<button type="button" class="btn" onclick="clik()">添加商品</button>  -->
+        <!-- end tablesWrap --> 
+<!--    
+        <div class="wizardstep-actions mgt10">  
+            <a href="###" class="btn j-wizardstep" data-origin="test" data-type="prev">上一步</a>  
+            <a href="###" class="btn btn-blue j-wizardstep" data-origin="test" data-type="next">下一步</a>  
+        </div>
+        -->
+        <a type="submit" class="btn btn-blue" onclick='clik()'>选择商品</a>
+        <h6>已选择套餐中的商品：</h6>
+        <div class="tablesWrap tj-all" style="width:60%;" id='slected_item'>  
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="20%">  
+                <col width="30%">  
+                <col width="20%"> 
+                <col width="15%">  
+                <col width="15%">  
+                </colgroup>  
+                <thead>  
+                    <tr>   
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>本店价</td>   
+                        <td>数量</td> 
+                        <td>操作</td> 
+                    </tr>  
+                </thead>  
+                <tbody class='item_list'>
+                    <tr class='no_one'><td colspan='4'>暂无商品可选，点击搜索获取商品信息</td></tr>
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+        </div>
+        
+        <input type='hidden' name='act' value='add' />
+        <button type="submit" class="btn btn-blue">提交</button>
+
+            
+        </div>
+
+            <div class="tc" data-index="1">  
+                {*
+                <div class="formitems inline">
+                    <label class="fi-name">
+                        <span class="colorRed">*</span>{$ITEM_NAME}分类：</label>
+                    <div class="form-controls">
+                        <select name="category_id">
+                            <option value="">--请选择--</option>
+                            {foreach from=$arr_category item=row1}
+                            <option value="{$row1.class_id}.0"
+                                {if $item.class_id == $row1.class_id && $item.sort_id == 0}
+                                selected
+                                {/if}
+                            >{$row1.class_name}</option>
+                            {foreach from=$row1.sort_info item=row2}
+                            <option value="{$row1.class_id}.{$row2.sort_id}"
+                                {if $item.class_id == $row1.class_id && $item.sort_id == $row2.sort_id}
+                                selected
+                                {/if}
+                            >{$row2.sort_name}</option>
+                            <!--{foreach from=$row2.genre_info item=row3}
+                            <option value="{$row1.class_id}.{$row2.sort_id}.{$row3.class_genre_id}">{$row3.genre_name}</option>
+                            {/foreach}-->
+                            {/foreach}
+                            {/foreach}
+                        </select>
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>*}
+
+                <div class="formitems inline">
+                    <label class="fi-name">
+                        <span class="colorRed">*</span>{$ITEM_NAME}名称：</label>
+                    <div class="form-controls">
+                        <input type="text" placeholder="请输入{$ITEM_NAME}名称" class="xxlarge" name="item_name" value="{$item.item_name}">
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>
+
+                <div class="formitems inline">
+                    <label class="fi-name">
+                        <span class="colorRed">*</span>{$ITEM_NAME}货号：</label>
+                    <div class="form-controls">
+                        <input type="text" placeholder="请输入{$ITEM_NAME}货号" class="small" name="item_sn" value="{$item_sn}">
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>
+
+                <div class="formitems inline">
+                    <label class="fi-name">
+                        <span class="colorRed">*</span>本店价：</label>
+                    <div class="form-controls">
+                        <input type="text" placeholder="0" class="small" name="mall_price" value="{$item.mall_price}">
+                        <span class="fi-text">元</span>
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>
+                <div class="formitems inline">
+                    <label class="fi-name">
+                        <span class="colorRed">*</span>市场价：</label>
+                    <div class="form-controls">
+                        <input type="text" placeholder="0" class="small" name="market_price" value="{$item.market_price}">
+                        <span class="fi-text">元</span>
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>
+
+                <div class="formitems inline">
+                    <label class="fi-name">
+                        积分抵扣百分比：</label>
+                    <div class="form-controls">
+                        <input type="text" placeholder="0" class="small" name="integral_exchange_rate" value="{$item.integral_exchange_rate}">
+                        <span class="fi-text">%</span>
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>
+                <div class="formitems inline">  
+                    <label class="fi-name"><span class="colorRed">*</span>排序号：</label>  
+                    <div class="form-controls">  
+                        <input type="text" placeholder="0" class="small" name="serial" id="serial" value="{$item.serial}">  
+                        <span class="fi-help-text hide"></span>
+                    </div>  
+                </div>
+                <div class="formitems inline">
+                    <label class="fi-name"><span class="colorRed">*</span>{$ITEM_NAME}销售状态：</label>
+                    <div class="form-controls">
+                        <div class="radio-group">
+                            <label><input type="radio" name="isuse" value="1" {if $item.isuse == 1}checked {/if}>出售中</label>
+                            <label><input type="radio" name="isuse" value="0" {if $item.isuse == 0}checked {/if}>仓库中</label>
+                        </div>
+                        <span class="fi-help-text error"></span>
+                    </div>
+                </div>
+
+                <div class="formitems inline">  
+                    <label class="fi-name">套餐介绍：</label>   
+                    <div class="form-controls">  
+                        <textarea name="item_desc" id="item_desc">{$item.item_desc}</textarea>  
+                        <span class="fi-help-text">一般在200字以内</span>  
+                    </div>    
+                </div>
+
+                <div class="formitems inline">
+                    <label class="fi-name">{$ITEM_NAME}图片：</label>
+                    <div class="form-controls">
+                        <ul class="fi-imgslist">
+                            {foreach from=$arr_photo item=row}
+                            <li class="fi-imgslist-item">
+                                <img src="{$row}" alt="">
+                                <input type="hidden" name="pic[]" value="{$row}">
+                                <a href="javascript:;" class="del J_del_pic" title="删除这张图"><i class="gicon-remove"></i></a>
+                            </li>
+                            {/foreach}
+                            <li class="fi-imgslist-item" id="J_add_pic">
+                                <a href="javascript:;" id="add_link" class="add" title="上传一张新的图片">+</a>
+                            </li>
+                            <input type="hidden" name="old_photo" value="{$old_photo}">
+                        </ul>
+                        <span class="fi-help-text">(图片800x800像素的效果最佳，建议使用4张以内图片</span>
+                    </div>
+                </div>
+
+                <div class="formitems inline"> 
+                    <label class="fi-name">&nbsp;</label> 
+                    <div class="radio-group">
+                        <a href="javascript:;" id="jump2" class="btn btn-blue">添加商品</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+<script>
+    var item_arr = new Array();
+</script>
+{/block} 
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpItemPackage/add_item_package.js"></script>
+<script src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItemPackage/add_item_step1.js?version={$version}"></script>
+{literal}
+<style>
+    #jpops .fi-name{width:65px;}
+    #jpops .form-controls{margin-left:75px;}
+    #j-item-extend li{margin-bottom:10px;}
+    .edit_item_tip{font-size: 18px;color: #a0a0a0;background-color: inherit;text-decoration: none;margin: 20px 180px;}
+</style>
+{/literal}
+{/block} 

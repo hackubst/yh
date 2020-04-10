@@ -1,0 +1,39 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>图文标题：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="subscribe_title" id="subscribe_title" value="{$config.SUBSCRIBE_TITLE}">
+		<span class="fi-help-text hide"></span>
+	</div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>图文链接：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="subscribe_link" id="subscribe_link" value="{$config.SUBSCRIBE_LINK}">
+		<span class="fi-help-text hide"></span>
+	</div>
+</div>
+
+{upload_image_widget($subscribe_pic_data)}
+
+<div class="formitems inline">
+    <label class="fi-name">图文简述：</label>
+    <div class="form-controls">
+        <textarea name="subscribe_content" id="subscribe_content">{$config.SUBSCRIBE_CONTENT}</textarea>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+		<input type="hidden" name="act" value="set" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>
+    </div>
+</div>
+</form>
+{/block}

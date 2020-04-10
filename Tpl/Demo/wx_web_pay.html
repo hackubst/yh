@@ -1,0 +1,75 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<button id="pay" style="background: blue;color:#fff;width: 100px;height:50px;cursor: pointer; margin: 50px;">微信支付DEMO</button>
+{/block}
+{block name="js"}
+{literal}
+<script>
+var jsApiParameters;
+
+
+
+$('#pay').on('click', function(){
+	//提交
+	$.ajax({
+		url:"/Demo/wx_web_pay",
+		type:"POST",
+		dataType:"json",
+		timeout:10000,
+		success:function(d){
+			if(d)
+			{
+				//微信支付
+				jsApiParameters = d;
+				callpay();
+			}
+		}
+	});
+})
+
+
+function jsApiCall()
+{
+//alert(jsApiParameters);
+	WeixinJSBridge.invoke(
+		'getBrandWCPayRequest',
+		jQuery.parseJSON(jsApiParameters),
+		function(res)
+		{
+			if(res.err_msg == "get_brand_wcpay_request:ok" )
+			{
+				//跳转链接
+				location.href = '/FrontUser/personal_center';
+			}
+			else
+			{
+				//WeixinJSBridge.log(res.err_msg);
+				//alert(res.err_code);
+				//alert(res.err_desc);
+				//alert(res.err_msg);
+			}
+		}
+	);
+}
+
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		}
+	}else{
+		jsApiCall();
+	}
+}
+
+
+</script>
+{/literal}
+{/block}
+
+

@@ -1,0 +1,118 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-n-s-top">
+	<div class="t-month-chart" id="month_container"> </div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+var day_list = '[';
+for (var i = 1; i <= {$day_num}; i ++)
+{
+	day_list = day_list + i + ',';
+}
+day_list = day_list.substring(0, day_list.length - 1);
+day_list += ']';
+
+//本月列表
+var order_amount_stat_list = '[';
+{foreach from=$order_amount_stat_list key=key item=item}
+	order_amount_stat_list = order_amount_stat_list + {$item} + ',';
+{/foreach}
+order_amount_stat_list = order_amount_stat_list.substring(0, order_amount_stat_list.length - 1);
+order_amount_stat_list += ']';
+
+var cost_amount_stat_list = '[';
+{foreach from=$cost_amount_stat_list key=key item=item}
+	cost_amount_stat_list = cost_amount_stat_list + {$item} + ',';
+{/foreach}
+cost_amount_stat_list = cost_amount_stat_list.substring(0, cost_amount_stat_list.length - 1);
+cost_amount_stat_list += ']';
+
+//上月列表
+var order_amount_stat_list_last = '[';
+{foreach from=$order_amount_stat_list_last key=key item=item}
+	order_amount_stat_list_last = order_amount_stat_list_last + {$item} + ',';
+{/foreach}
+order_amount_stat_list_last = order_amount_stat_list_last.substring(0, order_amount_stat_list_last.length - 1);
+order_amount_stat_list_last += ']';
+
+var cost_amount_stat_list_last = '[';
+{foreach from=$cost_amount_stat_list_last key=key item=item}
+	cost_amount_stat_list_last = cost_amount_stat_list_last + {$item} + ',';
+{/foreach}
+cost_amount_stat_list_last = cost_amount_stat_list_last.substring(0, cost_amount_stat_list_last.length - 1);
+cost_amount_stat_list_last += ']';
+
+var d = '{$date}';
+{literal}
+$(function (){
+	/*$("#month_container").highcharts(
+		{
+		chart: { 
+            defaultSeriesType: 'line', //图表类型line(折线图), 
+            zoomType: 'x'   //x轴方向可以缩放 
+        }, 
+		"credits":{"text":"@\u542f\u535a\u8f6f\u4ef6","enabled":false,"href":"http:\/\/www.yurtree.com","position":{"align":"right","y":-10}},"legend":{"enabled":true,"layout":"vertical","align":"right","verticalAlign":"middle","borderWidth":0},"xAxis":{"categories":['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],"title":{"text":"时间"}},"title":{"text":"订单交易量统计(" + 111 + "年)"},"yAxis":{"title":{"text":"交易量"},"allowDecimals":false,"plotLines":[{"value":0,"width":1,"color":"#808080"}],"min":0},"plotOptions":{"line":{"dataLabels":{"enabled":true},"enableMouseTracking":true}},"series":[{"type":"column","name":"交易量","data":eval(cost_amount_stat_list)}]}
+	);*/
+var chart = new Highcharts.Chart({
+	chart: {
+		renderTo: 'month_container',
+		defaultSeriesType: 'line'
+	},
+	title: {
+		text: d + ' 单品销量统计'
+	},
+	subtitle: {
+		text: ''
+	},
+	xAxis: {
+		categories: eval(day_list)
+	},
+	yAxis: {
+		title: {
+			text: 'RMB(元)'
+		}
+	},
+	tooltip: {
+		enabled: false,
+		formatter: function() {
+			return '<b>'+ this.series.name +'</b><br/>'+
+				this.x +': '+ this.y +'°C';
+		}
+	},
+	plotOptions: {
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	},
+	series: [{ 
+        name: '本月销量', 
+        data: eval(order_amount_stat_list) 
+    }, { 
+        name: '本月销售额', 
+        data: eval(cost_amount_stat_list)
+    }, {
+        name: '上月销量', 
+        data: eval(order_amount_stat_list_last)
+    }, {
+        name: '上月销售额',
+        data: eval(cost_amount_stat_list_last)
+    }]
+});
+});
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_num_stat.css" type="text/css" />
+{/block} 

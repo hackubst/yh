@@ -1,0 +1,88 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+
+<div class="t-a-wait-con">
+    <div class="tablesWrap">  
+    <!--    <div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action='/AcpUser/audit_waiting' method='post'>
+                <div class="t-a-wait-top-li"><span>分销商名称：</span><input type="text" placeholder="" class="mini" value='{$s_realname}' name='realname'> </div>
+                <div class="t-a-wait-top-li"><span>分销商姓名：</span><input type="text" placeholder="" class="mini" value='{$s_linkman}' name='linkman'> </div>
+                <div class="t-a-wait-top-li"><input type='hidden' name='submit' value='search' /><button class="btn"><i class="gicon-search"></i>搜索</button></div>
+                </form>
+            </div>
+        </div>-->
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="5%">
+            <col width="8%">
+            <col width="8%">
+            <col width="12%">  
+            <col width="27%">  
+            <col width="14%">  
+            <col width="8%">  
+            <col width="10%">  
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>选择</td>  
+                    <td>发件人</td>
+                    <td>收件人</td> 
+                    <td>标题</td>
+                    <td>内容</td>
+                    <td>时间</td> 
+                    <td>回复</td>
+                    <td>操作</td>  
+                </tr>  
+            </thead>  
+            <tbody>
+                {if $messagelist}
+					{section name=row loop=$messagelist}
+					<tr>  
+						<td><input type="checkbox" class="checkbox" value='{$messagelist[row].message_id}' name="a[]"></td>  
+						<td>{$messagelist[row].send_username}</td>  
+						<td>{$messagelist[row].reply_username}</td>  
+						<td>{$messagelist[row].message_title}</td>
+						<td>{$messagelist[row].message_contents}</td>
+						<td>{$messagelist[row].addtime}</td>
+						<td>{$messagelist[row].replynum}</td>
+						<td>   
+							<a href="/AcpMessage/reply_message/mod_id/2/message/{url_jiami($messagelist[row].message_id)}/redirect/{$cur_url}" class="btn accept" title="回复">回复</a>    
+						</td>  
+					</tr>
+					{/section}
+                {else}
+					<tr><td colspan='7'>没有符合条件的记录</td></tr>
+                {/if}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fl">  
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="Sel()">全选</a>  
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="Can()">取消</a>  
+				<a href="javascript:void(0);" class="btn btn-blue" onclick="delMessage()">删除</a>   
+            </div> 
+            <div class="fr">  
+                <div class="paginate">  
+                    {$page_str}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/allsend.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

@@ -1,0 +1,191 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s订单表格 -->
+  	<form id="order_form" method="post" action="/FrontOrder/pay_order">
+  	<div class="col-table">
+  		<table class="table table-striped table-bordered table-condensed" style="margin-bottom:8px;">
+		{if !$item_list}
+		<thead>
+          <tr>
+            <th style="text-align:center;font-weight:normal;">暂无首批订单商品</th>
+          </tr>
+        </thead>
+		{/if}
+		{if $item_list}
+	    <thead>
+          <tr>
+            <th>序号</th>
+            <th>编码</th>
+            <th>商品名称</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>小计</th>
+          </tr>
+        </thead>
+        <tbody>
+        {foreach from=$item_list name=loop item=item}
+          <tr class="order-items">
+            <td>{$smarty.foreach.loop.iteration}</td>
+            <td><input name="id" onclick="sumje(this)" type="checkbox" value="{$item.item_id}" checked /></td>
+            <td><a href="{$item_detail_link}{$item.item_id}">{$item.item_name}</a></td>
+            <td><input type="text" class="item_num" onkeyup="write_number(this)" onblur="setxj(this,'{$item.item_id}')" id="{$item.item_id}_mrsl" name="{$item.item_id}_mrsl" value="{$item.first_number.number}"/></td>
+            <td id="{$item.item_id}xsj">{$item.vip_price}</td>
+            <td id="{$item.item_id}xj">{$item.total_price}</td>
+            <input type="hidden" name="item_id" value="{$item.item_id}">
+          </tr>
+         {/foreach}       
+        </tbody>
+        {/if}
+      </table>
+      <!-- 全选操作和总价计算区 -->
+      {if $item_list}
+      <div class="first-btn-area">
+		<input id="qx" name="qx" onclick="checkall(true,'id')" type="button" value="全选" class="btn"/>
+		<input id="fx" name="fx"  onclick="checkall(false,'id')" type="button" value="反选" class="btn"/>
+		<span>商品总金额：￥<strong class="pic" id="spzje"></strong>元</span>
+	  </div>
+	  {/if}
+	  <!-- 提交按钮 -->
+      <div class="form-button btn" style="float:left;background: #ddd;"><a href="{$home_link}" style="color: #575555;">返回首页继续购物</a></div>
+      <input type="submit" class="form-button btn" style="line-height:20px;" value="提交订单">
+  	</div>
+  </form>
+  	<!-- e订单表格 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+	//提交订单
+	$('#order_form').submit(function(){
+		//表单验证
+		var item_str = '';
+		var number_str = '';
+		var checkboxs = $("input[name=id]:checked");
+		for (var i = 0, ci; ci = checkboxs[i]; i++) {
+			item_str += $(ci).parent().parent().find('input[name=item_id]').val() + ',';
+			number_str += $(ci).parent().parent().find('.item_num').val() + ',';	
+		}
+
+		if (!item_str)
+		{
+			alert('对不起，请至少选择一个商品');
+			return false;
+		}
+		item_str = item_str.substr(0, item_str.length - 1);
+		number_str = number_str.substr(0, number_str.length - 1);
+		//alert(item_str + ',' + number_str);
+
+		//提交订单
+		$.ajax({
+			url:"/FrontOrder/add_first_order",
+			type:"POST",
+			data:{
+				item_str: item_str,
+				number_str: number_str,
+			},
+			timeout:10000,
+			success:function(d){
+				if(d) {
+					if(d != 'failure')
+					{
+						if(d == 'nostock'){
+							alert('对不起，商品库存不足');
+						}else{
+							//返回成功，代码写这里
+							var link = '/FrontOrder/pay_order/order_id/' + d;
+							location.href = link;
+						}
+						
+					}
+					else
+					{
+					}
+				}
+			}
+		});
+		return false;
+	});
+	$(function(){
+		sumje();
+	});
+	//计算总价
+	function sumje(act){ 
+			var checkboxs = $("input[name=id]:checked");
+			var id="";
+			var hjje=0;
+			var xjje=0;
+			for (var i = 0, ci; ci = checkboxs[i]; i++) {
+				if (i > 0) {
+					id += ",";
+				}
+				id +=  ci.value;
+				xjje = document.getElementById(ci.value+"xj").innerHTML;
+				hjje = Number(parseFloat(hjje).toFixed(2))+Number(parseFloat(xjje).toFixed(2));
+			
+			}
+			document.getElementById("spzje").innerHTML = Number(parseFloat(hjje).toFixed(2));
+			
+	}
+	//计算单个商品小计
+	function setxj(t,act){ 
+		document.getElementById(act+"xj").innerHTML =(document.getElementById(act+"xsj").innerHTML*t.value).toFixed(2);
+		sumje(act);
+	}
+	//限制输入除了非正整数
+	function write_number(t){
+		t.value = t.value.replace(/[^\d]/g,'');
+	}
+	//全选
+	function checkall(t,n){
+		var inputs = $(':checkbox[name='+n+']');
+		 for(var i=0, ci; ci=inputs[i]; i++){ 
+			 ci.checked = t;
+		 }
+		 sumje("");
+	}
+	function w_number(t){
+		var reg = /^(-|\+)?\d+$/ ;
+		if(!reg.test(t.value)){
+			alert("必须为数字！");
+			t.focus();
+		}
+		sumje("");
+		return reg.test(t.value);
+	}
+	function gourl(){
+		if (null != has_submit && has_submit.value == "true") {
+			document.getElementById("save_warring_info").innerHTML = "对不起,您已经提交过表单,表单不能重复提交!";
+			return false;
+		}
+		var checkboxs = $("input[name=id]:checked");
+		var id="";
+		var sl="";
+		for (var i = 0, ci; ci = checkboxs[i]; i++) {
+			if (i > 0) {
+				id += ",";
+				sl += ",";
+			}
+			id +=  ci.value;  
+			sl += document.getElementById(ci.value+"_mrsl").value;
+		}
+		document.getElementById("has_submit").value = "true";
+		//location.href="spdd_spksdd.html?id="+id+"&sl="+sl;
+	}
+	
+</script>
+
+{/literal}
+{/block}

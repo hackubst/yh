@@ -1,0 +1,74 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id='water_config' action=''  method='post' enctype='multipart/form-data'>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>水印状态：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="water_open" value='1' {if $config.WATER_PRINT_OPEN == 1}checked{/if}>开启</label>  
+            <label><input type="radio" name="water_open" value='0' {if $config.WATER_PRINT_OPEN == 0}checked{/if}>关闭</label> 
+        </div>  
+    </div>  
+</div> 
+<div class="formitems inline">
+        <label class="fi-name">水印图片：</label>
+        <div class="form-controls">
+            <div class="fi-img">
+                <img src="{$config.WATER_PRINT_IMG}" onerror="javascript:this.setAttribute('src', '/Public/Images/nopic.png');" class="J_logo">
+            </div>
+            <a href="javascript:;" class="btn">
+                选择图片
+                <input type="file" class="fi-btn-upload J_logo_up" name="water_img">
+            </a>
+            <span class="fi-help-text">没有水印图片时，也不会添加水印</span>
+        </div>
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>提示：</span></label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label class='colorRed'>水印图片请上传jpg格式</label>  
+          
+        </div>  
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>水印位置：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="water_postion" value='1' {if $config.WATER_PRINT_IMG_POSITION == 1}checked="checked"{/if}>左上</label>  
+            <label><input type="radio" name="water_postion" value='2' {if $config.WATER_PRINT_IMG_POSITION == 2}checked="checked"{/if}>左下</label> 
+            <label><input type="radio" name="water_postion" value='3' {if $config.WATER_PRINT_IMG_POSITION == 3}checked="checked"{/if}>居中</label>  
+            <label><input type="radio" name="water_postion" value='4' {if $config.WATER_PRINT_IMG_POSITION == 4}checked="checked"{/if}>右上</label> 
+            <label><input type="radio" name="water_postion" value='5' {if $config.WATER_PRINT_IMG_POSITION == 5}checked="checked"{/if}>右下</label>  
+        </div>  
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">水印透明度：</label>  
+    <div class="form-controls">  
+            <input type="text" name="water_transparency" value="{$config.WATER_PRINT_TRANSPARENCY}" />
+            <span class="fi-help-text">0-100的整数</span>
+    </div>  
+</div>  
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+   		<input type='hidden' name='act' value='set' />  
+		<button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> 
+    </div>  
+</div>
+</form>  
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src='__ACPJS__/AcpConfig/edit_water.js?version={$version}'></script>
+{/block} 
+
+{block name="css"}
+
+{/block}

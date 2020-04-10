@@ -1,0 +1,116 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s分类 -->
+    <div class="col-left">
+    {include file="../common_personal_nav.html"}
+	</div>	
+    <!-- e分类 -->
+    <!-- s主内容 -->
+    <div class="col-main">
+		{include file="../common_personal_header.html"}
+		<div class="user-main">
+			<!-- s添加地址 -->
+			<h6 class="form-title mb20">收货地址管理</h6>
+			<a href="{$add_address_link}" class="btn btn-primary">添加收货地址</a>
+			<!-- e添加地址 -->
+			<!-- s收货地址列表 -->
+			<table class="mt20 table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>收货地址列表</th>
+					</tr>
+				</thead>
+				<thead>
+					<tr>
+						<th>编号</th>
+						<th>收货人姓名</th>
+						<th>收货人手机</th>
+						<th>收货地址</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+		        <tbody>
+                {foreach from=$user_address_list item=item name=name}
+		          <tr>
+                      <td>{$smarty.foreach.name.iteration}</td>
+                      <td>{$item.realname}</td>
+                      <td>{$item.mobile}</td>
+                      <td>{$item.area_string}</td>
+		            <td>
+                        <a href="{$edit_address_link}{$item.user_address_id}" class="btn btn-primary">修改</a>
+                        <input type="hidden" name="user_address_id" value="{$item.user_address_id}" />
+		            	<a href="javascript:;" class="btn del-addr">删除</a>
+		            </td>
+		          </tr>
+                {foreachelse}   
+                    <tr>
+                        <td colspan="7">
+                            没有符合条件的记录
+                        </td>
+                    <tr>
+                {/foreach}
+		        </tbody>
+		      </table>
+		      <!-- e收货地址列表 -->
+		</div>
+	</div>
+	<div class="clearfix"></div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+{literal}
+$(function(){
+	$('.del-addr').click(function(event) {
+        var _id = $(this).parent().find('input[name="user_address_id"]').val();
+        $.jPops.confirm({
+            title:"提示",
+            content:'您确定要删除这条数据吗？',
+            okBtnTxt:"确定",
+            cancelBtnTxt:"取消",
+            callback:function(r){
+                if(r){
+                    $.ajax({
+                        url: '/FrontAddress/del_address',
+                        data: {id: _id},
+                        dataType: 'json',
+                        success: function(data){
+                            if(data.status === 1){
+                                location.reload();
+                            }
+                            $.jPops.alert({
+                                title:"提示",
+                                content:data.msg,
+                                okBtnTxt:"确定",
+                                callback:function(){
+                                    return true;
+                                }
+                            });
+                        }
+                    });
+                }
+                return true;
+            }
+        });
+	});
+});
+
+{/literal}
+</script>
+{/block}

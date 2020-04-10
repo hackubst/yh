@@ -1,0 +1,223 @@
+﻿/*搜索*/
+.search_cnt .head_cnt{
+height: 45px;
+margin: 0 auto;
+text-align: center;
+background-color: #efefef;
+font-size: 15px;
+border-bottom:1px solid #ccc;
+position: relative;
+}
+.search_cnt .back{
+position: absolute;
+left: 6px;
+top: 10px;
+}
+.back_icon {
+width: 22px;
+height: 22px;
+}
+.search_cnt .head_cnt_input{
+width: 90%;
+display: inline-block;
+margin-top: 8px;
+position:relative;
+}
+.search_cnt .search_selet{
+width: 20%;
+height: 29px;
+float: left;
+border: 1px solid #ccc;
+border-right: none;
+border-top-left-radius: 4px;
+border-bottom-left-radius: 4px;
+outline: none;
+color: #ccc;
+background-color: #fff;
+padding-left: 5px;
+  font-size: 13px;
+}
+.search_cnt .select_arrow{
+border: #DADADA solid 1px;
+position: absolute;
+left: 42px;
+top: 9px;
+display: inline-block;
+content: '';
+width: 6px;
+height: 6px;
+border-top: none;
+border-right: none;
+-webkit-transform: rotate(-45deg);
+transform: rotate(-45deg);
+}
+
+.search_cnt .search_selet option{
+font-size:17px;	
+}
+.search_cnt .search_input{
+width: 88%;
+height: 29px;
+border-radius: 4px;	
+  font-size: 14px;
+  float: left;
+    padding-left: 5px;
+}
+.search_cnt .cancel{
+width:20%;	
+color: #999999;
+}
+/*热门关键词*/
+.search_cnt .key_list{
+width: 90%;
+margin: 10px auto;	
+}
+.search_cnt .key_block {
+display: inline-block;
+text-align: center;
+font-size: 15px;
+color: #999999;
+border: 1px solid #ccc;
+padding: 7px;
+border-radius: 33px;
+margin: 0 4px 10px 4px;
+width: 23%;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+/*搜索商品(商家)结果页*/
+/*结果list*/
+.conter{
+min-height:400px;
+margin-bottom: 70px;
+}
+.list-view{
+background:#fff;
+}
+.list-ul .item_cont,.list-ul .shop_cont{
+border-bottom: 1px solid #f0f0f0;
+position: relative;
+height: 95px;
+padding-top: 7px;
+}
+.conter .item_link,.conter .shop_link {
+display: inline-block;
+height: 100%;
+width: 100%;
+}
+.conter .item_pic_wrap,.shop_pic_wrap{
+width: 20%;
+position: absolute;	
+}
+.conter .item_pic,.shop_pic {
+position: absolute;
+width: 61px;
+height: 61px;
+border-radius:2px;
+left: 10px;
+top: 5px;
+}
+.conter .content,.conter .shop_content {
+position: absolute;
+width: 74%;
+left: 82px;
+color:#999;	
+}
+.shop_name_wrap{
+position:relative;
+}
+.conter .item_name,.shop_name_wrap .shop_name_txt {
+position: absolute;
+left: 0;
+top: 3px;
+font-size: 16px;
+color: #333;
+}
+.conter .shop_name,.shop_sale_num {
+position: absolute;
+right: 10px;
+top: 5px;
+}
+.shop_cont .shop_type{
+position: absolute;
+top: 27px;
+width: 62px;
+height: 17px;
+line-height:18px;
+color: #fff;
+text-align: center;	
+}
+.conter .shop_desc {
+position: absolute;
+top: 48px;
+left:-5px;
+}
+.shop_time_txt {
+border-right: 1px solid #f0f0f0;
+padding-right: 5px;
+margin-right: 5px;
+}
+.conter .item_desc {
+position: absolute;
+left: 0;
+width:95%;
+top: 29px;
+line-height: 18px;
+height: 36px;
+overflow: hidden;
+}
+.conter .item_intro,.shop_intro {
+position: absolute;
+top: 68px;
+left: 0;
+}
+.shop_intro{
+left:-5px;	
+}
+.shop_area {
+padding-right: 10px;
+border-right: 1px solid #f0f0f0;
+margin-right: 10px;
+}
+.conter .item_price {
+font-size: 17px;
+color: #333;
+margin-right: 10px;
+}
+.conter .rmb_symbol {
+font-size: 12px;
+}
+.time_loct_icon{
+width: 21px;
+height: 13px;
+fill: #999;
+vertical-align: middle;	
+}
+/*收藏的店铺*/
+#colet_cont{
+margin-bottom:0px;	
+}
+.colet_num {
+height: 40px;
+line-height: 40px;
+border-bottom: 1px solid #ddd;
+padding-left: 10px;
+font-size: 15px;
+color: #333;
+}
+.fav_total_num {
+color: #f75b5b;
+margin: 0px 5px;
+}
+.colet_del{
+position:absolute;
+top:30px;
+right:25px;	
+}
+.colet_del_icon{
+width:30px;
+height:30px;
+fill:#999;	
+}
+

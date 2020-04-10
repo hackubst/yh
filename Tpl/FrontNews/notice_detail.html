@@ -1,0 +1,16 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/news.css?version={$version}">
+{/block}
+{block name="content"}
+<div class="help_detail_cont">
+	<div class="help_header">
+		<div class="article_tit"><h1>{$noticeInfo.title}</h1></div>
+		<!-- <div class="article_author">作者：{$noticeInfo.author}</div> -->
+		<div class="article_time">{$noticeInfo.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</div>
+		<!-- <div class="article_from">来源：{$noticeInfo.article_source}</div> -->
+	</div>
+	<div class="article_cont">{$noticeInfo.description}</div>
+</div>
+{/block}

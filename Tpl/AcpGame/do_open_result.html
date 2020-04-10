@@ -1,0 +1,49 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='add_admin'>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>活动类型：</label>
+    <div class="form-controls">
+        <select name="type">
+            <option value="0">请选择开奖游戏系列</option>
+            {foreach from= $type_list item=change k}
+            <option value="{$k}">{$change}</option>
+            {/foreach}
+        </select>
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>开奖期号：</label>
+    <div class="form-controls">
+		<input type="text" name='issue' value='' id='issue' placeholder="" class="large">
+        <span class="fi-help-text colorRed">请输入需要开奖的期号</span>
+    </div>
+</div>
+
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class='colorRed'>*</span>开奖结果：</label>
+        <div class="form-controls">
+            <input type="text" name='result' id='result' placeholder="" class="xxlarge">
+            <span class="fi-help-text colorRed">注意：请输入开奖结果,一串数字用英文逗号隔开，例如：5,10,7,4,3,6,8,9,2,1</span>
+        </div>
+    </div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+    	<input type='hidden' name='submit' value='submit' />
+    	<button type="submit" class="btn btn-blue"><i class="gicon-ok white"></i>开奖</button>
+    	<button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form>
+{/block}
+{block name="js"}
+
+{/block} 

@@ -1,0 +1,202 @@
+html,body{margin:0; padding:0; width:100%; height:auto; overflow-x: hidden;  color:#fff;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-o-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+}
+i,em,b{font-style: normal;}
+img{vertical-align: top;}
+input{-webkit-appearance:none; -moz-appearance:none; -ms-appearance:none; appearance:none; outline: none;}
+.bluebg{background-color: #2c3459;}
+.rl{position: relative;}
+.dis_no{display:none;}
+.red{color:red;}
+.wrapper{position: relative; width: 100%;min-height:736px; overflow: hidden; max-width:640px; margin: 0 auto;}
+.wrapper .btns,.msgbox .btns{position: relative;margin: 0 auto;
+width: 95%;text-align: center;margin-top: 20px;}
+.wrapper .btn a{color:#e2652f;}
+.wrapper .btn,.msgbox .btn{
+/*width: 170px;*/
+padding: 0px 25px;
+height: 42px;
+margin: 20px 2px;
+overflow: hidden;
+background-color: #ffcf2f;
+border-radius: 5px;
+font-size: 17px;
+line-height: 42px;
+color: #d00606;
+text-align: center;
+}
+.wrapper .btn:hover{background-color: #E8BD2B;border-bottom: 3px solid #BD930A;}
+
+.wrapper img{opacity: 1; -webkit-transition:opacity .6s linear; -moz-transition:opacity .6s linear; -o-transition:opacity .6s linear; -ms-transition:opacity .6s linear; transition:opacity .6s linear;}
+	.title{position: absolute; top: 0; left: 0; width: 100%; height: 100%; line-height: 25px; color: #fff; font-size: 12px; text-align: center;}
+.wrapper .goods_pic{width:100%;margin:0 auto;}
+.wrapper .head_img {
+position: absolute;
+top: 15px;
+width: 100%;
+height: 50px;
+text-align: center;
+}
+.wrapper .head_img img{
+	width: 50px;
+height: 50px;
+border-radius: 20px;
+}
+.wrapper .share_txt_info {
+position: absolute;
+top: 76px;
+width: 100%;
+}
+.wrapper .s_txt_wrap{
+	width: 80%;
+margin: 0 auto;
+padding: 7px;
+background-color: rgba(255,255,255,0.5);
+line-height: 19px;
+color: grey;
+}
+.wrapper .s_award {
+width: 130px;
+background-size: cover;
+background: url(/Public/Images/front/order_tishi_bk.png) no-repeat;
+height: 50px;
+margin: 0 auto;
+}
+.wrapper .s_award_tit {
+height: 50px;
+width: 17px;
+color: black;
+display: inline-block;
+float: left;
+margin-left: 14px;
+}
+.wrapper .s_award_cont {
+height: 50px;
+color: rgb(215, 20, 20);
+line-height: 50px;
+font-size: 18px;
+}
+/*好友分享列表*/
+.wrapper .frd_list {
+width: 92%;
+margin: 0 auto;
+}
+.wrapper .frd_tit {
+text-align: center;
+}
+.wrapper .frd_list_ul {
+margin-top: 10px;
+}
+.wrapper .frd_li {
+height: 50px;
+position: relative;
+border-bottom: 1px solid #E7E4E4;
+}
+.wrapper .frd_avatar {
+position: absolute;
+top: 11px;
+}
+.wrapper .frd_avatar img{
+width: 30px;
+height: 30px;
+border-radius: 3px;
+}
+.frd_name_time {
+position: absolute;
+left: 38px;
+top: 9px;
+/* height: 25px; */
+}
+.frd_time {
+color: #F2F0F0;
+}
+.frd_tip_txt {
+position: absolute;
+top: 26px;
+left: 38px;
+color: #F5F5F5;
+}
+.frd_money {
+position: absolute;
+right: 10px;
+top: 9px;
+color: red;
+}
+/*分享结束*/
+.share_over {
+position: absolute;
+top: 280px;
+width: 100%;
+text-align: center;
+/* margin: 0 auto; */
+}
+.share_over_txt {
+width: 70%;
+background-color: rgba(255,255,255,.6);
+margin: 0 auto;
+height: 80px;
+border-radius: 5px;
+line-height: 80px;
+color: #d11271;
+font-size: 18px;
+}
+
+
+/*弹出框*/
+.win-mask {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+opacity: 0.5;
+background: #000;
+width: 100%;
+height: 100%;
+z-index: 10;
+}
+.fx_font {
+width: 90%;
+position: absolute;
+top: 1%;
+z-index: 10003;
+display: none;
+left: 0;
+right: 0;
+margin: 0 auto;
+text-align: center;
+}
+.share_txt{font-size: 22px;
+padding: 5px 20px;
+text-align: center;
+display: inline-block;
+line-height: 35px;
+font-style: italic;
+letter-spacing: 5px;}
+
+.screenIfm{
+display: none;
+position: fixed;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background:rgba(0,0,0,0.3);
+z-index: 13;
+}
+.fix_box{
+display: none;
+position: fixed;
+z-index: 1003;
+left: 50%;
+top: 50%;
+margin-left: -150px;
+margin-top: -200px;
+width: 300px;
+height: 400px;
+border-radius: 5px;
+background-color: rgba(0,0,0,0.7);
+}

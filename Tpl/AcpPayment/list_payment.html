@@ -1,0 +1,64 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap" style="margin-top:20px;"> 
+    <table class="wxtables">  
+        <colgroup>  
+            <col width="5%"> 
+            <col width="25%"> 
+            <col width="25%">  
+            <col width="20%">  
+            <col width="25%">  
+        </colgroup>  
+        <thead>  
+            <tr>
+                <td>序号</td>  
+                <td>支付方式名称</td>  
+                <td>支付方式描述</td>   
+                <td>状态</td>   
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+			{foreach from=$payway_list item=payway_info name=foo}
+				<tr>  
+					<td>  
+						{$smarty.foreach.foo.index + 1}.
+					</td>  
+					<td>  
+						{$payway_info.pay_name}
+						{if $payway_info.pay_tag == 'alipay'}
+							<a href="http://bizpartner.alipay.com/360shop/" style="font-size:14px;font-weight:700;color:red;" target="_blank">免费签约>></a>
+						{elseif $payway_info.pay_tag == 'chinabank'}
+							<a href="http://www.chinabank.com.cn/gateway/foropening.html" style="font-size:14px;font-weight:700;color:red;" target="_blank">去签约>></a>
+						{/if}
+					</td>
+					<td>  
+						{$payway_info.pay_desc}
+					</td>  
+					<td> 
+						{if $payway_info.isuse == 0}
+							未开启使用
+						{else}
+							正在使用中
+						{/if}
+					</td>  
+					<td>  
+						{if $payway_info.pay_tag == 'wxpay'}
+						<a href="/AcpPayment/set_wxpay" class="btn" title="设置">设置</a> 
+						{elseif $payway_info.pay_tag == 'mobile_wxpay'}
+						<a href="/AcpPayment/set_mobile_wxpay" class="btn" title="设置">设置</a> 
+                        {/if}
+						<!-- a href="javascript:;" class="btn" title="支付说明">支付说明</a -->  
+					</td>
+				</tr> 
+			{/foreach}
+        </tbody>  
+    </table>
+</div>  
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 

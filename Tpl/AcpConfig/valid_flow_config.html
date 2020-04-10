@@ -1,0 +1,108 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+
+<div class="formitems inline">
+    <label class="fi-name">每日充值返利需到达几倍有效流水：</label>
+    <div class="form-controls">
+        <input type="text" name='double_flow' value='{$config.DOUBLE_FLOW}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+    <div class="formitems inline">
+        <label class="fi-name">下线返利需到达几倍有效流水：</label>
+        <div class="form-controls">
+            <input type="text" name='return_double_flow' value='{$config.RETURN_DOUBLE_FLOW}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+<div class="formitems inline">
+    <label class="fi-name">下线返利有效流水：</label>
+    <div class="form-controls">
+        <input type="text" name='valid_flow' value='{$config.VALID_FLOW}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+    <div class="formitems inline">
+        <label class="fi-name">自己有效流水投注返利比列：</label>
+        <div class="form-controls">
+            <input type="text" name='self_flow_rate' value='{$config.SELF_FLOW_RATE}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">28类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='28' value='{$config.28}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">16类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='16' value='{$config.16}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">11类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='11' value='{$config.11}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">10类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='10' value='{$config.10}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">22类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='22' value='{$config.22}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">36类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='36' value='{$config.36}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="formitems inline">-->
+    <!--<label class="fi-name">PK类有效流水场数：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='PK' value='{$config.PK}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>-->
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src='__ACPJS__/AcpConfig/edit_config.js?version={$version}'></script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

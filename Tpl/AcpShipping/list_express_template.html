@@ -1,0 +1,89 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-art" style="margin-bottom:10px;"><a href={"/AcpShipping/add_express_template"|U} class="btn btn-blue"><i class="gicon-plus white"></i>添加快递单打印模板</a>  </div>
+<div class="tablesWrap">  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="30%">  
+        <col width="45%">  
+        <col width="20%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>编号</td>  
+                <td>快递单模板名称</td>  
+                <td>物流公司</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+		{foreach from=$shipping_print_list item=this key=k}
+            <tr>  
+                <td>  
+                    {$k + 1}
+                </td>  
+                <td>  
+                    {$this.print_temp_name}  
+                </td>  
+                <td>{$this.shipping_company_name}</td>  
+                <td>  
+                    <a href={"/AcpShipping/edit_express_template/id/{$this.shipping_company_id}"|U} class="btn" title="修改"><i class="gicon-edit black"></i>编辑</a>   
+                    <a href="javascript:;" class="btn J_Del" data-id="{$this.shipping_company_id}" title="删除"><i class="gicon-trash black"></i>删除</a>    
+                </td>  
+            </tr>  
+		{/foreach}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->    
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+{literal}
+<script src="__PLG__/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+$(function(){
+	$('.J_Del').on('click', function(){
+		var _this = $(this);
+		$.jPops.confirm({
+			title:"提示",
+			content:'您确定要删除这条数据吗？',
+			okBtnTxt:"确定",
+			cancelBtnTxt:"取消",
+			callback:function(r){
+				if(r){
+					$.ajax({
+						url: '/AcpShippingAjax/del_express_template',
+						data: {id: _this.data('id')},
+						dataType: 'json',
+						beforeSend: function(){
+							$.jPops.showLoading();
+						},
+						success: function(data){
+							$.jPops.hideLoading();
+							_this.parents('tr').fadeOut(400, function(){
+								$(this).remove();
+							});
+							$.jPops.alert({
+								title:"提示",
+								content:data.msg,
+								okBtnTxt:"确定",
+								callback:function(){
+									return true;
+								}
+							});
+						}
+					});
+				}
+				return true;
+			}
+		});
+	});
+});
+</script>
+{/literal}
+{/block} 

@@ -1,0 +1,206 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<!-- <div class="formitems inline">  
+    <label class="fi-name">标题：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="title" id="title" value=""> 
+        <span class="fi-help-text hide"></span>
+    </div>  
+</div> -->
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>推送内容：</label>  
+    <div class="form-controls">  
+        <textarea name='content' id='content'></textarea>  
+        <span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+        <span type="submit" class="btn btn-blue" id='app_push'><i class="gicon-check white"></i>发送</span>  
+    </div>  
+</div>
+
+<!-- <form id="J_FormArticle" action="" method="post">
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed"></span>设置通知推送模板：</label>  
+    <div class="form-controls"> 
+        <div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="order_create_state" value='1' {if $sms_config.order_create.state == 1}checked{/if}>订单创建时</label>  
+                <label><input type="checkbox" name="order_create_to_admin" value='1' {if $sms_config.order_create.to_amdin == 1}checked{/if}>抄送管理员</label>
+                <input type='hidden' name='order_create' value='{$sms_config.order_create.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">订单创建时 短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_order_create" id="rest_order_create">{$sms_config.order_create.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a>  
+                <a href="javascript:;" class="btn rest_now"><i class="gicon-repeat"></i>取消 </a>
+            </div>
+        </div>
+          
+        <div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="order_check_state" value='1' {if $sms_config.order_check.state == 1}checked{/if}>订单确认时</label>  
+                <label><input type="checkbox" name="order_check_to_admin" value='1' {if $sms_config.order_check.to_admin == 1}checked{/if}>抄送管理员</label> 
+                <input type='hidden' name='order_check' value='{$sms_config.order_check.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">订单确认时 短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_order_check" id="rest_order_check">{$sms_config.order_check.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a>  
+                <a href="javascript:;" class="btn rest_now"><i class="gicon-repeat"></i>取消 </a>
+            </div>
+        </div> 
+        
+        <div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="order_pay_state" value='1' {if $sms_config.order_pay.state == 1}checked{/if}>订单付款时</label>  
+                <label><input type="checkbox" name="order_pay_to_admin" value='1' {if $sms_config.order.to_admin == 1}checked{/if}>抄送管理员</label> 
+                <input type='hidden' name='order_pay' value='{$sms_config.order_pay.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">支付订单时 短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_order_pay" id="rest_order_pay">{$sms_config.order_pay.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a> 
+                <a href="javascript:;" class="btn rest_now"><i class="gicon-repeat"></i>取消 </a> 
+            </div>
+        </div>
+        
+        <div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="order_ship_state" value='1' {if $sms_config.order_ship.state == 1}checked{/if}>订单发货时</label>  
+                <label><input type="checkbox" name="order_ship_to_admin" value='1' {if $sms_config.order_ship.to_admin == 1}checked{/if}>抄送管理员</label>
+                <input type='hidden' name='order_ship' value='{$sms_config.order_ship.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">订单发货时 短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_order_ship" id="rest_order_ship">{$sms_config.order_ship.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a>  
+                <button type="reset" class="btn">取消</button>
+            </div>
+        </div> 
+        
+        <div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="set_psw_state" value='1' {if $sms_config.set_psw.state == 1}checked{/if}>发送验证码时</label>  
+<label><input type="checkbox" name="set_psw_to_admin" value='1' {if $sms_config.set_psw.to_admin == 1}checked{/if}>抄送管理员</label>
+                <input type='hidden' name='set_psw' value='{$sms_config.set_psw.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">用户找回密码或绑定解绑手机时  短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_set_psw" id="rest_set_psw">{$sms_config.set_psw.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a>  
+                <a href="javascript:;" class="btn rest_now"><i class="gicon-repeat"></i>取消 </a>
+            </div>
+        </div>
+<div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="user_reg_state" value='1' {if $sms_config.user_reg.state == 1}checked{/if}>用户注册时</label>  
+                <label><input type="checkbox" name="user_reg_to_admin" value='1' {if $sms_config.user_reg.to_admin == 1}checked{/if}>抄送管理员</label>  
+                <input type='hidden' name='user_reg' value='{$sms_config.user_reg.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">用户注册时 短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_user_reg" id="rest_user_reg">{$sms_config.user_reg.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a>  
+                <a href="javascript:;" class="btn rest_now"><i class="gicon-repeat"></i>取消 </a>
+            </div>
+        </div>      
+        <div class="sms_con_box"> 
+            <div class="checkbox-group">  
+                <label><input type="checkbox" name="admin_login_state" value='1' {if $sms_config.admin_login.state == 1}checked{/if}>管理员登录时</label>  
+<label><input type="checkbox" name="admin_login_to_admin" value='1' {if $sms_config.admin_login.to_admin == 1}checked{/if}>抄送管理员</label>  
+                <input type='hidden' name='admin_login' value='{$sms_config.admin_login.default_sms_text}'><a class='rest colorff6645' href="javascript:;">恢复默认模板</a>
+            </div> 
+            <div class="formitems inline">  
+                <div class="sms-name">管理员登录时 短信内容</div>  
+                <div class="sms-controls">  
+                    <textarea name="now_admin_login" id="rest_admin_login">{$sms_config.admin_login.sms_text}</textarea>  
+                </div>  
+            </div>
+            <div class="sms-but">
+                <a href="javascript:;" class="btn btn-blue sms_save"><i class="gicon-check white"></i>保存</a>  
+                <a href="javascript:;" class="btn rest_now"><i class="gicon-repeat"></i>取消 </a>
+            </div>
+        </div>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+        <input type='hidden' name='act' value='set_all' />  
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> 
+    </div>  
+</div>
+</form> -->
+{/block} 
+
+{block name="js"}
+<script>
+{literal}   
+$('#app_push').on('click',function(){
+    var content = $('#content').val();
+    var title = $('#title').val();
+    if(!content)
+    {
+        popAlert('请填写推送内容');
+        return false;
+    }else{
+        $.jPops.showLoading();
+        $.post('/AcpConfig/app_push',{'content':content,'title':title},function(data){
+            $.jPops.hideLoading(); 
+            
+            popAlert(data.message);
+        })
+    }
+}); 
+function popAlert(message)
+{
+    $.jPops.alert({  
+        title:"提示",  
+        content:message,  
+        okBtnTxt:"确定",  
+        callback:function(){  
+            // console.log("我是alert的回调"); 
+            return true;  
+        }  
+    });
+}
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

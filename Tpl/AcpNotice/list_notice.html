@@ -1,0 +1,97 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-art" style="margin-bottom:10px;"><a href="/AcpNotice/add_notice" class="btn btn-blue"><i class="gicon-plus white"></i>添加新闻</a>  </div>
+<div class="tablesWrap">  
+    <div class="tables-searchbox"> 
+	<form name="form1" action="/AcpNotice/list_notice" method="get">
+        <div class="t-list">
+            <span class="tbs-txt">标题：</span>  
+            <input type="text" name="title" id="title" value="{$title}">
+
+			<input type="hidden" name="act" value="submit" />
+            <button class="btn" type="submit"><i class="gicon-search"></i>搜索</button> 
+        </div>    
+	</form>
+    </div>  
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="35%">  
+        <col width="15%">  
+        <col width="15%">
+        <col width="10%">     
+        <col width="15%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>选择</td>  
+                <td>标题</td> 
+                <td>缩略图</td> 
+                <td>添加日期</td>  
+                <td>排序</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+		{if $notice_list}
+		{foreach from=$notice_list item=this}
+            <tr>  
+                <td class="_checkbox">  
+                    <input type="checkbox" class="checkbox" name="checkIds[]" value="{$this.notice_id}">  
+                </td>  
+                <td>{$this.title}</td>
+                <td><img height="40px"; width="50px"; src="{$this.path_img}"></td> 
+                <td>{$this.addtime}</td>  
+                <td class="serial">
+					<img src="__IMAGES__/ajax-loading.gif" class="hide" id="ajax-loading" />
+					<input type="text" class="mini" style="width:40px; text-align:center; border-color: #fff;" value="{$this.serial}" onblur="setSerial({$this.notice_id}, this);" />
+				</td>   
+                <td>  
+                    <a href="__APP__/AcpNotice/edit_notice/id/{$this.notice_id}" class="btn" title="编辑"><i class="gicon-edit black"></i>编辑</a>   
+                    <a href="javascript:;" onclick="delNotice({$this.notice_id}, this);" class="btn" title="删除"><i class="gicon-trash black"></i>删除</a>    
+                </td>  
+            </tr>  
+		{/foreach}
+		{else}
+			<tr>
+			{if $is_search}
+				<td colspan="7" class="center">暂未搜索到相关新闻，您可以尝试其他搜索</td>
+			{else}
+				<td colspan="7" class="center">暂无新闻，您可以<a href="__APP__/AcpNotice/add_notice">添加新闻</a></td>
+			{/if}
+			</tr>
+		{/if}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+	{if $notice_list}
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>  
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>  
+            <a href="javascript:;" onclick="delNoticeBatch();" class="btn btn-blue">删除</a>  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$show}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+	{/if}
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->    
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpNotice/notice.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpNotice/list_notice_cloud.css" type="text/css" />
+{/block}

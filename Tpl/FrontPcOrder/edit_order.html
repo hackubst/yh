@@ -1,0 +1,358 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/my_order_detail.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<div id="detailCon" class="wx_wrap"> 
+	<div class="state  state_pay  state_0"> 
+		<div class="state_info"> 
+			<div class="state_txt"> 
+					{if $order_info.order_status == OrderModel::PRE_PAY}
+						<p class="state_tit">您的订单<b class="">已生成</b>！</p> 
+						<p class="state_detail">请尽快支付。</p> 
+					{elseif $order_info.order_status == OrderModel::PAYED}
+						<p class="state_tit">您的订单<b class="">已付款</b>！</p> 
+						<p class="state_detail">请耐心等待系统发货。</p> 
+					{elseif $order_info.order_status == OrderModel::DELIVERED}
+						<p class="state_tit">您的订单<b class="">已发货</b>！</p> 
+						<p class="state_detail">请收到货后及时确认。</p> 
+					{elseif $order_info.order_status == OrderModel::CONFIRMED}
+						<p class="state_tit">您的订单<b class="">已确认</b>！</p> 
+						<p class="state_detail">感谢您的支持，欢迎再次购买。</p> 
+					{/if}
+				<div class="state_detail_list"> 
+					<p class="state_detail"><span>订单状态：<em class="co_blue">{$order_info.order_status_name}</em></span></p> 
+					<p class="state_detail"><span>订单编号：{$order_info.order_sn}</span></p> 
+				</div> 
+			</div> 
+		</div> 
+	</div> 
+	<div class="edit_addr_div">
+		<a href="javascript:;" id="change_addr">
+      	<div id="sendTo" class="send_to">
+          <div class="address_defalut">
+              <h3>
+                  送至
+              </h3>
+              <ul class="selected" id="editAddBtn">
+                  <li id="addr_detail">
+
+                          浙江省杭州市西湖区文新街道古墩路耀江文鼎苑3幢1701
+
+                  </li>
+                  <li>
+                      <strong>
+                          郑凌峰
+                      </strong>
+                      15158131340
+                  </li>
+                   <li class="edit">
+                      <span>
+                          编辑
+                      </span>
+                  </li>
+                  <li class="error" id="noToneTip" style="display:none;">
+                      请完善地址，方便收货
+                  </li>
+              </ul>
+          </div>
+      </div>
+      </a>
+	</div>	
+	<div class="mod_btns"> 
+		{if $order_info.order_status == OrderModel::PRE_PAY}
+		<a href="{$pay_order_link}{$order_info.order_id}" class="mod_btn bg_1 " id="toPay" >去支付</a> 
+			<a href="javascript:void(0)" class="mod_btn bg_2 " id="closeDeal">申请取消订单</a> 
+		{elseif $order_info.order_status == OrderModel::DELIVERED}
+			<a href="javascript:void(0)" class="mod_btn bg_1 " id="toConfirm" >确认收货</a> 
+		{/if}
+	</div> 
+	<div class="address"> 
+		<div class="address_row"> 
+			<div class="address_tit">
+				供货商：
+			</div> 
+			<div class="address_cnt">
+				{$order_info.shop_name}
+			</div> 
+		</div> 
+
+		<div class="address_row"> 
+			<div class="address_tit">
+				总&nbsp;&nbsp;&nbsp;&nbsp;额：
+			</div> 
+			<div class="address_cnt"> 
+				<span class="address_price">&yen;{$order_info.pay_amount}</span> 
+			</div> 
+		</div> 
+
+		<div class="address_row"> 
+			<div class="address_tit">
+				下单时间：
+			</div> 
+			<div class="address_cnt">
+				{$order_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}
+			</div> 
+		</div>  
+
+		<div class="address_row"> 
+			<div class="address_tit">
+				用户备注：
+			</div> 
+			<div class="address_cnt">
+				{if $user_remark}
+					{$order_info.user_remark}
+				{else}
+					--
+				{/if}
+			</div> 
+		</div>                         
+	</div>
+
+	<div class="goods"> 
+		<div class="goods_hd"> 
+			<h3>商品信息</h3> 
+			<span class="goods_count">共{count($order_info.order_item_list)}件</span> 
+		</div> 
+
+		<div class="goods_bd"> 
+		{foreach from=$order_info.order_item_list item=item}
+			<div class="goods_item"> 
+				<div class="goods_img">
+					<a href="{$detail_link}{$item.item_id}"><img alt="{$item.item_name}" src="{$item.small_pic}" loaded="1" /></a>
+				</div> 
+				<div class="goods_name">
+					<a href="{$detail_link}{$item.item_id}">{$item.item_name}</a>
+				</div> 
+				<div class="goods_detail"> 
+					<span class="goods_price">&yen;{$item.mall_price}</span> 
+					<span class="goods_num">{$item.number}件</span> 
+				</div> 
+			</div> 
+		{/foreach}
+		</div> 
+
+		<div class="goods_ft"> 
+			<p class="total"><span class="tit">实付：</span><span class="price"><strong>&yen;{$order_info.pay_amount}</strong></span></p> 
+		</div> 
+	</div> 
+</div> 
+<div id="addr_page" class="display-no" style="width:100%;">
+	<header class="h42 bk-bai pos-rel bd-btm-grey01">
+		<div class="pos-abs"><a href="javascript:;" id="hide_addr_page"><div class="goback-btn"></div></a></div>
+		<div class="header-title">选择地址</div>
+		<a href="{$setup_link}"><div class="header-list"></div></a>
+	</header>           
+  <div class="address_list" id="addressList">
+  <div class="address">
+      <ul class="selected">
+          <li id="addr_detail">
+              浙江省杭州市西湖区文新街道古墩路耀江文鼎苑3幢1701
+          </li>
+          <li>
+              <strong>
+                  郑凌峰
+              </strong>
+              15158131340
+          </li>
+          <li class="edit">
+              <a href="javascript:;" class="edit_link">
+                  编辑
+              </a>
+          </li>
+      </ul>
+  </div>
+  <div class="address">
+      <ul>
+          <li id="addr_detail">
+              浙江省杭州市西湖区紫荆花路38号古荡科技园11号楼华数传媒
+          </li>
+          <li>
+              <strong>
+                  郑凌峰
+              </strong>
+              15158131340
+          </li>
+          <li class="edit">
+              <a href="javascript:;" class="edit_link">
+                  编辑
+              </a>
+          </li>
+      </ul>
+  </div>
+  <div class="address">
+      <ul>
+          <li>
+              浙江省杭州市滨江区滨文路470号浙江警察学院
+          </li>
+          <li>
+              <strong>
+                  黄苑菲
+              </strong>
+              15869009043
+          </li>
+          <li class="edit">
+              <a href="javascript:;" class="edit_link">
+                  编辑
+              </a>
+          </li>
+      </ul>
+  </div>
+  <div class="address_list_link">
+      <a href="javascript:void(0);" class="item item_new edit_link" id="new">
+          新增收货地址
+      </a>
+  </div>
+	</div>
+</div>
+<div id="edit_addr_page" class="address_new display-no" style="width:100%;">
+	<header class="h42 bk-bai pos-rel bd-btm-grey01">
+		<div class="pos-abs"><a href="javascript:;" id="hide_edit_page"><div class="goback-btn"></div></a></div>
+		<div class="header-title">修改地址</div>
+		<a href="{$setup_link}"><div class="header-list"></div></a>
+	</header> 		        	
+    <input type="hidden" id="address_regionId" value="">
+    <input type="hidden" id="adid" value="">
+    <p>
+        <label for="name">
+            <span class="tit">
+                收货人
+            </span>
+	<input type="text" id="realname" name="realname" value="{$user_address_info.realname}" placeholder="名字">
+        </label>
+    </p>
+    <p>
+        <label for="mobile">
+            <span class="tit">
+                手机号码
+            </span>
+            <input type="number" id="mobile" name="mobile" value="{$user_address_info.mobile}" placeholder="手机号码">
+        </label>
+    </p>
+    <p>
+        <label for="provinceId">
+            <span class="tit">
+                省份
+            </span>
+            <select id="province_id" name="province_id">
+                <option value="0"> --选择省份-- </option>
+		{foreach from=$province_list item=province}
+			<option value="{$province.province_id}" {if $province.province_id == $user_address_info.province_id}selected{/if}>{$province.province_name}</option>
+		{/foreach}
+            </select>
+        </label>
+    </p>
+    <p>
+        <label for="cityId">
+            <span class="tit">
+                市
+            </span>
+            <select name="city_id" id="city_id">
+                <option value="0"> --选择城市-- </option>
+            </select>
+        </label>
+    </p>
+    <p id="areaSelP">
+        <label for="areaId">
+            <span class="tit">
+                区/县
+            </span>
+            <select name="area_id" id="area_id">
+                <option value=""> --选择县/区-- </option>
+            </select>
+        </label>
+    </p>
+    <p>
+        <label for="adinfo">
+            <span class="tit">
+                详细地址
+            </span>
+	<input id="address" name="address" value="{$user_address_info.address}" type="text" placeholder="详细地址">
+        </label>
+    </p>
+    <p class="action">
+<input type="hidden" id="pre_province_id" value="{$user_address_info.province_id}">
+<input type="hidden" id="pre_city_id" value="{$user_address_info.city_id}">
+<input type="hidden" id="pre_area_id" value="{$user_address_info.area_id}">
+<input type="hidden" id="address_id" value="{$user_address_info.user_address_id}">
+        <button class="submit" id="editBtn" onclick="save_address()">确认</button>
+    </p>
+</div> 
+{/block}
+
+{block name="js"}
+<script>
+var order_id = {$order_info.order_id};
+var canceled = {OrderModel::CANCELED};
+var confirmed = {OrderModel::CONFIRMED};
+{literal}
+$(function()
+{
+	$("#closeDeal").click(function()
+	{
+		if (confirm("您确认要取消订单吗？"))
+		{
+			set_order_state(order_id, canceled);
+		}
+	})
+	
+	$("#change_addr").click(function(e){
+		e.preventDefault();
+		$(".wx_wrap").hide();
+		$("header:first").hide();
+		$("#addr_page").show();
+		
+		});
+		
+	$("#hide_addr_page").click(function(e){
+		e.preventDefault();
+		$("#addr_page").hide();
+		$(".wx_wrap").show();
+		$("header:first").show();
+		
+		
+		});	
+		
+		$(".address ul").click(function(){
+			$(this).addClass("selected").parent().siblings().find("ul").removeClass("selected");
+			var temp = $(this).html();
+			$("#editAddBtn").html(temp);
+			
+		});
+		
+		$(".edit_link").click(function(e){
+			e.preventDefault();
+			$("#addr_page").hide();
+			$("#edit_addr_page").show();
+			
+		});
+		
+		$("#hide_edit_page").click(function(e){
+			e.preventDefault();
+			$("#edit_addr_page").hide();
+			$("#addr_page").show();
+			
+		});
+});
+
+$(function()
+{
+	$("#toConfirm").click(function()
+	{
+		if (confirm("您确认要确认收货吗？"))
+		{
+			set_order_state(order_id, confirmed);
+		}
+	})
+});
+</script>
+{/literal}
+<script src="__JS__/front/order.js?version={$version}"></script>
+{/block}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>质量球</title>
+		<script src="__JS__/jquery.3.2.js"></script>
+    	<script src="__JS__/common.js"></script>
+	</head>
+	<body>
+        <div>
+            <div class="form-container">
+                <div class="question-wrap">
+                    <h3 class="label">问题描述</h3>
+                    <textarea name="question-inp" id="question-inp" class="question-inp info" placeholder="在这里描述界面问题"></textarea>
+                </div>
+                <div class="photo-upload-block">
+                    <div class="label">上传图片</div>
+                    <div class="upload-wrap clearfix">
+                        <ul class="img-list clearfix">
+                        <!-- <li class="fl">
+                            <img class="img-responsive">
+                            <i class="icon-del del-btn" onclick="delImg()"></i>
+                        </li> -->
+                            <div class="upload-btn fl">
+                                <input type="file" name="upload_img" id="upload_img" accept="image/*">
+                                <img src="/Public/Images/icon_uploadpic@2x.png" class="img-responsive">
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 底部的按钮区 start -->
+                <div class="btn-bottom">提交</div>
+                <!-- 底部的按钮区 end -->
+            </div>
+        </div>
+    </body>
+    <script src="__JS__/mobile-detect.min.js"></script>
+	<script>
+		$(function () {
+            //判断数组中是否包含某字符串  
+            Array.prototype.contains = function(needle) {  
+            for (let i in this) {  
+                if (this[i].indexOf(needle) > 0)  
+                return i;  
+            }  
+            return -1;  
+            }
+            // 上传图片
+            $('#upload_img').on('change', function () {
+                var formobj = new FormData();
+                var file    = $('#upload_img')[0].files[0];
+                if (file != undefined) {
+                    formobj.append('upfile',file);
+                    var html = ''
+                    $.ajax({
+                        url:'/Api/uploadImage/appid/1/submit/submit',
+                        data:formobj,
+                        type:'POST',
+                        processData: false,
+                        contentType: false,
+                        success:function (res) {
+                            var path = JSON.parse(res)
+                            html = '<li class="fl img_li">\n' +
+                                        '<img class="img-responsive" src="'+path.file_path+'">\n'+
+                                        '<i class="icon-del del-btn" onclick="delImg()"></i>\n'+
+                                    '</li>\n'
+                            $('.img-list').prepend(html)
+                            var len = $('.img_li').length 
+                            if (len == 2) {
+                                $('.upload-btn').addClass('hidden')
+                            }
+                        },
+                        error:function (res) {
+                            console.log(res);
+                        }
+                    });
+                }
+            })
+            $(document).on('click','.del-btn',function () {
+                var remove_img = $(this).parent('.img_li')
+                remove_img.remove()
+                var len = $('.img_li').length
+                if (len < 2) {
+                    $('.upload-btn').removeClass('hidden')
+                }
+            })
+            //提交反馈
+            $('.btn-bottom').on('click',function(){
+                var textarea_value = $('#question-inp').val()
+                var img_length = $('.img_li').length
+                var img_list = $('.img_li')
+                if (textarea_value == '') {
+                    alert('请输入界面问题描述')
+                } else if (img_length == 0) {
+                    alert('请上传图片')
+                }
+                var os = ''; // 设备系统版本
+                var model = '';// 设备型号
+                var md = null; //设备信息
+                var u = navigator.userAgent, app = navigator.appVersion;
+                md = new MobileDetect(u);
+                os = md.os()
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+                var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if (isAndroid) {
+                    os = md.os() + md.version("Android");  
+                    var sss = u.split(";");  
+                    var i = sss.contains("Build/");  
+                    if (i > -1) {  
+                        model = sss[i].substring(0, sss[i].indexOf("Build/"));  
+                    } 
+                }
+                if (isIOS) {
+                    os = md.os() + md.version("iPhone");  
+                    model = md.mobile();
+                }
+                let html = '页面路径\n\t' + document.referrer + '\n\t------------------' + '\n\t附件地址\n\t'
+                var length = $('.img_li').length
+                var src = $('.img_li').eq(0).children().eq(0).attr('src')
+                for (let i = 0, len = length; i < len; i++) {
+                    html += '![test_img'+i+']('+$('.img_li').eq(i).children().eq(i).attr('src')+')     '
+                }
+                html += '\n\t------------------\n\t' + '自定义数据\n\t' + textarea_value + '\n\t------------------\n\t手机基本信息\n\t' + '手机系统版本号：' + os + '\n\t' + '手机型号：' + model;
+                console.log(html);
+                const form_data = new FormData()
+                form_data.append("uKey", "69dd308c52043223d3da87fedf98450f")
+                form_data.append("_api_key", "c3454efa2c2a4077102156567b089b36")
+                form_data.append("pKey", "e117cbfa896f92b0f7ce41cb5da9f3b9")
+                form_data.append("issueTitle", textarea_value)
+                form_data.append("issueDescription", html)
+                form_data.append("issueType", '问题反馈')
+                $.ajax({
+                    url:'http://www.tracup.com/apiv1/issue/create',
+                    data:form_data,
+                    type:'POST',
+                    processData: false,
+                    contentType: false,
+                    success:function (res) {
+                        console.log(res)
+                        alert('提交成功')
+                        history.go(-1)
+                    },
+                    error:function (res) {
+                        console.log(res);
+                    }
+                });
+            })
+        })
+    </script>
+    <style>
+        .hidden {
+            display: none;
+        }
+        ul,li,div,p,img,i,h3,textarea,input{
+            margin: 0;
+            padding: 0;
+        }
+        .opacity0 {
+            opacity: 0;
+        }
+        .img-responsive {
+            width: 100%;
+            height: 100%;
+        }
+        .form-container {
+            width: 100%;
+            padding-top: .30rem;
+            box-sizing: border-box;
+        }
+        .form-container .form-item {
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            -webkit-align-items: center;
+            width: 100%;
+        }
+        .form-container .form-item .label {
+            width: 18%;
+            margin-left: .30rem;
+            margin-right: .20rem;
+            font-size: .32rem;
+            color: #333;
+            line-height: .44rem;
+            letter-spacing: -1px;
+        }
+        .form-container .form-item .info {
+            flex: 1;
+            /* padding: .10rem .20rem; */
+            font-size: .32rem;
+            color: #000;
+            line-height: .44rem;
+        }
+        .form-container .question-wrap .label {
+            width: 100%;
+            padding: .28rem .30rem;
+            box-sizing: border-box;
+            font-size: .32rem;
+            color: #333;
+            line-height: .44rem;
+            letter-spacing: -1px;
+        }
+        .form-container .question-wrap .info {
+            font-size: .32rem;
+            color: #000;
+            line-height: .44rem;
+        }
+        .form-container .question-wrap textarea {
+            width: 100%;
+            height: 3.20rem;
+            padding: 0 .30rem .28rem;
+            border: none;
+            box-sizing: border-box;
+        }
+        .form-container .question-wrap textarea:-webkit-input-placeholder {
+            color: #ccc;
+        }
+        .photo-upload-block {
+            width: 100%;
+            padding-left: .30rem;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        .photo-upload-block .label {
+            width: 100%;
+            padding: .20rem 0;
+            border-bottom: 1px solid #e8e8e8;
+            font-size: .32rem;
+            color: #333;
+            line-height: .44rem;
+        }
+        .photo-upload-block .upload-wrap {
+            width: 100%;
+            padding: .32rem .12rem .12rem 0;
+            box-sizing: border-box;
+        }
+        .photo-upload-block .upload-wrap .img-list {
+            width: 100%;
+            list-style:none;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .photo-upload-block .upload-wrap .img-list li {
+            position: relative;
+            margin-right: .20rem;
+            margin-bottom: .20rem;
+            width: 1.28rem;
+            height: 1.28rem;
+        }
+        .photo-upload-block .upload-wrap .img-list .icon-del {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: -0.18rem;
+            display: inline-block;
+            width: .36rem;
+            height: .36rem;
+            background-image: url(/Public/Images/checkwrong.png);
+            background-size: contain;
+        }
+        .photo-upload-block .upload-wrap .upload-btn {
+            position: relative;
+            margin-bottom: .20rem;
+            width: 1.28rem;
+            height: 1.28rem;
+            border-radius: 4px;
+        }
+        #upload_img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* 底部按钮 */
+        .btn-bottom {
+            margin: 1rem auto 0;
+            width: calc(100% - .60rem);
+            height: .86rem;
+            border-radius: 8px;
+            font-size: .36rem;
+            color: rgba(16, 16, 16, 1);
+            line-height: .86rem;
+            text-align: center;
+            border: 1px solid rgba(187, 187, 187, 1);
+        }
+    </style>
+</html>

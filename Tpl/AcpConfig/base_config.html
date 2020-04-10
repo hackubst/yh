@@ -1,0 +1,379 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+
+    <!--
+<div class="formitems inline">
+    <label class="fi-name">单个红包最小值(金豆)：</label>
+    <div class="form-controls">
+        <input type="text" name='red_limit_money' value='{$config.RED_LIMIT_MONEY}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">红包有效期天数(天)：</label>
+    <div class="form-controls">
+        <input type="text" name='red_expire_time' value='{$config.RED_EXPIRE_TIME}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">推荐奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='invite_award' value='{$config.INVITE_AWARD}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">发红包手续费：</label>
+    <div class="form-controls">
+        <input type="text" name='red_point' value='{$config.RED_POINT}' placeholder="">
+        <span>%</span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">每日首充返利比例：</label>
+    <div class="form-controls">
+        <input type="text" name='recharge_rebate' value='{$config.RECHARGE_REBATE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+    <div class="formitems inline">
+    <label class="fi-name">代理商收卡抽水比例：</label>
+    <div class="form-controls">
+        <input type="text" name='dcp_write_off_rate' value='{$config.DCP_WRITE_OFF_RATE}' placeholder="">%
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+-->
+<div class="formitems inline">
+    <label class="fi-name">排行榜第一名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank1' value='{$config.RANK1}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">排行榜第二名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank2' value='{$config.RANK2}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">排行榜第三名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank3' value='{$config.RANK3}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">排行榜第四名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank4' value='{$config.RANK4}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">排行榜第五名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank5' value='{$config.RANK5}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">排行榜第6名—10名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank6' value='{$config.RANK6}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">排行榜第11名—20名奖励：</label>
+    <div class="form-controls">
+        <input type="text" name='rank7' value='{$config.RANK7}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<!--<div class="formitems inline">
+    <label class="fi-name">亏损返利下限：</label>
+    <div class="form-controls">
+        <input type="text" name='min_loss' value='{$config.MIN_LOSS}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">亏损返利比例：</label>
+    <div class="form-controls">
+        <input type="text" name='return_rate' value='{$config.RETURN_RATE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">-->
+    <!--<label class="fi-name">下级投注流水下限：</label>-->
+    <!--<div class="form-controls">-->
+        <!--<input type="text" name='min_flow' value='{$config.MIN_FLOW}' placeholder="">-->
+        <!--<span class="fi-help-text"></span>-->
+    <!--</div>-->
+<!--</div>j
+<div class="formitems inline">
+    <label class="fi-name">下级投注返利比例：</label>
+    <div class="form-controls">
+        <input type="text" name='flow_rate' value='{$config.FLOW_RATE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name">兑换点卡手续费：</label>
+    <div class="form-controls">
+        <input type="text" name='poundage' value='{$config.POUNDAGE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+    <div class="formitems inline">
+        <label class="fi-name">充值返经验比例：</label>
+        <div class="form-controls">
+            <input type="text" name='recharge_exp' value='{$config.RECHARGE_EXP}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name">最大抽水比例：</label>
+        <div class="form-controls">
+            <input type="text" name='max_deduct_rate' value='{$config.MAX_DEDUCT_RATE}' placeholder="">
+            <span>%</span>
+            <span class="fi-help-text colorRed">每个类型可单独设置，类型中不设置 即用此比例</span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name">最小抽水比例：</label>
+        <div class="form-controls">
+            <input type="text" name='min_deduct_rate' value='{$config.MIN_DEDUCT_RATE}' placeholder="">
+            <span>%</span>
+            <span class="fi-help-text colorRed">每个类型可单独设置，类型中不设置 即用此比例</span>
+        </div>
+    </div>
+-->
+
+    <div class="formitems inline">
+        <label class="fi-name">官方客服QQ：</label>
+        <div class="form-controls">
+            <input type="text" name='sys_qq' value='{$config.SYS_QQ}' placeholder="" class="xxlarge">
+            <span class="fi-help-text colorRed">多个QQ请用,隔开 最多填写三个</span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name">官方微信：</label>
+        <div class="form-controls">
+            <input type="text" name='sys_qq_group' value='{$config.SYS_QQ_GROUP}' placeholder="" class="xxlarge">
+            <span class="fi-help-text colorRed"></span>
+        </div>
+    </div>
+
+    <!--
+    <div class="formitems inline">
+        <label class="fi-name">官方QQ群key：</label>
+        <div class="form-controls">
+            <input type="text" name='sys_qq_key' value='{$config.SYS_QQ_KEY}' placeholder="">
+            <span class="fi-help-text"></span>
+            <span class="colorRed">通过 https://qun.qq.com/join.html 腾讯官方网站申请</span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">app下载链接：</label>
+        <div class="form-controls">
+            <input type="text" name='app_download_url' value='{$config.APP_DOWNLOAD_URL}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">体验版域名：</label>
+        <div class="form-controls">
+            <input type="text" name='test_url' value='{$config.TEST_URL}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    -->
+
+
+
+<!-- <div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 系统名称：</label>
+    <div class="form-controls">
+        <input type="text" name='s_name' value='{$config.SHOP_NAME}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name">公司名称：</label>
+    <div class="form-controls">
+        <input type="text" name='company_name' value='{$config.COMPANY_NAME}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">公司地址：</label>
+    <div class="form-controls">
+        <input type="text" name='customer_service_address' value='{$config.CUSTOMER_SERVICE_ADDRESS}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+    <div class="formitems inline">
+        <label class="fi-name">当前版本号：</label>
+        <div class="form-controls">
+            <input type="text" name='android_version' value='{$config.ANDROID_VERSION}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+
+<div class="formitems inline">
+    <label class="fi-name">短信验证服务UID：</label>
+    <div class="form-controls">
+        <input type="text" name='sms_uid' value='{$config.SMS_UID}' placeholder="">
+    	<span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">短信服务KEY：</label>
+    <div class="form-controls">
+        <input type="text" name='sms_key' value='{$config.SMS_KEY}' placeholder="">
+    	<span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name">客服电话：</label>
+    <div class="form-controls">
+        <input type="text" name='service_tel' value='{$config.CUSTOMER_SERVICE_TELEPHONE}' placeholder="">
+    	<span class="fi-help-text"></span>
+    </div>
+</div> -->
+<!--
+<div class="formitems inline">
+    <label class="fi-name">客服邮件地址：</label>
+    <div class="form-controls">
+        <input type="text" name='service_email' value='{$config.CUSTOMER_SERVICE_EMAIL}' placeholder="">
+    	<span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">客服传真：</label>
+    <div class="form-controls">
+        <input type="text" name='service_fax' value='{$config.CUSTOMER_SERVICE_FAX}' placeholder="">
+    	<span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">全国投诉热线：</label>
+    <div class="form-controls">
+        <input type="text" name='complaints_hotline' value='{$config.COMPLAINTS_HOTLINE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">订货热线：</label>
+    <div class="form-controls">
+        <input type="text" name='order_hotline' value='{$config.ORDER_HOTLINE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">售后热线：</label>
+    <div class="form-controls">
+        <input type="text" name='service_hotline' value='{$config.SERVICE_HOTLINE}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name">客服QQ总号：</label>
+    <div class="form-controls">
+        <input type="text" name='customer_service_qq' value='{$config.CUSTOMER_SERVICE_QQ}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>-->
+<!--<div class="formitems inline">
+    <label class="fi-name">暂时关闭网站：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="sys_open" value='0' {if $config.SYSTEM_OPEN == 0}checked="checked"{/if}>是</label>
+            <label><input type="radio" name="sys_open" value='1' {if $config.SYSTEM_OPEN == 1}checked="checked"{/if}>否</label>
+        </div>
+    </div>
+</div>
+
+<div class="formitems inline reason {if $config.SYSTEM_OPEN == 1}hide{/if}">
+    <label class="fi-name">关闭后提示信息：</label>
+    <div class="form-controls">
+        <textarea name="close_reason" id="close_reason">{$config.SYSTEM_CLOSE_REASON}</textarea>
+        <span class="fi-help-text">一般在200字以内</span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 本店价格前台显示名称：</label>
+    <div class="form-controls">
+        <input type="text" name='mall_price_name' value='{$config.MALL_PRICE_NAME}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 实际拿货价前台显示名称：</label>
+    <div class="form-controls">
+        <input type="text" name='real_price_name' value='{$config.REAL_PRICE_NAME}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+-->
+<!-- <div class="formitems inline">
+    <label class="fi-name">底部备案：</label>
+    <div class="form-controls">
+        <input type="text" name='official_record' value='{$config.OFFICIAL_RECORD}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 系统内部交易货币名称：</label>
+    <div class="form-controls">
+        <input type="text" name='system_money_name' value='{$config.SYSTEM_MONEY_NAME}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>
+</div> -->
+<!-- 
+{upload_image_widget($qr_code_data)}
+
+{upload_image_widget($qr_code_kf_data)}
+
+{upload_image_widget($qr_code_bg_data)} -->
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src='__ACPJS__/AcpConfig/edit_config.js?version={$version}'></script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

@@ -1,0 +1,213 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-n-s-top">
+    <div class="tables-searchbox">
+	<form method="post">
+		<div class="t-a-wait-top-li" style="margin-top:10px;float:left;">
+		<span class="tbs-txt">统计类型：</span>
+		<select class="small" name="date_type" style="height:30px;">
+			<option value="1" {if $date_type == AcpDepositAction::DEPOSIT_STAT_BY_DAY}selected{/if}>提现按日统计</option>
+			<option value="2" {if $date_type == AcpDepositAction::DEPOSIT_STAT_BY_MONTH}selected{/if}>提现按月统计</option>
+			<option value="3" {if $date_type == AcpDepositAction::DEPOSIT_STAT_BY_YEAR}selected{/if}>提现按年统计</option>
+		</select>
+		</div>
+
+		<span id="day_span">
+		<div class="mgt10" style="margin-left:20px;float:left;">
+			<span class="tbs-txt">选择日期：</span>
+			<input type="text" autocomplete="off" class="Wdate" name="add_time" value="{$add_time|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+			<button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+		</div>
+		</span>
+
+		<span id="month_span" style="display:none;">
+		<div class="mgt10" style="margin-left:20px;float:left;">
+			<span class="tbs-txt">选择月份：</span>
+			<select class="mini" name="year" id="year" style="height:30px;">  
+                        <option value="2013" {if $year == 2013}selected{/if}>2013</option>  
+                        <option value="2014" {if $year == 2014}selected{/if}>2014</option> 
+                        <option value="2015" {if $year == 2015}selected{/if}>2015</option> 
+                        <option value="2016" {if $year == 2016}selected{/if}>2016</option> 
+                        <option value="2017" {if $year == 2017}selected{/if}>2017</option> 
+                        <option value="2018" {if $year == 2018}selected{/if}>2018</option> 
+                        <option value="2019" {if $year == 2019}selected{/if}>2019</option> 
+                    </select>  
+                    <span>年</span>  
+                </div>  
+				<div class="form-controls" style="float:left;margin-top:10px; margin-left:10px;">  
+                    <select class="mini" name="month" id="month" style="height:30px;">  
+                        <option value="1" {if $month == 1}selected{/if}>1</option> 
+                        <option value="2" {if $month == 2}selected{/if}>2</option>  
+                        <option value="3" {if $month == 3}selected{/if}>3</option>  
+                        <option value="4" {if $month == 4}selected{/if}>4</option>  
+                        <option value="5" {if $month == 5}selected{/if}>5</option>  
+                        <option value="6" {if $month == 6}selected{/if}>6</option>  
+                        <option value="7" {if $month == 7}selected{/if}>7</option>  
+                        <option value="8" {if $month == 8}selected{/if}>8</option>  
+                        <option value="9" {if $month == 9}selected{/if}>9</option>  
+                        <option value="10" {if $month == 10}selected{/if}>10</option>  
+                        <option value="11" {if $month == 11}selected{/if}>11</option>  
+                        <option value="12" {if $month == 12}selected{/if}>12</option>  
+                    </select>  
+                    <span>月</span>  
+			<button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+		</div>
+		</span>
+
+		<span id="year_span" style="display:none;">
+		<div class="mgt10" style="margin-left:20px;float:left;">
+			<span class="tbs-txt">选择年份：</span>
+					<select class="mini" name="year2" id="year2" style="height:30px;">
+                        <option value="2019" {if $year2 == 2019}selected{/if}>2019</option> 
+                        <option value="2018" {if $year2 == 2018}selected{/if}>2018</option> 
+                        <option value="2017" {if $year2 == 2017}selected{/if}>2017</option> 
+                        <option value="2016" {if $year2 == 2016}selected{/if}>2016</option> 
+                        <option value="2015" {if $year2 == 2015}selected{/if}>2015</option> 
+                        <option value="2014" {if $year2 == 2014}selected{/if}>2014</option> 
+                        <option value="2013" {if $year2 == 2013}selected{/if}>2013</option>  
+                    </select>  
+                    <span>年</span>  
+			<button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+		</div>
+		</span>
+	</form>
+	</div>
+
+	<div class="t-month-chart" id="container">
+	</div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+var new_deposit_stat_list = '[';
+{foreach from=$new_deposit_stat_list key=key item=item}
+	new_deposit_stat_list = new_deposit_stat_list + {$item} + ',';
+{/foreach}
+new_deposit_stat_list = new_deposit_stat_list.substring(0, new_deposit_stat_list.length - 1);
+new_deposit_stat_list += ']';
+
+var sum_deposit_stat_list = '[';
+{foreach from=$sum_deposit_stat_list key=key item=item}
+	sum_deposit_stat_list = sum_deposit_stat_list + {$item} + ',';
+{/foreach}
+sum_deposit_stat_list = sum_deposit_stat_list.substring(0, sum_deposit_stat_list.length - 1);
+sum_deposit_stat_list += ']';
+
+var date_type = '{$date_type}';
+var xAxis = '[';
+var tmp = '';
+if (date_type == {AcpDepositAction::DEPOSIT_STAT_BY_DAY})
+{
+	for (var i = 1; i <= 24; i++)
+	{
+		tmp = i < 10 ? '0' + i : i;
+		xAxis = xAxis + tmp + ',';
+	}
+}
+else if (date_type == {AcpDepositAction::DEPOSIT_STAT_BY_MONTH})
+{
+	for (var i = 1; i <= 31; i++)
+	{
+		xAxis = xAxis + i + ',';
+	}
+}
+else if (date_type == {AcpDepositAction::DEPOSIT_STAT_BY_YEAR})
+{
+	for (var i = 1; i <= 12; i++)
+	{
+		tmp = i < 10 ? '0' + i : i;
+		xAxis = xAxis + tmp + ',';
+	}
+}
+
+xAxis = xAxis.substring(0, xAxis.length - 1);
+xAxis += ']';
+
+var d = '{$date}';
+{literal}
+$(function (){
+var chart = new Highcharts.Chart({
+	chart: {
+		renderTo: 'container',
+		defaultSeriesType: 'line'
+	},
+	title: {
+		text: d + ' 提现统计'
+	},
+	subtitle: {
+		text: ''
+	},
+	xAxis: {
+		//categories: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
+		categories: eval(xAxis)
+	},
+	yAxis: {
+		title: {
+			text: '提现数'
+		}
+	},
+	tooltip: {
+		enabled: false,
+		formatter: function() {
+			return '<b>'+ this.series.name +'</b><br/>'+
+				this.x +': '+ this.y +'°C';
+		}
+	},
+	plotOptions: {
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	},
+	series: [{
+		name: '提现数',
+		data: eval(new_deposit_stat_list)
+	},{
+		name: '提现总金额',
+		data: eval(sum_deposit_stat_list)
+	}]
+});
+});
+
+showHide(date_type);
+$('[name="date_type"]').change(function(){
+	var date_type = $(this).val();
+	showHide(date_type);
+})
+
+function showHide(date_type)
+{
+	if (date_type == 1)
+	{
+		$('#day_span').show();
+		$('#month_span').hide();
+		$('#year_span').hide();
+	}
+	else if (date_type == 2)
+	{
+		$('#day_span').hide();
+		$('#month_span').show();
+		$('#year_span').hide();
+	}
+	else if (date_type == 3)
+	{
+		$('#day_span').hide();
+		$('#month_span').hide();
+		$('#year_span').show();
+	}
+}
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_num_stat.css" type="text/css" />
+{/block}
+

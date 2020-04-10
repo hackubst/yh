@@ -1,0 +1,157 @@
+{extends file="../acp1.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap">
+        <div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="/AcpChat/staff_list" method="post" id="rank_waiting">
+                    <div class="t-a-wait-top-li"><span class="tbs-txt">公司名称：</span>
+                        {if $son_company_list}
+                        <select name="son_company" class="mini">
+                            <option value="0" selected="" >全部</option>
+                            {foreach from=$son_company_list item=this}
+                            <option value="{$this.son_company_id}"  {if $son_company_id == $this.son_company_id} selected{/if}>{$this.son_company_name}</option>
+                            {/foreach}
+                        </select>
+                        {/if}
+                    </div>
+
+                    <div class="t-a-wait-top-li"><span class="tbs-txt">经销商名称：</span>
+                        {if $son_company_list}
+                        <select name="distributor_id" class="mini">
+                            <option value="0" selected="" >全部</option>
+                            {foreach from=$distributor_list item=this}
+                            <option value="{$this.distributor_id}"  {if $distributor_id == $this.distributor_id} selected{/if}>{$this.distributor_name}</option>
+                            {/foreach}
+                        </select>
+                        {/if}
+                    </div>
+
+                    <input type="hidden" name="hx_group_id" value="{$hx_group_id}">
+                    <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+                </form>
+            </div>
+        </div>
+        <table class="wxtables">
+            <thead>
+            <tr>
+                <td>选择</td>
+                <td>姓名</td>
+                <td>岗位</td>
+                <td>公司</td>
+                <td>经销商</td>
+                <td>手机</td>
+                <td>注册时间</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$user_list item=user}
+            <tr>
+                <td><input type="checkbox" class="checkbox" value='{$user.user_id}' name="a[]"></td>
+                <td>{$user.realname}</td>
+                <td>{$user.group_name}</td>
+                <td>{$user.son_company_name}</td>
+                <td>{$user.distributor_name}</td>
+                <td>{if $user.mobile}{$user.mobile}{else}--{/if}</td>
+                <td>{$user.reg_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            </tr>
+            {foreachelse}
+            <tr><td colspan="11">没有符合条件的用户</td></tr>
+            {/foreach}
+            </tbody>
+        </table>
+        <!-- end wxtables -->
+        <div class="tables-btmctrl clearfix">
+            <div class="fl">
+                <a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>
+                <a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_add_member()">批量添加群成员</a>
+            </div>
+            <div class="fr">
+                <div class="paginate">
+                    {$show}
+                </div>
+                <!-- end paginate -->
+            </div>
+        </div>
+        <!-- end tables-btmctrl -->
+    </div>
+    <!-- end tablesWrap -->
+</div>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+    var url = '{$url}';
+    var hx_group_id = '{$hx_group_id}';
+    //全选
+    function Select(){
+        var sel=document.getElementsByName("a[]");
+        for(var i=0;i<sel.length;i++){
+            sel[i].checked=true;
+        }
+    }
+    //取消全选
+    function Cancel(){
+        var sel=document.getElementsByName("a[]");
+        for(var i=0;i<sel.length;i++){
+            sel[i].checked=false;
+        }
+    }
+
+    {literal}
+    function batch_add_member()
+    {
+        opt = '添加群成员成功';
+        $.jPops.confirm(
+            {
+                title:"提示",
+                content:"您确定要执行这些操作吗？",
+                okBtnTxt:"确定",
+                cancelBtnTxt:"取消",
+                callback:function(r)
+                {
+                    if(r)
+                    {
+                        var ids = '';
+                        var count = 0;
+                        $('input[name="a[]"]:checked').each(function(){
+                            count ++;
+                            ids += $(this).val() + ',';
+                        });
+
+                        if (!count)
+                        {
+                            alert('对不起，请选择至少一项进行操作！');
+                            return;
+                        }
+
+                        ids = ids.substr(0, ids.length - 1);;
+                        $.post('/AcpChat/add_group_member', {"user_ids":ids,"hx_group_id":hx_group_id}, function(data, textStatus)
+                        {
+                            if (data == 'success')
+                            {
+                                alert('恭喜您，' + opt + '成功！');
+                                location.reload();
+                            }
+                            else
+                            {
+                                alert('对不起，' + opt + '失败');
+                            }
+                        });
+                    }
+                    return true;
+                }
+            });
+    }
+</script>
+{/literal}
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

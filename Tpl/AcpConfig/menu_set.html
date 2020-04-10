@@ -1,0 +1,250 @@
+{extends file="../acp.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/acp/mg_shop.css"/>
+{/block}
+{block name="content"}
+	<!-- end header -->
+	<div class="container clearfix">
+		<!-- end sidebar -->
+		<div class="contain" style="overflow-x:auto;">
+        <!-- 代码扔这里 start -->
+        	<div class="mgcon">
+                <div class="mg-l">
+                    <div class="mg-l-t"><span>菜单设置 </span></div>
+                    <div class="alipay-mg">
+                        <div class="alipay-nav">
+                            <ul id="sortable" class="alipay-nav-ul clearfix">
+                            	{foreach from=$custom_info key=key name=loop1 item=menu}
+                        	    <li id="{$menu.loop1}" data="{$key+1}" {if $key == 0}class="hover j-alnav" {else} class="j-alnav" {/if} obj_name="{$menu.name}">
+                                    <span class="ali-nav-t j-alltext">{$menu.name}</span>
+                                    <span class="ali-nav-i j-alledit"><input name="ali-nav-yiji" type="text" value="{$menu.name}" onKeyUp="CheckLength(this,12)"  /></span>
+                                    <i class="move"></i><i class="del"></i>
+                                </li>
+                       			{/foreach}
+								{if $menu_length < 3}
+									<div class="alipay-nav-add"><a id="alipay-nav-edit" href="#"></a></div>
+								{/if}
+                            </ul>
+                            
+                            <div id="releaseali" class="releaseali">发布到微信</div>
+                        </div>
+                        
+                        <div id="alipay-meun" class="alipay-meun">
+                        {foreach from=$custom_info key=key name=loop2 item=menu}
+                            <div data="{$key+1}" id="alipay-meun-{$key+1}" class="alipay-meun-c j-menudata" {if $key == 0}style="display:block;"{/if}>
+                            	<div class="alipay-meun-type j-meun-type">
+                                	<a data="no" href="javascript:;" {if !isset($menu.sub_button)} class="hover" {/if}>无子级菜单</a>
+                                    <a data="have" href="javascript:;" {if isset($menu.sub_button)} class="hover"{/if} >有子级菜单</a>
+                                </div>
+                                 <div class="alipay-meun-have j-alimenutab" id="alimeunh{$key+1}" {if $menu.sub_button} style="display:block;" {else} style="display:none;"{/if}>
+                                    <div class="ali-meun-t">
+                                        <span class="icon"></span>
+                                        <span class="name">子菜单名称</span>
+                                        <span class="type">子菜单类型</span>
+                                        <span class="xsnr">显示内容</span>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                    <div class="ali-meun-c">
+                                        <ul>
+                                            {foreach from=$menu.sub_button key=sub_key item=sub_menu}
+											<li class="j-nav-erji" id="{$menu.key}_{$sub_menu.sub_key}">
+                                            	<!-- 移动图标 -->
+                                                <div class="ali-meun-c-icon"><i class="move"></i><i class="del"></i></div>
+                                                <!-- 子菜单名称 -->
+                                                <div class="ali-meun-c-name j-meunparent">
+                                                    <div class="ali-meun-c-name-text j-alltext">{$sub_menu.name}</div>
+                                                    <div class="ali-meun-c-name-edit j-alledit">
+                                                    	<input name="ali-meun-name-erji" type="text" value="{$sub_menu.name}"  onKeyUp="CheckLength(this,36)"/>
+                                                    </div>
+                                                </div>
+                                                <!-- 子菜单类型 -->
+                                                <div class="ali-meun-c-type j-meunparent">
+													<div class="ali-meun-c-type-text j-alltext">
+                                                        {if $sub_menu.type == 'view' || !$sub_menu.type}
+                                                        跳转网址
+                                                        {elseif $sub_menu.type == 'media_id'}
+                                                        推送图文
+                                                        {elseif $sub_menu.type == 'click'}
+                                                        自动回复
+                                                        {elseif $sub_menu.type == 4}
+                                                        自定义页面
+                                                        {/if}
+                                                    </div>
+													<div class="ali-meun-c-type-edit j-alledit">
+														<i></i>
+                                                        <span>
+                                                        	{if $sub_menu.type == 'view' || !$sub_menu.type}
+                                                            跳转网址
+                                                            {elseif $sub_menu.type == 'media_id'}
+                                                            推送图文
+                                                            {elseif $sub_menu.type == 'click'}
+                                                            自动回复
+                                                            {elseif $sub_menu.type == 4}
+                                                            自定义页面
+                                                            {/if}
+                                                        </span>
+                                                        <select class="ali-m-se-type">
+                                                        	{foreach from=$select_type key=key2 item=se}
+                                                                {if $sub_menu.type == {$key2} || !$sub_menu.type}
+                                                           			<option value="{$key2}" selected="selected">{$se}</option>
+                                                                {else}
+                                                            		<option value="{$key2}" >{$se}</option>
+                                                                {/if}
+                                                            {/foreach}
+                                                        </select>
+                                                    </div>
+												</div>
+                                                <!-- 显示内容 -->
+                                                <div class="ali-meun-c-xsnr j-meunparent">
+                                                	<div class="ali-meun-c-xsnr-text j-alltext">{if $sub_menu.type == 'view'}{$sub_menu.url}{else}链接地址{/if}</div>
+                                                    <div class="ali-meun-c-xsnr-edit j-alledit">
+                                                        <div class="textp-wap j-xsnrspan clearfix" {if $sub_menu.type == 'view' || !$sub_menu.type} style="display:block;" {else} style="display:none;" {/if}>
+															<span class=""><input type="text" onchange="change_value(this);" class="text" name="val" value="{if $sub_menu.type == 'view'}{$sub_menu.url}{/if}"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="clear:both;"></div>
+                                                <input type="hidden" class="ali-meun-lihidden" 
+                                                	ejid="{$sub_menu.sub_key}"
+                                                    ejname="{$sub_menu.name}" 
+                                                    ejtype="{$sub_menu.type}" 
+                                                    name="" 
+													value="{if $sub_menu.type == 'view'}{$sub_menu.url}{else}{$sub_menu.key}{/if}"/>
+                                            </li>
+											{/foreach}
+										 </ul>
+                                    </div>
+                                    <!--添加二级菜单 -->
+                                    <div class="ali-navmeun-add">
+                                        <a href="#" class=""></a>
+                                    </div>
+                                </div>
+                                 <div class="alipay-meun-no j-alimenutab" id="alimeunno{$key+1}" {if $b.sort} style="display:none;" {else} style="display:block;"{/if}>
+                                    <div class="ali-meun-c-type-e j-nav-erji">
+                                        <div class="ali-meun-c-type j-meunparent">
+                                            <div class="ali-meun-c-type-text j-alltext">
+                                                {if $menu.type == 'view' || !$menu.type}
+												跳转网址{$b.sort}
+                                                {elseif $menu.type == 'media_id'}
+                                                推送图文
+                                                {elseif $menu.type == 'click'}
+                                                自动回复
+                                                {elseif $menu.type == 4}
+                                                自定义页面
+                                                {/if}
+                                            </div>
+                                            <div class="ali-meun-c-type-edit j-alledit">
+                                                <i></i>
+                                                <span>
+													{if $menu.type == 'view' || !$menu.type}
+													跳转网址
+													{elseif $menu.type == 'media_id'}
+													推送图文
+													{elseif $menu.type == 'click'}
+													自动回复
+													{elseif $menu.type == 4}
+													自定义页面
+													{/if}
+                                                </span>
+                                                <select class="ali-m-se-type">
+													{foreach from=$select_type key=key2 item=se}
+														{if $sub_menu.type == {$key2} || !$sub_menu.type}
+															<option value="{$key2}" selected="selected">{$se}</option>
+														{else}
+															<option value="{$key2}" >{$se}</option>
+														{/if}
+													{/foreach}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="ali-meun-c-xsnr j-meunparent">
+											<div class="ali-meun-c-name-text j-alltext">{$menu.url}</div>
+											<div class="ali-meun-c-xsnr-edit j-alledit">
+                                                <!-- <div class="textp-wap j-xsnrspan clearfix" {if $menu.type == 'view' || !$menu.type} style="display:block;" {else} style="display:none;" {/if}>
+                                                    <span class="text">{if $menu.type == 'view' || $menu.key}{$menu.key}<input type="text" onchange="change_value(this);" class="text" name="val" value="">{else}选择链接网址{/if}</span>
+                                                </div> -->
+                                                <div class="textp-wap j-xsnrspan clearfix" {if $menu.type == 'view' || !$menu.type} style="display:block;" {else} style="display:none;" {/if}>
+													<span class="text"><input type="text" onchange="change_value(this);" class="text" name="val" value="{$menu.url}"></span>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div style="clear:both;"></div>
+                                        <input type="hidden" class="ali-meun-lihidden" ejtype="{$menu.type}" name="" value="{$menu.url}"/>
+                                    </div>
+                                </div>
+                            </div>
+                          {/foreach}    
+                           </div>
+                        <div id="alipay-button" class="alipay-button">
+                            <span class="edit">编辑</span><span class="fulfil">完成</span><span class="cancel">取消</span>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <input type="hidden" id="alipay-meun-id" tabid="" radiodata="" data="" name="" value="" erjiid="" />
+                        <input type="hidden" id="mg-platehid-id" name="" platename="" value="" modelid=""/>
+                    </div>
+                </div>
+                <div class="mg-r">
+                    <div class="mg-r-c">
+                        <div id="mg-ali-ms" class="mg-ali-ms clearfix"></div>
+                    </div>
+                </div>
+            	<div style="clear:both;"></div>
+        	</div>
+           
+        <!-- 代码扔这里 end -->
+        
+		</div>
+		<!-- end contain -->
+	</div>
+	<!-- end container -->
+    <!-- 模版弹出层 start -->
+    <div class="mg-plateshow-bg" id="mg-plateshow-bg"></div>
+    <div class="mg-plateshow" id="mg-plateshow">
+    	<div class="mg-plateshow-t">模版设置<i id="mg-plateshow-close"></i></div>
+        <div class="mg-plateshow-c">
+            <!--<div class="mg-plateshow-f">
+                <div class="mg-plateshow-ft">模版选择（共<b>12</b>套）</div>
+            </div>-->
+            <div class="mg-plateshow-l">
+                <ul class="mg-plateshow-ul clearfix"></ul>
+            </div>
+            <!--<div class="mg-plateshow-p clearfix">
+                <span class="up"></span>
+                <span class="text">1/5</span>
+                <span class="next"></span>
+            </div>-->
+        </div>
+    </div>
+    <!-- 模版弹出层 end -->
+    <!-- 链接弹出层 start -->
+    <div class="mg-plateshow" id="mg-linkshow">
+        <div class="mg-plateshow-t">WAP网址设置<i></i></div>
+        <div class="mg-plateshow-c">
+            <div class="mg-plateshow-l">
+               <div class="waplink"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 链接弹出层 end -->
+    <!-- 图文弹出层 start -->
+    <div class="mg-plateshow" id="mg-graphicshow">
+        <div class="mg-plateshow-t">自动回复设置<i></i></div>
+        <div class="mg-plateshow-c">
+        	<iframe id="iframgraphic" src="/McpPlatForm/mg_message" width="1220" height="635"></iframe>
+        </div>
+    </div>
+    <!-- 图文弹出层 end -->
+    <!-- 自定义页面弹出层 start -->
+    <div class="mg-plateshow" id="mg-customshow">
+        <div class="mg-plateshow-t">自定义页设置<i></i></div>
+        <div class="mg-plateshow-c">
+        	<iframe id="iframcustom" src="/McpPlatForm/mg_cust_page_i" width="1220" height="635"></iframe>
+        </div>
+    </div>
+{/block} 
+{block name="js"}
+<!-- 自定义页面弹出层 end -->
+<script type="text/javascript" src="__PUBLIC__/Js/jquery-ui-1.9.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/acp/mg_shop.js?version={$version}" charset="utf-8"></script>
+{/block} 

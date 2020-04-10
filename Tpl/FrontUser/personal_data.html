@@ -1,0 +1,106 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--主内容-->
+	<div class="personal_data_cont">
+		<div class="ed_cont">
+			<p>
+          <label for="name">
+              <span class="tit">
+                  姓名
+              </span>
+							<input type="text" placeholder="填写姓名" name="realname" id="realname" class="" value="{$user_info.realname}"/>
+          </label>
+      </p>
+			<p>
+          <label for="nickname">
+              <span class="tit">
+                  昵称
+              </span>
+              <input type="text" placeholder="输入你昵称" name="nickname" id="nickname" class="" value="{$user_info.nickname}"/>
+							<!--<input type="text" name="nickname" id="nickname" class="" value="{$user_info.nickname}" readonly="readonly"/>-->
+          </label>
+      </p>
+      <p>
+          <label for="mobile">
+              <span class="tit">
+                  手机号
+              </span>
+              <span class="pd_mobile">{if $user_info.mobile}{$user_info.mobile}{else}<a href="{$bind_mobile_link}">未绑定，点击设置</a>{/if}</span>
+              <!--<input type="tel" id="mobile" name="mobile" value="{$user_info.mobile}" placeholder="填写手机号" readonly="readonly">-->
+          </label>
+      </p> 
+      <p>
+          <label for="provinceId" class="ed_select">
+              <span class="tit">
+                  省份
+              </span>
+              <select id="province_id" name="province_id">
+                  <option value="0"> 选择省份 </option>	
+                  {foreach from=$province_list item=province}			
+									<option value="{$province.province_id}" {if $province.province_id == $user_info.province_id}selected{/if}>{$province.province_name}</option>				
+              		{/foreach}
+              </select>
+          </label>
+      </p>
+      <p>
+          <label for="cityId" class="ed_select">
+              <span class="tit">
+                  市
+              </span>
+              <select name="city_id" id="city_id">
+                  <option value="0"> 选择城市 </option>
+              </select>
+          </label>
+      </p>
+      <p id="areaSelP" class="ed_area">
+          <label for="areaId" class="ed_select">
+              <span class="tit">
+                  区/县
+              </span>
+              <select name="area_id" id="area_id">
+                  <option value=""> 选择县/区 </option>
+              </select>
+          </label>
+      </p>
+      <p>
+          <label for="name">
+              <span class="tit">
+                 详细地址 
+              </span>
+              <input type="text" placeholder="填写地址" name="address" id="address1" class="" value="{$user_info.address}"/>
+          </label>
+      </p>
+      <p>
+          <label for="email">
+              <span class="tit">
+                  邮箱
+              </span>
+              <input type="text" id="email" name="email" value="{$user_info.email}" placeholder="填写邮箱地址">
+          </label>
+      </p> 
+       
+    
+
+
+      <p class="action" style="display:none;">
+      		<input type="hidden" id="pre_province_id" value="{$user_info.province_id}">
+					<input type="hidden" id="pre_city_id" value="{$user_info.city_id}">
+					<input type="hidden" id="pre_area_id" value="{$user_info.area_id}">
+					<input type="hidden" id="pre_street_id" value="{$user_info.street}">
+      </p>          
+		</div>
+		<div class="submit_btn">
+			<a href="javascript:void(0);" id="submit" class="submit" onClick="save_user_info();">保存</a>
+		</div>
+  </div>
+  <!--提示层-->
+  <div id="tan_wrap"><div id="tan"></div></div>
+{/block}
+{block name="js"}
+<script src="__JS__/front/bbc.districtdata.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block}

@@ -1,0 +1,201 @@
+﻿@charset "UTF-8";
+body{font-size:14px;}	
+.collect_list li .title {
+	overflow:hidden;
+	text-overflow:ellipsis;
+	display:-webkit-box;
+	-webkit-line-clamp:2;
+	-webkit-box-orient:vertical
+}
+.mod_list .list_inner:after,.mod_list .list_extra:after {
+	clear:both;
+	content:'\20';
+	display:block
+}
+
+.link_blue {
+	color:#007AFF
+}
+.mod_list {
+	border-top:solid 1px #DDD;
+	border-bottom:solid 1px #DDD;
+	margin-bottom:10px;
+	background-color:white;
+	margin-top:-1px
+}
+.mod_list li {
+	min-height:20px;
+	line-height:20px;
+	padding:10px;
+	border-bottom:solid 1px #ddd;
+	position:relative
+}
+.mod_list li:last-child {
+	border-bottom:0 none
+}
+
+.mod_list li .right {
+	float:right;
+	color:#999
+}
+.mod_list li.active {
+	background-color:#EEE
+}
+
+.WX_bar ~ .wx_wrap {
+	padding-top:45px
+}
+.co_gray {
+	color:#999999 !important
+}
+.co_red {
+	color:#e4393c !important
+}
+.collect_null {
+	text-align:center;
+	color:#999;
+	padding:20px 0
+}
+.collect_title {
+	height:40px;
+	background-color:#f8f8f8;
+	border-bottom:solid 1px #DDD;
+	line-height:40px;
+	padding-left:10px
+}
+.collect_title .action {
+	float:right;
+	padding:0 10px;
+	color:#0D7EFF
+}
+
+.collect_list li .list_inner {
+	min-height:80px
+}
+.collect_list li .photo {
+	width:80px;
+	height:80px;
+	position:absolute;
+	top:10px;
+	left:10px
+}
+.collect_list li .photo img {
+	width:80px;
+	height:80px
+}
+.collect_list li .info {
+	margin:0 0 0 80px;
+	padding:0 10px;
+	color:#333;
+	line-height:20px
+}
+.collect_list li .title {
+	vertical-align:middle
+}
+.collect_list li .wg_title {
+	margin-bottom:10px
+}
+.collect_list li .price {
+	color:#E4393C;
+	font-weight:bold
+}
+.collect_list li .sku {
+	color:#999;
+	position:relative;
+	height:20px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	display:block;
+	white-space:nowrap
+}
+.collect_list li .collect_num,.collect_list li .change {
+	position:absolute;
+	right:0;
+	top:0
+}
+
+.edit_mode li .info {
+	margin:0 40px 0 80px;
+	padding:0 10px;
+	color:#333;
+	line-height:20px
+}
+.edit_mode li .del_btn,.collect_list li .del_btn {
+	width:30px;
+	height:60px;
+	position:absolute;
+	right:0;
+	top:0;
+	background:transparent url(/Public/Images/front/del_colet.png) no-repeat;
+	-webkit-background-size:15px 15px;
+	background-size:15px 15px;
+	background-position:5px 20px
+}
+
+
+/*  tab标签导航 */
+.my_nav {
+width: 100%;
+background: #f8f8f8;
+box-sizing: border-box;
+-webkit-box-sizing: border-box;
+}
+.my_nav ul {
+display: box;
+display: -ms-box;
+display: -webkit-box;
+display: -ms-flexbox;
+}
+.my_nav li {
+display: block;
+flex: 1;
+-ms-flex: 1;
+-webkit-flex: 1;
+box-flex: 1;
+-ms-box-flex: 1;
+-webkit-box-flex: 1;
+}
+.my_nav a {
+position: relative;
+display: block;
+height: 43px;
+line-height: 45px;
+text-align: center;
+color: #666;
+border-bottom: 1px solid #ddd;
+padding-bottom: 2px;
+font-size: 16px;
+}
+.my_nav li.cur a {
+padding-bottom: 0;
+border-bottom: 3px solid #e4393c;
+color: #e4393c;
+}
+.my_nav a:before {
+display: block;
+content: '\20';
+width: 1px;
+height: 20px;
+position: absolute;
+left: -1px;
+top: 50%;
+margin-top: -10px;
+background: #ddd;
+}
+
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+	body{font-size:24px;}
+	.header-title{font-size:1em;}
+	.mt13{margin-top:13px;}
+	.collect_title{height:60px;line-height:60px;}
+	.collect_list li .photo,.collect_list li .photo img{width:120px;height:120px;}
+	.collect_list li .info{line-height:50px;padding:0 54px;}
+	.collect_list li .sku{height:40px;}
+	.edit_mode li .del_btn,.collect_list li .del_btn {width:70px;height:100px;background:transparent url(/Public/Images/front/del_colet_pad.png) no-repeat;-webkit-background-size:35px 35px;background-size: 35px 35px;background-position: 5px 20px;}
+	.kuan {font-size: 1em;}
+	.my_nav a{height:70px;line-height:70px;font-size:1em;}
+	
+}

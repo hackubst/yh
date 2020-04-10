@@ -1,0 +1,136 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/city_list.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--头部-->
+	<header class="common_head">
+			<a class="back" href="{$mall_home_link}"><svg class="back_icon"><use xlink:href="#back"></use></svg><span class="back_home_txt">首页</span></a>
+			<div class="header_title">{$head_title}</div>
+	</header>
+	<!--内容区-->
+		<!--当前定位城市-->
+		<div class="position_city">
+			<h6>当前城市：</h6>
+			<h5 class="cur_city">
+				<a href="{$mall_home_link}/area_id/{$default_area_id}" id="cur_city">
+					{if isset($default_area) && $default_area_name}
+						{$default_area_name}
+					{/if}
+				</a>
+			</h5>
+		</div>
+		<!--最近访问城市-->
+		<div class="hot_trade">
+			<div class="hd"><h5>最近访问城市</h5></div>
+			<div class="home_place_list">
+				<ul>
+					{foreach from=$city_change_log_list item=area}
+						<li><a class="area_link" title="{$area.area_id}" href="{$mall_list_link}/area_id/{$area.area_id}">{$area.area_name}</a></li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--已开通城市-->
+		<div class="hot_trade">
+			<div class="hd"><h5>已开通城市</h5></div>
+			<div class="home_place_list">
+				<ul>
+					{foreach from=$opened_area_list item=area}
+						<li><a class="area_link" title="{$area.area_id}" href="{$mall_list_link}/area_id/{$area.area_id}">{$area.area_name}</a></li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--首字母选择城市-->
+		<div class="hot_trade">
+			<div class="hd"><h5>更多城市</h5></div>
+			<div class="letter_list">
+				<ul>
+						<li><a href="#A">A</a></li>
+						<li><a href="#B">B</a></li>
+						<li><a href="#C">C</a></li>
+						<li><a href="#D">D</a></li>
+						<li><a href="#E">E</a></li>
+						<li><a href="#F">F</a></li>
+						<li><a href="#G">G</a></li>
+						<li><a href="#H">H</a></li>
+						<li><a href="#I">I</a></li>
+						<li><a href="#J">J</a></li>
+						<li><a href="#K">K</a></li>
+						<li><a href="#L">L</a></li>
+						<li><a href="#M">M</a></li>
+						<li><a href="#N">N</a></li>
+						<li><a href="#O">O</a></li>
+						<li><a href="#P">P</a></li>
+						<li><a href="#Q">Q</a></li>
+						<li><a href="#R">R</a></li>
+						<li><a href="#S">S</a></li>
+						<li><a href="#T">T</a></li>
+						<li><a href="#U">U</a></li>
+						<li><a href="#V">V</a></li>
+						<li><a href="#W">W</a></li>
+						<li><a href="#X">X</a></li>
+						<li><a href="#Y">Y</a></li>
+						<li><a href="#Z">Z</a></li>
+				</ul>
+			</div>
+		</div>
+		<!--A城市-->
+		{foreach from=$area_list key=key item=area_arr}
+			<div id="{$key}" class="hot_trade">
+				<div class="hd"><h5>{$key}</h5></div>
+				<div class="letter_home_list">
+					<ul>
+						{foreach from=$area_arr item=area}
+							<li><a class="area_link" title="{$area.area_id}" href="{$mall_list_link}/area_id/{$area.area_id}">{$area.area_name}</a></li>
+						{/foreach}
+					</ul>
+				</div>
+			</div>
+		{/foreach}
+	<div id="container" style="display:none;"></div>
+	<div id="scrollto" class="gotop"><svg class="gotop_icon"><use xlink:href="#gotop"></use></svg></div>
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.3"></script>
+<script src="__JS__/front/area.js?version={$version}"></script>
+<script type="text/javascript">
+var lon = '{$point.lon}';
+var lat = '{$point.lat}';
+var default_area = '{$default_area}';
+var address = '';
+var ip_area_id = '';
+{literal}
+//默认城市处理
+setDefaultCity();
+
+$('.area_link').click(function(){
+	var area_id = $(this).attr('title');
+	log_city_change(ip_area_id, default_area, area_id);
+	//return false;
+});
+
+//当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失  
+$(function () {  
+  $(window).scroll(function(){  
+      if ($(window).scrollTop()>100){  
+          $("#scrollto").fadeIn(1000);  
+      }  
+      else  
+      {  
+          $("#scrollto").fadeOut(1000);  
+      }  
+  });  
+  //当点击跳转链接后，回到页面顶部位置  
+  $("#scrollto").click(function(){  
+      $('body,html').animate({scrollTop:0},10);  
+      return false;  
+  });  
+});  
+ 
+</script>
+{/literal}
+{/block}

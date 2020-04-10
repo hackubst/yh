@@ -1,0 +1,59 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/integral.css?version={$version}">
+{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+	<!--主内容区-->
+	<div id="load_wrapper"> 
+		<div class="od_item_cont" id="scroller"> 
+			<ul class="case_item" id="new_list">
+			{if $order_list}
+				{foreach from=$order_list item=item}
+					<li>
+						<a href="{$integral_order_detail_link}{$item.order_id}" class="od_item_link">
+							<div class="order_d_info">
+								<div class="order_sn">订单号：<em>{$item.order_sn}</em></div>
+								<div class="order_status">{$item.order_status}</div>
+							</div>
+							<div class="order_d_detail">
+								<div class="case_item_photo">
+									<img class="photo" src="{$item.small_pic}" alt="{$item.item_name}"  onerror="no_pic(this);"/>
+								</div>
+								<div class="case_item_cont">
+									<h3 class="case_item_name">
+										{$item.item_name}
+									</h3>
+									<label class="case_item_count">
+										<h6 class="case_i_count">价格：</h6>
+										<span class="case_i_count_txt"> <em>{if $item.pay_amount}&yen;{$item.pay_amount}&nbsp;+&nbsp;{/if}{(int)$item.integral_amount}</em>&nbsp;积分<!-- &nbsp;+&nbsp;<em>&yen 20</em>  --></span>
+									</label>
+								</div>
+							</div>
+						</a>
+					</li>
+				{/foreach}
+			{/if}	
+			</ul>
+			<div id="pullUp">
+				<span class="pullUpIcon index jiazaizhong3x"></span><span class="pullUpLabel">上拉加载...</span>
+			</div>
+
+		</div>
+
+	</div>
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/front/iscroll.js"></script>
+<script type="text/javascript" src="__JS__/front/integral_exchange_list.js"></script>
+<script>
+var firstRow = parseInt('{$firstRow}');
+var total = parseInt('{$total}');
+</script>
+{/block}

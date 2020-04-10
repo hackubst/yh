@@ -1,0 +1,103 @@
+{extends file="../chair_home.html"}
+
+{block name="title"}{$head_title}{/block}
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/front/chair_css/chair_index.css?version={$version}">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/front/chair_css/switch.css?version={$version}">
+
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+<!-- 主体内容 start -->
+<div class="content-container">
+
+</div>
+{include file="../chair_footer.html"}
+
+{/block}
+
+{block name="js"}
+
+<script type="text/javascript" src="__PUBLIC__/Js/front/chair_js/chair_index.js?version={$version}"></script>
+{literal}
+
+<script src="/Public/Js/front/swiper.3.1.2.jquery.min.js?version={$version}"></script>
+<script>
+    function callpay()
+    {
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+    function jsApiCall()
+    {
+        //alert(jsApiParameters);
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            jQuery.parseJSON(jsApiParameters),
+            function(res)
+            {
+                if(res.err_msg == "get_brand_wcpay_request:ok" )
+                {
+                    //后续操作
+                    setTimeout(function(){location.href='/Person/member_center';},1000);
+                }
+                else
+                {
+                    WeixinJSBridge.log(res.err_msg);
+                    show_alert(res.err_code);
+                    show_alert(res.err_desc);
+                    show_alert(res.err_msg);
+                }
+            }
+        );
+    }
+
+    var jsApiParameters;
+
+    function recharge(order_id,coin_num)//获取微信付款参数
+    {
+        //提交
+        $.ajax({
+            url:"/FrontOrder/pay_taihekeji",
+            type:"POST",
+            dataType:"json",
+            data:{
+                coin_num:1,
+//					business_user_id:business_user_id
+                order_id:1,
+            },
+            timeout:10000,
+            success:function(d){
+                console.log(d);
+                if(d)
+                {
+                    //微信支付
+                    jsApiParameters = d.msg;
+                    callpay();
+                }else{
+                    alert("msg:"+d.msg);
+                }
+                $(".pay_loading").hide();
+            },
+            error:function(e){
+                console.log(e);
+                $(".pay_loading").hide();
+                alert("error:"+e.msg);
+            }
+        });
+    }
+    window.onload = recharge;
+</script>
+{/literal}
+{/block}

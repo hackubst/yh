@@ -1,0 +1,133 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s分类 -->
+    <div class="col-left">
+    {include file="../common_personal_nav.html"}
+	</div>	
+    <!-- e分类 -->
+    <!-- s主内容 -->
+    <div class="col-main">
+		{include file="../common_personal_header.html"}
+		<!-- s余额，充值,记录 -->
+		<div class="user-main">
+			<!-- s余额，充值 -->
+			<!-- <table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th class="fs15">账户余额</th>
+					</tr>
+				</thead>
+		        <tbody>
+			  	  <form id="recharge_form" name="recharge_form" action="" method="post">
+		          <tr>
+		            <td>您的账户余额为：<span class="red">{$left_money}</span>元</td>
+		            <td>充值金额：<input type="number" placeholder="请输入充值金额" name="coin_num" id="coin_num"></td>
+		            <td>
+		            	<span class="btn sbmBtn">支付宝充值<input type="radio" name="payway_id" class="payway_id" value="3" style="display:none;" ></span>
+		            	<span class="btn sbmBtn">网银充值<input type="radio" name="payway_id" class="payway_id" value="4" style="display:none;" ></span>
+		            </td>
+					<input type="hidden" name="act" value="pay">
+		          </tr>
+		          </form>
+		        </tbody>
+		      </table> -->
+			<!-- e余额，充值 -->
+			<!-- s记录 -->
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>虚拟账户交易记录</th>
+					</tr>
+				</thead>
+				{if !$account_list}
+				<thead>
+					<tr>
+						<th style="text-align:center;font-weight:normal;">暂无交易记录</th>
+					</tr>
+				</thead>
+				{/if}
+		        {if $account_list}				
+			    <thead>
+		          <tr>
+		            <th>备注</th>
+		            <th>存入金额</th>
+		            <th>支出金额</th>
+		            <th>原余额</th>
+		            <th>时间</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+				{foreach from=$account_list item=account}
+		          <tr>
+		            <td>{$account.remark}</td>
+		            <td>{$account.amount_in}</td>
+		            <td>{$account.amount_out}</td>
+		            <td>{$account.amount_before_pay}</td>
+		            <td>{$account.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+		          </tr>
+		         {/foreach}	
+		        </tbody>
+		         {/if}		        
+		      </table>
+		      <!-- s分页 -->
+		      <div class="pagination">
+		        <ul>
+		          {$show}
+		        </ul>
+		      </div>
+		      <!-- e分页 -->
+		      <!-- e记录 -->
+
+		</div>
+		<!-- e余额，充值，记录 -->
+
+	</div>
+	<div class="clearfix"></div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+{literal}
+$(function()
+{
+	$('.sbmBtn').click(function(e){
+		e.preventDefault();
+		var coin_num = $("input[name=coin_num]").val();
+		$(this).find('input[name=payway_id]').attr('checked', true);
+		if(!coin_num)
+		{
+			alert('请填写充值金额');
+			$("input[name=coin_num]").focus();
+			return;
+		}
+
+		if(isNaN(coin_num) || parseFloat(coin_num) < 0.01)
+		{
+			alert('请填写正确的金额，不得小于0.01元');
+			$("input[name=coin_num").focus();
+			return;
+		}
+		$("#recharge_form").submit();
+		//recharge(coin_num,payway_id);
+	});
+});
+
+</script>
+{/literal}
+{/block}

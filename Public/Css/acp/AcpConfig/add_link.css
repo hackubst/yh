@@ -1,0 +1,41 @@
+/** by zhengzhen */
+.pic {
+	width: auto;
+	height: auto;
+}
+.pic-wrap {
+	float: none;
+	width: 140px;
+	height: 100px;
+	display: table-cell;
+	*display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+}
+.pic-loading {
+	position: absolute;
+	left: 54px;
+	top: 34px;
+	z-index: 999;
+	display: none;
+}
+.pic-preview {
+	max-width: 140px;
+	max-height: 100px;
+	display: none;
+}
+.pic-mask {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	padding: 1px;
+	opacity: .8;
+	filter: alpha(opacity=80);
+	display: none;
+}
+.fi-imgslist-item img {
+	height: auto;
+}

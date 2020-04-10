@@ -1,0 +1,104 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-n-s-top">
+    <div class="t-month-con">
+		<form method="POST" action="">
+        <div class="t-con-list">
+            <div class="formitems inline">  
+                <label class="fi-name" style="width:60px;">请选择：</label>  
+                <div class="form-controls" style=" margin-left:60px;">  
+                    <select class="mini" name="year" id="year">  
+                        <option value="2015" {if $year == 2015}selected{/if}>2015</option> 
+                        <option value="2014" {if $year == 2014}selected{/if}>2014</option> 
+                        <option value="2013" {if $year == 2013}selected{/if}>2013</option>  
+                        <option value="2012" {if $year == 2012}selected{/if}>2012</option>  
+                        <option value="2011" {if $year == 2011}selected{/if}>2011</option>  
+                        <option value="2010" {if $year == 2010}selected{/if}>2010</option>  
+                        <option value="2009" {if $year == 2009}selected{/if}>2009</option>  
+                        <option value="2008" {if $year == 2008}selected{/if}>2008</option>  
+                    </select>  
+                    <span>年</span>  
+					<button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+                </div>  
+            </div>  
+        </div>
+	</div>
+
+	<div class="t-month-chart" id="month_container">
+	</div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+var deposit_stat_list = '[';
+var sum_deposit_stat_list = '[';
+{foreach from=$deposit_stat_list key=key item=item}
+	deposit_stat_list = deposit_stat_list + {$item} + ',';
+{/foreach}
+deposit_stat_list = deposit_stat_list.substring(0, deposit_stat_list.length - 1);
+deposit_stat_list += ']';
+
+{foreach from=$sum_deposit_stat_list key=key item=item}
+	sum_deposit_stat_list = sum_deposit_stat_list + {$item} + ',';
+{/foreach}
+sum_deposit_stat_list = sum_deposit_stat_list.substring(0, sum_deposit_stat_list.length - 1);
+sum_deposit_stat_list += ']';
+
+var d = '{$date}';
+{literal}
+$(function (){
+var chart = new Highcharts.Chart({
+	chart: {
+		renderTo: 'month_container',
+		defaultSeriesType: 'line'
+	},
+	title: {
+		text: d + ' 提现年统计'
+	},
+	subtitle: {
+		text: ''
+	},
+	xAxis: {
+		categories: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+	},
+	yAxis: {
+		title: {
+			text: '提现数'
+		}
+	},
+	tooltip: {
+		enabled: false,
+		formatter: function() {
+			return '<b>'+ this.series.name +'</b><br/>'+
+				this.x +': '+ this.y +'°C';
+		}
+	},
+	plotOptions: {
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	},
+	series: [{
+		name: '提现数',
+		data: eval(deposit_stat_list)
+	}, {
+		name: '提现总金额',
+		data: eval(sum_deposit_stat_list)
+	}]
+});
+});
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_num_stat.css" type="text/css" />
+{/block} 

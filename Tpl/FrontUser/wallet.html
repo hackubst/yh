@@ -1,0 +1,48 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+  <div class="wallet_cont">
+  		<!--钱包余额-->
+  		<div class="wal_left_money">
+  			<span>余额：<i>￥{$user_info.left_money|default:0}</i></span>
+  		</div>
+      <!--功能入口-->
+			<div class="home_fun">
+				<ul>
+					<li>
+						<a href="{$recharge_link}">
+							<div class="psn_svg_wrap"><svg class="psn_icon rechrg_i"><use xlink:href="#recharge"></use></svg></div>
+							<div class="psn_svg_txt">充值</div>
+						</a>
+					</li>
+					<li>
+						<a href="{$member_card_bind_link}">
+							<div class="psn_svg_wrap"><svg class="psn_icon rechrg_i"><use xlink:href="#recharge"></use></svg></div>
+                            <div class="psn_svg_txt">会员卡</div>
+						</a>
+					</li>
+					<li>
+						<a href="{$show_ticket_link}">
+							<div class="psn_svg_wrap"><svg class="psn_icon rechrg_i"><use xlink:href="#recharge"></use></svg></div>
+                            <div class="psn_svg_txt">优惠券</div>
+						</a>
+					</li>
+					<li>
+						<a href="{$account_list_link}">
+							<div class="psn_svg_wrap"><svg class="psn_icon acont_i"><use xlink:href="#account"></use></svg></div>
+							<div class="psn_svg_txt">财务明细</div>
+						</a>
+					</li>					
+					<li>
+						<a href="{$recharge_list_link}">
+							<div class="psn_svg_wrap"><svg class="psn_icon acont_i"><use xlink:href="#integral"></use></svg></div>
+							<div class="psn_svg_txt">充值记录</div>
+						</a>
+					</li>					
+				</ul>
+			</div>
+	</div>
+{/block}

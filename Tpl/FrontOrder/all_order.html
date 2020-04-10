@@ -1,0 +1,295 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/my_order.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+        <div class="wx_wrap">
+						<div class="hd_bar" id="J_bar1">
+						    <form action="" class="hd_search_frm hd_search_frm_focus" onsubmit="return false;" id="searchForm">
+						        <input type="search" class="hd_search_txt hd_search_txt_null" id="keyWord" autocomplete="off" placeholder="快速搜索订单商品">
+						    </form>
+						    <!--div class="hd_search_tit hide" id="resFilterTipBlock"></div-->
+						    <div class="hd_me" style="display:block;">
+						        <a href="javascript:" id="filterBtn" class="hd_search_btn">
+						            搜索
+						        </a>
+						    </div>
+						</div>        		
+            <!-- S 导航 -->
+            <div class="my_nav">
+                <ul id="nav">
+                    <li class="order_nav cur" id="all_order">
+                        <a href="javascript:;">
+                            全部订单
+                        </a>
+                    </li>
+                    <li class="order_nav" id="n_pay">
+                        <a href="javascript:;">
+                            待支付
+                            <span class="num" id="payDeaLNum">
+                                1
+                            </span>
+                        </a>
+                    </li>
+                    <li class="order_nav" id="n_send">
+                        <a href="javascript:;">
+                            待发货
+                            <span class="num" id="receiveDeaLNum">
+                            	1
+                            </span>
+                        </a>
+                    </li>
+                    <li class="order_nav" id="n_query">
+                    	<a href="javascript:;">
+                    		待确认
+                    		<span class="num" id="queryDeaLNum">1</span>
+                    	</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- E 导航 -->
+            <!-- S 内容 -->
+            <div class="my_order_wrap">
+                <div class="my_order_inner" id="cont">
+                    <!-- S 所有订单 -->
+                    <div class="my_order show">
+                        <div id="cont1" class="order_append">
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="{$order_detail_link}" class="oh_content">
+                                        <p>
+                                            <span>状<span class="pr15em"></span>态：</span>
+                                            <em class="co_red">
+                                                待支付
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<span class="pr15em"></span>价：</span>
+                                            <em class="co_red">
+                                                ￥128.00
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>下单时间：</span>
+                                            <em class="">
+                                                2014-09-20
+                                            </em>
+                                        </p>
+                                    </a>
+                                    <a href="javascript:;" class="oh_btn toPay">
+                                        去支付
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="{$order_detail_link}" class="oh_content">
+                                        <p>
+                                             <span>状<span class="pr15em"></span>态：</span>
+                                            <em class="co_blue">
+                                                已取消
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<span class="pr15em"></span>价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>下单时间：</span>
+                                            <em class="">
+                                                2014-09-20
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="wx_ending">
+                            已经没有更多订单了！
+                        </div>
+                        <!-- 当没有订单时显示
+                        <div class="wx_ending">
+                            您暂时没有订单
+                        </div>-->
+                        
+                    </div>
+                    <!-- E 所有订单 -->
+                    <!-- S 待支付 -->
+                    <div class="my_order hide">
+                        <div id="cont2" class="order_append">
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="{$order_detail_link}" class="oh_content">
+                                        <p>
+                                            <span>状<span class="pr15em"></span>态：</span>
+                                            <em class="co_red">
+                                                待支付
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<span class="pr15em"></span>价：</span>
+                                            <em class="co_red">
+                                                ￥128.00
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>下单时间：</span>
+                                            <em class="">
+                                                2014-09-20
+                                            </em>
+                                        </p>
+                                    </a>
+                                    <a href="javascript:;" class="oh_btn toPay">
+                                        去支付
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wx_ending">
+                            已经没有更多订单了！
+                        </div>
+                         <!-- 当没有订单时显示
+                        <div class="wx_ending">
+                            您暂时没有待支付订单
+                        </div>-->
+                    </div>
+                    <!-- E 待支付 -->
+                    <!-- S 待发货 -->
+                    <div class="my_order hide">
+                        <div id="cont3" class="order_append">
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="{$order_detail_link}" class="oh_content">
+                                        <p>
+                                             <span>状<span class="pr15em"></span>态：</span>
+                                            <em class="co_blue">
+                                                待发货
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<span class="pr15em"></span>价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>下单时间：</span>
+                                            <em class="">
+                                                2014-09-20
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="wx_ending">
+                        	 已经没有更多订单了！
+                        </div>
+                         <!-- 当没有订单时显示
+                        <div class="wx_ending">
+                            您暂时没有待发货订单
+                        </div>-->
+                        
+                    </div>
+                    <!-- E 待发货 -->
+                    <!-- S 待确认 -->
+										<div class="my_order hide">
+                        <div id="cont4" class="order_append">
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="{$order_detail_link}" class="oh_content">
+                                        <p>
+                                             <span>状<span class="pr15em"></span>态：</span>
+                                            <em class="co_blue">
+                                                待确认
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<span class="pr15em"></span>价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>下单时间：</span>
+                                            <em class="">
+                                                2014-09-20
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="wx_ending">
+                        	已经没有更多订单了！
+                        </div>
+                         <!-- 当没有订单时显示
+                        <div class="wx_ending">
+                            您暂时没有待确认订单
+                        </div>-->
+                        
+                    </div>
+                    <!-- E 待确认 -->
+                </div>
+            </div>
+            <!-- E 内容 -->
+        </div>
+        <!-- END wx_wrap -->
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+$(function(){
+	
+		var range = 50; //距下边界长度/单位px  
+		var elemt = 500; //插入元素高度/单位px  
+		var num = firstRow;  
+		var totalheight = 0;  
+		var main = $("#going_list"); //主体元素  
+		$(window).scroll(function(){  
+			var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+			//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+			//console.log("页面的文档高度 ："+$(document).height());  
+			//console.log('浏览器的高度：'+$(window).height());  
+			totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+			if(($(document).height()-range) <= totalheight  && total > num)
+			{  
+				num = parseInt(num) + parseInt(firstRow);
+				//获取商品列表
+				$.post('/FrontMall/get_item_list', {"firstRow":num - parseInt(firstRow), "class_id":class_id, "class_tag":class_tag, "sort_id":sort_id, "item_name":item_name}, function(data, textStatus) 
+				 {
+					if (data != 'failure')
+					{
+						var len = data.length;
+						for (i = 0; i < len; i++)
+						{
+							main.append('<div class="hproduct"><a href="/FrontMall/detail/item_id/' + data[i].item_id + '"><p class="cover"><img src="' + data[i].base_pic + '"></p><p class="fn">' + data[i].item_name + '</p><p class="prices"><strong><em>￥' + data[i].mall_price + '</em></strong></p><p class="sku"cg="0-3-1"><span class="comment_num">销量：<span>' + data[i].sales_num + '</span></span><span class="stock hide">' + data[i].stock + '</span></p></a></div> ');  
+						}
+						//main.append('<div class="hproduct"><a href="javascript:"><p class="cover"><img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg"></p><p class="fn">康宝(Canbo)ZTP80A-25(H)立式<font class="skcolor_ljg">消毒柜</font></p><p class="prices"id="price_664485"><strong><em id="dp_J_664485">￥478.00</em></strong></p><p class="sku"cg="0-3-1"><span class="comment_num">销量：<span id="com_664485">4070</span></span><span class="comment_rate hide">好评率90%</span><span class="stock hide"id="stock_664485">无货</span></p></a></div> ');  
+					}
+				}, 'json');
+			}  
+		}); 
+		
+	$('.order_nav').click(function(){
+		$(this).addClass("cur").siblings().removeClass("cur");
+		$(".my_order").hide().eq($('.order_nav').index(this)).show();
+	});	
+});	
+</script>       
+{/literal}
+{/block}

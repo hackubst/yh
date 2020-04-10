@@ -1,0 +1,29 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<form action="" method="post" >
+	<div class="tables-searchbox">
+        <select class="small" name="role_type" style="display:none;">
+            <option value="0" >--选择用户类型--</option>
+				<option value="2" {if $role_type == 2}selected{/if}>云仓</option>
+				<option value="4" {if $role_type == 4}selected{/if}>配送员</option>
+        </select>
+		<span class="tbs-txt">起始时间：</span>
+		<input type="text" id="start_time" name="start_time" value="{$start_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+		<span class="fi-text">-</span>
+		<input type="text" id="end_time"name="end_time" value="{$end_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+
+		<input type="hidden" name="action" value="export" />
+		<button class="btn" type="submit"><i class="gicon-search"></i>导出</button>
+	</div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block}
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/export_data.css" type="text/css" />
+{/block}

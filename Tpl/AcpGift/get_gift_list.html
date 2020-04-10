@@ -1,0 +1,258 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="t-rank-tit" style="margin:10px;"><a href="/AcpGift/add_gift" class="btn btn-blue"><i class="gicon-plus white"></i>添加礼品</a></div>
+    <div class="tables-searchbox">
+        <form method="post">
+            <div class="mgt10">
+                <span class="tbs-txt">商家名称：</span>
+                <input type="text" name="shop_name" value="{$shop_name}">
+
+                <span class="tbs-txt">礼品名称：</span>
+                <input type="text" name="gift_name" value="{$gift_name}">
+
+                <span "tbs-txt">添加时间：</span>  
+                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+
+                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+                
+
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+            </div>
+        </form>
+    </div>
+    <!--end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>礼品</td>
+            <td>商家</td>
+            <td>图片</td>
+            <td><a class="{$serial_sort_order}" href="{$serial_sort_url}">排序号</a></td>
+            <td>描述</td>
+            <td>添加时间</td>
+            <td><a class="{$isuse_sort_order}" href="{$isuse_sort_url}">状态</a></td>
+            <td>操作</td> 
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$gift_list item=gift_item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$gift_item.gift_id}" name="a[]"></td>
+            
+            <td>{$gift_item.gift_name}</td>
+            <td>{$gift_item.shop_name}</td>
+            <td><img src="{$gift_item.pic}" style="height:50px;" onerror="no_pic(this);"></td>    
+            
+            <td>{$gift_item.serial}</td>
+            <td>{if $gift_item.desc}{$gift_item.desc}{else}--{/if}</td>
+            <td>{$gift_item.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>{$gift_item.status}</td>
+            <td>
+                <a href="/AcpGift/edit_gift/gift_id/{$gift_item.gift_id}" 
+                    class="btn" title="编辑">编辑</a>
+				<a href="javascript:;" class="btn" title="删除" 
+                    onclick="delete_gift({$gift_item.gift_id})">删除</a>  
+                {if $gift_item.isuse EQ 1}
+				<a href="javascript:;" class="btn" title="下架" 
+                    onclick="set_enable({$gift_item.gift_id}, 0)">下架</a>  
+                {else}
+				<a href="javascript:;" class="btn" title="上架" 
+                    onclick="set_enable({$gift_item.gift_id}, 1)">上架</a>  
+                {/if}
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:;" onclick="Select()" class="btn btn-blue">全选</a>
+            <a href="javascript:;" onclick="Cancel()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" onclick="batch_set_enable(0)" class="btn btn-blue">下架</a>
+            <a href="javascript:;" onclick="batch_set_enable(1)" class="btn btn-blue">上架</a>
+            <a href="javascript:;" onclick="batch_delete_gift()" class="btn btn-blue">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+            {$show}
+            </div>
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+function delete_gift(id)
+{
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 $.post('/AcpGift/delete_gift', {"gift_id":id}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_delete_gift()
+{
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count) {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+				 $.post('/AcpGift/batch_delete_gift', {"gift_ids":ids}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function set_enable(id, enable)
+{
+    var opt = enable ? '上架':'下架';
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 $.post('/AcpGift/set_enable', {"gift_id":id, "opt":enable}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					} else {
+						alert('对不起，'+ opt +'失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_set_enable(enable)
+{
+    var opt = enable ? '上架':'下架';
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count) {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+				 $.post('/AcpGift/batch_set_enable', {"gift_ids":ids, "opt":enable}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					} else {
+						alert('对不起，'+ opt +'失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+</script>
+{/literal}
+{/block}

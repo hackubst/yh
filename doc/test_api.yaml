@@ -1,0 +1,186 @@
+openapi: 3.0.0
+info:
+  title: 'Swagger 测试'
+  description: Swagger测试接口
+  termsOfService: 'http://swagger.io/terms/'
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  -
+    url: 'https://wx.xhsx88.com/api/api'
+    description: 测试接口请求地址
+  -
+    url: 'http://test.xhgy.com/api/api'
+    description: xyc本地接口请求地址
+paths:
+  '/?api_name=swagger.user.getItemList':
+    post:
+      tags:
+        - 商品
+      summary: 商品列表
+      description: 成功返回商品列表
+      operationId: swagger.Item.getItemList
+      parameters:
+        -
+          $ref: '#/components/parameters/appid'
+        -
+          $ref: '#/components/parameters/PHPSESSID'
+        -
+          $ref: '#/components/parameters/token'
+        -
+          name: api_name
+          in: query
+          description: api_name
+          required: true
+          schema:
+            type: string
+            default: xhgy.Item.getItemList
+        -
+          name: class_id
+          in: query
+          description: 一级分类id
+          required: false
+          schema:
+            type: integer
+          example: '9'
+        -
+          name: item_name
+          in: query
+          description: 商品名称
+          required: false
+          schema:
+            type: string
+        -
+          name: sort_id
+          in: query
+          description: 二级分类id
+          required: false
+          schema:
+            type: integer
+          example: '19'
+        -
+          $ref: '#/components/parameters/firstRow'
+        -
+          $ref: '#/components/parameters/pageSize'
+      responses:
+        '0':
+          description: 商品列表
+          content:
+            application/json:
+              schema:
+                properties:
+                  code: { description: code, type: integer, example: 0 }
+                  data: { description: '', type: array, items: { properties: { total: { description: 总数, type: integer, example: '35' }, item_list: { description: 商品列表, type: array, items: { properties: { item_id: { description: 商品id, type: integer, example: '1' }, item_name: { description: 商品名称, type: array, example: '帝皇鲜 澳洲牛腱 1000g' }, mall_price: { description: 商品价格, type: array, example: '10.00' } }, type: object } } }, type: object } }
+                type: object
+        '-1':
+          description: 失败
+      consumes:
+        - application/json
+      produces:
+        - application/json
+  '/?api_name=swagger.user.login':
+    post:
+      tags:
+        - 用户
+      summary: 用户登录
+      description: 成功返回session_id
+      operationId: swagger.user.login
+      parameters:
+        -
+          $ref: '#/components/parameters/appid'
+        -
+          $ref: '#/components/parameters/PHPSESSID'
+        -
+          $ref: '#/components/parameters/token'
+        -
+          name: api_name
+          in: query
+          description: api_name
+          required: true
+          schema:
+            type: string
+            default: xhgy.User.login
+        -
+          name: mobile
+          in: query
+          description: 手机号
+          required: true
+          schema:
+            type: string
+          example: '13738778857'
+        -
+          name: verify_code
+          in: query
+          description: 验证码
+          required: true
+          schema:
+            type: string
+          example: '111111'
+      responses:
+        '0':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                properties:
+                  code: { description: phpsessid, type: integer, example: 0 }
+                  data: { description: '', type: array, items: { properties: { user_id: { description: 用户id, type: integer, example: '123' }, phpsessid: { description: phpsessid, type: string, example: '1231411312312' } }, type: object } }
+                type: object
+        '-1':
+          description: 登录失败
+      consumes:
+        - application/json
+      produces:
+        - application/json
+components:
+  parameters:
+    appid:
+      name: appid
+      in: query
+      description: appid
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    PHPSESSID:
+      name: PHPSESSID
+      in: query
+      description: PHPSESSID
+      required: true
+      schema:
+        type: string
+      example: '1111111111'
+    token:
+      name: token
+      in: query
+      description: token
+      required: true
+      schema:
+        type: string
+      example: '11111111111111111111111111111111'
+    firstRow:
+      name: firstRow
+      in: query
+      description: 分页
+      required: true
+      schema:
+        type: integer
+      example: '0'
+    pageSize:
+      name: pageSize
+      in: query
+      description: 分页
+      required: true
+      schema:
+        type: integer
+      example: '0'
+tags:
+  -
+    name: 用户
+    description: 用户接口
+  -
+    name: 商品
+    description: 商品接口

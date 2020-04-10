@@ -1,0 +1,106 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-art" style="margin-bottom:10px;"><a href="/AcpHelp/add_help" class="btn btn-blue"><i class="gicon-plus white"></i>添加帮助</a>  </div>
+<div class="tablesWrap">  
+    <div class="tables-searchbox"> 
+	<form name="form1" action="/AcpHelp/list_help" method="get">
+        <div class="t-list">
+            <span class="tbs-txt">标题：</span>  
+            <input type="text" name="keyword" id="keyword" value="{$keyword}">
+        </div>
+        <div class="t-list">
+            <span class="tbs-txt">栏目：</span>  
+            <select class="small" name="sort_id" id="sort_id">  
+                <option value="0">--请选择--</option> 
+				{html_options options=$help_center_category_options selected=$help_center_category_option_selected}
+            </select>
+        </div>  
+        <div class="t-list">
+			<input type="hidden" name="act" value="submit" />
+            <button class="btn" type="submit"><i class="gicon-search"></i>搜索</button> 
+        </div>    
+	</form>
+    </div>  
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="60%">  
+        <col width="15%">  
+        <col width="5%">     
+        <col width="15%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>选择</td>  
+                <td>标题</td>  
+                <td>栏目</td>  
+                <td>排序</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+		{if $help_list}
+		{foreach from=$help_list item=this}
+            <tr>  
+                <td class="_checkbox">  
+                    <input type="checkbox" class="checkbox" name="checkIds[]" value="{$this.help_id}">  
+                </td>  
+                <td><a href="/Article/helpcenter/id/{$this.help_id}" target="_blank">{$this.title}</a></td>  
+                <td>{$this.help_sort_name}</td>  
+                <td class="serial">
+					<img src="__IMAGES__/ajax-loading.gif" class="hide" id="ajax-loading" />
+					<input type="text" class="mini" style="width:40px; text-align:center; border-color: #fff;" value="{$this.serial}" onblur="setSerial({$this.help_id}, this);" />
+				</td>   
+                <td>  
+                    <a href="__APP__/AcpHelp/edit_help/id/{$this.help_id}" class="btn" title="编辑"><i class="gicon-edit black"></i>编辑</a>   
+                    <a href="javascript:;" onclick="delArticle({$this.help_id}, this);" class="btn" title="删除"><i class="gicon-trash black"></i>删除</a>    
+                </td>  
+            </tr>  
+		{/foreach}
+		{else}
+			<tr>
+			{if $is_search}
+				<td colspan="5" class="center">暂未搜索到相关帮助，您可以尝试其他搜索</td>
+			{else}
+				<td colspan="5" class="center">暂无帮助，您可以<a href="/AcpHelp/add_help">添加帮助</a></td>
+			{/if}
+			</tr>
+		{/if}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+	{if $help_list}
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>  
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>  
+            <a href="javascript:;" onclick="delArticleBatch();" class="btn btn-blue">删除</a>  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$pagination}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+	{/if}
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->    
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/help_center.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+{literal}
+<style>
+.t-list{ float:left;}
+</style>
+{/literal}
+{/block}

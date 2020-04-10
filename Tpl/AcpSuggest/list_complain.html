@@ -1,0 +1,144 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="40%">  
+        <col width="15%">  
+		<col width="10%">
+        <col width="10%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>选择</td>  
+                <td>分销商</td>  
+                <td>投诉客服</td>  
+                <td>投诉原因</td>  
+                <td>投诉时间</td>  
+				<td>是否处理</td>
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+		{if $complain_list}
+		{foreach from=$complain_list item=this}
+            <tr>  
+                <td class="_checkbox">  
+                    <input type="checkbox" class="checkbox" name="checkIds[]" value="{$this.complain_log_id}">  
+                </td>  
+                <td>  
+                    {$this.complainer_realname}  
+                </td>  
+                <td>{$this.customer_service_online_account}</td>  
+                <td>{$this.contents}</td>  
+                <td>{$this.addtime}</td>  
+				<td>
+				{if $this.complain_state eq 0}
+					<i class="gicon-remove black"></i>
+				{elseif $this.complain_state eq 1}
+					<i class="gicon-ok black"></i>
+				{/if}
+				</td>
+                <td>  
+                    <a href="/AcpSuggest/complain_detail/id/{$this.complain_log_id}" class="btn" title="详情"><i class="gicon-eye-open black"></i>详情</a>    
+                </td>  
+            </tr>  
+		{/foreach}
+		{else}
+			<tr>
+				<td colspan="7" class="center">暂无客服投诉记录</td>
+			</tr>
+		{/if}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>  
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>  
+            <a href="javascript:;" onclick="delComplainBatch();" class="btn btn-blue">删除</a>  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$pagination}
+            </div>
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+function delComplainBatch(){
+	var _ids = [];
+	$('._checkbox :checked').each(function(){
+		_ids.push($(this).val());
+	});
+	if(_ids.length === 0){
+		$.jPops.alert({
+			title:"提示",
+			content:'对不起，请选择要删除项！',
+			okBtnTxt:"确定",
+			callback:function(){
+				return true;
+			}
+		});
+		return false;
+	}
+	$.jPops.confirm({
+		title:"提示",
+		content:'您确定要删除这些数据吗？',
+		okBtnTxt:"确定",
+		cancelBtnTxt:"取消",
+		callback:function(r){
+			if(r){
+				$.ajax({
+					url: '/AcpSuggestAjax/del_complain',
+					data: {ids: _ids},
+					dataType: 'json',
+					beforeSend: function(){
+						$.jPops.showLoading();
+					},
+					success: function(data){
+					//	console.log(data);
+						$.jPops.hideLoading();
+						if(data.status === 1){
+							for(var i in data){
+								if(data[i].error === 0){
+									$('._checkbox input:checked[value="' + data[i].id + '"]').parents('tr').fadeOut(400, function(){
+										$(this).remove();
+									});
+								}
+							}
+						}
+						$.jPops.alert({
+							title:"提示",
+							content:data.msg,
+							okBtnTxt:"确定",
+							callback:function(){
+								return true;
+							}
+						});
+					}
+				});
+			}
+			return true;
+		}
+	});
+}
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+
+{/block}

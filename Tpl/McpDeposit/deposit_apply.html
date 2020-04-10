@@ -1,0 +1,50 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action="" method="post">
+	<div class="formitems inline">
+		<label class="fi-name"><span class="colorRed">*</span>提现金额：</label>
+		<div class="form-controls">
+			<input type="text" name="money" value="" id="money" placeholder="" class="small">
+			<span class="fi-help-text error">可提现金额为：{$left_money}</span>
+		</div>
+	</div>
+
+	<div class="formitems inline">
+		<label class="fi-name">支付宝号码：</label>
+		<div class="form-controls">
+			<input type="text" name="account" value="{$user_info.mobile}" id="account" placeholder="" class="default" disabled>
+			<span class="fi-help-text"></span>
+		</div>
+	</div>
+
+
+	<div class="formitems inline">
+		<label class="fi-name">真实姓名：</label>
+		<div class="form-controls">
+			<input type="text" name="realname" value="{$user_info.realname}" id="realname" placeholder="" class="default" disabled>
+			<span class="fi-help-text"></span>
+		</div>
+	</div>
+
+
+	<div class="formitems inline">
+		<label class="fi-name"></label>
+		<div class="form-controls">
+			<button type="submit" class="btn btn-blue" onclick=""><i class="gicon-ok white"></i>提交
+			</button>
+			<button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+		</div>
+	</div>
+</form>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/clipboard.min.js"></script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/user_list.css" type="text/css" />
+{/block} 

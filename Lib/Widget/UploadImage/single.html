@@ -1,0 +1,20 @@
+<div class="formitems inline single_image_widget" id="{$name}" data-dir="{$dir}" data-module="{$module}">
+    <label class="fi-name">{if $must}<span class="colorRed">*</span>{/if}{$title}：</label>
+    <div class="form-controls">
+        <ul class="fi-imgslist">
+            <li class="preview fi-imgslist-item pic{if !$url} hide{/if}" id="preview" style="">
+                <div>
+                    <img id="J_Preview" style="height:69px;" src="{$url}"/>
+                </div>
+                <input class="xxlarge" type="hidden" name="{$name}" id="J_ImgUrl" value="{$url}" />
+                <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delete_single_image('{$name}');"></i></a>
+                <img src="/Public/Images/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                <div class="pic-mask" id="J_Mask"></div>
+            </li>
+            <li class="fi-imgslist-item{if $url} hide{/if}" id="add_li">
+                <a href="javascript:;" class="add" title="上传一张新的图片" id="{$name}_uploader">+</a>
+            </li>
+        </ul>
+        <span class="fi-help-text {if $warn}error{/if}">{$help}</span>
+    </div>
+</div>

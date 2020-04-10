@@ -1,0 +1,113 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="/AcpPost/add_gift" method="post">
+<div class="formitems inline" style="display:none;">
+    <label class="fi-name"><span class="colorRed">*</span>商家：</label>
+    <div class="form-controls">
+        <select name="merchant_id" class='xlarge'>
+            <option value="0">--选择商家--</option>
+            {foreach from=$merchant_list item=merchant_item}
+            <option value="{$merchant_item.merchant_id}" {if $merchant_item.merchant_id EQ $gift_info.merchant_id}selected{/if}>{$merchant_item.shop_name}</option>
+            {/foreach}
+        </select>
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>礼品名称：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="gift_name" id="gift_name" value="{$gift_info.gift_name}">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>礼品价值：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="money" id="gift_name" value="{$gift_info.money}">
+        <span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>礼品图片：</label>
+    <div class="form-controls">
+        <input type="file" name="" id ="inputfile">
+    </div>
+</div>
+
+<input type="text" name="pic" value="">
+
+
+
+<!-- {upload_image_widget($pic_data)} -->
+
+<!-- <div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>排序号：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="serial" id="serial" value="{$gift_info.serial}">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div> -->
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>是否上架：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="isuse" value="1"
+                {if $gift_info.isuse EQ 1} checked{/if} >上架</label>
+            <label><input type="radio" name="isuse" value="0"
+                {if $gift_info.isuse EQ 0} checked{/if} >仓库</label>
+        </div>
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>礼品描述：</label>
+    <div class="form-controls">
+		<textarea placeholder="" class= 'xlarge' name="desc" id="desc" value="">{$gift_info.desc}</textarea>
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+        <input type="hidden" name="action" value="{$action}" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>
+            {if $action == 'add'}添加{else}修改{/if}
+        </button>
+    </div>
+</div>
+</form>
+{/block}
+
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script>
+{literal}
+
+
+
+$("#inputfile").change(function(){
+    var data = new FormData();
+        //为FormData对象添加数据
+    $.each($('#inputfile')[0].files, function(i, file) {
+        data.append('upload_file'+i, file);
+    });
+    $(".loading").show();    //显示加载图片
+
+}
+
+
+
+{/literal}
+</script>
+{/block}

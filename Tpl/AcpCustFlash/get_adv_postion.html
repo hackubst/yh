@@ -1,0 +1,336 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存修改</button>
+</div>
+
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="20%"> 
+            <col width="20%">
+            <col width="20%">  
+            <col width="20%">
+            <col width="20%">
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>位置</td>
+                    <td>标题</td>  
+                    <td>尺寸</td>
+                    <td>图片</td>  
+                    <td>链接</td>  
+                </tr>  
+            </thead>  
+            <tbody>
+                <tr>  
+                    <td>首页广告一：</td>
+                    <td><input type="text" name='adv_p1_title' value='{$config.ADV_P1_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p1_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P1_PIC || !file_exists($adv_p1_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P1_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p1_pic" id="J_ImgUrl" data-id="{if $config.ADV_P1_PIC }{/if}" value="{$config.ADV_P1_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p1_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p1_pic_path && file_exists($adv_p1_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p1_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p1_link' value='{$config.ADV_P1_LINK}' placeholder=""></td>
+                </tr>  
+
+                <tr>  
+                    <td>首页广告二：</td>
+                    <td><input type="text" name='adv_p2_title' value='{$config.ADV_P2_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p2_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P2_PIC || !file_exists($adv_p2_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P2_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p2_pic" id="J_ImgUrl" data-id="{if $config.ADV_P2_PIC }{/if}" value="{$config.ADV_P2_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p2_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p2_pic_path && file_exists($adv_p2_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p2_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p2_link' value='{$config.ADV_P2_LINK}' placeholder=""></td>
+                </tr>  
+
+                <tr>  
+                    <td>分类广告一：</td>
+                    <td><input type="text" name='adv_p3_title' value='{$config.ADV_P3_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p3_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P3_PIC || !file_exists($adv_p3_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P3_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p3_pic" id="J_ImgUrl" data-id="{if $config.ADV_P3_PIC }{/if}" value="{$config.ADV_P3_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p3_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p3_pic_path && file_exists($adv_p3_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p3_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p3_link' value='{$config.ADV_P3_LINK}' placeholder=""></td>
+                </tr>  
+                
+                <tr>  
+                    <td>分类广告二：</td>
+                    <td><input type="text" name='adv_p4_title' value='{$config.ADV_P4_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p4_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P4_PIC || !file_exists($adv_p4_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P4_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p4_pic" id="J_ImgUrl" data-id="{if $config.ADV_P4_PIC }{/if}" value="{$config.ADV_P4_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p4_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p4_pic_path && file_exists($adv_p4_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p4_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p4_link' value='{$config.ADV_P4_LINK}' placeholder=""></td>
+                </tr>  
+
+                <tr>  
+                    <td>即时优惠一：</td>
+                    <td><input type="text" name='adv_p5_title' value='{$config.ADV_P5_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p5_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P5_PIC || !file_exists($adv_p5_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P5_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p5_pic" id="J_ImgUrl" data-id="{if $config.ADV_P5_PIC }{/if}" value="{$config.ADV_P5_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p5_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p5_pic_path && file_exists($adv_p5_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p5_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p5_link' value='{$config.ADV_P5_LINK}' placeholder=""></td>
+                </tr>  
+                <tr>  
+                    <td>即时优惠二：</td>
+                    <td><input type="text" name='adv_p6_title' value='{$config.ADV_P6_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p6_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P6_PIC || !file_exists($adv_p6_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P6_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p6_pic" id="J_ImgUrl" data-id="{if $config.ADV_P6_PIC }{/if}" value="{$config.ADV_P6_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p6_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p6_pic_path && file_exists($adv_p6_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p6_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p6_link' value='{$config.ADV_P6_LINK}' placeholder=""></td>
+                </tr>  
+                <tr>  
+                    <td>今日免费一：</td>
+                    <td><input type="text" name='adv_p7_title' value='{$config.ADV_P7_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p7_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P7_PIC || !file_exists($adv_p7_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P7_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p7_pic" id="J_ImgUrl" data-id="{if $config.ADV_P7_PIC }{/if}" value="{$config.ADV_P7_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p7_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p7_pic_path && file_exists($adv_p7_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p7_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p7_link' value='{$config.ADV_P7_LINK}' placeholder=""></td>
+                </tr>  
+                <tr>  
+                    <td>今日免费二：</td>
+                    <td><input type="text" name='adv_p8_title' value='{$config.ADV_P8_TITLE}' placeholder=""></td>
+                    <td><span class="fi-help-text">宽高：206*240 </span></td>  
+                    <td>
+                        <div id="adv_p8_pic">
+                            <ul class="fi-imgslist">
+                                <li class="preview fi-imgslist-item pic{if !$config.ADV_P8_PIC || !file_exists($adv_p8_pic_path)} hide{/if}" id="preview" style="">
+                                    <div>
+                                        <img id="J_Preview" src="{$config.ADV_P8_PIC}"/>
+                                    </div>
+                                    <input type="hidden" name="adv_p8_pic" id="J_ImgUrl" data-id="{if $config.ADV_P8_PIC }{/if}" value="{$config.ADV_P8_PIC}" />
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p8_pic');"></i></a>
+                                    <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                                    <div class="pic-mask" id="J_Mask"></div>
+                                </li>
+                                <li class="fi-imgslist-item{if $adv_p8_pic_path && file_exists($adv_p8_pic_path)} hide{/if}" id="add_li">
+                                    <a href="javascript:;" class="add" title="上传一张新的图片" id="adv_p8_pic_uploader">+</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>  
+                    <td><input type="text" name='adv_p8_link' value='{$config.ADV_P8_LINK}' placeholder=""></td>
+                </tr>  
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+
+</form> 
+{/block} 
+
+{block name="js"}
+<script src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script>
+{literal}
+	upload_file('adv_p1_pic');
+	upload_file('adv_p2_pic');
+	upload_file('adv_p3_pic');
+	upload_file('adv_p4_pic');
+	upload_file('adv_p5_pic');
+	upload_file('adv_p6_pic');
+	upload_file('adv_p7_pic');
+	upload_file('adv_p8_pic');
+	function upload_file(div_id)
+	{
+		// ajax上传图片
+		new AjaxUpload("#" + div_id + "_uploader", {
+			action: "/AcpArticleAjax/uploadHandler",
+			name: "imgFile",
+			responseType: "json",
+			onSubmit: function(){
+				//alert('正在上传');
+				//preview处的图片改为loading图片
+				$('#' + div_id).find('.preview').removeClass('hide');
+			},
+			onChange: function(file, extension){
+				if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+					return true;
+				}
+				else {
+					alert('暂不支持该图片格式！');
+					return false;
+				}
+			},
+			onComplete: function(file, response){
+				console.log(response);
+				if (response.status === 0) {
+					alert(response.msg);
+				}
+				else if (response.status === 1) {
+					$('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+					$('#' + div_id).find('.preview').show();
+					$('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+					$('#' + div_id).find('#add_li').hide();
+				}
+			}
+		});
+	}
+
+	function delImage(div_id)
+	{
+		var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+		var preview = $('#' + div_id).find('#J_Preview');
+		var param = {};
+		var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+		var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+		
+		if (_id != '') {
+			param.id = _id;
+		}
+		if (imgUrl != '') {
+			param.img_url = imgUrl;
+		}
+		$.ajax({
+			url: '/AcpArticleAjax/delImage',
+			type: 'post',
+			data: param,
+			dataType: 'json',
+			beforeSend: function(){
+				ajaxLoading.show();
+			},
+			success: function(data){
+			//	console.log(data);
+				if (data.status === 1) {
+					$('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+					$('#' + div_id).find('#J_Del').off('click', delImage);
+					preview.removeAttr('src').parent().parent().addClass('hide');
+					$('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+					$('#' + div_id).find('#add_li').show();
+				}
+				ajaxLoading.fadeOut();
+			}
+		});
+	}
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+{literal} 
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+<style>
+#J_Preview {
+    height:69px;
+}
+</style>
+{/literal} 
+{/block}
+                                    <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('adv_p4_pic');"></i></a>

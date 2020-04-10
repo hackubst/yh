@@ -1,0 +1,707 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<!--导入的js框架--> 
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.circliful.js?version=20141027"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.mobile-1.4.3.min.js?version=20141027"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/control.js?version=20141027"></script>
+<!--end--> 
+{/block}
+
+{block name="content"}
+<div id="fullscreen_img" style="background:url(__PUBLIC__/Images/front/pic.jpg); display:none;height:100%;width:100%;background-size:cover;" onclick="hide_img()"></div>
+<!--滚动图片模拟数据初始化--> 
+<script type="text/javascript">
+var arr1 = new Array();
+var arr2 = new Array();
+var arr3 = new Array();
+var arr4 = new Array();
+var arr5 = new Array();
+var arr6 = new Array();
+var arr7 = new Array();
+var arr8 = new Array();
+var arr9 = new Array();
+
+
+var command_arr = new Array();
+{foreach from=$command item=c key=key}
+	command_arr[{$key}] = {$c};
+{/foreach}
+
+var seed_state_list = new Array();
+{foreach from=$seed_state_list item=state key=key1}
+	seed_state_list[{$key1}] = new Array();
+	arr{$state.state} = ['{$state.img_path}'];
+	{foreach from=$state item=data key=key2}
+		seed_state_list[{$key1}]['{$key2}'] = '{$data}';
+	{/foreach}
+{/foreach}
+
+var alarm = {$planter_info.alarm};
+var planter_id = {$planter_info.planter_id};
+var seed_id = {$item_info.item_id};
+var default_state = {$default_state};
+var planter_seed_id = {$planter_seed_id};
+var state_changed = false;
+{literal}
+function hide_img()
+{
+	$('#fullscreen_img').hide();
+	$('#home').show();
+}
+
+function enlarge_img()
+{
+	$('#home').hide();
+	$('#fullscreen_img').show();
+}
+
+</script>
+
+<!--主控页面的js--> 
+<script type="text/javascript"> 
+var imglist='';
+
+
+var Count =9;
+var Imgs = new Array(Count);
+
+//预加载图片
+function preLoadImgs()
+{
+	for(var i=0;i<Imgs.length;i++){
+		Imgs[i]=new Image();
+		downloadImage(i);
+	}
+}
+//加载单个图片
+function downloadImage(i)
+{
+    var imageIndex = i+1; //图片以1开始
+    Imgs[i].src = "__PUBLIC__/Images/front/b"+imageIndex+".png";
+}
+function preLoadImg(url) {
+ var img = new Image();
+ img.src = url;
+}
+var main_init_is_over=false;
+$(document).on("pageinit","#home",function()
+{
+	//$.mobile.loading( "hide" );
+	if(!main_init_is_over)
+	{
+		init();
+	}
+});
+
+function init()
+{
+	var clientWidth = document.body.clientWidth;
+	fillstat();
+	if(clientWidth >= 540)
+	{
+		setDivs_pad();
+	}
+	else
+	{
+		setDivs();
+	} 
+	imglist=$('#images_ul').html();
+	imginit();
+	var obj=$('#jd_img' + default_state);
+	beTouch(obj);
+
+	//嵌套底部控制按钮的状态
+	initialize_btn();
+	//diy_init();
+	//去除主内容区自动生成的空text节点
+	var content_text = document.getElementById('home').firstChild;
+	$(content_text).remove();
+	preLoadImgs();
+
+}
+
+//旋转图片的初始化
+function imginit(imgurl,num)
+{
+	if((imgurl!=undefined)&&(num!=undefined))
+	{
+		switch(num)
+		{
+			case '1':arr1.push(imgurl);break;
+			case '2':arr2.push(imgurl);break;
+			case '3':arr3.push(imgurl);break;
+			case '4':arr4.push(imgurl);break;
+			case '5':arr5.push(imgurl);break;
+			case '6':arr6.push(imgurl);break;
+			case '7':arr7.push(imgurl);break;
+			case '8':arr8.push(imgurl);break;
+			case '9':arr9.push(imgurl);break;
+			default:break;
+		}
+		var str='<li><a href="#" onclick="enlarge_img()"><img src="'+imgurl+'" alt="" /></a></li>';
+		//$('#fullscreen_img').find('img').attr('src', imgurl);
+		imglist=str+imglist;
+	}
+	$('#images_ul').empty();
+	$('#images_ul').html(imglist);
+	//$('#featured-area ul').roundabout({
+		//easing: 'easeOutInCirc',
+	//});
+}
+
+//植物阶段改变时，图片切换
+function imgChange(arr)
+{
+	if(arr!=undefined)
+	{
+		var str='';
+		for(var i=0;i<arr.length;i++)
+		{
+			str+='<li><a href="#"><img src="'+arr[i]+'" alt="" /></a></li>';
+			imglist=str;
+		}
+	}
+
+	$('#images_ul').empty();
+	$('#images_ul').html(imglist);
+	//$('#featured-area ul').roundabout({
+		//easing: 'easeOutInCirc',
+	//});
+}
+
+//绘制圆形统计图
+function fillstat()
+{
+	$('#myStat').circliful();
+	$('#myStat').circliful();
+	$('#myStat2').circliful();
+	$('#myStat3').circliful();	  
+}
+
+//测试圆形统计图的重新绘制
+function set(t)
+{
+	$('#myStat').attr('data-part',t);
+	$('#myStat').attr('data-text',t+'℃');
+	$('#myStat').circliful();
+}
+
+//phone圆形排列div
+function setDivs()
+{
+	var dotLeft = $("#img_lb_div").offset().left-25+($("#img_lb_div").width()-$(".dot").width())/2;
+	//中心点纵坐标
+	// var dotTop = $("#img_lb_div").offset().top-20+($("#img_lb_div").height()-$(".dot").height())/2;
+	var dotTop=190;
+	//alert("dotLeft:"+dotLeft+"---dotTop"+dotTop);
+	//起始角度
+	var stard = 0;
+	//半径
+	var radius = 132;
+	//每一个BOX对应的角度;
+	var avd = 360/$(".d_jd").length;
+	//每一个BOX对应的弧度;
+	var ahd = avd*Math.PI/180;
+
+	//设置圆的中心点的位置
+	$(".dot").css({"left":dotLeft,"top":dotTop});
+	$(".d_jd").each(function(index, element){
+		index = (seed_state_list.length + 1) - index;
+		$(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+	});
+}
+
+function setDivs_pad()//pad布局
+{	
+	var dotLeft = $("#img_lb_div").offset().left-40+($("#img_lb_div").width()-$(".dot").width())/2;
+	//中心点纵坐标
+	//var dotTop = $("#img_lb_div_select").offset().top-20+($("#img_lb_div_select").height()-$(".dot_select").height())/2;
+	var dotTop=360;
+
+	//起始角度
+	var stard = 0;
+	//半径
+	var radius = 245;
+	//每一个BOX对应的角度;
+	var avd = 360/$(".d_jd").length;
+	//每一个BOX对应的弧度;
+	var ahd = avd*Math.PI/180;
+
+	//设置圆的中心点的位置
+	$(".dot").css({"left":dotLeft,"top":dotTop});
+	$(".d_jd").each(function(index, element){
+		index = (seed_state_list.length + 1) - index;
+		$(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+	});
+}
+var isend=false;//最后一个阶段
+
+//植物各阶段选中
+function beTouch(obj)
+{
+	//清除被选择的状态
+	infoShow();
+	reSetAllImg();
+	var url=$(obj).attr('src').split(".");
+	var newurl='';
+	var t=$(obj).attr('src').split('_s');
+	var num=$(obj).parent().attr('value');//取得哪个阶段
+	$('#images_ul').attr('value',num);
+	if(t.length>1)
+	{
+	}
+	else
+	{
+		//各种阶段被选中时的代码
+		newurl=url[0]+'_s.png';
+		$(obj).attr('src',newurl);
+		$('#p_info').html($(obj).prev().html());
+		$('#p_info').attr('value',$(obj).parent().attr('value'));
+		$('#img_lb_div').css('background-image','url(__PUBLIC__/Images/front/b'+$('#p_info').attr('value')+'.png)');//改变phone状态圆图
+		//各阶段植物的图片切换
+		var arr = new Array();
+		switch(num)
+		{
+			case '1':arr=arr1;break;
+			case '2':arr=arr2;break;
+			case '3':arr=arr3;break;
+			case '4':arr=arr4;break;
+			case '5':arr=arr5;break;
+			case '6':arr=arr6;break;
+			case '7':arr=arr7;break;
+			case '8':arr=arr8;break;
+			case '9':arr=arr9;break;
+			default:arr=arr1;break;
+		}
+
+		$('#images_ul').empty();
+			imgChange(arr);//初始化图片
+		if(num==getMaxState())
+		{
+			isend=true;
+		}
+	}
+
+	var t=0;
+	var d=0;
+	var l=0;
+	len = seed_state_list.length;
+	for (var j = 0; j < len; j++)
+	{
+		if (seed_state_list[j]['state'] == num)
+		{
+			t = seed_state_list[j]['outside_temperature'];
+			d = seed_state_list[j]['humidity'];
+			l = seed_state_list[j]['illuminance_limit'];
+		}
+	}
+
+	if (state_changed == false)
+	{
+		t = parseFloat($('#myStat').attr('data-text'));
+		d = parseFloat($('#myStat2').attr('data-text'));
+		l = parseFloat($('#myStat3').attr('data-text'));
+		state_changed = true;
+	}
+
+	$('#myStat').attr('data-part',parseFloat(t) / 10);
+	$('#myStat').attr('data-text',parseFloat(t) / 10 +'℃');
+	$('#myStat2').attr('data-part',parseFloat(d) / 10);
+	$('#myStat2').attr('data-text',parseFloat(d) / 10 + '%');
+	$('#myStat3').attr('data-part',parseFloat(l) / 10);
+	$('#myStat3').attr('data-text',l+'lx');
+	fillstat();
+}
+
+//取得随机数
+function getRandom(n){
+	return Math.floor(Math.random()*n+1)
+}
+
+//拍照按钮点击事件
+function addPic()
+{
+	var url="__PUBLIC__/Images/front/ajax-loader.gif";
+	var obj=$('#images_ul .roundabout-in-focus a img');
+	$(obj).attr('src',url);
+	var screenWidth = document.body.clientWidth;
+	if(screenWidth >= 540){
+		$(obj).css('width','250');
+		$(obj).css('height','150');
+	}else{
+		$(obj).css('width','160');
+		$(obj).css('height','100');
+	}
+	setTimeout(function () {    
+		var url="__PUBLIC__/Images/front/pic.jpg";
+		var num=$('#images_ul').attr('value');
+		imginit(url,num);
+	}, 2000);
+}
+
+//取消其他阶段的选中情况
+function reSetAllImg()
+{
+	//var imgs=$('.plant_img');
+	$('.plant_img').each(function()
+	{
+		var url=$(this).attr('src').replace('_s',"");
+		$(this).attr('src',url);
+	});
+}
+
+var isfinal=false;//是否最后一个阶段YES已被点击
+
+function ask()
+{
+	if(!isfinal)
+	{
+		infoUnShow();	        
+	}
+}
+
+//显示说明文字
+function infoShow()
+{
+	$('#p_info').css('display','block');
+	//$('#p_yes').css('display','none');
+	//$('#p_no').css('display','none');
+	//$('#d_line').css('background-image','');
+}
+
+//隐藏说明文字，显示yes和no按钮
+function infoUnShow()
+{
+	$('#p_info').css('display','none');
+	$('#p_yes').css('display','block');
+	$('#p_no').css('display','block');
+	var clientWidth = document.body.clientWidth;
+	if(clientWidth >= 540)
+	{
+		$('#d_line').css('background-image','url(__PUBLIC__/Images/front/line_pad.png)');
+	}
+	else
+	{
+		$('#d_line').css('background-image','url(__PUBLIC__/Images/front/line.png)');
+	}
+}
+
+function no()
+{
+	var i=$('#p_info').attr('value')*1;	
+	var prev = getPrevState(i);
+	var obj=$('#jd_img'+prev);
+	beTouch(obj);
+	set_state(prev);
+}
+
+function yes()
+{
+	var i=$('#p_info').attr('value')*1;		
+	if(isend)
+	{
+	   isfinal=true;
+	}
+
+	if(i==getMaxState())
+	{
+		infoShow();
+		$('#p_info').html('恭喜~收获啦');//最后的提示语
+		return;
+	}
+
+	var next = getNextState(i);
+	var obj=$('#jd_img'+next);
+	beTouch(obj);
+	set_state(next);
+}
+
+//在select页面中被调用，用来传入开始的植物阶段
+function home_sel_plant(num)
+{
+	var obj=$('#jd_img'+num);
+	beTouch(obj);
+}
+
+
+$(function() { 
+        $('.mwui-switch-btn').each(function() {
+            $(this).bind("click", function() { 
+				var btn = $(this).find("span");
+				var mode = btn.attr("class") == 'off' ? 1 : 0;
+				set_mode(mode);
+ 
+                /*if(btn.attr("class") == 'off') { 
+                    $(this).find("input").val("0");
+                    btn.attr("change", btn.html()); 
+                    btn.html(change);
+                } else { 
+                    $(this).find("input").val("1");
+                    btn.attr("change", btn.html()); 
+                    btn.html(change);
+                }*/ 
+ 
+                return false;
+            });
+        });
+});
+</script> 
+<!--end--> 
+
+<!--主控界面的css--> 
+<style type="text/css">
+.bd-btm-grey01{border-bottom:none;}
+.liwidth
+{
+   width:80px;
+}
+.liwidth2
+{
+   width:23%;
+}
+.stat{
+   float:left;
+}
+
+
+.plant_img{
+	width:100%;
+	height:100%;
+}
+
+
+
+
+.ui-icon-me:after {  
+	   background-image: url("__PUBLIC__/Images/front/tb_1.png");  /**你的图片，路径是相对于当前使用文件可以访问到的*/         
+	   background-size: 18px 18px;  
+	   /*border-radius: 0; 图标形态，0=方形，不设置就是默认的圆形*/  
+ } 
+.ui-icon-sd:after {  
+	   background-image: url("__PUBLIC__/Images/front/tb_2.png");    
+	   background-size: 18px 18px;         
+ } 
+ .ui-icon-ss:after {  
+	   background-image: url("__PUBLIC__/Images/front/tb_3.png");    
+	   background-size: 18px 18px;         
+ } 
+ .ui-icon-gw:after {  
+	   background-image: url("__PUBLIC__/Images/front/tb_4.png");    
+	   background-size: 18px 18px;         
+ } 
+ 
+ 
+
+ .dot
+ { 
+ position:absolute;
+ width:0px;
+ height:0px;
+ }
+ .boxflex_col2 a{font-weight:normal;color:rgb(112,112,112);}
+ .boxflex_col2 a:hover{color:#68b300;}
+
+#images_ul img{width:177px;border-radius:90px;}
+#images_ul{margin-top: -164px;margin-left: 16px;width: 180px;height: 180px;}
+#home{width:100%;position:absolute;}
+.fix_box{display:none;position:fixed;z-index:1003;left:50%;top:50%;margin-left:-125px;margin-top:-165px;width:250px;height:331px;border-radius: 5px;background: #EEEEEE;}
+.main_box_title{width:100%;text-align:center;font-size: 30px;color: #5FC849;line-height: 31px;margin-top:20px;}
+.main_dur_time,.main_guang_time{width: 100%;
+text-align: center;
+margin-top: 20px;}
+.main_dur_time label,.main_guang_time label{font-size: 14px;
+color: #AAAAAA;
+line-height: 29px;}
+.main_dur_time input,.main_guang_time input{width: 100%;
+border: 0;
+height: 44px;
+font-size: 13px;
+color: #E5E5E5;
+line-height: 27px;
+text-align: center;}
+.main_box_save{height: 35px;
+margin: 0 auto;
+margin-top: 20px;
+text-align: center;}
+.main_box_save a{border-radius:4px;
+background: #5BCA40;
+width: 91px;
+height: 35px;
+display: inline-block;
+text-align: center;
+line-height: 35px;
+color:white;}
+
+.mwui-switch-btn{
+    width:75px;  
+    display:inline-block;
+    padding:1px;
+    background:#E6E6E6;
+    overflow:hidden;
+    margin-bottom:5px;
+    /*border:1px solid #5FC849;*/
+    border-radius:18px;
+    cursor: pointer;
+}
+.mwui-switch-btn span{
+    width:32px;
+    font-size:14px;
+    height:18px;
+    padding:4px 5px 2px 5px;
+    display:block; 
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#f6f6f6,endColorstr=#eeeeee,grandientType=1);
+    background:-webkit-gradient(linear, 0 0, 0 100%, from(#f6f6f6), to(#eeeeee));
+    background:-moz-linear-gradient(top, #f6f6f6, #eeeeee);
+    border-radius:18px;
+    float:left;
+    color:#5FC849;
+    text-align:center; 
+} 
+.mwui-switch-btn:hover span{
+    background:#fff;
+}
+.mwui-switch-btn span.off{float:right;}
+input[type='submit']{padding:5px 10px;cursor: pointer;}
+.adver_btn{text-align: center;margin-top: 10px;}
+.adver_btn span{color: #5FC849;
+vertical-align: super;
+font-size: 14px;}
+.mainH_btn{margin-bottom:50px;}
+a.main-btn1:hover{color: #5FC849;background:#fff;}
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+#images_ul{margin-top: -312px;margin-left: 31px;width: 340px;height: 340px;}
+#images_ul img{width:338px;border-radius: 171px;}
+#s_info{width: 340px;height: 340px;margin-left: 30px;margin-top: -355px;background-image: url(/Public/Images/front/quan3_pad.png);}
+#select_info {margin-top: -202px;}
+.s_start_btn .main-btn {width: 180px;height: 60px;font-size: 2em;line-height: 60px;}
+.fix_box{margin-left: -200px;
+margin-top: -265px;
+width: 400px;
+height: 530px;}
+.main_box_title{line-height: 47px;
+margin-top: 30px;font-size:47px;}
+.main_dur_time, .main_guang_time{margin-top:35px;}
+.main_dur_time label, .main_guang_time label{font-size: 24px;line-height: 50px;}
+.main_dur_time input, .main_guang_time input{height: 60px;font-size: 24px;line-height: 60px;}
+.main_box_save{height: 70px;margin-top: 50px;}
+.main_box_save a{border-radius: 8px;width: 150px;height: 60px;line-height: 60px;font-size: 24px;}
+.adver_btn{margin-top: 15px;height: 80px;}
+.adver_btn span {font-size: 2em;}
+.mwui-switch-btn {width: 120px;border-radius: 22px;}
+.mwui-switch-btn span {width: 50px;height: 33px;border-radius: 22px;}
+.mainH_btn{margin-bottom:80px;}
+a.main-btn1:hover{color: #5FC849;background:#fff;}
+}
+
+</style>
+</head> 
+{/literal}
+
+<body> 
+<div id="fullscreen_img" style="background:url(__PUBLIC__/Images/front/pic.jpg); display:none;height:100%;width:100%;background-size:cover;" onclick="hide_img()"></div>
+<div data-role="page" id="home"> 
+	{include file="$header_path"}
+	<div data-role="content" id="instwo_content" style="width: 100%;overflow: hidden;"> 
+
+		<!--植物各个阶段-->
+		<div id='img_lb_div' class='container'>
+			<div id='plant_m'>
+				<div id='d_info'>
+					<div id='d_line'>
+						<p id='p_info' class="p_info" value=''></p>
+						<!--<p id='p_yes' onclick='yes()'>YES</p>
+						<p id='p_no' onclick='no()'>NO</p>-->
+					</div>
+				</div>
+					<!--圆背景图-->
+				<ul id='images_ul' value=''>
+					{foreach from=$seed_state_list item=state}
+						<a href="#"><img src="{$state}" alt="" /></a>
+					{/foreach}
+				</ul> 
+				<div class="dot"></div>
+				<div class='d_jd'></div>
+				{foreach from=$seed_state_list item=state}
+					{if $state.state == 1}
+						<div id='jd1' value='1' class='d_jd'><span style='display:none;'>请问种子发芽了吗?</span><img id='jd_img1' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase1.png'></img></div>
+					{elseif $state.state == 2}
+						<div id='jd2' value='2' class='d_jd'><span style='display:none;'>请问长出叶子了吗?</span><img id='jd_img2' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase2.png'></img></div>		
+					{elseif $state.state == 3}
+						<div id='jd3' value='3' class='d_jd'><span style='display:none;'>请问看到很多叶子了吗?</span><img id='jd_img3' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase3.png'></img></div>
+					{elseif $state.state == 4}
+						<div id='jd4' value='4' class='d_jd'><span style='display:none;'>请问叶子很茂盛了吗?</span><img id='jd_img4' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase4.png'></img></div>
+					{elseif $state.state == 5}
+						<div id='jd5' value='5' class='d_jd'><span style='display:none;'>请问看到果实了吗?</span><img id='jd_img5' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase5.png'></img></div>
+					{elseif $state.state == 6}
+						<div id='jd6' value='6' class='d_jd'><span style='display:none;'>请问果实变多了吗?</span><img id='jd_img6' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase6.png'></img></div>
+					{elseif $state.state == 7}
+						<div id='jd7' value='7' class='d_jd'><span style='display:none;'>果实结了很多了吗?</span><img id='jd_img7' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase7.png'></img></div>
+					{elseif $state.state == 8}
+						<div id='jd8' value='8' class='d_jd' ><span style='display:none;'>叶子开始脱落了吗?</span><img id='jd_img8' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase8.png'></img></div>
+					{elseif $state.state == 9}
+						<div id='jd9' value='9' class='d_jd'><span style='display:none;'>果实成熟了吗？</span><img id='jd_img9' onclick='' class='plant_img' src='__PUBLIC__/Images/front/phase9.png'></img></div>
+					{/if}
+				{/foreach}
+		   </div>
+	   </div>
+	   <!--yes和设置按钮-->
+	   		<div class="param_icon" style="text-align: center;margin-top: 27px;">
+					<div class="display-ib"><a href="javascript:yes();" class="main_yes_link"></a></div>
+					<div class="display-ib"><a href="javascript:no();" class="main_diy_link"></a></div>
+				</div>
+
+	   	<!--圆形统计图-->
+		<script>
+		var screenWidth = document.body.clientWidth;
+		if(screenWidth >= 540)
+		{
+			document.write('<div id="stats" class="stat_home"><div class="stat" id="myStat" data-dimension="170" data-text="{$planter_info.outside_temperature}℃"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#ff1919" data-bgcolor="#eee" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat2" data-dimension="170" data-text="{$planter_info.humidity}%"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#22AEEB" data-bgcolor="#eee" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat3" data-dimension="170" data-text="{$planter_info.illuminance}lx"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#ff9834" data-bgcolor="#eee" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+		}
+		else
+		{
+			document.write('<div id="stats" class="stat_home"><div class="stat" id="myStat" data-dimension="90" data-text="{$planter_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#ff1919" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat2" data-dimension="90" data-text="{$planter_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#22AEEB" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat3" data-dimension="90" data-text="{$planter_info.illuminance}lx"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#ff9834" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="0" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+		}
+		</script>
+				<!--三个图标-->
+		<div class="param_icon3">
+			<div class="param_icon_temp"></div>
+			<div class="param_icon_humit"></div>
+			<div class="param_icon_light"></div>
+		</div>
+		
+		<!--灌溉弹框-->
+		<div class="fix_box">
+			<div class="main_box_title">设置</div>
+			<div class="main_dur_time">
+				<label>灌溉时间</label>
+				<input type="text" value="{$ton}" name="g-time" id="g-time" placeholder="需要浇灌多少秒" class="main_dura_time" />
+			</div>
+			<div class="main_guang_time">
+				<label>灌溉间隔</label>
+				<input type="text" value="{$toff}" name="g-interval" id="g-interval" placeholder="每隔多少秒一次" class="main_guanga_time"/>
+			</div>
+			<div class="main_box_save">
+				<a id="ok-submit" href="javascript:set_spray_time();$('.fix_box').hide();$('.screenIfm').hide();">保存</a>	
+			</div>
+		</div>
+		<div id="screenIfm" style="z-index:1002;" class="screenIfm" onclick="$('.fix_box').hide();$(this).hide();" style="display: none;">
+		</div>
+		<!--end灌溉弹框-->
+	   <div class="mainH_btn">
+		  <a href="{$main_diy_link}{if $planter_info.planter_seed_state_id > 0}{$planter_info.planter_seed_state_id}/is_diy/1{else}{$planter_info.seed_state_id}/is_diy/0{/if}/planter_seed_id/{$planter_seed_id}" class="main-btn1" rel="external">DIY<span class="pr5em"></span>编辑</a>
+		  <a href="javascript:;" onclick="$('.fix_box').show();$('.screenIfm').show();" class="main-btn1" rel="external">灌溉设置</a>
+				<!--冒险模式切换-->
+			<div class="adver_btn">
+					<span>冒险模式</span>
+					<button class="mwui-switch-btn"><span change="{if $planter_info.is_risk_mode == 0}开{else}关{/if}" class="{if $planter_info.is_risk_mode == 0}off{/if}">{if $planter_info.is_risk_mode == 0}关{else}开{/if}</span><input type="hidden" name="show_icon" value="0" /></button> 
+			</div>
+	<!--底部导航-->
+	{include file="./footer.html"}
+</div> 
+{/block}

@@ -1,0 +1,119 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+{/block}
+{block name="content"}
+	<div class="ref_wrap">
+		<form method="POST" action="" id="refund_apply_form">
+			<i class="select_arrow"></i>
+	    <select name="refund_type" id="refund_type" class="ref_sel_reason">
+	    	<option value="0" class="ref_sel_opt">选择退款原因</option>	
+	    	{foreach from=$arr_refund_reason item=item key=key}
+	    	<option value="{$key}">{$item}</option>	
+	    	{/foreach}
+	    	
+	    </select>
+	    
+			<!--评语-->
+	    <div class="ref_txt_area">
+	    	<textarea name="reason" id="reason" class="ref_assess_box" placeholder="填写退款原因"></textarea>
+	    </div>
+			<!--上传凭证-->
+	    <div class="ref_upload_photo">
+	    	<div>
+					<a href="javascript:;" class="add" title="上传一张新的图片" id="J_Uploader"><svg class="photo_icon"><use xlink:href="#photo"></use></svg></a>
+				</div>
+				<div class="preview" style="display:none;">
+					<img id="J_Preview" class="pic-preview" style="width:40px;"/>
+				</div>
+				<input type="hidden" name="img_url" data-id="" id="J_ImgUrl" />
+	    </div>
+	    <!--提交按钮-->
+	    <div class="submit_btn">
+	    	<a class="submit" href="javascript:;" onclick="refund_apply();">申请退款</a>	
+	    </div>
+    </form>
+	</div>
+</body>
+</html>
+{/block}
+{block name="js"}
+<script type="text/javascript">
+var order_id = '{$order_id}';
+{literal}
+// ajax上传图片
+new AjaxUpload("#J_Uploader", {
+	action: "/Front/uploadHandler",
+	name: "upfile",
+	responseType: "json",
+	onSubmit: function(){
+		//alert('正在上传');
+		//preview处的图片改为loading图片
+		$('.preview').show();
+	},
+	onChange: function(file, extension){
+		if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+			return true;
+		}
+		else {
+			alert('暂不支持该图片格式！');
+			return false;
+		}
+	},
+	onComplete: function(file, response){
+	//	console.log(response);
+		if (response.status === 0) {
+			alert(response.msg);
+		}
+		else if (response.status === 1) {
+			$('#J_Preview').attr('src', response.img_url);
+			$('.preview').show();
+			$('#J_ImgUrl').val(response.img_url);
+		}
+	}
+});
+
+function refund_apply()
+{
+	var refund_type = $('#refund_type').val();
+	//alert(refund_type);
+	if (refund_type == 0)
+	{
+		alert('抱歉，请选择退款原因');
+		return false;
+	}
+
+	var reason = $('#reason').val();
+	if (!reason)
+	{
+		alert('抱歉，请填写退款原因');
+		return false;
+	}
+
+	/*var img_url = $('#J_ImgUrl').val();
+	if (!img_url)
+	{
+		alert('抱歉，请上传相关图片');
+		return false;
+	}*/
+
+	$('#refund_apply_form').submit();
+}
+function toggleCheckbox(obj)
+{
+	var css = $(obj).parent().hasClass("selected");
+	if(css){
+		$(obj).parent().removeClass("selected");
+		//$(obj).parent().siblings().hide();
+		$(obj).parent().find("input:checkbox").attr("checked", false);
+	}else{
+		$(obj).parent().addClass("selected");
+		//$(obj).parent().siblings().show();
+		$(obj).parent().find("input:checkbox").attr("checked", "true");
+	}
+}
+</script> 
+{/literal}
+{/block}

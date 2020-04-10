@@ -1,0 +1,25 @@
+<tr>
+	<input type="hidden" id="pre_province_id" value="{$province_id}">
+	<input type="hidden" id="pre_city_id" value="{$city_id}">
+	<input type="hidden" id="pre_area_id" value="{$area_id}">
+	<td class="tables-form-title">收货地区：</td>  
+	<td>
+		<select class="small" id="province_id" name="province_id">  
+			<option value="0">--选择省份--</option>  
+			{foreach from=$province_list item=province_info}
+				<option value="{$province_info.province_id}" {if isset($province_id) && $province_id == $province_info.province_id}selected{/if}>{$province_info.province_name}</option>  
+			{/foreach}
+		</select> 
+		<select class="small" id="city_id" name="city_id">  
+			<option value="0">--选择城市--</option>  
+		</select> 
+		<span id="div_area">
+			<select class="small" id="area_id" name="area_id">  
+				<option value="0">--选择地区--</option>  
+			</select> 
+		</span>
+		<span class="fi-help-text"></span>
+	</td>
+	<td class="tables-form-title">详细地址：</td>  
+	<td><input type="text" placeholder="" class="xlarge" id="address" name="address" value="{$address}"></td>
+</tr>

@@ -1,0 +1,270 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div id="print_div">
+<div class="t-detail-top">
+	<input type="hidden" id="order_type" value="{$order_type}">
+	<input type="hidden" id="order_id" name="order_id" value="{$order_info.order_id}">
+	<input type="hidden" id="admin_remark" name="admin_remark" value="{$order_info.admin_remark}">
+	<input type="hidden" id="total_amount" name="total_amount" value="{$order_info.total_amount}">
+	<input type="hidden" id="express_fee" name="express_fee" value="{$order_info.express_fee}">
+	<input type="hidden" id="express_company_id" name="express_company_id" value="{$order_info.express_company_id}">
+	<input type="hidden" id="express_number" name="express_number" value="{$order_info.express_number}">
+	<div class="top-tit">
+		当前订单（{$order_info.order_sn}）状态：{$order_info.order_status}
+    	<button type="button" class="btn" onclick="print_order()" style="float:right;">打印当前订单</button>  
+	</div>
+    <div class="top-but">
+    	<table class="wxtables">  
+			<tbody>  
+            <tr><td class="tables-form-title">联系方式：</td>  
+                <td><span>{$user_info.realname}</span><span>{$user_info.mobile}</span></td></tr>
+            <tr><td class="tables-form-title">QQ：</td>  
+            {if $user_info.qq}
+                <td><a class="QQ" href='http://wpa.qq.com/msgrd?V=1&uin={$user_info.qq}&Site=在线咨询&Menu=no&title=在线客服' target='_blank'><img src="/Public/Images/qq.png" height="20" width="20" />  {$user_info.qq}</a></td>
+            {else}
+                <td>该用户暂时没提供QQ</td>
+            {/if}
+            </tr>
+			</tbody>  
+        </table>
+
+    </div>
+    <!--<div class="top-but">
+    	<button type="button" class="btn" id="remark_btn">备注</button>  
+		{if $order_info.order_status_num == 0}
+			<button type="button" class="btn" id="change_price_btn">修改价格</button>  
+			{if isset($order_type) && $order_type == 3}
+				<a href="javascript:;" onclick="offline_pay({$order_info.order_id}, 1)" class="btn">已线下收款</a>  
+			{else}
+				<a href="javascript:;" onclick="offline_pay({$order_info.order_id}, 0)" class="btn">已线下收款</a>  
+			{/if}
+		{/if}
+        <button type="button" class="btn" id="cancel_order_btn">关闭订单</button>  
+	</div>-->
+</div>
+
+<div class="t-detail-goods">
+	<div class="t-detail-goods-tit">订单状态变更明细:</div>
+    <div class="t-detail-goods-con">
+    	<table class="wxtables">  
+			<colgroup>  
+				<col width="5%">  
+				<col width="10%">  
+				<col width="12%">  
+				<col width="10%">  
+				<col width="13%">  
+				<col width="50%">  
+			</colgroup>  
+			<thead>  
+				<tr>  
+					<td>序号</td>  
+					<td>变更前状态</td>  
+					<td>变更后状态</td>  
+					<td>变更时间</td>  
+					<td>操作人IP</td>  
+					<td>操作描述</td>  
+				</tr>  
+			</thead>  
+			<tbody>  
+				{foreach from=$order_log_list item=order_log_info}
+				<tr>  
+					<td>  
+						{$order_log_info.i}
+					</td>  
+					<td>  
+						{$order_log_info.start_order_status}
+					</td>  
+					<td>  
+						{$order_log_info.end_order_status} 
+					</td>  
+					<td>{$order_log_info.addtime}</td>  
+					<td>{$order_log_info.ip}</td> 
+					<td>{$order_log_info.remark}</td> 
+				</tr>  
+				{foreachelse}
+					暂无记录
+				{/foreach}
+			</tbody>  
+		</table>  
+    </div>
+	<div class="t-detail-goods-tit">商品信息:</div>
+    <div class="t-detail-goods-con">
+    	<table class="wxtables">  
+			<colgroup>  
+				<col width="45%">  
+				<col width="8%">  
+				<col width="8%">  
+				<col width="8%">  
+				<col width="8%">  
+				<col width="8%"> 
+				<col width="15%">  
+			</colgroup>  
+			<thead>  
+				<tr>  
+					<td>商品名称</td>  
+					<td>规格属性</td>  
+					<td>货号</td>  
+					<td>商品价格</td>  
+					<td>购买数量</td>  
+					<td>总价</td>  
+					<td>备注</td>  
+				</tr>  
+			</thead>  
+			<tbody>  
+				{foreach from=$item_list item=item_info}
+				<tr>  
+					<td>  
+						<b class="pic-t"><img src="{$item_info.small_pic}" /></b>
+						<span>{$item_info.item_name}</span> 
+					</td>  
+					<td>  
+						{if $item_info.property == ''}
+							无
+						{else}
+							{$item_info.property} 
+						{/if}
+					</td>  
+					<td>{$item_info.item_sn}</td>  
+					<td>{$item_info.real_price}</td> 
+					<td>{$item_info.number}</td> 
+					<td>  
+						<span>￥</span>  
+						<span>{$item_info.real_price * $item_info.number}</span>  
+					</td>  
+					<td>无</td>  
+				</tr>  
+				{/foreach}
+			</tbody>  
+		</table>  
+    </div>
+
+	{if count($gift_list)}
+		<div class="t-detail-goods-tit">礼品信息:</div>
+		<div class="t-detail-goods-con">
+			<table class="wxtables">  
+				<colgroup>  
+					<col width="20%">  
+					<col width="50%">  
+					<col width="15%">  
+					<col width="15%"> 
+				</colgroup>  
+				<thead>  
+					<tr>  
+						<td>礼品图片</td>  
+						<td>礼品名称</td>  
+						<td>市场价</td>  
+						<td>数量</td>  
+					</tr>  
+				</thead>  
+				<tbody>  
+					{foreach from=$gift_list item=gift_info}
+					<tr>  
+						<td>  
+							<b class="pic-t"><img src="{$gift_info.small_pic}" /></b>
+						</td>  
+						<td>  
+							<span>{$gift_info.gift_name}</span> 
+						</td>  
+						<td>  
+							<span>￥</span>  
+							<span>{$gift_info.market_price}</span>  
+						</td>  
+						<td>{$gift_info.gift_total}</td> 
+					</tr>  
+					{/foreach}
+				</tbody>  
+			</table>  
+		</div>
+	{/if}
+    <div class="t-detail-goods-tit mag">订单实收款结算：</div>
+    <div class="t-detail-goods-con t-border">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="20%">  
+                <col width="80%">   
+            </colgroup>  
+            <tbody>  
+                <tr>  
+                    <td class="tables-form-title">商品金额（元）：</td>  
+					<td>{$order_info.total_amount}</td>   
+                </tr>  
+                <tr>  
+                    <td class="tables-form-title">商品总重量（克）：</td>  
+					<td>{$order_info.weight}</td> 
+                </tr> 
+				{if isset($order_type) && $order_type != 3}
+					<tr>  
+						<td class="tables-form-title">运费（元）：</td>  
+						<td>{$order_info.express_fee}</td> 
+					</tr> 
+				{/if}
+                <tr>  
+                    <td class="tables-form-title">订单折扣或涨价（元）：</td>  
+					<td>{$order_info.system_discount_amount}</td> 
+                </tr> 
+                <tr>  
+                    <td class="tables-form-title">订单实收款（元）：</td>  
+					<!--<td>{$order_info.total_amount + $order_info.express_fee}</td>-->
+					<td>{$order_info.pay_amount}</td> 
+                </tr>  
+            </tbody>  
+        </table>   
+    </div>
+	<div class="t-detail-goods-tit mag">物流信息：</div>
+	<div class="t-detail-goods-con t-border">
+		<table class="wxtables tables-form">  
+			<colgroup>  
+				<col width="20%">  
+				<col width="80%">   
+			</colgroup>  
+			<tbody>  
+				<tr>  
+					<td class="tables-form-title">物流公司：</td>  
+					<td><span class="line-t">{$express_company_name}</span><!-- <a id="change_express_company_btn" href="javascript:;" class="btn">修改物流公司</a>-->  </td>
+				</tr>  
+				<tr>  
+					<td class="tables-form-title">收货信息：</td>  
+                    <td> {if $order_info.realname}{$order_info.realname},{/if}{if $order_info.mobile}{$order_info.mobile},{/if} {$order_info.address}</td>
+                        <!--					<td>{if $order_info.address}{$order_info.address}，{/if}{if $order_info.consignee}{$order_info.consignee}，{/if}{if $order_info.mobile}{$order_info.mobile}{/if}</td> -->
+				</tr> 
+				<tr>  
+					<td class="tables-form-title">物流单号：</td>  
+					<td><span class="line-t">{if $order_info.express_number} {$order_info.express_number} {else} 暂无运单信息{/if}</span> 
+				</tr> 
+				<tr>  
+					<td class="tables-form-title">买家留言：</td>  
+					<td>{$order_info.user_remark}</td> 
+				</tr>  
+			</tbody>  
+		</table>   
+	</div>
+</div>
+</div>
+{/block} 
+
+{block name="js"}
+{literal}
+<script>
+function print_order()
+{
+	printdiv('print_div');
+}
+</script>
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<!--<script src="__JS__/acp/AcpOrder/order_detail.js?version={$version}"></script>-->
+<style>
+#jpops .fi-name{width:100px;}
+#jpops .form-controls{margin-left:100px;}
+</style>
+{/literal} 
+{/block} 
+
+{block name="css"}
+{literal}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_detail.css" type="text/css" />
+<style>
+</style>
+{/literal}
+{/block} 

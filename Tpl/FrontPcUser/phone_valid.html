@@ -1,0 +1,147 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}  
+  <section class="mlr10">
+	  <div class="pt20 display-bl">
+		  <form id="register_form" name="register_form" action="" method="post">
+			  <div class="pos-rel display-bl">
+				<div class="form_inpText">
+					<input type="tel" placeholder="请输入手机号" name="mobile" id="mobile" class="formElem" autofocus="true"/>
+				</div>
+				<div class="form_inpText1">
+					<input type="text" placeholder="输入验证码" name="register-valNum" id="register-valNum" class="formElem" />
+					<div class="sendBtn">
+						<a class="sendValNum" id="code">获取验证码</a>
+					</div>
+				</div>
+
+				<div class="sbmBtn mt5 mb10">
+					<a id="register-submit">提<span class="pr10em"></span>交</a>
+				</div>
+			  </div>
+
+			  <input type="hidden" name="action" value="register">
+			  <input type="hidden" name="msign" value="">
+		  </form>
+		</div>
+
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+
+{/block}
+
+{block name="js"}
+{literal}  
+
+<script>
+
+	$( function(){
+			
+			
+			var sec = 60;
+			var enabled = true;
+			function goTimer(){
+				enabled = false;
+				$("#code").html(sec+"秒后重发");
+				$("#code").addClass("sendBtn_grey");
+				setTimeout(loop,1000);
+			}
+
+			function loop(){
+				sec --;
+				$("#code").html(sec+"秒后重发");
+				$("#code").addClass("sendBtn_grey");
+
+				if(sec > 0){
+					setTimeout(loop,1000);
+				}else{
+					$("#code").html("重新发送");
+					$("#code").removeClass("sendBtn_grey");
+					sec = 60;
+					enabled = true;
+				}
+			}
+
+			$('#code').click(function(e){
+				e.preventDefault();
+				if(!enabled){
+					return;
+				}
+				if(!$("input[name=mobile]").val() || !/\d{11}/.test( $("input[name=mobile]").val() ) ){
+					var error="请输入正确的手机号码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+				var thiz = this;
+				$.ajax({
+					url:"/FrontUser/save_user_info",
+					type:"POST",
+					data:{
+						mobile : $("input[name=mobile]").val(),
+						type : 1
+					},
+					dataType:"json",
+					timeout:10000,
+					error:function(){
+						var error="网络请求错误，请重试";
+						$("#tan").html(error);
+						tishi();
+					},
+					success:function(d){
+						if(d && d.msg) {
+							if(d.code == 100016){
+								goTimer();
+								$('input[name="msign"]').val(d.msign)
+							}
+							alert(d.msg);
+						}
+					}
+				});
+			});
+			
+			$('.sbmBtn a').click(function(e){
+				e.preventDefault();
+				if(this.parentNode.className.indexOf('disable') != -1) return;
+				if(!$("input[name=mobile]").val() || !/\d{11}/.test( $("input[name=mobile]").val() ) ){
+					var error="请输入正确的手机号码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+
+				if(!$("input[name=register-valNum]").val()){
+					var error="请输入正确的验证码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+
+				$("#register_form").submit();
+			});
+			
+				
+		});
+
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		// $('.black-bg').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+		// $('.black-bg').fadeOut(1500);
+	  }
+</script>   
+{/literal}
+{/block}

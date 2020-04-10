@@ -1,0 +1,101 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/my_order.css?version={$version}">
+{literal}
+<style>
+.recharge_record{
+display: block;
+padding: 10px 0;
+border-bottom: 1px solid #ddd;	
+}
+</style>
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+        <div class="wx_wrap">
+            <!-- S 内容 -->
+            <div class="my_order_wrap">
+                <div class="my_order_inner" id="cont">
+                    <!-- S 所有记录 -->
+                    <div class="my_order">
+						<div>
+						{foreach from=$account_list item=account}
+                            <div class="order">
+                                <div class="order_head">
+									<div class="recharge_record">
+										<p> <span>金<span class="pr15em"></span>额：</span> <em> &yen;{$account.amount_in} </em>
+										</p>
+										<p> <span>充值前金币数：</span> <em> {$account.amount_before_pay} </em> </p>
+										<p> <span>充值后金币数：</span> <em> {$account.amount_after_pay} </em> </p>
+										<p> <span>充值时间：</span> <em> {$account.addtime|date_format:"%Y-%m-%d %H:%M:%S"} </em> </p>
+										<p> <span>备注：</span> <em> {$account.remark} </em> </p>
+									</div>
+                                </div>
+                            </div>
+						{/foreach}
+						</div>
+					</div>
+					<div>
+						<div>
+							{if !$account_list}
+								<div class="wx_ending"> 暂时没有记录 </div>
+							{/if}
+							<div class="wx_ending" style="display:none;" id="ending">
+								已经没有更多记录了！
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <!-- E 内容 -->
+        </div>
+        <!-- END wx_wrap -->
+{/block}
+
+{block name="js"}
+<script>
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+{literal}
+$(function(){
+	var range = 50; //距下边界长度/单位px  
+	var elemt = 500; //插入元素高度/单位px  
+	var num = firstRow;  
+	var totalheight = 0;  
+	var main = $(".my_order"); //主体元素  
+	$(window).scroll(function(){  
+		var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+		//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+		//console.log("页面的文档高度 ："+$(document).height());  
+		//console.log('浏览器的高度：'+$(window).height());  
+		totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+		if(($(document).height()-range) <= totalheight  && total > num)
+		{  
+			num = parseInt(num) + parseInt(firstRow);
+			//获取商品列表
+			$.post('/FrontUser/get_account_list', {"firstRow":num - parseInt(firstRow), opt:'account'}, function(data, textStatus) 
+			 {
+				if (data != 'failure')
+				{
+					var len = data.length;
+					for (i = 0; i < len; i++)
+					{
+						main.append('<div class="order"> <div class="order_head"> <div class="recharge_record"> <p> <span>金<span class="pr15em"></span>额：</span> <em> &yen;' + data[i].amount_in + ' </em> </p> <p> <span>充值前金币数：</span> <em> ' + data[i].amount_before_pay + ' </em> </p> <p> <span>充值后金币数：</span> <em> ' + data[i].amount_after_pay + ' </em> </p> <p> <span>充值时间：</span> <em> ' + data[i].addtime + ' </em> </p> <p> <span>备注：</span> <em> ' + data[i].remark + ' </em> </p> </div> </div> </div>');  
+					}
+				}
+			}, 'json');
+		}  
+		if (total < num)
+		{
+			console.log(total + ', ' + num);
+			$('#ending').show();
+		}
+	}); 
+	
+});	
+</script>       
+{/literal}
+{/block}

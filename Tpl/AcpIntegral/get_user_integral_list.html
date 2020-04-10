@@ -1,0 +1,81 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+		<div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                <div class="t-a-wait-top-li"><span>加盟商名称：</span><input type="text" placeholder="" class="small" name="nickname"> </div>
+                <div class="t-a-wait-top-li"><span>联系人名称：</span><input type="text" placeholder="" class="small" name="realname"> </div>
+                <div class="t-a-wait-top-li"><span>联系人手机号：</span><input type="text" placeholder="" class="small" name="mobile"> </div>
+                <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+              </form>
+            </div>        
+        </div> 
+        <table class="wxtables">  
+            <colgroup>  
+            <!-- <col width="10%"> -->
+            <col width="15%">  
+            <col width="15%">  
+            <col width="15%">  
+            <col width="15%">  
+            <col width="15%">  
+            <col width="25%">
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <!-- <td>选择</td>   -->
+                    <td>会员(加盟商)</td>  
+                    <td>联系人</td>  
+                    <td>手机号</td>  
+                    <td>累计积分</td>  
+                    <td>积分余额</td>  
+                    <td>操作</td>  
+                </tr>  
+            </thead>
+            <tbody>
+				{foreach from=$integral_list item=integral}
+                <tr>
+                    <!-- <td><input type="checkbox" class="checkbox" value='{$integral.integral_id}' name="a[]"></td>  -->
+                    <td>{$integral.nickname}</td>  
+                    <td>{$integral.realname}</td>  
+                    <td>{$integral.mobile}</td>  
+                    <td>{$integral.total_integral}</td>
+                    <td>{$integral.left_integral}</td>
+                    <td>
+						<a href="/AcpUser/user_detail/user_id/{$integral.user_id}" class="btn" title="查看会员详情">会员详情</a>   
+                        <a href="/AcpIntegral/get_user_integral_detail/user_id/{$integral.user_id}" class="btn" title="查看积分明细">积分明细</a>   
+						<a href="/AcpIntegral/get_user_integral_edit/user_id/{$integral.user_id}" class="btn" title="调整积分">调整积分</a>   
+                    </td>
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的会员</td></tr>
+                {/foreach}
+            </tbody>
+        </table>
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fl">  
+            </div> 
+            <div class="fr">  
+                <div class="paginate">  
+                    {$show}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

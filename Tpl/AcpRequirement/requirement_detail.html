@@ -1,0 +1,35 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-com-de">  
+    <div class="t-com-de-le">来自用户：</div>  
+    <div class="t-com-de-ri">{$user_name}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">添加时间：</div>  
+    <div class="t-com-de-ri">{$info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">内容：</div>  
+    <div class="t-com-de-ri" style="width: 400px;">{$info.requirement}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">希望解决时间：</div>  
+    <div class="t-com-de-ri" style="width: 400px;">{$info.require_time|date_format:"%Y-%m-%d %H:%M:%S"}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">附件：</div>  
+    <div class="t-com-de-ri" style="width: 400px;">
+        {if $info.attachment}[<a href="{$info.attachment}" target="_blank">附件内容,点击查看</a>]{else}无{/if}
+    </div>  
+</div> 
+{/block} 
+
+{block name="js"}
+
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpSuggest/complain_detail.css" />
+{/block}

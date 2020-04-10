@@ -1,0 +1,169 @@
+function set_order_state(order_id, order_status)
+{
+	$.post('/FrontOrder/set_order_state', {"order_id": + order_id, "order_status": order_status}, function(data, textStatus) 
+	{
+		if (data != 'failure')
+		{
+			alert('恭喜您，操作成功！');
+			location.reload();
+		}
+		else
+		{
+			alert('对不起，操作失败');
+		}
+	});
+}
+
+function goPay(order_id)
+{
+	$.ajax({
+		url:"/FrontOrder/merge_order",
+		type:"POST",
+		dataType:"json",
+		data:{
+			order_id: order_id,
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {
+				if (d.code == 0)
+				{
+					//跳转
+					var link = '/FrontOrder/pay_order/order_id/' + d.merge_pay_id;
+					//console.log(link);
+					location.href = link;
+				}
+			}
+		}
+	});
+}
+
+function realtime_express_query()
+{
+	if (map_called)
+	{
+		return false;
+	}
+	map_called = true;;
+	// 百度地图API功能
+	map = new BMap.Map("close_map");
+	map.enableScrollWheelZoom();
+	map.centerAndZoom(new BMap.Point(lon, lat), 15);
+
+	//向地图中添加缩放控件
+	var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+	map.addControl(ctrl_nav);
+
+	for (var k = 0; k < route_path.length; k ++)
+	{
+		var p = new BMap.Point(route_path[k]['lon'], route_path[k]['lat']);
+		var marker = new BMap.Marker(p);
+		var content = route_path[k]['remark'] == undefined ? '我家' : route_path[k]['remark'];
+		map.addOverlay(marker);
+		addClickHandler(content, marker, k);
+	}
+
+	var lushu;
+	var myIcon = new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)});
+	var marker = new BMap.Marker(new BMap.Point(lon,lat), {icon:myIcon});
+	map.addOverlay(marker);
+	var i = 0;
+	function getPoint()
+	{
+		var tmp_lon = (parseFloat(route_path[1]['lon']) - parseFloat(route_path[2]['lon'])) / 1000 * i + lon;
+		var tmp_lat = (parseFloat(route_path[1]['lat']) - parseFloat(route_path[2]['lat'])) / 1000 * i + lat;
+		var p = new BMap.Point(tmp_lon, tmp_lat);
+		marker.setPosition(p);
+		//console.log(p);
+		addClickHandler('aaaa', marker, 0);
+		//中心点调整
+		if (i % 1000 == 0)
+		{
+			map.centerAndZoom(p, 15);
+			console.log(i);
+		}
+		i++;
+	}
+	setInterval(getPoint, 1000);
+
+	// 实例化一个驾车导航用来生成路线
+	var arrPois = new Array();
+	var drv = new BMap.DrivingRoute(new BMap.Point(lon, lat), {
+		onSearchComplete: function(res){
+			if (drv.getStatus() == BMAP_STATUS_SUCCESS)
+			{
+				arrPois = res.getPlan(0).getRoute(0).getPath();
+				var tmp_arrPois = arrPois;
+				/*if (start_point)
+				{
+					tmp_arrPois = new Array();
+					tmp_arrPois[0] = start_point;
+					for (var k = 0; k < arrPois.length; k ++)
+					{
+						tmp_arrPois[k + 1] = arrPois[k];
+					}
+				}*/
+				//tmp_arrPois[tmp_arrPois.length] = new BMap.Point(route_path[index]['lon'], route_path[index]['lat']);
+				index ++;
+
+				start_point = arrPois[arrPois.length - 1];
+				console.log(tmp_arrPois);
+				console.log(start_point);
+				map.addOverlay(new BMap.Polyline(tmp_arrPois, {strokeColor: '#111'}));
+				map.setViewport(tmp_arrPois);
+				//map.addOverlay(new BMap.Polyline(arrPois, {strokeColor: '#111'}));
+				//map.setViewport(arrPois);
+
+				lushu = new BMapLib.LuShu(map,arrPois,{
+					defaultContent:"从天安门到百度大厦",//"从天安门到百度大厦"
+					autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+					icon  : new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
+					speed: 450,
+					enableRotation:true,//是否设置marker随着道路的走向进行旋转
+					landmarkPois: [
+						{lng:120.207536,lat:30.206518,html:'江南大道江虹路口<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2},
+						{lng:116.315391,lat:39.964429,html:'高速公路收费<div><img src="http://map.baidu.com/img/logo-map.gif"/></div>',pauseTime:3},
+						{lng:116.381476,lat:39.974073,html:'肯德基早餐<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2}
+					]
+				});
+				//绑定事件
+				//lushu.start();
+				lushu.showInfoWindow();
+			}
+		}
+	});
+
+	for (var j = 0; j < route_path.length; j ++)
+	{
+		if (j > 0)
+		{
+			drv.search(new BMap.Point(route_path[j - 1]['lon'], route_path[j - 1]['lat']), new BMap.Point(route_path[j]['lon'], route_path[j]['lat']));
+		}
+	}
+
+	function $(element){
+		return document.getElementById(element);
+	}
+}
+
+function addClickHandler(content,marker, k){
+	marker.addEventListener("click",function(e){
+		openInfo(content,e,k);
+	});
+}
+
+function openInfo(content,e,k)
+{
+	var p = e.target;
+	var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+	var opts = {
+		width : 200,     // 信息窗口宽度
+		height: 100,     // 信息窗口高度
+		title : k == (route_path.length - 1) ? '收货地点' : route_path[k]['shop_name'] , // 信息窗口标题
+		enableMessage:true,//设置允许信息窗发送短息
+		message:"亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~"
+	}
+
+	var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+	map.openInfoWindow(infoWindow,point); //开启信息窗口
+}

@@ -1,0 +1,49 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+<form method="POST" action="" id="rate_set_form">
+	<!--主内容-->
+	<div class="personal_data_cont">
+		<div class="ed_cont">
+			<p>
+			<label for="name">
+				<span class="tit">
+					下级代理拿货折扣（%）：
+				</span>
+				<input type="text" placeholder="如90" name="first_agent_rate" id="first_agent_rate" class="" value="{$first_agent_rate}"/ style="width: 120px;right: 10px;left: auto;">
+			</label>
+			</p>
+		</div>
+
+		<div class="submit_btn">
+			<input type="hidden" name="act" value="save">
+			<a href="javascript:void(0);" id="submit" class="submit" onClick="save_info();">保存</a>
+		</div>
+  </div>
+</form>
+<!--提示层-->
+<div id="tan_wrap"><div id="tan"></div></div>
+{/block}
+{block name="js"}
+<script>
+//保存设置
+function save_info()
+{
+	var first_agent_rate = $('#first_agent_rate').val();
+	var re = /^[1-9]+(\.\d+)?$|^0(\.\d+)?$|^[1-9]+[0-9]*(\.\d+)?$/; 
+
+	if (!re.test(first_agent_rate))
+	{
+		$("#tan").html('对不起，请填写整数或小数！');
+		tishi();
+		$('#first_agent_rate').focus();
+		return false;
+	}
+
+	$('#rate_set_form').submit();
+}
+</script>
+{/block}

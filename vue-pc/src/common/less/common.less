@@ -1,0 +1,375 @@
+//宽高
+.wh(@width, @height) {
+  width: @width;
+  height: @height;
+}
+
+//字体大小，颜色
+.sc(@size, @color) {
+  font-size: @size;
+  color: @color;
+}
+
+.n1{color:#0167FF}
+
+.n2{color:#eca101}
+
+.n3{color:#ff0000}
+
+.n4{color:#0167FF}
+
+.n5{color:#eca101}
+
+.n6{color:#ff0000}
+
+.n7{color:#0167FF}
+
+.n8{color:#eca101}
+
+.n9{color:#ff0000}
+
+.n10{color:#0167FF}
+
+// 主要内容宽度;
+@main-width: 1080px;
+// 主要字体颜色
+@main-color: #FED093;
+// 走势图底部背景颜色
+@chart-color:#FFEFD4;
+// 页面最小高度，当页面内容不能占满屏幕时
+@min-height: calc(100% - 232px);
+
+// 鼠标悬浮 手指
+.pointer{
+   &:hover{
+     cursor: pointer;
+   }
+}
+
+input {
+  border-width: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+// 取消 输入框为数字时的上下箭头;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+// 公用按钮样式 @btnHeight 按钮高度  @btnWidth  按钮宽度
+.commonBtn(@btnHeight, @btnWidth) {
+  width: @btnWidth;
+  height: @btnHeight;
+  line-height: @btnHeight;
+  font-size: 18px;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(360deg, rgba(209, 145, 60, 1) 0%, rgba(255, 209, 148, 1) 100%);
+  border-radius: 4px;
+}
+
+// 表格样式一中的结果样式  @wh: 宽高(圆形宽高相等), @fs: 字体大小
+.result_ball(@wh, @fs) {
+  width: @wh;
+  height: @wh;
+  border-radius: @wh;
+  font-size: @fs;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(249, 212, 35, 1) 0%, rgba(255, 78, 80, 1) 100%);
+  line-height: @wh;
+  text-align: center;
+}
+
+// 游戏相关表格公用样式;
+.game_table {
+  width: @main-width;
+  text-align: center;
+  border-top: 2px solid #F5A623;
+
+  th {
+    height: 42px;
+    line-height: 42px;
+    font-size: 14px;
+    background: #FFEFD4;
+    color: #4A4130;
+    border: 1px solid #e8e8e8;
+  }
+
+  .text_left {
+    text-align: left;
+    letter-spacing: 38px;
+    padding-left: 61px;
+    box-sizing: border-box;
+  }
+
+  td {
+    height: 44px;
+    border: 1px solid #e8e8e8;
+    text-align: center;
+    font-size: 14px;
+    color: #4A4130;
+    line-height: 44px;
+    box-sizing: border-box;
+    vertical-align: bottom;
+
+    .moreline {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      line-height: 17px;
+      font-size: 12px;
+    }
+
+    .douzi_all {
+      display: flex;
+      align-items: center;
+      .sc(16px, #4A4130);
+      justify-content: center;
+
+      img {
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+      }
+    }
+
+    .win_douzi{
+      color: rgb(255, 76, 32);
+    }
+    .lose_douzi{
+      color: rgb(56, 151, 255);
+    }
+
+    .table_btn {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      div {
+        width: 64px;
+        height: 32px;
+        font-size: 14px;
+        color: #fff;
+        line-height: 32px;
+        text-align: center;
+        border-radius: 5px;
+      }
+
+      .guess {
+        background: linear-gradient(360deg, rgba(209, 145, 60, 1) 0%, rgba(255, 209, 148, 1) 100%);
+        &:hover{
+          cursor: pointer;
+        }
+      }
+
+      .awarding {
+        background: linear-gradient(360deg, rgba(255, 75, 31, 1) 0%, rgba(255, 144, 104, 1) 100%);
+      }
+
+      .haveaward {
+        background: #ccc;
+      }
+
+      .haveAward_tow {
+        .haveAward_tow_btn {
+          width: 64px;
+          height: 18px;
+          border-radius: 18px;
+          background: #CCCCCC;
+          line-height: 18px;
+          text-align: center;
+          color: #fff;
+          margin-bottom: 1px;
+        }
+
+        .haveAward_tow_txt {
+          text-align: center;
+          font-size: 12px;
+          color: #D1913C;
+          height: 17px;
+          line-height: 17px;
+        }
+      }
+    }
+
+    .poker_box {
+      display: flex;
+      align-items: center;
+      height: 100%;
+
+      img {
+        width: 32px;
+        height: 42px;
+        margin-left: 4px;
+      }
+    }
+
+    .poker_result {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      justify-content: space-around;
+      flex-wrap: wrap;
+
+      div {
+        min-width: 28px;
+        height: 34px;
+        color: #fff;
+        font-size: 16px;
+        text-align: center;
+        line-height: 34px;
+        margin-bottom: 4px;
+      }
+
+      .bg_red {
+        background: #FB3A3A;
+      }
+
+      .bg_blue {
+        background: #1F70FF;
+      }
+
+      .bg_green {
+        background: #99ff00;
+      }
+    }
+
+    .result {
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 16px;
+        height: 22px;
+        margin: 0 4px;
+      }
+
+      .result_num {
+        margin-left: 6px;
+        .result_ball(30px, 22px);
+      }
+
+      .result_str{
+        margin-left: 6px;
+        width: 24px;
+        height: 24px;
+        border-radius: 24px;
+        line-height: 24px;
+        text-align: center;
+        font-size: 16px;
+        color: #fff;
+      }
+
+      .result_look {
+        .sc(12px, #D1913C);
+        margin-left: 10px;
+        &:hover{
+          cursor: pointer;
+        }
+      }
+    }
+    .result_num_arr{
+      display: flex;
+      padding: 0 12px;
+      box-sizing: border-box;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      span {
+        display: inline-block;
+        width: 26px;
+        height: 26px;
+        border-radius: 4px;
+        line-height: 26px;
+        text-align: center;
+        font-size: 16px;
+        margin-right: 4px;
+        img{
+          width: 26px;
+          height: 26px;
+          border-radius: 4px;
+          opacity: 0.3;
+        }
+        .active{
+          opacity: 1;
+        }
+      }
+      span:last-child{
+        margin-right: 0;
+      }
+      .result_num_arr_result{
+        .result_ball(26px, 18px);
+      }
+    }
+
+    .result_two {
+      font-size: 16px;
+
+      .result_two_top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 24px;
+
+        img {
+          width: 11px;
+          height: 14px;
+          margin: 0 4px;
+        }
+
+        .result_num {
+          margin-left: 6px;
+          .result_ball(24px, 16px);
+        }
+      }
+
+      .result_look {
+        .sc(12px, #D1913C);
+        height: 17px;
+        line-height: 17px;
+        &:hover{
+          cursor: pointer;
+        }
+      }
+    }
+
+    .ball_result_box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+
+      .ball_result_look {
+        font-size: 12px;
+        color: #D1913C;
+      }
+    }
+
+    .only_num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+
+      img {
+        height: 23px;
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+    }
+  }
+}

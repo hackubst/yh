@@ -1,0 +1,63 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">
+    <!--<div class="tables-searchbox">-->
+        <!--<form action='{$form_url}' method='post'>-->
+            <!--<span class="tbs-txt">群名称：</span>-->
+            <!--<input type="text" name='group_name' value='{$group_name}' />-->
+            <!--<input type='hidden' name='submit' value='search' />-->
+
+            <!--<button class="btn"><i class="gicon-search"></i>查询</button>-->
+        <!--</form>-->
+    <!--</div>-->
+
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <thead>
+        <tr>
+            <td>商户名称</td>
+            <td>商户号</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$merchant_list item=this}
+        <tr>
+            <td>{$this.name}</td>
+            <td>{$this.mcid}</td>
+            <td>
+                <!--<a href="javascript:;" onclick="del_group({$this.hx_group_id})" class="btn">删除</a>-->
+                <a href="/AcpWxMerchant/add_merchant/id/{$this.wx_merchant_id}" class="btn" title="修改">修改</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/front/jquery.showLoading.min.js?version={$version}"></script>
+<script src="/Public/Js/jquery/layer.js"></script>
+<script src="/Public/Js/jquery/jquery.cookie.min.js"></script>
+<script>
+</script>
+<script type="text/javascript">
+
+</script>
+{/block}

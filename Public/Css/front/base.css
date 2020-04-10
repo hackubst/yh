@@ -1,0 +1,147 @@
+
+/*! * @名称：base.css * @功能：1、重设浏览器默认样式 * 2、设置通用原子类*/
+/*reset & tool class*/
+	html,a {
+	color:#999;
+}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
+	margin:0;
+	padding:0;
+   font-family:"Microsoft YaHei", Verdana, Geneva, sans-serif;
+}
+body,button,input,select,textarea {
+    font:15px \5b8b\4f53,arial,sans-serif;
+    font-family: "微软雅黑";
+}
+input,select,textarea {
+    font-size:100%;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+th {
+	text-align:inherit;
+}
+fieldset,img {
+	border:none;
+}
+iframe {
+	display:block;
+}
+abbr,acronym {
+	border:none;
+	font-variant:normal;
+}
+del {
+	text-decoration:line-through;
+}
+address,caption,cite,code,dfn,em,th,var {
+	font-style:normal;
+	font-weight:500;
+}
+ol,ul {
+	list-style:none;
+}
+caption,th {
+	text-align:left;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+q:before,q:after {
+	content:'';
+}
+sub,sup {
+	font-size:75%;
+	line-height:0;
+	position:relative;
+	vertical-align:baseline;
+}
+sup {
+	top:-0.5em;
+}
+sub {
+	bottom:-0.25em;
+}
+a:hover {
+	text-decoration:none;
+}
+ins,a {
+	text-decoration:none;
+}
+a:focus,*:focus {
+	outline:none;
+}
+/*input[type="button"],input[type="submit"],input[type="reset"] {
+	-webkit-appearance:none;
+}*/
+a,img,button,input,textarea {
+	-webkit-tap-highlight-color:rgba(255,255,255,0);
+}
+.clearfix:before,.clearfix:after {
+	content:"";
+	display:table;
+}
+.clearfix:after {
+	clear:both;
+	overflow:hidden;
+}
+.clearfix {
+	zoom:1;
+}
+.clear {
+    clear:both;
+    display:block;
+    font-size:0;
+    height:0;
+    line-height:0;
+    overflow:hidden;
+}
+.hide {
+    display:none!important;
+}
+.block {
+    display:block;
+}
+/* 设置浮动，减少浮动带来的 bug */
+.fl,.fr {
+    display:inline;
+}
+.fl {
+    float:left;
+}
+.fr {
+    float:right;
+}
+.tl{
+    text-align: left;
+}
+.tr{
+    text-align: right;
+}
+.tc{
+    text-align: center;
+}
+.oh{
+  overflow: hidden;
+}
+.bold{
+  font-weight: bold;
+}
+.pos_abs{
+  position: absolute;
+}
+.pos_rel{
+  position: relative;
+}
+.txt_limit{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  -ms-text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.border_no{
+	border: none !important;
+}

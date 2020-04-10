@@ -1,0 +1,52 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="POST" action="">
+<div class="t-his-top">
+    <div class="t-his-top-li">
+        <div class="formitems inline">  
+            <label class="fi-name" style="width:70px;">订单状态：</label>  
+            <div class="form-controls" style="margin-left:70px;">  
+                <select class="mini" name="order_status" id="order_status">  
+                    <option value="">请选择</option>   
+                    <option value="{OrderModel::CONFIRMED}">已完成</option>
+                    <option value="{OrderModel::CANCELED}">已关闭</option> 
+                    <option value="{OrderModel::REFUND_DELIVER_CONFIRMD}">已退货</option> 
+                </select>  
+                <span class="fi-help-text"></span>  
+            </div>  
+        </div>  
+    </div>
+    <div class="t-his-top-li">
+        <div class="formitems inline">  
+            <label class="fi-name" style="width:75px; color:#666;">选择时间段：</label>  
+            <div class="form-controls" style="margin-left:80px;">  
+                <input type="text" autocomplete="off" name="start_time" id="start_time" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">  
+                <span class="fi-text">-</span>  
+                <input type="text" autocomplete="off" name="end_time" id="end_time" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">  
+            </div>
+        </div>    
+    </div>
+	<div class="t-his-top-li">
+		<input type="hidden" name="act" value="export">
+		<button type="submit" class="btn">导出订单</button>
+	</div>
+</div>
+</form>
+
+<div class="t-his-bottom">
+	<p>注：</p>
+    <p>1 . 每个 EXCEL文件 导出的最大订单条数和平均每个订单中所包含的商品件数成正比！</p>
+    <p>2 . 如果您在进行订单导出时遇到未知的问题，请试图改小每个 EXCEL文件 导出的订单条数 ！</p>
+    <p>3 . 在进行订单导出时，可能需要很长一段时间，请不要刷新页面   ！</p>
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/get_history_order.css" type="text/css" />
+{/block} 

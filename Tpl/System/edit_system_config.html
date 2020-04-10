@@ -1,0 +1,31 @@
+{extends file="../acp.html"}
+{block name="title"}{$head_title}{/block} 
+{block name="content"}
+<div class="path_css">当前位置：<a href="__APP__/acp/index">后台管理首页</a> > {$head_title}</div>
+<div class="show_notice">带 <span class="cRed">*</span> 号的项目为必填项</div>
+<div class="blank10"></div>
+
+<form id="form1" name="form1" method="post" action="">
+<table border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="35" align="right"><span class="cRed">*</span> 网站名称：</td>
+    <td align="left"><input name="website_name" type="text" id="website_name" value="{$system_config.WEBSITE_NAME}" size="50" /></td>
+  </tr>
+  <tr>
+    <td height="35" align="right"><span class="cRed">*</span> 列表页面每页显示多少条记录：</td>
+    <td align="left"><input name="per_page_num" type="text" id="per_page_num" value="{$system_config.PER_PAGE_NUM}" size="5" maxlength="3" style="ime-mode:disabled;" onkeypress="return only_num();" /></td>
+  </tr>
+  <tr>
+    <td height="35" align="right"><span class="cRed">*</span> 备案号：</td>
+    <td align="left"><input name="beianhao" type="text" id="beianhao" value="{$system_config.BEIANHAO}" size="20" /></td>
+  </tr>
+  <tr>
+    <td height="35" align="right"><span class="cRed">*</span> 前台跳转网址：</td>
+    <td align="left"><input name="to_taobao" type="text" id="to_taobao" value="{$system_config.TO_TAOBAO}" style="width:500px" /></td>
+  </tr>
+  <tr>
+    <td height="35" colspan="2" align="center"><input name="act" type="hidden" value="submit" /><input type="submit" name="Submit" value=" 修 改 " class="submit_b" />　　<input type="button" name="resetb" value=" 重 置 " onclick="this.form.reset();" class="submit_b" /></td>
+  </tr>
+</table>
+</form>
+{/block} 

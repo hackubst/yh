@@ -1,0 +1,120 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="alert alert-danger" id="hack_fixie67" style="display:none;"><strong>提示</strong>系统检测到您使用的浏览器版本过低，如果功能无法正常使用，请尝试升级您的浏览器。</div>
+<div class="express-settingbox">
+	<form id="J_FormExpress" action="" method="post">
+		<div class="formitems inline" style="vertical-align: top; display: inline-block; margin-left: 0;">  
+			<label class="fi-name" style="width: 80px;"><span class="colorRed">*</span>物&nbsp;流&nbsp;公&nbsp;司：</label>  
+			<div class="form-controls" style="margin-left: 90px;">  
+				<select class="small" name="shipping_company_id" id="J_ShippingCompanyId">
+					<option value="">--请选择--</option>
+					{html_options options=$shipping_company_options}
+				</select>  
+				<span class="fi-help-text hide"></span>
+			</div>
+		</div>
+		<div class="formitems inline" style="vertical-align: top; display: inline-block; margin-left: 10px;">  
+			<label class="fi-name" style="width: 80px;"><span class="colorRed">*</span>模&nbsp;板&nbsp;名&nbsp;称：</label>  
+			<div class="form-controls" style="margin-left: 90px;">  
+				<input type="text" placeholder="" name="print_temp_name" id="J_PrintTempName" />  
+				<span class="fi-help-text hide"></span>
+			</div>
+		</div>
+		<div class="formitems inline">  
+			<label class="fi-name" style="width: 80px;"><span class="colorRed">*</span>快递单尺寸：</label>  
+			<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 10px;">  
+				<label>长</label>
+				<input type="text" placeholder="" class="mini" name="printing_paper_width" id="printing_paper_width" />  
+				<span class="fi-help-text hide"></span>
+			</div>
+			<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 0;">  
+				<label>宽</label>
+				<input type="text" placeholder="" class="mini" name="printing_paper_height" id="printing_paper_height" />  
+				<span class="fi-help-text hide"></span>
+			</div>
+			<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 0; overflow: hidden;">
+				<input type="hidden" name="img_url" id="J_ImgUrl" value="" />
+				<button class="btn" id="J_Uploader">上传底图</button>
+				<span class="fi-help-text hide"></span>
+			</div>
+			<span class="fi-help-text">此处设置快递单的实际尺寸，单位0.1mm，如长120mm，则设置1200</span>
+		</div>
+		<input type="hidden" name="act" value="submit" />
+	</form>
+    <select id="slt_opts" class="select">  
+        <option value="">请选择打印项</option>
+	{foreach from=$print_item_list item=this}
+        <option value="{$this.shipping_print_item_en}">{$this.shipping_print_item_value}</option>
+	{/foreach}
+    </select>
+    <select id="slt_fontsize" class="select small">
+        <option value="">字体大小</option>
+        <option value="10">10px</option>
+        <option value="12">12px</option>
+        <option value="14">14px</option>
+        <option value="16">16px</option>
+        <option value="18">18px</option>
+        <option value="20">20px</option>
+        <option value="22">22px</option>
+        <option value="24">24px</option>
+    </select>
+
+    <select id="slt_letterSpacing" class="select small">
+        <option value="">文字间距</option>
+        <option value="0">0px</option>
+        <option value="2">2px</option>
+        <option value="4">4px</option>
+        <option value="6">6px</option>
+        <option value="8">8px</option>
+        <option value="10">10px</option>
+        <option value="12">12px</option>
+        <option value="14">14px</option>
+        <option value="16">16px</option>
+        <option value="18">18px</option>
+    </select>
+
+    <span>右偏移：</span><input type="text" class="input" id="ipt_posLeft" style="width:50px;"><span>px</span>
+    <span>下偏移：</span><input type="text" class="input" id="ipt_posTop" style="width:50px;"><span>px</span>
+    <a href="javascript:;" id="ckb_fontbold" class="ckb-font" title="加粗"><i class="expicon bold"></i></a>
+    <a href="javascript:;" id="ckb_fontitalic" class="ckb-font" title="斜体"><i class="expicon italic"></i></a>
+</div>
+
+<div id="express-editor">
+{foreach from=$print_item_list item=this}
+    <div class="textarea-item" id="{$this.shipping_print_item_en}">
+        <textarea name="{$this.shipping_print_item_en}" data-tip_value="{$this.shipping_print_item_value}">{$this.shipping_print_item_value}</textarea>
+        <a href="javascript:;" title="移除" class="textarea-item-del"><i class="exp-ctrl-icon remove"></i></a>
+        <a href="javascript:;" title="移动" class="textarea-item-move"><i class="exp-ctrl-icon move"></i></a>
+    </div>
+{/foreach}
+
+    <!-- 底图开始 -->
+	<div class="default-height">
+		<img id="J_ExpressBG" style="display: none;" />
+	</div>
+    <!-- 底图结束 -->
+</div>
+
+<div class="mgt15">
+    <a href="javscript:;" class="btn btn-blue" id="btn_confirm"><i class="gicon-check white"></i>确定</a>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/jquery-ui-1.10.4/jquery-ui.min.js?version={$version}"></script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpShipping/express.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpShipping/save_express_template.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__JS__/jquery/jquery-ui-1.10.4/jquery.ui.resizable-min.css">
+<link rel="stylesheet" type="text/css" href="__ACPCSS__/AcpShipping/express.css" />
+{literal}
+<style>
+.default-height {height: 500px}
+</style>
+{/literal}
+{/block}

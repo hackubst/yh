@@ -1,0 +1,47 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>一级分类名称：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="class_name" id="class_name" value="{$class_info.class_name}">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>排序号：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="serial" id="serial" value="{$class_info.serial}">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">显示：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="isuse" value="1" {if $class_info.isuse == 1}checked="checked"{/if} />是</label>  
+            <label><input type="radio" name="isuse" value="0" {if $class_info.isuse == 0}checked="checked"{/if} />否</label>   
+        </div>  
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="edit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>添加</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+{/block} 
+
+{block name="css"}
+{/block}

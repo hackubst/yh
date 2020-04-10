@@ -1,0 +1,80 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<!--主内容-->
+<div class="pay_main">
+    <div class="pay_cont">
+        <form id="bind_form" name="bind_form" action="" method="post">
+            <div class="rcg_top_num">
+                <label>关联手机号: </label><span>{$user_info.mobile|default:"请先去个人中心设置手机号码"}</span>
+            </div>
+            <div class="rcg_top_num">
+                <label>关联卡号: </label>
+                <input type="tel" style="width:70%; font-size:15px;" placeholder="请输入会员卡号" 
+                name="num" id="member_card_id" autofocus="true"/>
+            </div>
+            <input type="hidden" name="act" value="bind">
+            {if $user_info.mobile}
+            <div class="submit_btn" id="sbmBtn">
+                <a class="submit" onclick="on_submint();">立即绑定</a>
+            </div>
+            {else}
+            {/if}
+        </form>
+    </div>
+</div>
+{/block}
+{block name="js"}
+{literal}
+<script>
+function show_error(msg) {
+    layer.open({
+        content: msg,
+        style:'width:70%;color:#000;',
+        shadeClose:true
+    });
+}
+
+function on_submint() {
+    var member_card_id = parseInt($('#member_card_id').val());
+    if (!member_card_id) {
+        show_error("卡号不能为空");
+    } else {
+        $.ajax({
+            url:"/FrontUser/ajax_bind_card",
+            type:"POST",
+            data:$('#bind_form').serialize(),
+            timeout:1000,
+            success:function(d){ 
+                if (d == 'success') {
+                    var lay_contact = layer.open({
+                        content: '恭喜, 绑定成功',
+                        shadeClose:false,
+                        btn:['好的'],
+                        style:'width:70%;color:#000;',
+                        yes:function() {
+                            location.href='/FrontUser/bind_member_card';
+                        },
+                    });     
+                } else {
+                    show_error(d);
+                }
+            }
+        });
+
+    }
+
+}
+</script>
+{/literal}
+{/block}
+
+

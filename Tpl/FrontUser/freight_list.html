@@ -1,0 +1,77 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+{include file="$header_path"}
+	<!--所有记录 -->
+	<div class="detail_list_cont">
+  		<!--镖金余额-->
+  		<div class="wal_left_money">
+  			<span>剩余镖金：<i>￥{if $freight_list[0].end_freight == 0}0{else}{$freight_list[0].end_freight}{/if}</i></span>
+  		</div>
+  	<!--一条记录 -->
+    <div class="dlist_cont">
+        <div class="dlist_content" id="going_list">
+            {foreach from=$freight_list item=freight}
+            <div class="dlink_record">
+							<p> <span>金额：</span> <i> &yen;{$freight.freight} </i></p>								
+							<p> <span>变动前金额：</span> <em> {$freight.start_freight} </em> </p>
+							<p> <span>变动后金额：</span> <em> {$freight.end_freight} </em> </p>
+							<p> <span>变动时间：</span> <em> {$freight.addtime|date_format:"%Y-%m-%d %H:%M:%S"} </em> </p>
+							<!-- <p> <span>订单号：</span> <em></em> </p> -->
+							<p> <span>镖金来源：</span> <em>{$freight.change_type_name}</em> </p>
+							<p> <span>备注：</span> <em> {$freight.remark} </em> </p>
+						</div>
+            {/foreach}
+        </div>
+    </div>
+	</div>
+	{if !$freight_list}
+	<div class="dlist_error"> —————— &nbsp;&nbsp;暂时没有记录&nbsp;&nbsp;—————— </div>
+	{/if}
+{/block}
+{block name="js"}
+<script type="text/javascript">
+var firstRow = parseInt('{$firstRow}');
+var total = parseInt('{$total}');
+{literal}
+$(function(){  
+    var range = 500; //距下边界长度/单位px  
+    var elemt = 500; //插入元素高度/单位px  
+    var num = firstRow;  
+    var totalheight = 0;  
+    var main = $("#going_list"); //主体元素  
+    $(window).scroll(function(){  
+      var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+      totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+      if(($(window).height()+range) <= totalheight  && total > num)
+      {  
+        num = parseInt(num) + parseInt(firstRow);
+        //获取商品列表
+        $.post('/FrontUser/get_freight_list', {"firstRow":num - parseInt(firstRow)}, function(data, textStatus)
+         {
+          if (data != 'failure')
+          {
+            var len = data.length;
+            for (i = 0; i < len; i++)
+            {
+                var html = '<div class="dlink_record"><p><span>金额：</span><i>&yen;'+data[i].freight+'</i></p><p><span>变动前金额：</span> <em>'+data[i].start_freight+'</em> </p><p> <span>变动后金额：</span> <em>'+data[i].end_freight+'</em> </p><p> <span>变动时间：</span> <em>'+data[i].addtime+'</em> </p><p> <span>镖金来源：</span> <em>'+data[i].change_type_name+'</em> </p><p> <span>备注：</span> <em>'+data[i].remark+'</em> </p></div>';
+               
+                  main.append(html);  
+            }
+ 
+          }
+        }, 'json');
+      } 
+       else
+      {
+        $('#item_ending').show();
+      }
+    }); 
+    
+  }); 
+</script>
+{/literal}
+{/block}

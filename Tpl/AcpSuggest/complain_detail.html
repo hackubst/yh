@@ -1,0 +1,90 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-com-de">  
+    <div class="t-com-de-le">投诉客服：</div>  
+    <div class="t-com-de-ri">{$complain_info.customer_service_online_account}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">投诉原因：</div>  
+    <div class="t-com-de-ri" style="width: 400px;">{$complain_info.contents}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">凭证：</div>  
+    <div class="t-com-de-ri" style="position: relative;">
+		<img src="__IMAGES__/popup-loading.gif" id="ajax-loading" style="display: none; position: absolute; z-index: 999; left: 84px; top: 84px;" />
+		<img id="proof" data-url="{$complain_info.proof}" width="200" height="200" />
+	</div>  
+</div>  
+{if !$complain_info.complain_state}
+<div class="t-com-de">  
+    <div class="t-com-de-le">&nbsp;</div>  
+    <div class="t-com-de-ri"><button type="button" class="btn btn-blue" id="set_handled" data-id="{$complain_info.complain_log_id}"><i class="gicon-check white"></i>已处理</button></div>  
+</div> 
+{/if}
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+$(function(){
+	var _this = $('#proof');
+	var imgUrl = _this.data('url');
+	if('' != imgUrl){
+		var _ajaxLoading = $('#ajax-loading');
+		_ajaxLoading.show();
+		_this.attr('src', imgUrl);
+		if(_this.prop('complete')){
+			_ajaxLoading.fadeOut();
+		} else {
+			_this.on('load', function(){
+				_ajaxLoading.fadeOut();
+			}).on('error', function(){
+				_ajaxLoading.fadeOut();
+			});
+		}
+	}
+	
+	$('#set_handled').on('click', function(){
+		var _this = this;
+		$.jPops.confirm({
+			title:"提示",
+			content:'客服投诉处理状态一旦设置将不可逆，您确定要设置吗？',
+			okBtnTxt:"确定",
+			cancelBtnTxt:"取消",
+			callback:function(r){
+				if(r){
+					$.ajax({
+						url: '/AcpSuggestAjax/set_handled',
+						data: {id: $(_this).data('id')},
+						dataType: 'json',
+						beforeSend: function(){
+							$.jPops.showLoading();
+						},
+						success: function(data){
+							$.jPops.hideLoading();
+							$.jPops.alert({
+								title:"提示",
+								content:data.msg,
+								okBtnTxt:"确定",
+								callback:function(){
+									location.href = '/AcpSuggest/list_complain';
+									return true;
+								}
+							});
+						}
+					});
+				}
+				return true;
+			}
+		});
+	});
+});
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpSuggest/complain_detail.css" />
+{/block}

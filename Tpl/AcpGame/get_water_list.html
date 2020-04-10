@@ -1,0 +1,277 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<div class="tablesWrap">
+
+<div class="tables-searchbox">
+    <form method="post">
+        <div class="mgt10">
+        </div>
+    </form>
+</div>
+    <table class="wxtables">
+        <colgroup>
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+            <col width="10%">
+            <col width="10%">
+            <col width="5%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>名称名称</td>
+            <td>A盘退水</td>
+            <td>B盘退水</td>
+            <td>C盘退水</td>
+            <td>D盘退水</td>
+            <td>单项限额</td>
+            <td>单注最高限额</td>
+            <td>单注最低限额</td>
+            <td>操作</td>
+
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$water_list item=v}
+        <tr>
+
+            <td>{$v.name}</td>
+            <td>{$v.a*100}%</td>
+            <td>{$v.b*100}%</td>
+            <td>{$v.c*100}%</td>
+            <td>{$v.d*100}%</td>
+            <td>{$v.limit}</td>
+            <td>{$v.high_limit}</td>
+            <td>{$v.low_limit}</td>
+
+
+
+            <td>
+                <a href="/AcpGame/edit_water/water_id/{$v.water_id}" class="btn" title="编辑">编辑</a>
+
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+        </div>
+    </div>
+
+    <!-- end tables-btmctrl -->
+
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+
+    $(function() {
+
+        var html='<form id="pop_demo">                                                                '+
+            '<div class="formitems inline">                                                       '+
+            '	<label class="fi-name"><span class="colorRed">*</span>中百分比(0-100)：</label>          '+
+            '	<div class="form-controls">                                                       '+
+            '		<input type="text" id="amount" name="amount" onkeyup="this.value=this.value.replace(/[^\\d]/g,\'\') " onafterpaste="this.value=this.value.replace(/[^\\d]/g,\'\') ">                                 '+
+            '		<span class="fi-help-text" id="amount_ts">20表示百分之20得奖</span>       '+
+            '	</div>                                                                            '+
+            '</div>                                                                               '+
+            '</form>                                                                              ';
+
+        $(".j_form").click(function(){
+            var game_type_id = $(this).data('id');
+            $.jPops.custom({
+                title:"金豆充值",
+                content:html,
+                callback:function(r){
+                    acp.popFormStatus=false;//弹窗表单验证状态
+                    if(r){
+
+                        $.validator.setDefaults({
+                            submitHandler: function() {
+                                acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+                                var kill_rate=$("#jpops #amount").val();
+
+                                $.ajax({
+                                    url : '/AcpGame/edit_kill_model',
+                                    type : 'POST',
+                                    dataType : 'JSON',
+                                    timeout : 1000,
+                                    data : {id : game_type_id,kill_rate : kill_rate,state:1},
+                                    error : function() {
+                                        $.jPops.message({title:"操作提示",content: "操作失败请重试",timing:3000});
+                                    },
+                                    success : function(result) {
+                                        if(result.code == 200)
+                                        {
+                                            $.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+                                            //刷新页面
+                                            setTimeout(function(){window.location.reload() },2000);
+                                        }
+                                        else
+                                        {
+                                            $.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+
+                        //表单验证规则
+                        $("#pop_demo").validate({
+                            rules: {
+                                amount: {required: true}
+                            },
+                            messages: {
+                                amount: {required: "请输入变动金额", check_float: "格式如: 10000"}
+                            },
+                            errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+                            success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+                        });
+
+                        //模拟提交表单
+                        $("#pop_demo").submit();
+
+                        return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+                    }
+                    else{//点击取消按钮执行的事件
+                        return true;
+                    }
+                }
+
+            });
+        })
+    });
+
+function set_enable(id, enable,type)
+{
+    if(type == 2){
+        var opt = enable ? '启用':'禁用';
+    }else if(type == 1){
+        var opt = enable ? '显示':'隐藏';
+    }else if(type == 3){
+        var opt = enable ? '开启':'停止';
+    }
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定要执行这个操作吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/type_set_enable', {"type_id":id, "opt":enable,"type":type}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您，' + opt + '成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，'+ opt +'失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+function edit_kill_model(id, state)
+{
+    if(state == 1){
+        var opt = '开启杀模式';
+
+    }else if(state == 0){
+        var opt = '开启随机模式';
+    }
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定"+opt+"吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/edit_kill_model', {"id":id, "state":state}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您，' + opt + '成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，'+ opt +'失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+function setSerial(_id, _this){
+    var initVal = _this.defaultValue;
+    var curVal = $(_this).val();
+    if(curVal == ''){
+        $(_this).val(initVal);
+        return false;
+    }
+    if(curVal == initVal){
+        return false;
+    }
+    $.ajax({
+        url: '/AcpGame/edit_valid_flow',
+        data: {id: _id, valid_flow: curVal},
+        dataType: 'json',
+        type: 'post',
+        beforeSend: function(){
+            $(_this).prev().removeClass('hide');
+            $(_this).addClass('hide');
+        },
+        success: function(data){
+            $(_this).prev().addClass('hide');
+            $(_this).removeClass('hide');
+            if(data.status === 1){
+                _this.defaultValue = curVal;
+            } else {
+                $(_this).val(initVal);
+            }
+            $.jPops.alert({
+                title:"提示",
+                content:data.msg,
+                okBtnTxt:"确定",
+                callback:function(){
+                    location.reload();
+                    return true;
+                }
+            });
+        }
+    });
+}
+
+
+</script>
+{/literal}
+{/block}

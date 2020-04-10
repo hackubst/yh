@@ -1,0 +1,174 @@
+{if $pc_site eq 1}
+<!doctype html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<!-- Mobile Specific Metas -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>{block name="title"}{/block}</title>
+<!-- CSS -->
+<link rel="stylesheet" href="__PUBLIC__/Css/front/style.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/colors.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/skeleton.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/layout.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/ddsmoothmenu.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/elastislide.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/home_flexslider.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/light_box.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Plugins/jPops/jquery.jpops.min-v3.css">
+{block name="css"}{/block}
+<!-- 失败默认图片 -->
+<script>
+  function no_pic(obj) {
+    obj.setAttribute("src", "/Public/Images/front/nopicture.png");
+}
+</script>
+</head>
+<body>
+	{include file="./footer.html"}
+	<!-- <div class="container"> -->
+	{if $smarty.const.ACTION_NAME == 'index'}
+	{include file="top_ads.html"}	
+	{/if}
+	{if $smarty.const.ACTION_NAME != 'login'}
+	{include file="header.html"}	
+	{/if}
+	{block name="content"}{/block}
+	<!-- </div> -->
+	{if $smarty.const.ACTION_NAME != 'login'}
+	{include file="footer.html"}	
+	{include file="customer.html"}
+	{/if}
+	<script>
+		var user_id = '{$user_id}';
+		//分享信息
+		var link = '{$wx_share_link}';
+		var img = '{$share_info.pic}';
+		var title = '{$head_title}';
+		var desc = '{$head_title}';
+		var appId = '{$signPackage.appId}';
+		var timestamp = '{$signPackage.timestamp}';
+		var nonceStr = '{$signPackage.nonceStr}';
+		var signature = '{$signPackage.signature}';
+	</script>
+	<!--JS-->
+	<script src="__PUBLIC__/Js/front/jquery-1.8.2.min.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/common.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/jquery.easing.1.3.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/ddsmoothmenu.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/jquery.flexslider.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/jquery.elastislide.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/jquery.jcarousel.min.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/jquery.accordion.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/light_box.js?version={$version}"></script>
+	<script src="__PUBLIC__/Plugins/jPops/jquery.jpops.min-v3.js"></script>
+	<script src="__PUBLIC__/Js/front/html5.js?version={$version}"></script>
+	<script src="__PUBLIC__/Js/front/wxapi.js"></script>
+	<!--end js-->
+	<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	{block name="js"}{/block}
+</body>
+</html>
+ 
+{else}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<meta name="apple-mobile-web-app-title" content="金龙28" />
+	{if $smarty.const.ACTION_NAME == 'cart'}
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">  
+	{/if}
+	<title>{block name="title"}{/block}</title>
+	<link href="__PUBLIC__/Css/front/common.css?version={$version}" type="text/css" rel="stylesheet">
+	<link href="{$tpl_path}/css/header_footer.css?version={$version}" type="text/css" rel="stylesheet">
+	<link href="__PUBLIC__/Css/front/layer.css?version={$version}" type="text/css" rel="stylesheet">
+	<!--<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js?version={$version}"></script>-->
+	<script src="__JS__/jquery/jquery-1.9.1.min.js?version={$version}"></script>
+	{block name="css"}{/block}
+</head>
+<body>
+	{include file="common_sprite.html"}
+	{block name="content"}
+	{/block}
+	{if $smarty.const.ACTION_NAME == 'mall_home' || $smarty.const.ACTION_NAME == 'all_order' || $smarty.const.ACTION_NAME == 'pre_pay_order' || $smarty.const.ACTION_NAME == 'pre_deliver_order' || $smarty.const.ACTION_NAME == 'pre_confirm_order' || $smarty.const.ACTION_NAME == 'wallet' || $smarty.const.ACTION_NAME == 'personal_center' || $smarty.const.ACTION_NAME == 'mall_list' || $smarty.const.ACTION_NAME == 'item_list'}
+	{include file="$footer_path"}
+	{/if}
+	<!--提示层-->
+  <div id="tan_wrap"><div id="tan"></div></div>
+	<script>
+	var has_deflt_addr = "{$has_deflt_addr}";
+	var default_addr = "{$default_addr_string}";
+	var first = "{$first}";	
+    function no_pic(obj) {
+         obj.setAttribute("src", "/Public/Images/noimg.png");
+     }
+	</script>
+	{if $smarty.const.ACTION_NAME != 'item_list'}
+	<script src="__JS__/front/custom.js?version={$version}"></script>
+	{/if}
+	<script src="__JS__/front/layer.m.js?version={$version}"></script>
+	<script src="__PLG__/native/native_event.js?version={$version}"></script>
+	<script src="__JS__/clipboard.min.js"></script>
+	<script>
+	//获取后台数据
+	ip = "{$client_ip}";
+	az_id = 1;
+	user_id = '{$user_id}';
+	</script>
+	<script>
+		var user_id = '{$user_id}';
+		//分享信息
+		var link = '{$wx_share_link}';
+		var img = '{$share_info.pic}';
+		var title = '{$head_title}';
+		var desc = '{$head_title}';
+		var appId = '{$signPackage.appId}';
+		var timestamp = '{$signPackage.timestamp}';
+		var nonceStr = '{$signPackage.nonceStr}';
+		var signature = '{$signPackage.signature}';
+//alert('title = ' + title + ', desc = ' + desc + ', link = ' + link + ', img = ' + img);
+	</script>
+	{if $smarty.const.ACTION_NAME != 'mall_home' && $smarty.const.ACTION_NAME != 'item_list' && $smarty.const.ACTION_NAME != 'item_detail' }
+	<script type="text/javascript">
+		//用户是否登录
+		$(function(){
+			if(user_id == null || user_id == 0 || user_id == '' || user_id == '0'){
+				//console.log('没登录');
+				native_listen('no_login');
+			}
+		})
+	</script>
+	{/if}
+	<!--JS-->
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="__PUBLIC__/Js/front/wxapi.js"></script>
+
+    <!-- <script src="/stat.js?version={$version}"></script> -->
+	{block name="js"}{/block}
+	{if $smarty.const.ACTION_NAME == 'mall_home'  }
+		<script type="text/javascript">
+		     $('#slider_cont').flexslider({
+		          animation: "fade",
+		          direction: "horizontal",
+		          easing: "swing",
+		      });
+		</script>
+	{/if}
+</body>
+</html>
+{/if}

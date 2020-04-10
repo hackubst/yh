@@ -1,0 +1,170 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/detail.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/swiper.3.1.2.min.css">
+{/block}
+{block name="content"}
+<!-- 头部模块 -->
+<!-- <header class="common_head">
+		<a class="back" id="redir_back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+		<div class="header_title{if $merchant_info.online == 0} offline{/if}">
+			{$head_title}
+		</div>
+</header> -->
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<div class="wrapper detail">
+    <!--轮播-->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {foreach from=$item_photo_list item=item_photo}
+            <div class="swiper-slide">
+                <img data-src="{$item_photo}" onerror="no_pic(this);" class="swiper_img swiper-lazy">
+                <div class="swiper-lazy-preloader"></div>
+            </div>
+            {/foreach}
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="name">{$item_info.item_name}</div>
+    <div class="info1">
+        <span class="price">{$item_info.mall_price}元{if $item_info.unit}/{$item_info.unit}{/if}</span><span class="collect">库存 {$item_info.stock}</span>
+        <input type="hidden" id="item_id" value="{$item_info.item_id}" />
+    </div>
+    <div class="info2 clearfix">
+		<h3>商品简介</h3>
+		<div>{$item_info.item_desc}</div>
+    </div>
+    {if $item_txt}
+    <div class="it_detail">
+        <div class="it_title"><span class="it_line_l"></span>商品详情<span class="it_line_r"></span></div>
+        <div class="item_content">{$item_txt}</div>
+    </div>
+    {/if}
+
+</div>
+
+
+<!--底部固定购物车商品数量-->
+<div id="cart" class="cart">
+	<div class="cart_tip">
+		<a href="{$cart_link}">
+		<div class="cart_icon_wrap">
+			<svg class="detail_cart_icon"><use xlink:href="#detailcart"></use></svg>
+			<div class="cart_num {if !$total_num}hide{/if}" id="cartNum" num="{$total_num}">{$total_num}</div>
+			<span class="add_num popone" id="popone" style="">+1</span>
+		</div>
+		</a>
+		<!-- <h3 class="cart_price_tit">总价：</h3> -->
+		<!-- <span class="cart_p_sym">￥</span><span class="cart_price" id="cart_price" price="{$total_amount}">{$total_amount}</span> -->
+	</div>
+	{include file="../coupon_tip.html"}
+	<div class="fix-box-add">
+		<span class="add_num popone" id="popone" style="color:white;">+1</span>
+		<a href="javascript:;" class="addto_cart">加入购物车</a>
+	</div>
+	<!-- <div class="cart_btns" style="">
+		<a class="cart_btn_confirm" href="{$cart_link}"><span class="combtn inner">结算</span></a>
+	</div> -->
+</div>
+{/block}
+{block name="js"}
+<script src="__PUBLIC__/Js/front/item.js?version={$version}"></script>
+<script src="__PUBLIC__/Js/front/swiper.3.1.2.jquery.min.js"></script>
+<script>
+var item_id = parseInt('{$item_id}');
+var item_name = '{$share_info.item_name}';
+var item_desc ='{$share_info.item_desc}';
+var basc_pic ='{$share_info.basc_pic}';
+var share_url ='{$share_info.share_url}';
+console.log(item_name)
+console.log(item_desc)
+console.log(basc_pic)
+console.log(share_url)
+/*var cur_item_price = 0.00;
+//判断是否是商品详情以及它当前id和price
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+var merchant_id = parseInt('{$merchant_id}');
+var is_item = '{$is_item}';
+var temp_item_id = '{$item_info.item_id}';
+var temp_item_price = '{$item_info.mall_price}';
+var cur_sort_id = '{$cur_sort_id}';
+var item_detail_link = '{$item_detail_link}';*/
+
+{literal}
+//轮播
+
+
+var isSingle = false;
+if($(".swiper-container .swiper-slide").size() == 1) 
+    isSingle = true;
+var mySwiper = new Swiper ('.swiper-container', {
+    autoplay: 4000,
+    //loop: true,
+    lazyLoading: true,
+    pagination: isSingle ? '' : '.swiper-pagination'
+});
+var clientWidth = $(window).width();
+$('.swiper-container').height(clientWidth);
+$(function()
+{
+	$('.addto_cart').click(function(e)
+	{
+			e.stopPropagation();
+			//var siblings = $(this).parent().siblings();
+			var popone = $(this).siblings('.popone');
+			/*var item_price = $(siblings).find("#item_price").val();
+			item_price = item_price == undefined ? (cur_item_price == 0.00 ? temp_item_price : cur_item_price) : item_price;
+			//var item_id = $(siblings).find('#item_id').val();
+			item_id = item_id == undefined ? (cur_item_id == 0 ? temp_item_id : cur_item_id) : item_id;*/
+			console.log(item_id);
+			/*if (!item_id)
+			{
+				alert('抱歉，请选择商品！');
+				return false;
+			}*/
+			
+			$.post('/FrontCart/add_cart', {'item_id': item_id}, function(data){
+				if (data != 'failure')
+				{
+					//加购物车成功的代理写这里，主要是在页面上的反馈，具体有哪些元素，查看打印出来的data
+					$(popone).fadeIn(500).fadeOut(2000);
+					var num = $("#cartNum").attr("num");
+					var numb = parseInt(num) + 1;
+					numb = data.totalNum;
+					$('#cartNum').attr("num",numb).html(numb).show();
+					/*var price = $('#cart_price').attr("price");
+					var nprice = parseFloat(price) + parseFloat(item_price);
+					var float_nprice = nprice.toFixed(2);//保留两位小数
+					float_nprice = data.totalPrice;
+					$('#cart_price').attr("price",float_nprice).html(float_nprice);*/
+					console.log(data);
+				}
+				else
+				{
+					//添加失败的代码写这里
+				}
+			}, 'json');
+	});	
+});
+
+window.onload = function() {
+	if (!is_wechat()) {
+		native_listen('share_item',{
+			item_name:item_name,
+			item_desc:item_desc,
+			basc_pic:basc_pic,
+			share_url:share_url,
+		})
+	}
+}
+{/literal}
+</script>
+<script src="__PUBLIC__/Js/front/coupon.js?version={$version}"></script>
+{/block}

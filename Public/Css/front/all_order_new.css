@@ -1,0 +1,148 @@
+
+@media only screen and (min-width: 320px){
+    html {
+        font-size: 17px !important;
+    }
+}
+@media only screen and (min-width: 375px){
+    html {
+        font-size: 20px !important;
+    }
+}
+@media only screen and (min-width: 414px){
+    html {
+        font-size: 22px !important;
+    }
+}
+@media only screen and (min-width: 768px){
+    html {
+        font-size: 41px !important;
+    }
+}
+.tab{
+	width: 100%;
+	background-color: #FFF;
+	margin-bottom: 0.5rem;
+}
+.tab>li{
+	width: 25%;
+	line-height: 2.15rem;
+	text-align: center;
+	font-size: 0.8rem;
+	color: #333;
+	position: relative;
+}
+.tab>li a{
+	color: #333;
+}
+.tab>li .num {
+    position: absolute;
+    position: absolute;
+    height: 12px;
+    min-width: 12px;
+    line-height: 12px;
+    top: 2px;
+    right: 1px;
+    color: #fff;
+    background-color: #ff5c5c;
+    border-radius: 20px;
+    padding: 2px;
+    font-size: 12px;
+    text-align: center;
+}
+.tab .active{
+	font-size: 0.8rem;
+	color: #ff5c5c;
+	border-bottom: 1px solid #ff5b6f;;
+}
+.tab .active a{
+	color: #ff5c5c;
+}
+.main{
+	width: 100%;
+	/*margin-bottom: 0.5rem;*/
+}
+.box{
+	background-color: #FFF;
+	margin-bottom: 0.5rem;
+}
+.title{
+	border-bottom: 1px solid #eee;
+}
+.title>p{
+	font-size: 0.6rem;
+	color: #9d9d9d;
+	line-height: 1.5rem;
+	margin-left: 3%;
+}
+.title>span{
+	font-size: 0.6rem;
+	color: #e85337;
+	line-height: 1.5rem;
+	margin-right: 3%;
+}
+.title .close{
+	font-size: 0.6rem;
+	color: #9d9d9d;
+}
+.img_box{
+	border-bottom: 1px solid #eee;
+	padding-top: 0.5rem;
+}
+.img_box>li{
+	margin: 0 0 0.5rem 2.7%;
+	position: relative;
+}
+.img_box>li>img{
+	width: 4.05rem;
+	height: 4.05rem;
+	vertical-align: bottom;
+}
+.img_box>li>p{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 80%;
+	padding: 0 10%;
+	line-height: 1.05rem;
+	background-color: rgba(0,0,0,0.5);
+	font-size: 0.55rem;
+	color: #fff;
+}
+.address{
+	border-bottom: 1px solid #eee;
+	padding-top: 0.5rem;
+}
+.address>p{
+	font-size: 0.7rem;
+	color: #333;
+	margin: 0 0 0.5rem 2.7%;
+}
+.price{
+	padding: 0.8rem 0 0.8rem 0;
+}
+.price>p{
+	font-size: 0.6rem;
+	color: #333;
+	margin-right: 3%;
+}
+.price>p>i{
+	color: #e85337;
+	font-style: normal;
+	font-size: 0.7rem;
+}
+.price>p>span{
+	color: #e85337;
+}
+.btn{
+	clear: both;
+	display: block;
+	width: 3.4rem;
+	line-height: 1.25rem;
+	margin: 0.7rem 3% 0 0;
+	border: 1px solid #ff5c5c;
+	border-radius: 2px;
+	background-color: #FFF;
+	color: #ff5c5c;
+	text-align: center;
+}

@@ -1,0 +1,83 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="ser-box">
+{foreach from=$module_style item=this}
+	<div class="ser-list">
+    	<div class="ser-list-img"><a href="javascript:;" class="set-use hover" title="点击启用"><img src="{$this.smallpic}" /></a></div>
+        <div class="ser-list-name"><a href="javascript:;" class="set-use hover" data-id="{$this.template_style_id}">启用</a>/<a href="javascript:;" class="preview" data-style_id="{$this.template_style_id}" data-page_id="{$this.template_page_id}" data-model_id="{$this.template_model_id}">预览</a></div>
+    </div>
+{/foreach}
+</div>
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('.set-use').on('click', function(){
+		var _id = $(this).data('id');
+		$.ajax({
+			url: '/DiyModel/EnableStyle',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				action: 'enable',
+				model_sign: 'online',
+				style_id: _id
+			},
+			success: function(data) {
+				if(data.code == 200) {
+					// console.log(data.model_html);
+					// console.log(data.css_path);
+					// console.log(data.js?version={$version}_path);
+				} else if(data.code == 400) {
+					// console.log(data.msg);
+				}
+			}
+		});
+	});
+	
+	$('.preview').on('click', function(){
+		var styleId = $(this).data('style_id');
+		var pageId = $(this).data('page_id');
+		var modelId = $(this).data('model_id');
+		
+		$.ajax({
+			url: '/DiyModel/displayStyle',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				action: 'get_url',
+				model_sign: 'online',
+				style_id: styleId,
+				page_id: pageId,
+				model_id: modelId,
+				item_type_ids: 0,
+				pro_num: 0
+			},
+			success: function(data) {
+				if(data.code == 200) {
+					location.href = data.display_url;
+				} else if(data.code == 400) {
+					$.jPops.alert({
+						title:"提示",
+						content:data.msg,
+						okBtnTxt:"确定",
+						callback:function(){
+							return true;
+						}
+					});
+				}
+			}
+		});
+	});
+});
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/set_service_style.css" type="text/css" />
+{/block}

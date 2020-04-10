@@ -1,0 +1,238 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+    	<div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                    {if $opt == 'user'}<div class="t-a-wait-top-li"><span>用户账号：</span><input type="text" placeholder="" value="{$username}" class="mini" name="username"> </div>
+                <!--div class="t-a-wait-top-li"><span>加盟商名称：</span><input type="text" placeholder="" value="{$nickname}" class="mini" name="nickname"> </div-->
+                <div class="t-a-wait-top-li"><span>联系人：</span><input type="text" placeholder="" value="{$realname}" class="mini" name="realname"> </div>{/if}
+                <div class="t-a-wait-top-li"><span>手机号：</span><input type="text" placeholder="" value="{$mobile}" class="mini" name="mobile"> </div>
+                <!--div class="t-a-wait-top-li"><span>QQ：</span><input type="text" placeholder="" value="{$qq}" class="mini" name="qq"> </div-->
+                <!--div class="t-a-wait-top-li"><span>邮箱：</span><input type="text" placeholder="" value="{$email}" class="mini" name="email"> </div-->
+                <!--div class="t-a-wait-top-li"><span>门店编号：</span><input type="text" placeholder="" value="{$store_sn}" class="mini" name="store_sn"> </div-->
+                    <!--
+                <div class="t-a-wait-top-li">
+                <select class="small" name="big_area_id">
+                    <option value="0" >大区</option>
+                    {section name=row loop=$big_area_list}
+                    <option value="{$big_area_list[row].big_area_id}" {if $big_area_list[row].big_area_id == $big_area_id}selected{/if} >{$big_area_list[row].area_name}</option>
+                    {/section}
+                </select>
+                </div>
+                    -->
+
+                <div class="t-a-wait-top-li">
+                <select class="small" name="user_rank_id">
+                    <option value="0" >用户等级</option>
+                    {section name=row loop=$rank_list}
+                    <option value="{$rank_list[row].user_rank_id}" {if $rank_list[row].user_rank_id == $user_rank_id}selected{/if} >{$rank_list[row].rank_name}</option>
+                    {/section}
+                </select>
+                </div>
+
+                <div class="t-a-wait-top-li" style="width:400px;">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:70px; font-weight:normal;">注册时间：</label>  
+                        <div class="form-controls" style="margin-left:80px;">  
+				            <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+
+                            <span class="fi-text">-</span>  
+                            
+                            <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+                        </div>  
+                    </div> 
+                </div>
+
+                <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+              </form>
+            </div>        
+        </div> 
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="5%">
+            <col width="7%"> 
+            <col width="7%">  
+            <col width="7%">
+            <col width="7%">  
+            <col width="7%">  
+            <col width="7%">  
+            <col width="7%">  
+            <col width="7%">  
+            <col width="7%">  
+            <col width="15%">
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>选择</td>  
+                    <td>用户名</td>
+                    <td>联系人</td>  
+                    <td>ID</td>
+                    <td>姓名</td>  
+                    <td>用户等级</td>
+                    <td>手机</td>
+                    <td>邮箱</td>
+                    <td>QQ</td>
+                    <td>注册时间</td>
+                    <td>操作</td>  
+                </tr>  
+            </thead>  
+            <tbody>
+				{foreach from=$user_list item=user}
+                <tr>  
+                    <td><input type="checkbox" class="checkbox" value='{$user.user_id}' name="a[]"></td> 
+                    
+                    <td>{$user.username}</td>  
+                    <!-- <td>{$user.realname}</td> -->
+                    <td>{$user.area_string}</td>
+                    <td><span>{$user.email}</span></td>  
+                    <td><span>{$user.qq}</span></td>  
+                    
+                    <td>{$user.user_id}</td>
+                    <td>{$user.nickname}</td>  
+                    {if $opt == 'user'}<td>{$user.rank_name}</td>{/if}
+                    <td>{if $user.mobile}{$user.mobile}{else}--{/if}</td>
+					<td>{if $user.parent_nickname}<a href="/AcpUser/get_all_user_list/user_id/{$user.user_id}" target="_blank" title="点击查看">{$user.parent_nickname}{else}--{/if}</a></td>  
+                    <td>{$user.first_agent_num}</td>  
+                    <td>{$user.second_agent_num}</td>  
+                    <td>{$user.third_agent_num}</td>  
+                    <td>{$user.reg_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                    {if $opt == 'user'}<td>{$user.member_card_id|default:"--"}</td>{/if}
+                    <td>  
+						<a href="/AcpAgent/get_agent_list/first_agent_id/{$user.user_id}" class="btn" title="查看下级代理">查看下级代理</a>   
+						<a href="/AcpUser/get_all_user_list/user_id/{$user.first_agent_id}" class="btn" title="查看上级代理">查看上级代理</a>   
+                        <a href="javascript:;" class="btn" onclick="set_father({$user.user_id})" title="设置上级">设置上级代理</a>   
+                    </td>  
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的用户</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fr">  
+                <div class="paginate">  
+                    {$show}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+    var url = '{$url}';
+//全选
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+{literal} 
+
+function set_father(user_id)
+{
+	var html='';
+
+	var html='<form id="deliver_form">' + 
+			'<div class="formitems inline">'+
+				'<label class="fi-name">上级代理ID号：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="father_id" id="father_id"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+		'</form>';
+	
+	$.jPops.custom({
+		title:"设置上级",  
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+				var father_id = $('#father_id').val();
+				$.validator.setDefaults(
+				{
+					//表单验证通过后的处理，异步提交表单
+					submitHandler: function()
+					{
+						$.post('/AcpUser/ajax_set_user_father',{"user_id":user_id,"father_id":father_id},function(data)
+						{
+							if (data == 'success')
+							{
+								alert('恭喜您，操作成功');
+                                location.reload();
+							}
+							else
+							{
+								alert('对不起，操作失败');
+							}
+						})
+						acp.batchDeliverFormStatus = true;
+					}
+				});
+			
+				//表单验证规则
+				$("#deliver_form").validate(
+				{
+					rules: 
+					{
+						father_id: 
+						{
+							required: true,
+							digits: true
+						},
+					},
+					messages: 
+					{
+						father_id: 
+						{
+							required: "对不起，填写上级代理ID!",
+							digits: "对不起，填写上级代理ID!",
+						},
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+
+				//模拟提交表单
+				$("#deliver_form").submit();
+				return acp.batchDeliverFormStatus;
+			}
+			else
+			{
+				return true;  
+			}
+		}
+	});
+}
+
+
+
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{block name="title"}{/block} - 管理中心 - {$system_config.SHOP_TITLE}</title>
+	<!--<link rel="stylesheet" href="__ACPJS__/acpcomm.js?version={$version}">-->
+	<link rel="stylesheet" href="__ACPCSS__/acpcomm-min.css">
+	<!--<link type="text/css" rel="stylesheet" href="__CSS__/acp/zoom.css" />-->
+	<link rel="stylesheet" href="__PLG__/jPops/jquery.jpops.min-v3.css">
+	<link type="text/css" rel="stylesheet" href="__ACPCSS__/tip.css" />
+	<link href="__PUBLIC__/Css/front/layer.css?version={$version}" type="text/css" rel="stylesheet">
+	<style>
+	{literal}
+	.time_string {
+	    position: fixed;
+	    top: 100px;
+	    right: 0;
+	    width: 160px;
+	    color: #fff;
+	    display: none;
+	    background-color: #f8a31f;
+	    padding: 10px;
+	    font-size: 15px;
+	    display: none;
+	    text-align: center;
+	    line-height: 26px;
+	}
+	{/literal}
+
+	</style>
+	{block name="css"}
+	{/block}
+</head>
+<body id="body">
+
+	<div id="div1" style="display:none;"></div>
+	<div class="header {if $ui_navPosMod =='fixed'}fixed{/if}" id="j-nav">
+		<div class="layout blue clearfix {if $ui_layoutMod =='fixed'}fixed{/if}">
+			<div class="brandWrap fl">
+				<h1 class="logo">
+					<a href="/"><img src="__PUBLIC__/Images/acp/logo.png"></a>
+				</h1>
+				<a href="javascript:;" class="brandTgl j-togggle-sidebar"><i class="ic16 ic-menu"></i></a>
+			</div>
+			<!-- end brandWrap -->
+			<ul class="nav fl clearfix">
+			{foreach from=$my_menu_file name=menu_name key=key item=menu}
+				<li class="nav-list">
+					<a href="javascript:;" class="nav-list-main j-navsub-toggle {if $mod_id == $key}active{/if}">
+						<span>{$menu.name}
+							{if isset($menu.num) && $menu.num > 0}
+								(<b>{$menu.num}</b>)
+							{/if}
+						</span>
+						<i class="navArrow ic8 ic-navarrow-down"></i>
+					</a>
+					<dl class="nav-list-sub">
+					{foreach from=$menu.menu_list key=first_level item=menu_list}
+						<dt>{$first_level}</dt>
+						{foreach from=$menu_list item=link}
+						{if $link.in_menu == '' && !isset($link.in_top)}
+							<dd>
+								<a href="{$link.mod_do_url}/mod_id/{$key}" title="{$link.name}">{$link.name}
+									{if isset($link.num) && $link.num > 0}
+										(<b class="colorRed">{$link.num}</b>)
+									{/if}
+								</a>
+							</dd>
+						{/if}
+						{/foreach}
+					{/foreach}
+						</dl>
+					<!-- end nav-list-sub -->
+				</li>
+			{/foreach}
+			</ul>
+			<!-- end nav -->
+			<ul class="nav fr mgr10 clearfix">
+				<!-- 站内信先注释，加入站内信功能时去除注释 -->
+                <!--<li class="nav-list">
+                	{if $unread_message_num}
+                    <a href="/AcpMessage/waiting_reply_message/mod_id/2" class="nav-list-main onlyicon">
+                        <i class="navArrow ic16 ic-envelope"></i>
+                    </a>
+                    <span class="nav-mailcount">
+                    	{$unread_message_num}
+                    </span>
+                    {else}
+                    <a href="/AcpMessage/list_message/mod_id/2" class="nav-list-main onlyicon">
+                        <i class="navArrow ic16 ic-envelope"></i>
+                    </a>
+                    <span class="nav-mailcount"></span>
+                    {/if}
+				</li>-->
+				<li id="div2" class="nav-list">
+                <li class="nav-list">
+                    <a href="javascript:;" class="nav-list-main onlyicon j-navsub-toggle">
+                        <i class="navArrow ic16 ic-cog"></i>
+                    </a>
+                    <dl class="nav-list-sub layoutCtrl algRight">
+                        <dt>布局方式</dt>
+                        <dd>
+                            <a href="javascript:;" class="j-layoutCtrl" data-type="fluid"><i class="gicon-ok-sign {if $ui_layoutMod=='fixed'}white{/if}"></i>流式布局</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" class="j-layoutCtrl" data-type="fixed"><i class="gicon-ok-sign {if $ui_layoutMod=='fluid'  || $ui_layoutMod==''}white{/if}"></i>固定宽度</a>
+                        </dd>
+                        <dt class="ie6hide">导航栏固定方式</dt>
+                        <dd class="ie6hide">
+                            <a href="javascript:;" class="j-navCtrl" data-type="default"><i class="gicon-ok-sign {if $ui_navPosMod=='fixed'}white{/if}"></i>默认</a>
+                        </dd>
+                        <dd class="ie6hide">
+                            <a href="javascript:;" class="j-navCtrl" data-type="fixed"><i class="gicon-ok-sign {if $ui_navPosMod=='default' || $ui_navPosMod==''}white{/if}"></i>固定</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="nav-list">
+                    <a href="javascript:;" class="nav-list-main onlyicon j-navsub-toggle">
+                        <i class="navArrow ic16 ic-user"></i>
+                    </a>
+                    <dl class="nav-list-sub algRight">
+                        <dd><a href="javascript:;">{$login_user.username|truncate:15:"...":true}</a></dd>
+                        <dd><a href="/" target="_blank">首页</a></dd>
+                        <dd><a href="/logout">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <!-- end nav -->
+		</div>
+	</div>
+	<!-- end header -->
+
+	<div class="layout {if $ui_navPosMod =='fixed'}pdt40{/if} {if $ui_layoutMod =='fixed'}fixed{/if}" id="j-cont-ly">
+		<div class="container clearfix">
+			<div class="content fr">
+				<div id="main">
+					{block name="mainhead"}{/block}
+					<div class="breadcrumbs">
+						<a href="/acp">首页</a>
+                        {if $action_title}
+                        <span class="ic8 ic-menuarrow-right"></span>
+                        <a href="{$action_src}">{$action_title}</a>
+                        {/if}
+
+                        {if $head_title}
+                        <span class="ic8 ic-menuarrow-right"></span>
+                        <a href="javascript:;" class="colorBlack">{$head_title}</a>
+                        {/if}
+						<a href="javascript:;" class="closebrdc j-closebrdc"><i class="gicon-remove"></i></a>
+					</div>
+					<!-- end breadcrumbs -->
+					<div class="main-content">
+					{block name="content"}{/block}
+					</div>
+					<!-- end main-content -->
+				</div>
+				<!-- end main -->
+			</div>
+			<!-- end content -->
+			<div id="sidebar" class="fl">
+				{block name="sidebar"}
+					{foreach from=$my_menu_list key=first_level item=menu_list}
+					<dl class="menulist">
+						<dt>
+							<a href="" class="j-togglemenu">
+								<i class="meunarrow ic8 ic-menuarrow-down"></i>
+								{$first_level}
+							</a>
+						</dt>
+						{foreach from=$menu_list item=link}
+							{if $link.in_menu == ''}
+								<dd>
+									<a href="{$link.mod_do_url}/mod_id/{$mod_id}" {if $link.id == $menu_no}class="active"{/if}>{$link.name}
+										{if isset($link.num) && $link.num > 0}
+											(<b>{$link.num}</b>)
+										{/if}
+									</a>
+								</dd>
+							{/if}
+						{/foreach}
+					</dl>
+					{/foreach}
+				{/block}
+			</div>
+			<!-- end sidebar -->
+		</div>
+		<!-- end container -->
+	</div>
+	<!-- 倒计时 -->
+	<div class="time_string">
+			<div>试用倒计时</div>
+			<span id="t_d">00天</span>
+		    <span id="t_h">00时</span>
+		    <span id="t_m">00分</span>
+		    <span id="t_s">00秒</span>
+	</div>
+	<!-- 提示层 by zhengzhen -->
+	<p id="J_TipLayer" class="popTip" style="top: 110px; display: none;">
+		<i></i>
+		<span>正在加载，请稍后...</span>
+	</p>
+	<div id="J_TransMaskLayer" class="transMask" style="display: none;"></div>
+	<script src="__JS__/jquery/jquery-1.8.3.min.js?version={$version}"></script>
+	<script src="__ACPJS__/acpcomm-min.js?version={$version}"></script>
+	<script src="__PLG__/jPops/jquery.jpops.min-v3.js?version={$version}"></script>
+	<script type="text/javascript" src="__ACPJS__/tip.js?version={$version}"></script>
+	<script src="__JS__/clipboard.min.js"></script>
+	<!--<script src="__JS__/jquery/zoom.min.js"></script>-->
+{if $smarty.const.UPLOAD_IMAGE_SCRIPT === true}
+<script src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script src="__JS__/common/upload_image.js?version={$version}"></script>
+{/if}
+	<script src="__JS__/front/layer.m.js?version={$version}"></script>
+
+	<!--<script type="text/javascript" src="__ACPJS__/new_order.js?version={$version}"></script>-->
+	<script>
+		var music = '/Public/msg.mp3';
+
+
+    $('body').on('click','img',function(){
+        var src = this.src;
+        if (src) {
+            window.open(src);
+        }
+    });
+    //倒计时方法
+    function GetRTime(){
+    	var EndTime = '{$limit_endtime}';
+
+	    var NowTime = Math.round(new Date().getTime()/1000);
+	    var t =EndTime - NowTime;
+	    // console.log(t);
+
+	    var d=0;
+	    var h=0;
+	    var m=0;
+	    var s=0;
+	    if(t>=0){
+	      d=Math.floor(t/60/60/24);
+	      h=Math.floor(t/60/60%24);
+	      m=Math.floor(t/60%60);
+	      s=Math.floor(t%60);
+	    }
+	 
+	 
+	    document.getElementById("t_d").innerHTML = d + "天";
+	    document.getElementById("t_h").innerHTML = h + "时";
+	    document.getElementById("t_m").innerHTML = m + "分";
+	    document.getElementById("t_s").innerHTML = s + "秒";
+	  }
+	  //当打开时调用倒计时
+	  var limit_open = parseInt('{$limit_open}');
+	  if(limit_open)
+	  {
+	  	window.setInterval(GetRTime,1000);
+	  	setTimeout("$('.time_string').show()",1000);
+
+	  }
+	  
+	  //倒计时描述
+	  var time_desc = '{$limit_desc}';
+	  	$('.time_string').on('hover', function() {
+	  		layer.open({
+		    content: time_desc,
+		 	skin: 'msg',
+		    time: 5 //5秒后自动关闭
+		  });
+	  	});
+
+	  
+
+
+	</script>
+	{block name="js"}{/block}
+</body>
+</html>

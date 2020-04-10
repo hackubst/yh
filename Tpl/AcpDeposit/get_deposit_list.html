@@ -1,0 +1,69 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="10%">
+            <col width="16%">
+            <col width="16%">
+            <col width="16%">
+            <col width="16%">  
+            <col width="16%">
+            <col width="16%">
+            </colgroup>  
+            <thead>  
+                <tr>   
+                    <td>用户ID</td>
+                    <td>用户姓名</td>
+                    <td>提现支付宝</td>
+                    <td>提现金额</td> 
+                    <td>提现手续费</td>
+                    <td>实际到账金额</td>  
+                    <td>提现时间</td>  
+                </tr>  
+            </thead> 
+            <tbody>
+				{foreach from=$deposit_list item=row}
+                <tr>  
+                    <td><a href="/AcpUser/user_detail/user_id/{$row.user_id}" title="查看用户详情"><span style="color: blue">{$row.id}</span></a></td>
+                    <td>{$row.username}</td>
+                    <td>{$row.mobile}</td>
+                    <td>{$row.money}元</td>
+                    <td>{$row.deposit_server_charge}元</td>
+                    <td>{$row.real_get_money}元</td>
+                    <td>{$row.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的用户</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <!--<div class="fl">  
+				<a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+				<a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+			</div> -->
+            <div class="fr">  
+                <div class="paginate">  
+                    {$show}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

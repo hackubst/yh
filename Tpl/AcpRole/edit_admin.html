@@ -1,0 +1,83 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='edit_admin'>
+<div class="formitems inline">  
+    <label class="fi-name">登录用户名：</label>  
+    <div class="form-controls">
+    	{$user_info.username}   
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>联系人：</label>  
+    <div class="form-controls">  
+        <input type="text" name='linkman' value='{$user_info.realname}' id='linkman' placeholder="" class="small"> 
+        <span class="fi-help-text"></span>   
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">新密码：</label>  
+    <div class="form-controls">  
+        <input type="password" placeholder="" name='newpassword' id='newpassword' class="small">
+        <span class="fi-help-text"><font>不修改则不用填写(不能少于6位)</font></span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>电子邮件：</label>  
+    <div class="form-controls">  
+        <input type="text" name='email' value='{$user_info.email}' id='email' placeholder="" class="default">
+        <span class="fi-help-text"></span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>手机：</label>  
+    <div class="form-controls">  
+        <input type="text" name='mobile' value='{$user_info.mobile}' id='mobile' placeholder="" class="default">
+        <span class="fi-help-text" id='notice_mobile'><font>手机和固话至少填写一个</font></span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">固话：</label>  
+    <div class="form-controls">  
+        <input type="text" name='tel' value='{$user_info.tel}' id='tel' placeholder="" class="default">
+        <span class="fi-help-text"></span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">性别：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">
+        	<label><input type="radio" name="sex" value='0' {if $user_info.sex == 0}checked{/if} >女</label>  
+            <label><input type="radio" name="sex" value='1' {if $user_info.sex == 1}checked{/if}>男</label>   
+            <label><input type="radio" name="sex" value='2' {if $user_info.sex == 2}checked{/if} >保密</label>  
+        </div>  
+        <span class="fi-help-text"></span>
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>所属角色：</label>  
+    <div class="form-controls">  
+        <select name="group"> 
+            {section name=row loop=$group_list}  
+            <option value='{$group_list[row].group_id}' {if $user_info.group_id == $group_list[row].group_id}selected{/if}>{$group_list[row].group_name}</option>	
+            {/section} 
+        </select>  
+    </div>  
+</div>
+  
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='submit' value='submit' />
+    	<input type='hidden' name='uid' value='{url_jiami($user_info.user_id)}' />
+    	<button type="submit" class="btn btn-blue" onclick='return checkEditAdmin();'><i class="gicon-ok white"></i>保存</button>  
+    	<button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> 
+    </div>  
+</div>
+</form>  
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/edit_user_group.js?version={$version}"></script>
+{/block} 

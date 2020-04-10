@@ -1,0 +1,224 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+{include file="./Public_forms.html"}
+<!-- end tables-searchbox -->  
+<table class="wxtables">  
+    <colgroup>  
+    <col width="5%">  
+    <col width="8%">  
+    <col width="8%"> 
+    <col width="8%">  
+    <col width="8%">  
+    <col width="12%">  
+    <col width="15%">  
+    <col width="8%"> 
+    <col width="20%">  
+    </colgroup>  
+    <thead>  
+        <tr>
+            <td>选择</td>
+            <td>订单编号</td>
+            <td>订单金额</td>  
+            <td>订单实付款</td>  
+            <td>返还金额</td>  
+            <td>申请时间</td>  
+            <td>备注</td>  
+            <td>处理状态</td>  
+            <td>操作</td>
+        </tr>  
+    </thead>  
+    <tbody>  
+        {foreach from=$order_list item=refund_change_info}
+			<tr>
+				<td><input type="checkbox" class="checkbox" name="a[]" value="{$refund_change_info.item_refund_change_id}"></td>
+				<td>{$refund_change_info.order_sn}</td>
+				<td>  
+					<span>￥</span>  
+					<span>{$refund_change_info.total_amount + $refund_change_info.express_fee}</span>  
+				</td>  
+				<td>  
+					<span>￥</span>  
+					<span>{$refund_change_info.pay_amount}</span>  
+				</td>  
+				<td>
+					<span>￥</span>  
+					<span>{$refund_change_info.refund_money}</span>
+				</td>  
+				<td>{$refund_change_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>  
+				<td>{$refund_change_info.reason}</td>  
+				<td>
+					{if $refund_change_info.state == 0}
+						待处理
+					{elseif $refund_change_info.state == 1}
+						已受理
+					{elseif $refund_change_info.state == 1}
+						已拒绝
+					{/if}
+				</td>  
+				<td>  
+					<a href="/DcpOrder/order_refund_change_apply_detail/item_refund_change_id/{$refund_change_info.item_refund_change_id}/order_id/{$refund_change_info.order_id}/redirect/{$redirect}" class="btn" title="查看">查看</a>   
+					{if $refund_change_info.state == 0}
+						<a href="javascript:;" class="btn" title="修改" onclick="passItemRefundChangeApply({$refund_change_info.item_refund_change_id})">受理</a>   
+						<a href="javascript:;" class="btn" title="拒绝" onclick="refuseItemRefundChangeApply({$refund_change_info.item_refund_change_id})">拒绝</a>   
+					{/if}
+				</td>  
+			</tr>
+		{foreachelse}      
+		<tr>
+			<td colspan="9">
+				没有符合条件的记录
+			</td>
+		<tr>
+		{/foreach}
+    </tbody>  
+</table>  
+<!-- end wxtables -->  
+<div class="tables-btmctrl clearfix">  
+    <!--<div class="fl">  
+        <a href="###" class="btn btn-blue" onclick="Select()">全选</a>  
+        <a href="###" class="btn btn-blue" onclick="Cancel()">取消</a>  
+        <a href="###" class="btn btn-blue">删除</a> 
+	</div>-->
+    <div class="fr">  
+		{$show} 
+        <!-- end paginate -->  
+    </div>  
+</div>  
+<!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<script>
+	//全选
+	function Select(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=true;
+		}
+	}
+	//取消全选
+	function Cancel(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=false;
+		}
+	}
+
+//通过退换货
+function passItemRefundChangeApplyDept(item_refund_change_id)
+{
+	$.jPops.confirm(
+	{
+		 title:"提示",
+		 content:"您确定要同意这条申请吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/DcpOrder/passItemRefundChangeApply', {"item_refund_change_id":item_refund_change_id}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，已通过该条订单退款申请！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，订单退款申请未通过！');
+					}
+				});
+			 }  
+			 else{  
+				 // console.log("我是confirm的回调,false");  
+			 }  
+			 return true;  
+		 }
+	});
+}
+
+//拒绝退换货
+function refuseItemRefundChangeApplyDept(item_refund_change_id)
+{
+	var html='<form id="refuse_refund_change_form"><div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>备注：</label>'+ 
+				'<div class="form-controls">'+
+					'<textarea cols="30" rows="5" id="change_admin_remark" name="change_admin_remark"></textarea>'+
+					'<span class="fi-help-text"> </span>'+
+				'</div></div>'+
+			'</form>';
+
+	$.jPops.custom(
+	{
+		 title:"提示",
+		 content:html,  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				$.validator.setDefaults({
+					//表单验证通过后的处理，异步提交表单
+					submitHandler: function() {
+						 var admin_remark = $('#change_admin_remark').val();
+						 $.post('/DcpOrder/refuseItemRefundChangeApply', {"item_refund_change_id":item_refund_change_id,"admin_remark":admin_remark}, function(data, textStatus) 
+						 {
+							if (data == 'success')
+							{
+								alert('恭喜您，已拒绝该条订单退款申请！');
+								location.reload();
+							}
+							else
+							{
+								alert('对不起，订单退款申请拒绝失败！');
+							}
+						});
+				   }
+				});
+
+				//表单验证规则
+				$("#refuse_refund_change_form").validate({
+					rules: {
+						change_admin_remark: {
+							required: true
+						}
+					},
+					messages: {
+						change_admin_remark: {
+							required: "对不起，备注不能为空"
+						}
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+
+				//模拟提交表单
+				$("#refuse_refund_change_form").submit();
+			} else {
+				return true;
+			}
+		 }
+	});
+}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/get_pre_pay_order_list.css" type="text/css" />
+{literal}
+<style>
+#jpops .fi-name{width:50px;}
+#jpops .form-controls{margin-left:50px;}
+</style>
+{/literal}
+{/block} 

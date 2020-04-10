@@ -1,0 +1,86 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>标题或描述：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="title" id="title" value="{$coupon_set_info.title}">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>领券类型：</label>
+    <div class="form-controls">
+        <select name="type_num">
+            <option value="0">--请选择--</option>
+            <option value="1" {if $coupon_set_info.type_num eq 1}selected{/if}>新人优惠券</option>
+            <option value="2" {if $coupon_set_info.type_num eq 2}selected{/if}>注册领券</option>
+            <option value="3" {if $coupon_set_info.type_num eq 3}selected{/if}>通用领券</option>
+
+        </select>
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>选择已有优惠券：</label>
+    <div class="form-controls">
+        <ul>
+            {foreach from=$vouchers_list item=vouchers_info}
+                <li><input type="checkbox" name="vouchers_ids[]" id="{$vouchers_info.vouchers_id}" class="che-li" value="{$vouchers_info.vouchers_id}" {if in_array($vouchers_info.vouchers_id,$vouchers_ids)}checked{/if}/><label for="{$vouchers_info.vouchers_id}">{$vouchers_info.title}</label></li>
+            {/foreach}
+        </ul>
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>使用期限：</label>
+    <div class="form-controls">
+        <input type="text" autocomplete="off" class="Wdate" name="start_time"
+        value="{if $coupon_set_info.start_time}{date('Y-m-d H:i:s',$coupon_set_info.start_time)}{/if}"
+        onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">
+
+        <span class="fi-text">-</span>
+
+        <input type="text" autocomplete="off" class="Wdate" name="end_time"
+        value="{if $coupon_set_info.end_time}{date('Y-m-d H:i:s',$coupon_set_info.end_time)}{/if}"
+        onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">
+    </div>
+</div>
+
+{upload_image_widget($bg_pic_data)}
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>是否生效：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="isuse" value="1"
+                {if $coupon_set_info.isuse EQ 1} checked{/if} >生效</label>
+            <label><input type="radio" name="isuse" value="0"
+                {if $coupon_set_info.isuse EQ 0} checked{/if} >不生效</label>
+        </div>
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+        <input type="hidden" name="action" value="{$action}" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>
+            {if $action == 'add'}添加{else}修改{/if}
+        </button>
+    </div>
+</div>
+
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block}

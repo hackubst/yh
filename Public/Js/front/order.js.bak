@@ -1,0 +1,100 @@
+function set_order_state(order_id, order_status)
+{
+	$.post('/FrontOrder/set_order_state', {"order_id": + order_id, "order_status": order_status}, function(data, textStatus) 
+	{
+		if (data != 'failure')
+		{
+			alert('恭喜您，操作成功！');
+			location.reload();
+		}
+		else
+		{
+			alert('对不起，操作失败');
+		}
+	});
+}
+
+function goPay(order_id)
+{
+	$.ajax({
+		url:"/FrontOrder/merge_order",
+		type:"POST",
+		dataType:"json",
+		data:{
+			order_id: order_id,
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {
+				if (d.code == 0)
+				{
+					//跳转
+					var link = '/FrontOrder/pay_order/order_id/' + d.merge_pay_id;
+					//console.log(link);
+					location.href = link;
+				}
+			}
+		}
+	});
+}
+
+function realtime_express_query()
+{
+	// 百度地图API功能
+	var map = new BMap.Map("close_map");
+	map.centerAndZoom(new BMap.Point(lon, lat), 14);
+
+	var myP1 = new BMap.Point(lon,lat);    //起点
+	var myP2 = new BMap.Point(lon + 0.01,lat);    //终点
+	var myP3 = new BMap.Point(lon - 0.01,lat);    //终点
+	var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/Mario.png", new BMap.Size(32, 70), {    //小车图片
+	//offset: new BMap.Size(0, -5),    //相当于CSS精灵
+	imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+	});
+	var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});    //驾车实例
+	driving2.search(myP1, myP2);    //显示一条公交线路
+	driving2.search(myP2, myP3);    //显示一条公交线路
+
+	window.run = function (){
+	var driving = new BMap.DrivingRoute(map);    //驾车实例
+	driving.search(myP1, myP2);
+	driving.setSearchCompleteCallback(function(){
+	//var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+	var pts = new Array();
+	for (i = 0; i < 1000; i ++)
+	{
+		pts[i] = new Array();
+		pts[i] = new BMap.Point(lon + i * 0.0001, lat);
+		console.log(lon + i * 0.0001 + ',' + lat);
+	}
+	var paths = pts.length;    //获得有几个点
+	console.log(pts);
+
+	var carMk = new BMap.Marker(pts[0],{icon:myIcon});
+	map.addOverlay(carMk);
+	i=0;
+	function resetMkPoint(i)
+	{
+		carMk.setPosition(pts[i]);
+		if(i < paths)
+		{
+			setTimeout(function()
+			{
+				i++;
+				resetMkPoint(i);
+			},100);
+		}
+	}
+
+	setTimeout(function()
+	{
+		resetMkPoint(5);
+	},100)
+
+	});
+	}
+
+	setTimeout(function(){
+	run();
+},1500);
+}

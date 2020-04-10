@@ -1,0 +1,648 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap">
+    	<div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                    <div class="t-a-wait-top-li"><span>ID：</span><input type="text" placeholder="" value="{$id}" class="mini" name="id"> </div>
+                <div class="t-a-wait-top-li"><span>昵称：</span><input type="text" placeholder="" value="{$nickname}" class="mini" name="nickname"> </div>
+                <!--<div class="t-a-wait-top-li"><span>姓名：</span><input type="text" placeholder="" value="{$alipay_account_name}" class="mini" name="alipay_account_name"> </div>-->
+                <div class="t-a-wait-top-li"><span>手机号：</span><input type="text" placeholder="" value="{$mobile}" class="small" name="mobile"> </div>
+
+                <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+              </form>
+            </div>        
+        </div> 
+        <table class="wxtables">  
+            <colgroup>
+                <!--<col width="5%"> -->
+                <!--<col width="5%">-->
+                <!--<col width="5%">  -->
+                <!--<col width="5%">-->
+                <!--<col width="5%">-->
+                <!--<col width="5%">-->
+                <!--<col width="5%"> -->
+
+
+                <!--<col width="10%">  -->
+                <!--<col width="10%">-->
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+            </colgroup>
+            <thead>  
+                <tr>  
+
+                    <td>ID</td>
+                    <td>姓名</td>
+                    <td>手机号</td>
+                    <td>验证码</td>
+                    <td>过期时间</td>
+
+                </tr>
+            </thead>  
+            <tbody>
+				{foreach from=$code_list item=user}
+                <tr>  
+                    <!--<td><input type="checkbox" class="checkbox" value='{$user.user_id}' name="a[]"></td> -->
+                    <td><a href="/AcpUser/user_detail/user_id/{$user.user_id}" title="查看用户详情"><span style="color: blue">{$user.id}</span></a></td>
+                    <td>{if $user.nickname}{$user.nickname}{else}--{/if}</td>
+                    <td>{if $user.mobile}{$user.mobile}{else}--{/if}</td>
+                    <td><span>{if $user.verify_code}{$user.verify_code}{else}--{/if}</span></td>
+                    <!--<td><span>{if $user.qq}{$user.qq}{else}&#45;&#45;{/if}</span></td> -->
+                    <!-- <td>{$user.area_string}</td> -->
+                    <td>{$user.expire_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+
+                    </td>  
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的用户</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">
+<!--            <div class="fl">  -->
+<!--				<a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  -->
+<!--				<a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  -->
+<!--                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_set_is_enable(2)">批量禁用</a> -->
+<!--                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_set_is_enable(1)">批量激活</a> -->
+<!--                &lt;!&ndash; {if $opt == 'user'} <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_send_freight_coupon()">批量发放优惠券</a> {/if}-->
+<!--                <a href="javascript:;" class="btn btn-blue" onclick="copy_link()">个人中心链接</a> &ndash;&gt;-->
+<!--            </div>-->
+            <div class="fr">
+                <div class="paginate">
+                    {$show}
+                </div>
+                <!-- end paginate -->
+            </div>
+        </div>
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+    var url = '{$url}';
+//全选
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+{literal} 
+$(function() {
+
+	var html='<form id="pop_demo">                                                                '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>变动金额(RMB)：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="amount" name="amount" onkeyup="this.value=this.value.replace(/[^\\d]/g,\'\') " onafterpaste="this.value=this.value.replace(/[^\\d]/g,\'\') ">                                 '+
+			'		<span class="fi-help-text" id="amount_ts">10000</span>       '+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed"></span>选择变动类型：</label>      '+
+			'	<div class="form-controls">                                                       '+
+			'		<div class="radio-group">                                                     '+
+			'			<label><input type="radio" name="amount_type" value="0" checked>加款</label>  '+
+			'			<label><input type="radio" name="amount_type" value="1">减款</label>          '+
+			'		</div>                                                                        '+
+			'		<span class="fi-help-text"></span>                                            '+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed"></span>操作备注：</label>           '+
+			'	<div class="form-controls">                                                       '+
+			'		<textarea name="remark" id="remark"></textarea>                               '+
+			'		<span class="fi-help-text">一般在200字以内</span>                             '+
+			'	</div>                                                                            '+
+			'</div>																			      '+
+			'</form>                                                                              ';
+			
+	$(".j_form").click(function(){
+		var user_id = $(this).data('id');
+		$.jPops.custom({
+			title:"调整用户余额",
+			content:html,
+			callback:function(r){
+				acp.popFormStatus=false;//弹窗表单验证状态
+				if(r){
+					$.validator.setDefaults({
+						submitHandler: function() {
+							acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+							var amount=$("#jpops #amount").val();
+							var remark=$("#jpops #remark").val();
+							var amount_type=$("#jpops").find("input[name='amount_type']:checked").val();
+						
+							$.ajax({
+								url : '/AcpFinance/edit_agent_account', 
+								type : 'POST', 
+								dataType : 'JSON',
+								timeout : 1000,
+								data : {action : "set",user_id : user_id,amount_type : amount_type,amount : amount, remark : remark},
+								error : function() {
+									$.jPops.message({title:"操作提示",content: "操作失败请重试",timing:3000});
+								},
+								success : function(result) {
+									if(result.code == 200)
+									{
+										$.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+										//刷新页面
+										setTimeout(function(){window.location.reload() },2000);
+									}
+									else
+									{
+										$.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+									}
+								}
+							});
+							
+						}
+					});
+
+					//表单验证规则
+					$("#pop_demo").validate({
+						rules: {
+							amount: {required: true}
+						},
+						// messages: {
+						// 	amount: {required: "请输入变动金额", check_float: "格式如: 99.00 或 99.99"}
+						// },
+						errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+						success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+					});
+
+					//模拟提交表单
+					$("#pop_demo").submit();
+
+					return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+				}
+				else{//点击取消按钮执行的事件
+					return true;
+				}
+			}
+			
+		});
+	})
+ });
+function set_is_enable(id, is_enable)
+{
+	opt = (is_enable == 1) ? '激活' : '禁用';
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行该操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpUserAjax/set_user_is_enable', {"user_id":id, "is_enable":is_enable}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，' + opt + '失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+function set_to_agent(id)
+{
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行该操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpUserAjax/set_to_agent', {"user_id":id}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，设置成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，设置失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_set_is_enable(is_enable)
+{
+	opt = (is_enable == 1) ? '激活' : '禁用';
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行这些操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count)
+				 {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+
+				 $.post('/AcpUserAjax/batch_set_user_is_enable', {"user_ids":ids, "is_enable":is_enable}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，' + opt + '失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });
+}
+
+function send_freight_coupon(user_id)
+{
+	var html='';
+
+	var html='<form id="deliver_form">' + 
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>优惠券名称：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="freight_name" id="freight_name"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+			'<div class="formitems inline">'+
+            '<label class="fi-name"><span class="colorRed">*</span>优惠券使用条件( > 元)：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="price_limit" id="price_limit"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>优惠券面额：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="freight_num" id="freight_num"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>有效天数：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="valid_day_num" id="valid_day_num"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+		'</form>';
+	
+	$.jPops.custom({
+		title:"发放优惠券",  
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+			    var freight_name  = $('#freight_name').val();
+				var freight_num   = $('#freight_num').val();
+				var valid_day_num = $('#valid_day_num').val();
+				var price_limit   = $('#price_limit').val();
+
+				$.validator.setDefaults(
+				{
+					//表单验证通过后的处理，异步提交表单
+					submitHandler: function()
+					{
+						$.post('/AcpPromo/dispatch_coupon',{"user_id":user_id,"num":freight_num,"valid_day_num":valid_day_num, "coupon_name":freight_name, "price_limit":price_limit},function(data)
+						{
+							if (data == 'success')
+							{
+								alert('恭喜您，操作成功');
+							}
+							else
+							{
+								alert('对不起，操作失败');
+							}
+						})
+						acp.batchDeliverFormStatus = true;
+					}
+				});
+			
+				//表单验证规则
+				$("#deliver_form").validate(
+				{
+					rules: 
+					{
+						freight_num: 
+						{
+							required: true,
+							digits: true
+						},
+						valid_day_num: 
+						{
+							required: true,
+							digits: true
+						},
+					},
+					messages: 
+					{
+						freight_num: 
+						{
+							required: "对不起，请填写面额",
+							digits: "面额请填写数字!"
+						},
+						valid_day_num: 
+						{
+							required: "对不起，请填写有效天数",
+							digits: "有效天数请填写数字!"
+						},
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+
+				//模拟提交表单
+				$("#deliver_form").submit();
+				return acp.batchDeliverFormStatus;
+			}
+			else
+			{
+				return true;  
+			}
+		}
+	});
+}
+
+function batch_send_freight_coupon()
+{
+	var html='';
+
+	var user_ids = '';
+	var count = 0;
+	$('input[name="a[]"]:checked').each(function()
+	{
+		count ++;
+		user_ids += $(this).val() + ',';
+	});
+	if (!count)
+	{
+		alert('对不起，请选择至少一个用户进行发放');
+		return;
+	}
+
+	var user_ids = user_ids.substr(0, user_ids.length - 1);
+	var html='<form id="batch_deliver_form">' + 
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>优惠券名称：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="freight_name" id="freight_name"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+			'<div class="formitems inline">'+
+            '<label class="fi-name"><span class="colorRed">*</span>优惠券使用条件( > 元)：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="price_limit" id="price_limit"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>优惠券面额：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="freight_num" id="freight_num"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>有效天数：</label>'+ 
+				'<div class="form-controls">'+
+					'<input name="valid_day_num" id="valid_day_num"><span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+		'</form>';
+	
+	$.jPops.custom({
+		title:"批量发放镖金优惠券",  
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+			    var freight_name  = $('#freight_name').val();
+				var freight_num   = $('#freight_num').val();
+				var valid_day_num = $('#valid_day_num').val();
+				var price_limit   = $('#price_limit').val();
+
+				$.validator.setDefaults(
+				{
+					//表单验证通过后的处理，异步提交表单
+					submitHandler: function()
+					{
+						$.post('/AcpPromo/batch_dispatch_coupon',{"user_ids":user_ids,"freight_num":freight_num,"valid_day_num":valid_day_num, "coupon_name":freight_name, "price_limit":price_limit},function(data)
+						{
+							if (data == 'success')
+							{
+								alert('恭喜您，操作成功');
+							}
+							else
+							{
+								alert('对不起，操作失败');
+							}
+						})
+						acp.batchDeliverFormStatus = true;
+					}
+				});
+			
+				//表单验证规则
+				$("#batch_deliver_form").validate(
+				{
+					rules: 
+					{
+						freight_num: 
+						{
+							required: true,
+							digits: true
+						},
+						valid_day_num: 
+						{
+							required: true,
+							digits: true
+						},
+					},
+					messages: 
+					{
+						freight_num: 
+						{
+							required: "对不起，请填写面额",
+							digits: "面额请填写数字!"
+						},
+						valid_day_num: 
+						{
+							required: "对不起，请填写有效天数",
+							digits: "有效天数请填写数字!"
+						},
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+
+				//模拟提交表单
+				$("#batch_deliver_form").submit();
+				return acp.batchDeliverFormStatus;
+			}
+			else
+			{
+				return true;  
+			}
+		}
+	});
+}
+
+function delUser(_id, _this){
+	$.jPops.confirm({
+		title:"提示",
+		content:'您确定要删除这条数据吗？',
+		okBtnTxt:"确定",
+		cancelBtnTxt:"取消",
+		callback:function(r){
+			if(r){
+				$.ajax({
+					url: '/AcpUser/ajax_del_user',
+					data: {id: _id},
+					success: function(data){
+                        var msg = '';
+						if(data == 'success'){
+                            msg ="删除成功";
+                        } else {
+                            msg ="删除失败";
+                        }
+                        $.jPops.alert({
+                            title:"提示",
+                            content: msg,
+                            okBtnTxt:"确定",
+                            callback:function(){
+                                location.href="/AcpUser/get_all_user_list?r=" + Math.random();
+                                return true;
+                            }
+                        });
+					}
+				});
+			}
+			return true;
+		}
+	});
+}
+
+function general_code(id)
+{
+    if (!id) {
+        alert('出错啦');
+    }
+    var url_link = url + '?register_p=' + id;
+    $.jPops.custom({
+		title:"二维码链接地址",  
+		content:url_link,
+		okBtnTxt:"确定",  
+        cancelBtnTxt:"取消",  
+        callback:function(r)
+        {
+            return true;
+        } 
+    });
+
+}
+
+
+    //复制链接
+function copy_link()
+{
+    var link = 'http://' + document.domain + '/FrontUser/personal_center';
+    $.jPops.custom({
+        title:"请复制链接",  
+        content:'<div>个人中心链接：' + link + '</div>',
+        okBtnTxt:"复制",  
+        cancelBtnTxt:"关闭",  
+        callback:function(r)
+        {
+            if(r)
+            {
+                text = link;
+                copy_text('jpops-btn-ok');
+            }
+            else
+            {
+                return true;  
+            }
+        }
+    });
+}
+function copy_text(id)
+    {
+        var clipboard = new Clipboard('#' + id, {
+            text: function() {
+                return text;
+            }
+        });
+
+        clipboard.on('success', function(e) {
+            console.log(e);
+            alert('复制成功');
+        });
+
+        clipboard.on('error', function(e) {
+            console.log(e);
+            alert('复制失败，请手动复制');
+        });
+    }
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

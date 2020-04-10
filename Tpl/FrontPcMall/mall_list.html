@@ -1,0 +1,136 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/search_panel.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<div class="wx_wrap">
+		<!-- 搜索条 -->
+		<div class="hd_bar" id="J_bar1">
+			{include file="./search_form.html"}
+		   <div class="hd_me" style="display:none">
+				<a href="javascript:;" onclick="search_item();" id="filterBtn" class="hd_search_btn">
+					搜索
+				</a>
+			</div>
+		</div> 	
+		<!-- S 导航 -->
+	{if !$item_name}
+		<div class="my_nav">
+			<ul id="nav">
+			{foreach from=$class_list item=class}
+				<li class="order_nav {if $class_id == $class.class_id}cur{/if}" id="plant_list">
+					<a href="{$mall_list_link}/class_id/{$class.class_id}">
+						{$class.class_name}
+					</a>
+				</li>
+			{/foreach}
+			</ul>
+		</div>
+	{else}
+		<div class="s_found" id="sFound">
+            <p class="found_tip_2">
+                <!--span id="sFoundTip1" class="hide">隐藏了不相关的商品，</span-->
+                找到
+                <!--span class="letter15" id="foundKeyTip"></span-->
+                相关商品
+                <span id="totResult">
+					{$total}
+                </span>
+                件。
+            </p>
+        </div>
+
+	{/if}
+
+	<!-- E 导航 -->
+    <div id="searchResBlock" class="">
+		{if !$item_list}
+			<div class="s_null" id="sNull01">
+				<h5>
+					抱歉，没有符合的商品。
+				</h5>
+			</div>
+		{/if}
+
+		<div class="cont_itemlist" id="cont1_itemlist">
+		{foreach from=$item_list item=item}
+			<div class="mod_itemlist_small" id="itemList">
+				<div class="hproduct">
+					<a href="{$detail_link}{$item.item_id}">
+						<p class="cover">
+							<img src="{$item.middle_img}">
+						</p>
+						<p class="fn">
+							{$item.item_name}
+						</p>
+						<p class="prices">
+							<strong> <em> ￥{$item.mall_price} </em> </strong>
+						</p>
+						<p class="sku" cg="0-3-1">
+							<span class="comment_num"> 销量： <span id="com_664485"> {$item.sales_num} </span> </span>
+							<span class="stock hide"> {$item.stock} </span>
+						</p>
+					</a>
+				</div>
+			</div>
+		{/foreach}
+		</div>      
+	</div>
+</div>
+{/block}
+
+{block name="js"}
+<script type="text/javascript">  
+var firstRow = '{$firstRow}';
+var total = '{$total}';
+var class_id = '{$class_id}';
+var class_tag = '{$class_tag}';
+var sort_id = '{$sort_id}';
+var item_name = '{$item_name}';
+{literal}
+	$(function(){  
+		var range = 50; //距下边界长度/单位px  
+		var elemt = 500; //插入元素高度/单位px  
+		var num = firstRow;  
+		var totalheight = 0;  
+		var main = $("#itemList"); //主体元素  
+		$(window).scroll(function(){  
+			var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+			//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+			//console.log("页面的文档高度 ："+$(document).height());  
+			//console.log('浏览器的高度：'+$(window).height());  
+			totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+			if(($(document).height()-range) <= totalheight  && total > num)
+			{  
+				num = parseInt(num) + parseInt(firstRow);
+				//获取商品列表
+				$.post('/FrontMall/get_item_list', {"firstRow":num - parseInt(firstRow), "class_id":class_id, "class_tag":class_tag, "sort_id":sort_id, "item_name":item_name}, function(data, textStatus) 
+				 {
+					if (data != 'failure')
+					{
+						var len = data.length;
+						for (i = 0; i < len; i++)
+						{
+							main.append('<div class="hproduct"><a href="/FrontMall/detail/item_id/' + data[i].item_id + '"><p class="cover"><img src="' + data[i].middle_img + '"></p><p class="fn">' + data[i].item_name + '</p><p class="prices"><strong><em>￥' + data[i].mall_price + '</em></strong></p><p class="sku"cg="0-3-1"><span class="comment_num">销量：<span>' + data[i].sales_num + '</span></span><span class="stock hide">' + data[i].stock + '</span></p></a></div> ');  
+						}
+						//main.append('<div class="hproduct"><a href="javascript:"><p class="cover"><img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg"></p><p class="fn">康宝(Canbo)ZTP80A-25(H)立式<font class="skcolor_ljg">消毒柜</font></p><p class="prices"id="price_664485"><strong><em id="dp_J_664485">￥478.00</em></strong></p><p class="sku"cg="0-3-1"><span class="comment_num">销量：<span id="com_664485">4070</span></span><span class="comment_rate hide">好评率90%</span><span class="stock hide"id="stock_664485">无货</span></p></a></div> ');  
+					}
+				}, 'json');
+			}  
+		}); 
+		
+		$('.order_nav').click(function(){
+			$(this).addClass("cur").siblings().removeClass("cur");
+			$(".cont_itemlist").hide().eq($('.order_nav').index(this)).show();
+		});
+	});  
+</script>      
+{/literal}
+{/block}

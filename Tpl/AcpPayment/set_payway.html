@@ -1,0 +1,82 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" id="form_addItem" enctype="multipart/form-data">
+    <div class="formitems inline">
+        <label class="fi-name">支付方式名称：</label>
+        <div class="form-controls">
+			<input type="text" class="xxlarge" name="pay_name" id="pay_name" value="{$payway_info.pay_name}" disabled>
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">支付方式描述：</label>
+        <div class="form-controls">
+            <textarea name="pay_desc" id="pay_desc" class="default"></textarea>
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">收款支付宝账户：</label>
+        <div class="form-controls">
+            <input type="text" class="xlarge" name="alipay_account">
+			<span class="fi-help-text"></span>
+        </div>
+    </div>
+
+	<div class="formitems inline">
+		<label class="fi-name">
+			<span class="colorRed">*</span>签约接口：</label>
+		<div class="form-controls">
+			<select name="category_id">
+				<option value="">--请选择--</option>
+				{foreach from=$sign_type_list item=sign_type_info}
+					<option value="{$sign_type_info.value}">{$sign_type_info.key}</option>
+				{/foreach}
+			</select>
+			<span class="fi-help-text error"></span>
+		</div>
+	</div>
+
+    <div class="formitems inline">
+        <label class="fi-name">合作者身份(Pid)：</label>
+        <div class="form-controls">
+            <input type="text" class="xlarge" name="alipay_partner">
+			<span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">安全校验码(Key)：</label>
+        <div class="form-controls">
+            <input type="text" class="xlarge" name="alipay_key">
+			<span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>是否启用：</label>
+        <div class="form-controls">
+            <div class="radio-group">
+                <label><input type="radio" name="isuse" value="1" checked>是</label>
+                <label><input type="radio" name="isuse" value="0">否</label>
+            </div>
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+
+    <div class="formactions mgl180">
+        <button class="btn btn-blue" type="submit"><i class="gicon-ok white"></i>提交</button>
+    </div>
+
+</form>
+{/block} 
+
+{block name="js"}
+{/block}
+
+{block name="css"}
+{/block}

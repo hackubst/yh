@@ -1,0 +1,107 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+
+D:\phpStudy\WWW\shishengxin\Tpl\AcpVersion\android_version_list.html
+{block name="content"}
+<div class="t-art" style="margin-bottom:10px;">
+	<a href="/AcpVersion/android_version_setting" class="btn btn-blue" ><i class="gicon-plus white"></i>添加新版本</a>
+</div>
+<div class="tablesWrap">
+	<!-- end tables-searchbox -->
+	<table class="wxtables">
+		<colgroup>
+		<col width="30%">
+		<col width="30%">
+		<col width="30%">
+		</colgroup>
+		<thead>
+			<tr>
+				<td>版本号</td>
+				<td>日志</td>
+				<td>添加时间</td>
+			</tr>
+		</thead>
+		<tbody>
+		{if $version_list}
+		{foreach from=$version_list item=this key=k}
+			<tr>
+				<td>{$this.version}</td>
+				<td>
+					{$this.remark}
+				</td>
+				<td>
+					{$this.addtime}
+				</td>
+			</tr>
+		{/foreach}
+		{else}
+			<tr>
+				<td colspan="5" class="center">暂无版本号</td>
+			</tr>
+		{/if}
+		</tbody>
+	</table>
+	<!-- end wxtables -->
+	{if $version_list}
+	<div class="tables-btmctrl clearfix">
+		<div class="fr">
+			<div class="paginate">
+				{$show}
+			</div>
+			<!-- end paginate -->
+		</div>
+	</div>
+	{/if}
+	<!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap --> 
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+
+function delSort(_id){
+	$.jPops.confirm({
+		title:"提示",
+		content:'您确定要删除该栏目吗？',
+		okBtnTxt:"确定",
+		cancelBtnTxt:"取消",
+		callback:function(r){
+			if(r){
+				$.ajax({
+					url: '/AcpChannel/del_channel_sort',
+					type:'post',
+					data: {sort_id: _id},
+					dataType: 'json',
+					success: function(data){
+						if(data == 'success'){
+							alert('栏目删除成功');
+							location.reload();
+						}else{
+							alert('栏目删除失败');
+						}
+					}
+				});
+			}
+			return true;
+		}
+	});
+}
+
+
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/list_sort.css" type="text/css" />
+{literal}
+<style>
+#jpops .fi-name{width:75px;}
+#jpops .form-controls{margin-left:80px;}
+.t-list{ float:left;}
+</style>
+{/literal}
+{/block}

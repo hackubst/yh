@@ -1,0 +1,316 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <!-- <div class="t-rank-tit" style="margin:10px;"><a href="/AcpGift/add_gift" class="btn btn-blue"><i class="gicon-plus white"></i>添加礼品</a></div> -->
+    <div class="tables-searchbox">
+        <form method="post">
+            <div class="mgt10">
+                <span class="tbs-txt">ID：</span>
+                <input type="text" name="id" value="{if $id}{$id}{else}{/if}">
+
+            	<select name="status">
+	                <option value="4" {if $status == 4}selected="selected"{/if}>--全部--</option>
+	                <option value="1" {if $status == 1}selected="selected"{/if}>正常</option>
+	                <option value="2" {if $status == 2}selected="selected"{/if}>已取消</option>
+	                <option value="3" {if $status == 3}selected="selected"{/if}>已过期</option>
+	            </select>
+
+                <span class="tbs-txt">红包标题：</span>
+                <input type="text" name="title" value="{$title}">
+
+                <span class="tbs-txt">昵称：</span>
+                <input type="text" name="nickname" value="{$nickname}">
+                
+                <span "tbs-txt">查询发送时间：</span>  
+                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+
+                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+                
+
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+            </div>
+        </form>
+    </div>
+    <!--end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="5%">
+            <col width="5%">
+            <col width="11%">
+            <col width="11%">
+            <col width="11%">
+            <col width="11%">
+            <col width="11%">
+            <col width="11%">
+            <col width="11%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>用户ID</td>
+            <td>用户昵称</td>
+            <td>红包类型</td>
+            <td>红包标题</td>
+            <td>剩余金额/红包总金额(金豆)</td>
+            <td>剩余个数/红包总数</td>
+            <td>红包状态</td>
+            <td>发送时间</td>
+            <td>过期时间</td>
+            <td>操作</td> 
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$red_packet_list item=red_packet name=list}
+        <tr>
+            <!-- <td><input type="checkbox" class="checkbox" value="{$gift_card.gift_id}" name="a[]"></td> -->
+            
+            <!--<td>{if $red_packet.id}{$red_packet.id}{else}&#45;&#45;{/if}</td>-->
+            <td><span style="color: blue">{$red_packet.id}</span></a></td>
+
+            <td>{if $red_packet.nickname}{$red_packet.nickname}{else}--{/if}</td>
+            <td>{if $red_packet.type == 1}普通红包{else}拼手气红包{/if}</td>
+            <td>{$red_packet.title}</td>
+            <td>{$red_packet.residue_money}/{$red_packet.total_money}</td>
+            <td>{$red_packet.residue_num}/{$red_packet.num}</td>
+            <td>{if $red_packet.is_cancel == 1}已取消{else if $red_packet.expire_time < time()}已过期{else}正常{/if}</td>
+            <td>{$red_packet.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>{$red_packet.expire_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>
+                <a href="/McpRedPacket/get_red_packet_log_list/red_packet_id/{$red_packet.red_packet_id}" class="btn" title="查看领取记录">查看领取记录</a>
+                {if $act == 'admin'}
+                {if $red_packet.is_cancel == 0}
+
+                <a href="javascript:;" onclick="get_red_url('{$red_packet.red_jiami_id}');" class="btn" title="生成红包链接">生成红包链接</a>
+
+<!--                <a href="javascript:;" onclick="cancel_red({$red_packet.red_packet_id});" class="btn" title="关闭"><i-->
+<!--                        class="gicon-trash black"></i>关闭</a>-->
+                {/if}
+                {/if}
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <!-- <a href="javascript:;" onclick="Select()" class="btn btn-blue">全选</a>
+            <a href="javascript:;" onclick="Cancel()" class="btn btn-blue">取消</a> -->
+<!--             <a href="javascript:;" onclick="batch_set_enable(0)" class="btn btn-blue">下架</a>
+            <a href="javascript:;" onclick="batch_set_enable(1)" class="btn btn-blue">上架</a> -->
+            <!-- <a href="javascript:;" onclick="batch_delete_gift()" class="btn btn-blue">删除</a> -->
+        </div>
+        <div class="fr">
+            <div class="paginate">
+            {$show}
+            </div>
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+function delete_gift(id)
+{
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 $.post('/AcpGift/delete_red_packet', {"gift_card_id":id}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_delete_gift()
+{
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count) {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+				 $.post('/AcpGift/batch_delete_gift', {"gift_ids":ids}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function set_enable(id, enable)
+{
+    var opt = enable ? '上架':'下架';
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 $.post('/AcpGift/set_enable', {"gift_id":id, "opt":enable}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					} else {
+						alert('对不起，'+ opt +'失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_set_enable(enable)
+{
+    var opt = enable ? '上架':'下架';
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count) {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+				 $.post('/AcpGift/batch_set_enable', {"gift_ids":ids, "opt":enable}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					} else {
+						alert('对不起，'+ opt +'失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+
+function cancel_red(_id){
+    $.jPops.confirm({
+        title:"提示",
+        content:'您确定要关闭此红包吗？',
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r){
+            if(r){
+                $.post('/McpRedPacket/cancel_red', {id: _id}, function(data, textStatus)
+                {
+                    console.log(data);
+                    if (data == 'success') {
+                        alert('恭喜您，关闭成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，关闭失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+
+
+function get_red_url(jiami_id)
+{
+    // var opt = enable ? '上架':'下架';
+    $.jPops.confirm({
+        title:"提示",
+        content:"红包链接：www.jinlong28.com/#/index?jiami_id="+jiami_id,
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            return true;
+        }
+
+    });
+}
+
+
+</script>
+{/literal}
+{/block}

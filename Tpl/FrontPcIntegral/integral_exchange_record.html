@@ -1,0 +1,79 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s分类 -->
+    <div class="col-left">
+    {include file="../common_personal_nav.html"}
+	</div>	
+    <!-- e分类 -->
+    <!-- s主内容 -->
+    <div class="col-main">
+		{include file="../common_personal_header.html"}
+		<div class="user-main">
+			<!-- s积分换购商品记录 -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>积分换购商品记录</th>
+					</tr>
+				</thead>
+				<thead>
+					<tr>
+						<th>换购编码</th>
+						<th>换购日期</th>
+						<th>兑换数量</th>
+						<th>花费积分</th>
+						<th>换购状态</th>
+						<th>更新时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+		        <tbody>
+                {foreach from=$integral_exchange_list item=integral name=name}
+		          <tr>
+                    <td>{$integral.exchange_record_sn}</td>  
+                    <td>{$integral.addtime|date_format:"%Y-%m-%d"}</td>
+                    <td>{$integral.total_num}</td>
+                    <td>{$integral.pay_amount|string_format:"%d"}</td>
+                    <td>{$integral.order_status_name}</td>
+                    <td>{$integral.confirm_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                    <td><a href="{$integral_exchange_detail_link}{$integral.exchange_record_id}">兑换明细</a></td>
+		          </tr>
+                {foreachelse}   
+                    <tr>
+                        <td colspan="7">
+                            没有符合条件的记录
+                        </td>
+                    <tr>
+                {/foreach}
+		        </tbody>
+		      </table>
+		      <!-- 分页 -->
+		      <div class="pagination">
+                <div class="paginate">  
+                    {$show}
+                </div>  
+		      </div>
+		      <!-- e积分换购商品记录 -->
+		</div>
+	</div>
+	<div class="clearfix"></div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+{/block}

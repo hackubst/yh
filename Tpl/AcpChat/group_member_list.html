@@ -1,0 +1,240 @@
+{extends file="../acp1.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap">
+        <div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="{$form_url}" method="post" id="rank_waiting">
+                    <!--{if $opt == 'user'}<div class="t-a-wait-top-li"><span>用户账号：</span><input type="text" placeholder="" value="{$username}" class="mini" name="username"> </div>-->
+                    <!--div class="t-a-wait-top-li"><span>加盟商名称：</span><input type="text" placeholder="" value="{$nickname}" class="mini" name="nickname"> </div-->
+                    <div class="t-a-wait-top-li"><span>姓名：</span><input type="text" placeholder="" value="{$realname}" class="mini" name="realname"> </div>{/if}
+                    <div class="t-a-wait-top-li"><span>手机号：</span><input type="text" placeholder="" value="{$mobile}" class="mini" name="mobile"> </div>
+                    <!--div class="t-a-wait-top-li"><span>QQ：</span><input type="text" placeholder="" value="{$qq}" class="mini" name="qq"> </div-->
+                    <!--div class="t-a-wait-top-li"><span>邮箱：</span><input type="text" placeholder="" value="{$email}" class="mini" name="email"> </div-->
+                    <!--div class="t-a-wait-top-li"><span>门店编号：</span><input type="text" placeholder="" value="{$store_sn}" class="mini" name="store_sn"> </div-->
+                    <!--
+                <div class="t-a-wait-top-li">
+                <select class="small" name="big_area_id">
+                    <option value="0" >大区</option>
+                    {section name=row loop=$big_area_list}
+                    <option value="{$big_area_list[row].big_area_id}" {if $big_area_list[row].big_area_id == $big_area_id}selected{/if} >{$big_area_list[row].area_name}</option>
+                    {/section}
+                </select>
+                </div>
+                    <!--<div class="t-a-wait-top-li"><span>服务商：</span>-->
+                    <!--<select class="small" name="is_providers">-->
+                    <!--<option value="0" >请选择</option>-->
+                    <!--<option value="1" {if $is_providers == 1}selected{/if}> 是 </option>-->
+                    <!--<option value="2" {if $is_providers == 2}selected{/if}> 否 </option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <input type="hidden" value="{$hx_group_id}" name="hx_group_id">
+                    <div class="t-a-wait-top-li"><span class="tbs-txt">公司名称：</span>
+                        {if $son_company_list}
+
+                        <select name="son_company" class="mini">
+                            <option value="0" selected="" >全部</option>
+                            {foreach from=$son_company_list item=this}
+                            <option value="{$this.son_company_id}"  {if $son_company_id == $this.son_company_id} selected{/if}>{$this.son_company_name}</option>
+                            {/foreach}
+                        </select>
+                        {/if}
+                    </div>
+
+                    <!--<div class="t-a-wait-top-li"><span>创业导师：</span>-->
+                    <!--<select class="small" name="is_mentor">-->
+                    <!--<option value="0" >请选择</option>-->
+                    <!--<option value="1" {if $is_mentor == 1}selected{/if}> 是 </option>-->
+                    <!--<option value="2" {if $is_mentor == 2}selected{/if}> 否 </option>-->
+                    <!--<div class="t-a-wait-top-li"><span>创业导师：</span>
+                        <select class="small" name="is_mentor">
+                            <option value="0" >请选择</option>
+                            <option value="1" {if $is_mentor == 1}selected{/if}> 是 </option>
+
+
+                        <!--</select>-->
+                    <!--</div>-->
+
+                    <!--<div class="t-a-wait-top-li">-->
+                    <!--<select class="small" name="user_rank_id">-->
+                    <!--<option value="0" >用户等级</option>-->
+                    <!--{section name=row loop=$rank_list}-->
+                    <!--<option value="{$rank_list[row].user_rank_id}" {if $rank_list[row].user_rank_id == $user_rank_id}selected{/if} >{$rank_list[row].rank_name}</option>-->
+                    <!--{/section}-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="t-a-wait-top-li" style="width:400px;">-->
+                        <!--<div class="formitems inline">-->
+                            <!--<label class="fi-name" style="width:70px; font-weight:normal;">加群时间：</label>-->
+                            <!--<div class="form-controls" style="margin-left:80px;">-->
+                                <!--<input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">-->
+
+                                <!--<span class="fi-text">-</span>-->
+
+                                <!--<input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+                </form>
+            </div>
+        </div>
+        <table class="wxtables">
+            <thead>
+            <tr>
+                <!--<td>选择</td>-->
+                <td>姓名</td>
+                <td>帐号</td>
+                <td>岗位</td>
+                <td>公司</td>
+                <td>手机</td>
+                <td>加群时间</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$hx_group_member_list item=user}
+            <tr>
+                <!--<td><input type="checkbox" class="checkbox" value='{$user.user_id}' name="a[]"></td>-->
+                <td>{$user.realname}</td>
+                <td>{if $user.username}{$user.username}{else}{$user.mobile}{/if}</td>
+                <td>{$user.group_name}</td>
+                <td>{$user.son_company_name}</td>
+                <td>{if $user.mobile}{$user.mobile}{else}--{/if}</td>
+                <td>{$user.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                <td>
+                    <a href="javascript:;" onclick="del_group_member({$user.hx_group_id},{$user.user_id})" class="btn">删除</a>
+                </td>
+            </tr>
+            {foreachelse}
+            <tr><td colspan="11">没有符合条件的用户</td></tr>
+            {/foreach}
+            </tbody>
+        </table>
+        <!-- end wxtables -->
+        <div class="tables-btmctrl clearfix">
+            <!--<div class="fl">-->
+                <!--<a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>-->
+                <!--<a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>-->
+            <!--</div>-->
+            <div class="fr">
+                <div class="paginate">
+                    {$show}
+                </div>
+                <!-- end paginate -->
+            </div>
+        </div>
+        <!-- end tables-btmctrl -->
+    </div>
+    <!-- end tablesWrap -->
+</div>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+    var url = '{$url}';
+    var hx_group_id = '{$hx_group_id}';
+    //全选
+    function Select(){
+        var sel=document.getElementsByName("a[]");
+        for(var i=0;i<sel.length;i++){
+            sel[i].checked=true;
+        }
+    }
+    //取消全选
+    function Cancel(){
+        var sel=document.getElementsByName("a[]");
+        for(var i=0;i<sel.length;i++){
+            sel[i].checked=false;
+        }
+    }
+
+    {literal}
+    
+    function del_group_member(group_id,user_id) {
+        opt = '删除群成员';
+        $.jPops.confirm(
+            {
+                title:"提示",
+                content:"您确定要执行该操作吗？",
+                okBtnTxt:"确定",
+                cancelBtnTxt:"取消",
+                callback:function(r)
+                {
+                    if(r)
+                    {
+                        $.post('/AcpChat/del_group_member', {"hx_group_id":group_id,"user_id":user_id}, function(data, textStatus)
+                        {
+                            if (data == 'success')
+                            {
+                                alert('恭喜您，' + opt + '成功！');
+                                location.reload();
+                            }
+                            else
+                            {
+                                alert('对不起，' + opt + '失败');
+                            }
+                        });
+                    }
+                    return true;
+                }
+            });
+    }
+    
+    function batch_add_member()
+    {
+        opt = '添加群成员成功';
+        $.jPops.confirm(
+            {
+                title:"提示",
+                content:"您确定要执行这些操作吗？",
+                okBtnTxt:"确定",
+                cancelBtnTxt:"取消",
+                callback:function(r)
+                {
+                    if(r)
+                    {
+                        var ids = '';
+                        var count = 0;
+                        $('input[name="a[]"]:checked').each(function(){
+                            count ++;
+                            ids += $(this).val() + ',';
+                        });
+
+                        if (!count)
+                        {
+                            alert('对不起，请选择至少一项进行操作！');
+                            return;
+                        }
+
+                        ids = ids.substr(0, ids.length - 1);
+
+                        $.post('/AcpChat/add_group_member', {"user_ids":ids,"hx_group_id":hx_group_id}, function(data, textStatus)
+                        {
+                            if (data == 'success')
+                            {
+                                alert('恭喜您，' + opt + '成功！');
+                                location.reload();
+                            }
+                            else
+                            {
+                                alert('对不起，' + opt + '失败');
+                            }
+                        });
+                    }
+                    return true;
+                }
+            });
+    }
+</script>
+{/literal}
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

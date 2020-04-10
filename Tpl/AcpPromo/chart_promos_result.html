@@ -1,0 +1,60 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+     <div class="tables-searchbox">
+        <form method="post" action=''>
+         	<span class="tbs-txt">时间：</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t1" value="{if $s_time1}{date('Y-m-d',$s_time1)}{/if}"  onclick="WdatePicker()">
+	        <span class="tbs-txt">至</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t2" value="{if $s_time2}{date('Y-m-d',$s_time2)}{/if}"  onclick="WdatePicker()">
+	        
+	        <input type='hidden' name='act' value='search' />
+	        <button type="submit" class="btn"><i class="gicon-search"></i>筛选</button>
+        </form>
+    </div> 
+    <!-- end tables-searchbox -->  
+    
+    <div class="t-month-chart" id="month_container">
+		<!--<img src="/Public/Images/acp/bao.jpg" />-->
+	</div>
+ 
+</div>  
+<!-- end tablesWrap --> 
+ {/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="/Public/Plugins/Highcharts/highcharts.js"></script>
+<script>
+//分类
+var type = '[';
+//统计的总数
+var data = '[';
+
+{foreach from=$total_info key=key item=data}
+	data += {$data} + ',';
+	type += '"{$key}"' + ',';
+{/foreach}
+
+data = data.substr(0, data.length - 1);
+data += ']';
+
+type = type.substr(0, type.length - 1);
+type += ']';
+
+//console.log(type);
+{literal}
+$(function (){
+	$("#month_container").highcharts(
+		{"credits":{"text":"@\u542f\u535a\u8f6f\u4ef6","enabled":false,"href":"http:\/\/www.360shop.com.cn","position":{"align":"right","y":-10}},"legend":{"enabled":true,"layout":"vertical","align":"right","verticalAlign":"middle","borderWidth":0},"xAxis":{"categories":eval(type),"title":{"text":"活动类型"}},"title":{"text":"参与各类活动的订单数量统计"},"yAxis":{"title":{"text":"订单量"},"allowDecimals":false,"plotLines":[{"value":0,"width":1,"color":"#808080"}],"min":0},"plotOptions":{"line":{"dataLabels":{"enabled":true},"enableMouseTracking":true}},"series":[{"type":"column","name":"订单量","data":eval(data)}]}
+	);
+});
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+
+{/block}

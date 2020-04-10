@@ -1,0 +1,100 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s分类 -->
+    <div class="col-left">
+    {include file="../common_personal_nav.html"}
+	</div>	
+    <!-- e分类 -->
+    <!-- s主内容 -->
+    <div class="col-main">
+		{include file="../common_personal_header.html"}
+        <form method="post" action="">
+		<div class="user-main">
+			<!-- s积分换购 -->
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+		          <tr>
+		            <th>积分换购</th>
+		          </tr>
+		        </thead>
+			    <thead>
+		          <tr>
+		            <th>序号</th>
+		            <th>商品名称</th>
+		            <th>所需积分</th>
+		            <th>数量</th>
+		            <th>合计</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+                {foreach from=$item_list item=item name=name}
+		          <tr>
+                    <td>{$smarty.foreach.name.iteration}</td>  
+                    <td><a href="{$integral_item_detail_link}{$item.item_id}">{$item.item_name}</a></td>
+		            <td class="daily_price">{$item.mall_price|string_format:"%d"}</td>
+                    <input name="item_id[]" type="hidden" value="{$item.item_id}" readonly=true>
+		            <td><input name="item_num[]" class="daily_itemNum" type="text" value="0" onkeyup="write_number(this)"></td>
+		            <td class="daily_total">0</td>
+		          </tr>
+                {foreachelse}   
+                    <tr>
+                        <td colspan="7">
+                            没有符合条件的商品
+                        </td>
+                    <tr>
+                {/foreach}
+		        </tbody>
+		    </table>
+            {if isset($item_list)}
+      		<div class="form-button btn" style="float:left;background: #ddd;"><a href="{$integral_cart_link}" style="color: #575555;">去积分购物车</a></div>
+            <button name="submit" type="submit" class="btn form-button">立即兑换</button>
+            {/if}
+		      <!-- e积分换购 -->
+		</div>
+        </form>
+	</div>
+	<div class="clearfix"></div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+{literal}
+$(function(){
+	//小计计算
+	$('.daily_itemNum').blur(function(){
+		var _this = $(this);
+		if(!_this.val().match(/^\d+$/) && _this.val() != ""){
+			alert('必须是数字');
+			return;
+		}
+    if(_this.val() != ""){
+      var price = parseInt(_this.val()) * Number(parseFloat(_this.parent().siblings('.daily_price').html()).toFixed(2));
+      _this.parent().siblings('.daily_total').html(parseFloat(price.toFixed(2)));
+    }else{
+    	_this.parent().siblings('.daily_total').html("0");
+    }	
+	});
+});
+function write_number(t)
+{
+      t.value = t.value.replace(/[^\d]/g,'');
+}
+{/literal}
+</script>
+{/block}

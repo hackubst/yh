@@ -1,0 +1,87 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{/block}
+
+{block name="content"}
+	<div class="main user">
+		{include file="../mainMenu.html"}	
+		<div class="base_contenter">
+			{include file="../leftMenu.html"}
+			<div class="base_right refund origin">
+				<div class="base-title ">
+					<span>申请退款</span>
+					<a class="back" href="{$refund_order_list_link}">返回我的订单</a>
+				</div>
+				<div class="originTtile">
+					<span>退款金额：<font>￥{$order_info.pay_amount}</font></span>
+					<!--<span>退款方式：退回余额</span>-->
+				</div>
+				<div class="originStatus yuestatus">
+					<h1>退款申请已经提交，审核通过后，{$order_info.refund_money_back_time_str}到账</h1>
+					<div class="statusPic"><img src="__PUBLIC__/Images/front/status2.jpg" /></div>
+					<ul class="status01">
+						<li class="currentStatus">提交申请</li>
+						<li>{$order_info.refund_apply_time|date_format:"%Y-%m-%d %H:%M"}</li>
+					</ul>
+					<ul class="status02">
+						<li>本网站处理完成</li>
+						<li>{$order_info.refund_pass_time_str}</li>
+					</ul>
+
+					<ul class="status04">
+						<li>退款成功</li>
+						<li>{$order_info.refund_money_back_time_str}</li>
+					</ul>
+				</div>
+				<div class="originOrder">
+					<h4>{$shop_name}</h4>
+					<ul class="orderData">
+						<li><label>成交时间：</label><span>{$order_info.pay_time|date_format:"%Y-%m-%d %H:%M:%S"}</span></li>
+						<li><label>退款菜单：</label>
+							{foreach from=$item_list key=key item=item}
+								<span>
+									{$item.item_name} X {$item.number}
+								</span>
+							{/foreach}
+						</li>
+						<li><label>订单总金额：</label><span>{$order_info.total_amount}元</span></li>
+						<li><label>付款金额：</label><span><font>{$order_info.pay_amount}元</font></span></li>
+					</ul>				
+				</div>
+				<div style="clear:both"></div>
+				<div class="originRecord">
+					<h3>退款记录</h3>
+					<table cellspacing=0 cellpadding=0>
+						<tr>
+							<th>申请提交时间</th>
+							<th>退款金额</th>
+							<th>状态</th>
+						</tr>
+						{foreach from=$order_refund_list item=refund_info}
+							<tr>
+								<td>{$refund_info.refund_apply_time|date_format:"%Y-%m-%d %H:%M"}</td>
+								<td>{$refund_info.pay_amount}</td>
+								<td>{OrderModel::convertOrderStatus($refund_info.order_status)}</td>
+							</tr>
+						{/foreach}
+						<!-- <tr class="last">
+							<td colspan=5></td>							
+						</tr> -->						
+					</table>
+				</div>
+				<div class="originHelp">
+					<div class="orihM">
+						{$refundDetailContents}
+					</div>
+				</div>
+		  </div>
+	 </div><!--  base_contenter end   -->
+	</div><!--  main end   -->
+{/block} 
+
+{block name="js"}
+{literal}
+{/literal}
+{/block}

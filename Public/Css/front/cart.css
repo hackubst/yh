@@ -1,0 +1,293 @@
+﻿/*送货地址*/
+.cart_addr{
+height: 70px;
+position: relative;
+background-color: white;
+}
+.def_cart_area{
+width: 95%;
+position: relative;
+height: 70px;	
+}
+.wuliu_link {
+display: inline-block;
+width: 100%;
+}
+.wuliu_link:after{
+content: '';
+width: 11px;
+height: 11px;
+position: absolute;
+border-top: 1px solid #949090;
+border-right: 1px solid #949090;
+right: 17px;
+top: 30px;
+transform: rotate(45deg);
+-webkit-transform: rotate(45deg);
+}
+.def_cart_area .addr_name_tel {
+position: absolute;
+top: 15px;
+left: 77px;
+color: #767474;
+}
+.def_cart_area .addr_mobile{
+position: absolute;
+left: 100px;
+top: 3px;	
+}
+.def_cart_area .addr_address {
+position: absolute;
+top: 44px;
+left: 77px;
+width: 75%;
+height: 27px;
+overflow: hidden;
+font-size: 14px;
+line-height: 18px;
+color: #767474;
+
+}
+.wuliu {
+width: 30px;
+height: 30px;
+fill: #999;
+position: absolute;
+top: 10px;
+left: 10px;
+}
+.cart_error{
+	line-height: 70px;
+padding-left: 20px;
+color: #999;
+}
+/*顶部功能区*/
+.ctrl_cont {
+height: 45px;
+line-height: 45px;
+position: relative;
+font-size: 15px;
+background-color: #efefef;
+}
+.sel_all {
+position: absolute;
+left: 10px;
+color: #999;
+}
+.del_item {
+position: absolute;
+right: 10px;
+color: #333;
+}
+.clear_all {
+position: absolute;
+right: 15px;
+color: #FF5C5C;
+}
+/*商家选择区*/
+.listContent{
+margin-bottom:50px;
+}
+.sel_shop{
+position:relative;
+height:45px;
+line-height:45px;	
+color:#333;
+border-top:1px solid #ddd;
+border-bottom:1px solid #ddd;
+}
+.sel_shop_wrap{
+position:absolute;
+left:10px;	
+}
+
+/*购物车商品信息*/
+.cart_goods:after{
+content:'\20';
+display:block;
+position:absolute;
+top:50%;
+right: 18px;
+width:12px;
+height:12px;
+border-top:1px solid #999;
+border-left:1px solid #999;
+background:none;
+margin-top:-6px;
+-webkit-transform:rotate(135deg);
+-ms-transform:rotate(135deg);
+transform:rotate(135deg);
+}
+
+.icon_select{
+width: 30px;
+height: 30px;
+display: inline-block;
+background: url(/Public/Images/front/common_png_sprite.png) no-repeat 0px -32px;
+-webkit-background-size: 324%;
+position: relative;
+top: 9px;
+margin-right: 2px;
+}
+.selected .icon_select{
+background-position:0 -72px;
+}
+
+label.count {
+position: absolute;
+top: 70px;
+height: 26px;
+line-height:26px;
+width: 180px;
+left: 136px;
+color: #999;
+}
+.count_txt{
+float: left;
+margin-right: 10px;	
+}
+
+label.count input::-webkit-inner-spin-button,label.count input::-webkit-outer-spin-button {
+-webkit-appearance:none;
+margin:0
+}
+.count .min,.count .add {
+position: relative;
+float: left;
+width: 27px;
+height: 24px;
+border: 1px solid #ddd;
+background-color: #eee;
+text-align: center;
+color: #595959;
+font-size: 24px;
+}
+.count .input_count {
+float: left;
+width: 34px;
+height: 24px;
+line-height: 24px;
+color: #999;
+text-align: center;
+border: none;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+-webkit-appearance: none;
+-webkit-border-radius: 0;
+}
+.cart_goods {
+border-bottom: 1px solid #f0f0f0;
+height: 110px;
+position:relative;
+}
+.cart_goods .item {
+position:relative;
+}
+.cart_goods .icon_select {
+position: absolute;
+left: 10px;
+top: 40px;
+}
+
+.cart_goods .link {
+display: block;
+position: absolute;
+left: 44px;
+top: 15px;
+}
+.cart_goods .image {
+display:block;
+width:80px;
+height:80px;
+}
+.cart_goods .name {
+position: absolute;
+left: 136px;
+top: 15px;
+color: #333;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+width: 55%;
+}
+.shop-price {
+position: absolute;
+left: 136px;
+top: 45px;
+color: #333;
+font-weight: bold;
+}
+.list_shop_line {
+height: 10px;
+background-color: #eee;
+border-top: 1px solid #ccc;
+}
+.listContent .list_shop{
+	background-color: white;
+}
+/*底部结算*/
+.pay_bar {
+position:fixed;
+left:0;
+right:0;
+width:100%;
+bottom:0;
+height:54px;
+line-height:54px;
+background-color:rgba(238, 238, 238, 0.9);
+border-top:1px solid #ddd;
+color:#333;
+z-index:1
+}
+.pay_bar .total {
+position: absolute;
+left: 10px;
+top: 10px;
+line-height: 18px;
+font-weight: bold;
+font-size: 13px;
+}
+.pay_bar .total b {
+color: #333;
+}
+.pay_bar .total em {
+display: block;
+color: #999;
+margin-left: -5px;
+font-weight: normal;
+font-size: 12px;
+}
+.pay_bar .icon_select {
+vertical-align:-6px;
+margin:0 10px
+}
+
+.pay_bar .btn_pay:active {
+background:#AD0F5E
+}
+.pay_bar .btn_pay.disabled {
+background:#999;
+cursor:default
+}
+.cart_btn {
+position: absolute;
+right: 10px;
+top: 7px;
+display: block;
+width: 68px;
+height: 40px;
+text-align: center;
+line-height: 40px;
+color: #999;
+background: #FFFFFF;
+border: 1px solid #ddd;
+font-size: 13px;
+border-radius: 2px;
+-webkit-border-radius: 2px;
+}
+.pay_bar .btn_pay{
+color: #fff;
+background: #0cb700;
+right: 83px;
+}
+

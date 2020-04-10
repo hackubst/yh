@@ -1,0 +1,728 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+.coupon_layer{
+	font-size: 17px;
+	line-height: 25px;
+	max-width: 80%;
+}
+/*.coupon_tip{
+	position: fixed;
+	right: -27px;
+	bottom: 70px;
+	z-index: 8;
+	width: 27px;
+	height: 27px;
+}*/
+#mobile_wxpay{
+	display:none !important;
+}
+.coupon-tip-icon{
+	width: 27px;
+	height: 27px;
+	background-position: -25px -59px;
+}
+.radioclass {
+	width: 12px;
+	height: 12px;
+	border: 2px solid #ddd;
+	border-radius: 50%;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+.radioclass:checked{
+	border-color: #0cb700;
+}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+	<!--主内容区-->
+  <div class="order_submit_wrap">
+  		<!--显示收货地址-->
+      <a href="javascript:void(0);" id="change_addr">
+      	<div id="sendTo" class="send_to">
+          <div class="address_defalut">
+              <h5>
+                  送至
+              </h5>
+              <ul class="deft_addr_seleted" id="editAddBtn">
+								<input type="hidden" id="user_address_id" value="{$user_address_info.user_address_id}">
+								<input type="hidden" id="pre_province_id" value="{$user_address_info.province_id}">
+								<input type="hidden" id="pre_city_id" value="{$user_address_info.city_id}">
+								<input type="hidden" id="pre_area_id" value="{$user_address_info.area_id}">
+								<input type="hidden" id="pre_address" value="{$user_address_info.address}">
+								<li id="addr_detail" class="addr_detail">
+									{$user_address_info.area_string}{$user_address_info.address}
+								</li>
+								<li>
+									<span id="pre_realname">{$user_address_info.realname}</span>
+									<span id="pre_mobile">{$user_address_info.mobile}</span>
+								</li>
+								{if !$user_address_info}
+								<a href="{$address_list_link}" class="goto_edit_addr">
+									<li class="error" id="noToneTip">
+										前去完善收货地址，方便收货
+									</li>
+								</a>
+								{/if}
+              </ul>
+          </div>
+      	</div>
+      </a>
+      {if $node_list}
+      	<div id="sendTo" class="send_to">
+          <div class="address_defalut">
+              <h5>
+              配送方式：
+              </h5>
+              <input type="radio" id="deliver_way1" name="deliver_way" value="1" checked="checked"
+              class="radioclass" onclick="deliver_way_event(0)" /><label for="deliver_way1">邮寄</label>
+              &nbsp;&nbsp;&nbsp;
+              <input type="radio" id="deliver_way2" name="deliver_way" value="0"  class="radioclass"
+              onclick="deliver_way_event(1)" /><label for="deliver_way2">自提</label>
+          </div>
+      	</div>
+      	<div id="sendTo" class="send_to">
+          <div class="address_defalut1">
+              <h5>
+              门店：
+              </h5>
+              <select style="width:70%;height:40px;font-size:13px;" id="send_way">
+                  <!-- onchange="get_shopping_cost()">-->
+                  {foreach from=$node_list item=row}
+                  <option value="{$row.node_code|default:0}">{$row.node_name}-{$row.address}</option>
+                  {/foreach}
+              </select>
+          </div>
+      	</div>
+
+        {if $ticket_list}
+        <div id="ticket" class="send_to">
+          <div class="address_defalut1">
+              <h5>
+              抵用券：
+              </h5>
+              <select style="width:70%;height:40px;font-size:13px;" id="ticketId" onchange="get_ticket_change()">
+                  <option value="0">不用券支付</option>
+                  {foreach from=$ticket_list item=row}
+                  <option value="{$row.voucher_code}">{$row.voucher_code|substr:0:6}**-可抵用{$row.left_money}元</option>
+                  {/foreach}
+              </select>
+                  {foreach from=$ticket_list item=row}
+                  <input type="hidden" id="{$row.voucher_code}" value="{$row.left_money}" />
+                  {/foreach}
+          </div>
+      	</div>
+        {/if}
+
+		{if $order_info['user_vouchers_list']}
+        <div id="ticket" class="send_to">
+          <div class="address_defalut1">
+              <h5>
+              优惠券：
+              </h5>
+              <select style="width:70%;height:40px;font-size:13px;" id="user_vouchers_id" name="user_vouchers_id" onchange="change_vouchers();">
+                  <option value="0">不用优惠券</option>
+				  {foreach from=$order_info['user_vouchers_list'] key=key item=row}
+				  <option value="{$row.user_vouchers_id}" {if $row.user_vouchers_id == $order_info.best_vouchers_id}selected{/if}>{$row.title}</option>
+                  {/foreach}
+				  {foreach from=$order_info['user_vouchers_list'] key=key item=row}
+					  <input type="hidden" id="num_{$row.user_vouchers_id}" value="{$row.num}">
+                  {/foreach}
+              </select>
+          </div>
+      	</div>
+		{/if}
+
+        {else}
+        <input type="hidden" id="send_way" value="0" />
+        {/if}
+
+      <div class="order_content">
+		<div id="single_merchant">
+			<!--<div class="case_promise_txt">我们承诺{$single_merchant_promise_time}分钟内送达</div>-->
+			<ul class="case_order">
+				<!--<div class="case_order_title">
+					<span class="case_o_gold">配送费：<i id="express_fee">￥{$order_info.express_fee}</i></span>
+					<span class="case_o_total">商品总金额：<i id="total_amount">￥{$order_info.total_amount}</i></span>
+				</div>-->
+				<li class="case_merchant">
+					<div class="case_merchant_title">
+						<a href="javascript:void(0);" onClick="show_remark();" class="case_m_remark">
+							<svg class="remark_icon"><use xlink:href="#remark"></use></svg>
+							<h4>添加备注</h4>
+						</a>
+					</div>
+					<ul class="case_item">
+						{foreach from=$order_info.item_list item=item}
+							<li>
+								<div class="case_item_photo">
+									<img class="photo" src="{$item.small_pic}" alt="{$item.item_name}"  onerror="no_pic(this);"/>
+								</div>
+								<div class="case_item_cont">
+									<h3 class="case_item_name">
+										{$item.item_name}
+									</h3>
+									<h3 class="case_item_price">
+										<span class="case_i_price">
+											￥{$item.real_price}
+										</span>
+									</h3>
+									<label class="case_item_count">
+										<h6 class="case_i_count">数量：</h6>
+										<span class="case_i_count_txt"> {$item.number} </span>
+									</label>
+								</div>
+							</li>
+						{/foreach}
+					</ul>
+				</li>
+			</ul>
+		</div>
+      </div>
+
+      <!--订单处理-->
+      <div class="order_pay_area" id="pay_area">
+      		<!--订单总价-->
+          <p class="order_total_price">
+              商品总价：
+              <span class="totalPrice">
+				  &yen;{$order_info.total_amount + $order_info.discount_amount}
+              </span>
+          </p>
+          <p class="order_total_price">
+              配送费：
+              <span id="span_express_fee" class="totalPrice">
+				  &yen;{$order_info.express_fee}
+              </span>
+          </p>
+          <p class="order_total_price">
+              优惠总价：
+              <span id="discount_amount" class="totalPrice">
+				  &yen;{$order_info.discount_amount}
+              </span>
+          </p>
+          <p class="order_total_price">
+              总价：
+              <span id="totalPrice" class="totalPrice">
+				  &yen;{$order_info.total_amount + $order_info.express_fee}
+              </span>
+          </p>
+
+          <!--订单支付方式选择-->
+          <div class="order_pay_action submit_btn" id="payBtnList">
+					{foreach from=$payway_list item=payway}
+                    <a href="javascript:;" id="{$payway.pay_tag}"
+                                           {if $payway.pay_tag == 'cardpay'} style="background-color:#AA8BF3"{/if}
+                        class="submit online_pay{if $payway.pay_tag == 'wallet'} wallet_color {/if}" >
+                        {if $payway.pay_tag == 'wallet'}
+                        <span id="wallet_money">{$SYSTEM_MONEY_NAME}
+							  <em class="wallet_left_money">
+								余额：{$user_info.left_money}
+							  </em>
+							 </span>
+							
+							{/if}
+						</a>
+						<input type="hidden" value="{$payway.payway_id}" id="payway_id" />
+						<input type="hidden" value="{$payway.pay_name}" id="payway_name" />
+						<input type="hidden" value="{$payway.pay_tag}" id="pay_tag" />
+						<input type="hidden" value="{$payway.card_code|default:0}" id="card_code" />
+					{/foreach}
+          </div>
+      </div>
+      <!--添加备注弹出层-->
+			<div class="remark_fix_box" id="fix_box">
+				<ul class="order_remark_cont">
+					 <li class="remark_wrap">
+						 	<div class="rmark_title">添加备注</div>
+						 	<div class="remark_input">
+						 		<textarea name="remark_txt" id="remark_txt" class="remark_txt" placeholder="请输入您想要说的话"></textarea>
+						 	</div>
+					 </li>
+					 <a herf="javascript:void(0);" onclick="submit_remark(this);"><li id="cfm_ok" class="cfm_btn">确定</li></a>
+					 <a herf="javascript:void(0);" onclick="$('#fix_box').hide();$('#screenIfm').hide();"><li id="cfm_quit" class="cfm_btn">取消</li></a>
+				</ul>
+			</div>
+			<!--添加备注层背景-->
+			<div id="screenIfm" style="z-index:10;" class="screenIfm" onclick="$('#fix_box').hide();$('#pay_tan_fix').hide();$(this).hide();paying=false;" style="display:none;">
+			</div>
+
+			<!--马上付时输入支付密码支付-->
+			<div class="pay_pwd_tan" id="pay_tan_fix" style="height:220px;">
+				<form id="pwd_form" name="pwd_form" action="" method="post">
+				<div class="pay_tan_tit">请输入支付密码</div>
+				<div class="pay_tan_num">
+					支付金额：
+					<i>&yen;
+						<label id="pay_amount_label">
+							{$order_info.total_amount + $order_info.express_fee}
+						</label>
+					</i>
+				</div>
+				<input type="number" name="pay_password" id="pay_password" value="" placeholder="输入六位支付密码" maxlength="6" />
+				<input name="paynon_password" type="password" id="paynon_password" placeholder="输入六位支付密码" style="display:none;" />
+				<span style="margin-top:100px;margin-left:25px;">默认的支付密码为“123456”</span>
+				<a href="javascript:void(0);" id="pay_pwd_ok" class="pay_tan_link pay_ok"><span>确定</span></a>
+				<a href="javascript:void(0);" id="pay_pwd_quit" class="pay_tan_link pay_quit"><span>取消</span></a>
+				<input type="hidden" id="total_pay_amount" value="{$order_info.total_amount + $order_info.express_fee}" />
+				<input type="hidden" id="pay_tag" value="wallet" />
+				</form>
+			</div>
+  </div>
+{include file="../coupon_tip.html"}
+{/block}
+
+{block name="js"}
+<script>
+var opt = 3;
+var order_temp_id = '{$order_temp_id}';
+var order_id = 0;
+var express_fee = parseFloat('{$order_info.express_fee}');
+//商品总金额，不含运费
+var total_amount_bef = parseFloat('{$order_info.total_amount}');
+//加运费之后金额
+var total_amount;
+total_amount = {$order_info.total_amount + $order_info.express_fee};
+var pay_amount = total_amount;
+var password = '{$pay_password}' ? true : false;
+var paying = false;
+var jsApiParameters;
+
+var left_money = parseFloat('{$user_info.left_money}');
+var money_name = '{$SYSTEM_MONEY_NAME}';
+//是否券支付
+var ticket_send = 0;
+var voucher_code = '';
+var ticket_money_enough = 0;
+var ticket_money = 0;
+//最优优惠券抵扣价格
+var best_vouchers_num = parseInt('{$order_info.best_vouchers_num}');
+var discount_amount = parseInt('{$order_info.discount_amount}');
+var coupon_desc = '{$coupon_desc}';
+var is_app = 0;
+var native_order_id;
+{literal}
+if(!is_wechat()){
+	is_app = 1;
+}
+function change_vouchers()
+{
+	var id = $('#user_vouchers_id').val();
+	var num = 0;
+	if (id != 0)
+	{
+		num = parseInt($('#num_' + id).val());
+	}
+	//alert(id + ', ' + num);
+	var total_amount = parseInt($('#totalPrice').html());
+	discount_amount = discount_amount + num - best_vouchers_num;
+	$('#totalPrice').html(total_amount - num + best_vouchers_num);
+	$("#pay_amount_label").html(total_amount - num + best_vouchers_num);
+	$('#discount_amount').html(discount_amount);
+	if (id == 0)
+	{
+		best_vouchers_num = 0;
+	}
+	else
+	{
+		best_vouchers_num = num;
+	}
+}
+
+function toggleRadio(obj){
+	var has_slbing_selted = $(obj).parent().siblings().hasClass("selected");
+	if(has_slbing_selted){
+		$(obj).parent().siblings().removeClass("selected");
+	}
+	$(obj).parent().addClass("selected");
+	$(obj).parent().find("input:radio").attr("checked", "checked");
+}
+
+//根据不同的配送方式，生成不同的金额
+function get_shopping_cost()
+{
+    var way = $("#send_way").val();
+    if (way == 0) {
+        $("#express_fee").html("￥"+express_fee);
+        $("#span_express_fee").html(express_fee);
+        $("#totalPrice").html(total_amount);
+        $("#pay_amount_label").html(total_amount);
+        $("#total_pay_amount").attr('value', total_amount);
+    } else {
+        $("#express_fee").html("￥0");
+        $("#span_express_fee").html("0");
+        $("#totalPrice").html(total_amount_bef);
+        $("#pay_amount_label").html(total_amount_bef);
+        $("#total_pay_amount").attr('value', total_amount_bef);
+    }
+}
+
+
+//当选择券付款时，隐藏其他支付方式
+function get_ticket_change()
+{
+    var ticketId = $("#ticketId").val();
+    voucher_code = ticketId;
+    var content = money_name + ' <em class="wallet_left_money"> 余额：'+left_money+' </em>';
+
+    var deliver = $('input[name=deliver_way]:checked').val()
+
+        if (ticketId == 0) {
+            $("#wallet_money").html(content);
+            $("#wxpay").show();
+            $("#cardpay").show();
+            ticket_send = 0;
+
+            if (deliver == 1) {
+                $("#totalPrice").html(total_amount);
+                $("#pay_amount_label").html(total_amount);
+                $("#total_pay_amount").attr('value', total_amount);
+            } else {
+                $("#totalPrice").html(total_amount_bef);
+                $("#pay_amount_label").html(total_amount_bef);
+                $("#total_pay_amount").attr('value', total_amount_bef);
+            }
+
+            ticket_money = 0;
+        } else {
+            ticket_send = 1;
+            ticket_money  = $("#"+ticketId).val();
+            //金额不够则用作抵扣用，否则只显示券支付
+            if (ticket_money < pay_amount) {
+                $("#wallet_money").html(content);
+                $("#wxpay").show();
+                $("#cardpay").show();
+
+                var other_pay = total_amount - ticket_money;
+                var other_pay_no_deliver = total_amount_bef - ticket_money;
+
+                if (deliver == 1) {
+                    $("#totalPrice").html(other_pay);
+                    $("#pay_amount_label").html(other_pay);
+                    $("#total_pay_amount").attr('value', other_pay);
+                } else {
+                    $("#totalPrice").html(other_pay_no_deliver);
+                    $("#pay_amount_label").html(other_pay_no_deliver);
+                    $("#total_pay_amount").attr('value', other_pay_no_deliver);
+                }
+                ticket_money_enough = 0;
+
+            } else {
+                ticket_money_enough = 1;
+
+                $("#wallet_money").html('确认支付');
+                $("#wxpay").hide();
+                $("#cardpay").hide();
+
+                total_amount= 0;
+                $("#totalPrice").html(total_amount);
+                $("#pay_amount_label").html(total_amount);
+                $("#total_pay_amount").attr('value', total_amount);
+            }
+        }
+}
+
+function show_remark()
+{
+	$('#fix_box').show();
+	$('#screenIfm').show();
+}
+
+function submit_remark()
+{
+	$('#fix_box').hide();
+	$('#screenIfm').hide();
+}
+
+$(function(){
+	//输入密码失去焦点变化
+	$("#pay_password").focus(function() {
+		var text_value = $(this).val();
+		if (text_value == this.defaultValue) {
+			$("#pay_password").hide();
+			$("#paynon_password").show().focus();
+			}
+	});
+	$("#paynon_password").blur(function() {
+		var text_value = $(this).val();
+		$('#pay_password').val(text_value);
+		if (text_value == "") {
+			$("#pay_password").show();
+			$("#paynon_password").hide();
+		}
+	});
+
+	//选择支付方式
+	$(".online_pay").click(function(e)
+	{
+		var payway_id = $(this).next().val();
+		var payway_name = $(this).next().next().val();
+		var pay_tag = $(this).next().next().next().val();
+		var card_code = $(this).next().next().next().next().val();
+		if (pay_tag == 'wallet' || pay_tag == 'cardpay')
+		{
+			if (password)
+			{
+				$('#pay_tan_fix,#screenIfm').show();
+				$('#pay_password').prop("autofocus",true);
+				//密码验证
+				$('#pay_pwd_ok').click(function()
+				{
+					//console.log('bbb');
+					//console.log(paying);
+					if (paying)
+					{
+						//alert('对不起，请勿重复点击');
+						return false;
+					}
+					else
+					{
+						//console.log('aaa');
+						paying = true;
+						//支付密码验证
+						add_order(payway_id, payway_name, pay_tag, card_code);
+					}
+				});
+			}
+			else
+			{
+				confirm('您未设置支付密码，前去设置','location.href="/FrontPassword/edit_pwd"');
+			}
+		}
+		else
+		{	
+			add_order(payway_id, payway_name, pay_tag, card_code);
+		}
+	});
+	//密码支付取消按钮
+	$('#pay_pwd_quit').click(function()
+	{
+		$('#pay_tan_fix,#screenIfm').hide();
+		//alert(paying);
+		paying = false;
+	});
+});
+
+function add_order(payway_id, payway_name, pay_tag, card_code)
+{
+    var send_way = $('#send_way').val();
+    var need_deliever = $('input[name=deliver_way]:checked').val()
+	if (!payway_id)
+	{
+		alert('对不起，请选择支付方式！');
+		return false;
+	}
+
+	if (pay_tag == 'wallet' || pay_tag == 'cardpay')
+	{
+		var pay_password = $('#pay_password').val();
+		if (!pay_password)
+		{
+			alert('对不起，请输入支付密码');
+			return false;
+		}
+	}
+
+	var remark_str = $('#remark_txt').val();
+	var user_vouchers_id = $('#user_vouchers_id').val();
+	//alert(order_temp_id + ', ' + payway_id + ', ' + payway_name + ', ' + pay_password + ', ' + remark_str);
+
+	//提交订单
+	$.ajax({
+		url:"/FrontOrder/add_order",
+		type:"POST",
+		dataType:"json",
+		data:{
+			order_temp_id: order_temp_id,
+			payway_id: payway_id,
+			card_code: card_code,
+			payway_name: payway_name,
+			pay_password: pay_password,
+			user_remark: remark_str,
+            send_way: send_way,
+            need_deliever: need_deliever,
+            ticket_send:ticket_send,
+            voucher_code:voucher_code,
+            user_vouchers_id:user_vouchers_id,
+            is_app:is_app
+		},
+		timeout:10000,
+		success:function(d){
+			if(d)
+			{
+				if(d.code == -1)
+				{
+					//余额不足，提示并跳转到支付页面
+					var link = '/FrontOrder/pay_order/order_id/' + d.order_id;
+					location.href = link;
+				}
+				else if (d.msg != 'failure')
+				{
+					//返回成功，代码写这里
+					if (pay_tag == 'mobile_wxpay' || pay_tag == 'wxpay')
+					{
+						if(is_app == 0){
+							//微信支付
+							jsApiParameters = d.jsApiParameters;
+							order_id = d.order_id;
+								callpay();
+							}else{
+								native_order_id = d.order_id;
+								//console.log(order_temp_id);
+								native_listen('wx_pay',{
+							        order_id : native_order_id,
+							        pay_tag : pay_tag
+							    });
+							}
+						
+						//console.log(native_order_id);
+						
+					}
+					else if ((pay_tag == 'wallet' || pay_tag == 'cardpay') && d.code == 0)
+					{
+						//alert(d.code);
+						$("#tan").html("恭喜您，订单付款成功");
+						tishi();
+						setTimeout(function(){location.href = "/FrontOrder/pre_deliver_order";},1000);
+					}
+					else if ((pay_tag == 'wallet' || pay_tag == 'cardpay') && d.code > 0)
+					{
+						var error;
+						switch(d.code)
+						{
+							case 1:
+							error="对不起，余额不足，请使用其他方式支付";
+							break;
+							case 2:
+							error="密码错误";
+							break;
+							case 3:
+							error="请输入密码";
+							break;
+							case 4:
+							$("#tan").html(d.msg);
+							tishi();
+							setTimeout(function(){location.href = "/FrontCart/cart.html";},2000);
+							break;
+							case 5:
+							$("#tan").html(d.msg);
+							tishi();
+							break;
+							case 'failure':
+							error="支付失败";
+							break;
+						}
+						$("#tan").html(error);
+						//alert(error);
+						tishi();
+						paying = false;
+					}
+				}
+			}
+		}
+	});
+}
+
+//调用微信JS api 支付
+function jsApiCall()
+{
+	if (paying == false)
+	{
+		paying = true;
+		WeixinJSBridge.invoke(
+			'getBrandWCPayRequest',
+			jQuery.parseJSON(jsApiParameters),
+			function(res)
+			{
+				if (res.err_msg == "get_brand_wcpay_request:ok" )
+				{
+					//支付成功
+					location.href = '/FrontOrder/pre_deliver_order';
+				}
+				else
+				{
+					paying = false;
+					//WeixinJSBridge.log(res.err_msg);
+					//alert(res.err_code);
+					//alert(res.err_desc);
+					//alert(res.err_msg);
+				}
+			}
+		);
+	}
+}
+
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+			document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		}
+	}else{
+		jsApiCall();
+	}
+}
+
+function deliver_way_event(event)
+{
+    if (event == 0) {
+            $("#express_fee").html("￥"+express_fee);
+            $("#span_express_fee").html(express_fee);
+        if (ticket_money_enough == 1) {
+            $("#totalPrice").html(total_amount);
+            $("#pay_amount_label").html(total_amount);
+        } else {
+            $("#pay_amount_label").html(total_amount - ticket_money);
+            $("#totalPrice").html((total_amount - ticket_money));
+        }
+    } else {
+        $("#express_fee").html("￥0");
+            $("#span_express_fee").html("0");
+        if (ticket_money_enough == 1) {
+            $("#totalPrice").html(total_amount_bef);
+            $("#pay_amount_label").html(total_amount_bef);
+        } else {
+            $("#totalPrice").html((total_amount_bef - ticket_money));
+            $("#pay_amount_label").html(total_amount_bef - ticket_money);
+
+        }
+    }
+}
+
+//显示优惠提示内容
+function show_coupon()
+{
+	layer.open({
+		style:'font-size: 15px;line-height: 25px;max-width: 80%;',
+		content:coupon_desc
+	});
+}
+
+		/*$("#wxpay").on("click",function(){
+		    native_listen('wx_pay',{
+		        order_temp_id : order_temp_id
+		    });
+		})*/
+
+
+		    
+
+
+
+</script>
+{/literal}
+{/block}

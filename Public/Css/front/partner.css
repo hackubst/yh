@@ -1,0 +1,32 @@
+.div-block{
+background-color: #ccc;
+background: -moz-linear-gradient(top, #f1f0f0, #a6a6a6);
+background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f1f0f0), to(#a6a6a6));
+background: linear-gradient(to bottom, #f1f0f0 0%, #a6a6a6 100%);
+color: #000;
+border-right: 1px solid #fff;
+line-height: 40px;
+padding: 0;
+}
+.div-block > a , .div-block > a:link , .div-block > a:active , .div-block > a:visited {
+color: #000;
+text-decoration: none;
+}
+.main .row{
+margin-bottom: 10px;
+}
+.magenta{
+background-color: #fb527b;
+background: -moz-linear-gradient(top, #fc84b3, #f71d3e);
+background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fc84b3), to(#f71d3e));
+background: linear-gradient(to bottom, #fc84b3 0%, #f71d3e 100%);
+color: #fff;
+}
+.magenta > a , .magenta > a:link , .magenta > a:active{
+color: #fff;
+}
+.btn-gtly{
+position: absolute;
+padding: 0;
+white-space: normal;
+}

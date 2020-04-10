@@ -1,0 +1,226 @@
+body,ul,li,ol,p,input,textarea,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+body{font-family:arial,Microsoft Yahei;color:#ccc;font-size:12px;background-color:#f5f5f5;}
+a{
+	text-decoration: none;
+}
+.line_row{
+	width: 100%;
+	height: 10px;
+	border-top: 1px solid #c8c7cc;
+	border-bottom: 1px solid #c8c7cc;
+}
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+/*轮播图*/
+.img_po{padding:0px 0px;}
+.img_poa{width:100%;background-color:#fff;}
+.hge{padding:0px 0px;}
+.flexslider{position:relative;width:100%;overflow:hidden;zoom:1;}
+.flex-viewport{-webkit-transition:all 1s ease;-moz-transition:all 1s ease;transition:all 1s ease;}
+.flexslider .slides{zoom:1;}
+.flex-direction-nav{display:none;}
+.flex-control-nav{width:100%;position:absolute;bottom:5px;text-align:center;}
+.flex-control-nav li{margin:0 4px;display:inline-block;zoom:1;*display:inline;}
+.flex-control-paging li a{background-color: #999; border-radius:8px;display:block;height:8px;width:8px;overflow:hidden;text-indent:-99em;}
+.flex-control-paging li a.flex-active{background-color:#fcbb01;}
+
+/*分类入口*/
+.index_category{
+background-color: white;
+overflow: hidden;
+}
+.index_wrap {
+font-size: 0;
+}
+
+.index_category .item{
+display: inline-block;
+text-align: center;
+width: 25%;
+box-sizing: border-box;
+-webkit-box-sizing: border-box;
+height: 80px;
+/*border-right: 1px solid #efefef;
+border-bottom: 1px solid #efefef;*/
+}
+.index_category .index_icon{
+width: 20px;
+height: 20px;	
+fill:white;
+}
+.index_category .icon_quan{
+width: 36px;
+height: 36px;
+line-height: 56px;
+margin: 0 auto;
+background-color: #ccc;
+border-radius: 18px;
+margin-top: 10px;
+margin-bottom: 10px;	
+}
+.index_category .icon_quan .icon_quan_img{
+	width: 26px;
+	height: 26px;
+	margin-top: 5px;
+}
+.index_wrap a:nth-child(1) .icon_quan{
+	background-color: #ffcc5f;
+}
+.index_wrap a:nth-child(2) .icon_quan{
+	background-color: #9d81b9;
+}
+.index_wrap a:nth-child(3) .icon_quan{
+	background-color: #fdab62;
+}
+.index_wrap a:nth-child(4) .icon_quan{
+	background-color: #ff5f88;
+}
+.index_wrap a:nth-child(5) .icon_quan{
+	background-color: #df5fff;
+}
+.index_wrap a:nth-child(6) .icon_quan{
+	background-color: #ff765f;
+}
+.index_wrap a:nth-child(7) .icon_quan{
+	background-color: #6fb4e3;
+}
+.index_category .item_name{
+font-size: 12px;
+color: #999999;	
+}
+
+/*热门商品*/
+.index_item{
+margin-top: 10px;
+border-bottom: 1px solid #f0f0f0;
+background-color: white;	
+}
+.index_shop .shop_tit,.index_item .item_tit{
+height: 30px;
+line-height: 30px;
+font-size: 14px;
+color: #555;
+width: 100%;
+margin: 0 auto;
+background: #fff;
+}
+.list_icon {
+  display: inline-block;
+  width: 6px;
+  height: 19px;
+  background-color: #fabe00;
+  border-radius: 3px;
+  margin: 5px 3px -4px 3px;
+}
+.hot_right_tit {
+  float: right;
+  margin-right: 17px;
+}
+.index_shop .shop_cont,.index_item .item_cont{
+width: 96%;
+margin: 0 auto;	
+border-bottom: 1px solid #f0f0f0;
+}
+.index_shop .shop_info{
+height:60px;	
+position: relative;
+}
+.index_shop .shop_logo{
+position: absolute;
+top: 10px;	
+}
+.shop_logo img{
+width: 40px;
+height: 40px;	
+}
+.index_shop .shop_name{
+position: absolute;
+left: 45px;
+top: 21px;
+font-size: 15px;
+color: #999999;	
+}
+.index_shop .shop_item_cont{
+height:139px;
+position: relative;
+}
+
+.shop_item_pic img{
+width:100%;
+height:100%;	
+border-radius: 6px;
+}
+.index_shop .shop_link,.index_shop .shop_hot_link{
+position: absolute;
+right: 0;
+top: 15px;
+height: 29px;
+width: 80px;
+border: 1px solid #a4c31d;
+color: #a4c31d;
+border-radius: 50px;
+font-size: 15px;
+text-align: center;
+line-height: 29px;	
+}
+.index_shop .shop_hot_link{
+border: 1px solid #d11271;
+color: #d11271;	
+}
+.index_shop .shop_item_link{
+display: inline-block;
+width: 48.1%;
+margin:8px 2px;
+/*float: left;	*/
+}
+.shop_item_pic .item_info,.shop_item_pic .price_info{
+	margin-top: 13px;
+}
+.shop_item_pic .item_title {
+  color: #333;
+  font-size: 13px;
+    line-height: 17px;
+  overflow: hidden;
+  /* max-height: 35px; */
+  height: 35px;
+}
+.shop_item_pic .item_price {
+  font-size: 16px;
+  color: #0065b2;
+  margin-right: 3px;
+}
+.shop_item_pic .item_del_price {
+font-size: 13px;
+  color: #8d8c8e;
+}
+.index_shop .shop_item_pic {
+width: 100%;
+/*height: 127px;*/
+position: relative;
+}
+.index_shop .shop_item_price {
+position: absolute;
+bottom: 20px;
+left: 10px;
+}
+.index_shop .price_icon{
+width: 50%;
+height: 27px;
+fill: #a4c31d;	
+}
+.index_shop .price_hot_icon{
+width: 50%;
+height: 27px;
+fill: #d11271;
+}
+.index_shop .price_tag{
+position: absolute;
+left: 3px;
+top: 6px;
+color: white;
+font-size: 12px;	
+}

@@ -1,0 +1,79 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+
+{block name="content"}
+<div class="comm-breadcrumbs">
+	<a href="/">网站首页</a>
+	<span class="comm-breadcrumbs-arrow"></span>
+	<a href="/Article/article_list">{$head_title}</a>
+</div>
+<!--end comm-breadcrumbs-->
+
+<div class="j-layout clearfix">
+	<div class="j-layout-col w190 mgr10">
+	{foreach from=$article_category_list item=this}
+		<dl class="article-list-leftPanel">
+			<dt>
+				<h3 class="article-llp-title">
+					<a href="/Article/article_list/id/{$this.article_sort_id}"{if $article_sort_id eq $this.article_sort_id} style="color: #ff7f00;"{/if}>{$this.article_sort_name}</a>
+				</h3>
+			</dt>
+		</dl>
+	{/foreach}
+		<!--end article-list-leftPanel-->
+	</div>
+	<!--end w190-->
+	<div class="j-layout-col w790">
+		<div class="article-list-rightPanel">
+			<div class="article-lrp-title">
+				<h2>
+					<i class="article-lrp-titleicon lf"></i>
+					<b>{if $article_sort_name}{$article_sort_name}{else}全部资讯{/if}</b>
+					<i class="article-lrp-titleicon info"></i>
+				</h2>
+			</div>
+			<!--end article-lrp-title-->
+			
+			<ul class="article-lrp-list">
+		{if $general_article_list}
+			{foreach from=$general_article_list item=this}
+				<li class="clearfix">
+					<div class="article-lrp-list-context fl">
+						<div class="article-lrp-lc-line pdb15 clearfix">
+							<h1 class="title fl">
+								<a href="/Article/article_display/sort_id/{$article_sort_id}/id/{$this.article_id}">{$this.title}</a>
+							</h1>
+							<span class="datetiem fr">{$this.addtime}</span>
+						</div>
+					</div>
+				</li>
+			{/foreach}
+		{else}
+			<li class="clearfix">
+				<div class="article-lrp-list-context fl">
+					<div class="article-lrp-lc-line pdb15 clearfix" style="text-align: center;">
+						暂无资讯
+					</div>
+				</div>
+			</li>
+		{/if}
+			</ul>
+			 
+			<div class="article-lrp-paginate">
+				{$pagination}
+			</div>
+		</div>
+		<!--end article-list-rightPanel-->
+	</div>
+	<!--end w790-->
+</div>
+<!-- end j-layout-->
+{/block}
+
+{block name="js"}
+
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="__COMMCSS__/article.css" />
+{/block}

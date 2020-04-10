@@ -1,0 +1,258 @@
+/*
+* @Author:zhangminxiang
+* @Date:   2016-04-05 09:06:05
+* @Last Modified by:zhangminxiang
+* @Last Modified time:
+*/
+body{
+	font-family:"华文细黑";
+}
+.main{
+	width:100%;
+	/*padding:0 0 0 4%;*/
+	background:#FFF;
+    TEXT-ALIGN: center;
+    MARGIN-RIGHT: auto; MARGIN-LEFT: auto;
+}
+.main_a{
+	width:50%;
+	display:block;
+	background:#FFF;
+	float:left;
+	margin-bottom:10px;
+	position:relative;
+}
+.a_right{
+	float:right;
+}
+@media only screen and (min-width:320px) and (max-width:360px) {
+	.main_a img{
+		width:140px;
+		height:140px;
+	}
+}
+@media only screen and (min-width:361px) and (max-width:400px) {
+	.main_a img{
+		width:165px;
+		height:165px;
+	}
+}
+@media only screen and (min-width:401px) {
+	.main_a img{
+		width:176px;
+		height:176px;
+	}
+}
+.main_a img{
+	margin-bottom:14px;
+}
+.main_a p:nth-of-type(1){
+	font-size:13px;
+	color:#777;
+	margin:0 3%;
+	margin-bottom:7px;
+	overflow: hidden;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+}
+.main_a p:nth-of-type(2){
+	font-size:13px;
+	color:#ff5c5c;
+	margin:0 0 15px 3%;
+}
+.lucency{
+	position:absolute;
+	bottom:0;
+	width:100%;
+	line-height:30px;
+	text-align:center;
+	background:rgba(0,0,0,0.4);
+	font-size:16px;
+	color:#FFF;
+}
+/*---------------*\
+ * index_home
+\*---------------*/
+.mid{
+	width:94%;
+	padding:0 3%;
+	/*background:#F3F3F3;*/
+}
+.mid_a{
+	width:100%;
+	display:block;
+	background:#FFF;
+	margin:10px auto;
+	box-shadow:0 2px 5px #AEAEAE;
+}
+.a_img{
+	width:100%;
+	position:relative;
+}
+.a_icon{
+	height:22px;
+	position:absolute;
+	background:rgba(0,0,0,0.5);
+	right:0;
+	bottom:0;
+	border-top-left-radius:50px;
+}
+.a_icon span{
+	width:13px;
+	height:13px;
+	display:block;
+	float:left;
+	background:url(/Public/Images/front/icon_shizhong@3x.png) no-repeat;
+	background-size:13px;
+	margin:5px 4% 0 13%;
+}
+.a_icon p{
+	font-size:12px;
+	color:#FFF;
+	margin:5px 0 0 0;
+	text-align: center;
+}
+.a_txt{
+	width:100%;
+	line-height:38px;
+	background:#FFF;
+}
+.a_txt p:nth-of-type(1){
+	font-size:14px;
+	color:#82737a;
+	float:left;
+	margin-left:4%;
+	line-height: 22px;
+}
+.a_txt p:nth-of-type(2){
+	font-size:14px;
+	color:#FF5c5c;
+	float:right;
+	margin-right:3%;
+}
+@media only screen and (min-width:320px) and (max-width:360px) {
+	.a_img img{
+		width:303px;
+		height:144px;
+	}
+	.a_icon{
+		width:25%;
+	}
+}
+@media only screen and (min-width:361px) and (max-width:400px) {
+	.a_img img{
+		width:355px;
+		height:169px;
+	}
+	.a_icon{
+		width:22%;
+	}
+}
+@media only screen and (min-width:401px) {
+	.a_img img{
+		width:384px;
+		height:177px;
+	}
+	.a_icon{
+		width:20%;
+	}
+}
+/*---------------*\
+ * list
+\*---------------*/
+.box{
+	display:block;
+	width:100%;
+	background:#FFF;
+	border-bottom:1px solid #e8e8e8;
+}
+.box img{
+	float:left;
+	margin:8px 3% 8px 2%;
+}
+.box_div{
+	margin-top:15px;
+	float:left;
+}
+.box_div p:nth-of-type(1){
+	font-size:16px;
+	color:#686868;
+	overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    margin-bottom:20px;
+}
+.box_div p:nth-of-type(2){
+	width:30%;
+	line-height:27px;
+	text-align:center;
+	background:#FF5C5C;
+	color:#FFF;
+	font-size:14px;
+	float:left;
+	margin-right:5%;
+}
+.box_div p:nth-of-type(3){
+	float:left;
+	font-size:14px;
+	color:#FF5C5C;
+	margin-top:5px;
+}
+.box_div p:nth-of-type(4){
+	float:left;
+	font-size:17px;
+	color:#FF5C5C;
+	margin-top:3px;
+}
+@media only screen and (min-width:320px) and (max-width:360px) {
+	.box img{
+		width:80px;
+		height:80px;
+	}
+	.box_div{
+		width:68%;
+	}
+}
+@media only screen and (min-width:361px) and (max-width:400px) {
+	.box img{
+		width:90px;
+		height:90px;
+	}
+	.box_div{
+		width:70%;
+	}
+}
+@media only screen and (min-width:401px) {
+	.box img{
+		width:100px;
+		height:100px;
+	}
+	.box_div{
+		width:68%;
+	}
+}
+
+
+
+/*---------------------------*\
+ * 上拉加载
+\*---------------------------*/
+#load_wrapper {
+  width:100%;
+  overflow:auto;
+}
+
+#scroller {
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  width:100%;
+  padding:0;
+}
+#pullDown, #pullUp {
+  background:#fff;
+  height:40px;
+  line-height:40px;
+  padding:5px 10px;
+  font-weight:bold;
+  font-size:14px;
+  color:#888;
+}

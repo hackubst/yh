@@ -1,0 +1,157 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+
+{block name="mainhead"}
+<div class="main-head clearfix">
+	<div class="fl">
+		<span class="main-head-txt">欢迎您</span>
+	</div>
+	<div class="fr">
+		<a href="/AcpOrder/get_pre_pay_order_list/mod_id/1" class="clrblock clr-red">
+			<i class="ic34 ic-signup"></i>
+			<span class="clrblock-txt">待处理订单</span>
+			<span class="clrblock-txt">{$unhandled_item.unhandled_order_num}笔</span>
+		</a>
+		<a href="/AcpUser/audit_waiting/mod_id/2" class="clrblock clr-orange">
+			<i class="ic34 ic-users"></i>
+			<span class="clrblock-txt">待审核分销商</span>
+			<span class="clrblock-txt">{$unhandled_item.waiting_audit_num}个</span>
+		</a>
+		<a href="/AcpFinance/waiting_enter/mod_id/5" class="clrblock clr-green">
+			<i class="ic34 ic-credit"></i>
+			<span class="clrblock-txt">待确认入账</span>
+			<span class="clrblock-txt">{$unhandled_item.unhandled_account_apply_num}条</span>
+		</a>
+		<a href="/AcpSuggest/list_complain/mod_id/0" class="clrblock clr-blue">
+			<i class="ic34 ic-aid"></i>
+			<span class="clrblock-txt">待处理投诉</span>
+			<span class="clrblock-txt">{$unhandled_item.unhandled_complain_num}条</span>
+		</a>
+	</div>
+</div> 
+{/block} 
+
+{block name="content"}
+<style>
+ ul,li { list-style-type:none;z-index:99999}
+.select_box { width:100px; border:1px solid #ccc; padding-right:20px; padding-left:10px; background:url('__ACPIMAGES__/select_ul.gif') no-repeat 110px center; position:relative;}
+.select_box span { cursor:pointer; display:block; line-height:25px; width:100%; height:25px; overflow:hidden;}
+.select_box ul li { cursor:pointer;}
+.son_ul { width:129px; position:absolute; left:0; top:25px; border:1px dashed #ccc; background:#fff;}
+.son_ul li { display:block; line-height:25px; padding-left:10px; width:120px}
+.hover_order { background:#368EE0;}
+.hover_user{ background:#F8A31F;}
+</style>
+<div class="chartWrap clearfix">    
+    <div class="chartBox chartBox-blue per50 fl">    
+        <div class="cb-title">    
+            <h2>订单统计</h2>    
+        </div>  
+        <div class="cb-contain" style='min-height:40px;'>
+        	<div class="formitems inline" style='padding-bottom:0px;'>  
+    			<div style='float:left;'>
+    			<!-- <ul>
+  						<li class="select_box">
+    						<span class='order'>{if $order == 1}今天{elseif $order == 2}昨天{elseif $order == 3}上一周{elseif $order == 4}本月{elseif $order == 5}上一个月{elseif $order == 6}今年{/if}</span>
+    						<ul class="son_ul" id='order'>
+      							<li data-value='1'>今天</li>
+      							<li data-value='2'>昨天</li>
+      							<li data-value='3'>上一周</li>
+      							<li data-value='4'>本月</li>
+      							<li data-value='5'>上一个月</li>
+      							<li data-value='6'>今年</li>
+    						</ul>
+  						</li>
+					</ul>-->
+					<select name='order'>
+						<option value='1' {if $order == 1}selected{/if}>今天</option>
+						<option value='2' {if $order == 2}selected{/if}>昨天</option>
+						<option value='3' {if $order == 3}selected{/if}>上一周</option>
+						<option value='4' {if $order == 4}selected{/if}>本月</option>
+						<option value='5' {if $order == 5}selected{/if}>上一个月</option>
+						<option value='6' {if $order == 6}selected{/if}>今年</option>
+					</select>
+    			</div>
+    			<div style='float:right;'>总计<span id='order_total'>{$order_total}</span></div>  
+			</div>
+			<div class="t-month-chart" id="order_count" style='height:260px;'>
+				<!--<img src="/Public/Images/acp/bao.jpg" />-->
+			</div>
+        </div>
+    </div>    
+    <div class="chartBox chartBox-orange per50 fr">    
+        <div class="cb-title">    
+            <h2>会员统计</h2>    
+        </div>
+        <div class="cb-contain" style='min-height:40px;'>
+        	<div class="formitems inline" style='padding-bottom:0px;'>  
+    			<div style='float:left;'>
+    			<!-- 	<ul>
+  						<li class="select_box">
+    						<span  class='user'>{if $user == 1}今天{elseif $user == 2}昨天{elseif $user == 3}上一周{elseif $user == 4}本月{elseif $user == 5}上一个月{elseif $user == 6}今年{/if}</span>
+    						<ul class="son_ul" id='user'>
+      							<li data-value='1'>今天</li>
+      							<li data-value='2'>昨天</li>
+      							<li data-value='3'>上一周</li>
+      							<li data-value='4'>本月</li>
+      							<li data-value='5'>上一个月</li>
+      							<li data-value='6'>今年</li>
+    						</ul>
+  						</li>
+					</ul>  -->
+					<select name='user'>
+						<option value='1' {if $user == 1}selected{/if}>今天</option>
+						<option value='2' {if $user == 2}selected{/if}>昨天</option>
+						<option value='3' {if $user == 3}selected{/if}>上一周</option>
+						<option value='4' {if $user == 4}selected{/if}>本月</option>
+						<option value='5' {if $user == 5}selected{/if}>上一个月</option>
+						<option value='6' {if $user == 6}selected{/if}>今年</option>
+					</select>
+    			</div>
+    			<div style='float:right;'>总计<span id='user_total'>{$user_total}</span></div>  
+			</div>
+			<div class="t-month-chart" id="user_count" style='height:260px;'>
+				<!--<img src="/Public/Images/acp/bao.jpg" />-->
+			</div>  
+        </div>
+    </div>    
+</div> 
+
+<div class="chartWrap">      
+    <div class="chartBox">      
+        <div class="cb-title">待办事项</div>      
+        <div class="cb-contain nopdd">  
+            <table class="wxtables table-list">    
+                <colgroup>    
+                    <col width="100%">     
+                </colgroup>    
+                <tbody>
+                	{section name=row loop=$waiting}
+                	{if $waiting[row].num <= 0}{continue}{/if}    
+                    <tr>    
+                        <td><a href="{$waiting[row].href}">{$waiting[row].desc} ({$waiting[row].num})</a></td>     
+                    </tr>  
+                    {/section}  
+                </tbody>    
+            </table>  
+        </div>      
+    </div>      
+</div> 
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/acp_index.js?version={$version}"></script>
+<script type="text/javascript">
+	var order_total	= '{$order_total}';
+		order_subtitle = '{$order_subtitle}';
+	    order_data_x = '{$order_data_x}';
+	    order_data_y = '{$order_data_y}';
+	
+	var user_total	= '{$user_total}';
+		user_subtitle = '{$user_subtitle}';
+    	user_data_x = '{$user_data_x}';
+    	user_data_y = '{$user_data_y}';
+</script>
+{/block}

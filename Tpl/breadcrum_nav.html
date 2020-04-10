@@ -1,0 +1,49 @@
+<div class="breadcrum-container">
+	<ul>
+		{if $smarty.const.ACTION_NAME == 'item_list'}
+			<li><a href="{$item_list_link}" title="所有商品分类">所有分类</a></li>
+
+			{if $smarty.get.new_shop == '1'}
+			<li><a href="{$item_list_link}new_shop/1" title="开业装修">开业装修</a></li>			
+			{/if}
+			{if $smarty.get.new == '1'}
+			<li><a href="{$item_list_link}new/1" title="新品">新品</a></li>			
+			{/if}
+			{if $smarty.get.package == '1'}
+			<li><a href="{$item_list_link}package/1" title="套餐商品">套餐商品</a></li>			
+			{/if}
+			{if $smarty.get.promo == '1'}
+			<li><a href="{$item_list_link}promo/1" title="促销商品">促销商品</a></li>			
+			{/if}
+			{if $smarty.get.cqs}
+			<li><a href="javascript:;" title="搜索结果">搜索结果</a></li>			
+			{/if}
+			{if $smarty.get.class_id}
+			<li><a href="{$item_list_link}class_id/{$class_id}" title="{$class_name}">{$class_name}</a></li>			
+			{/if}
+			{if $smarty.get.sort_id}
+			<li><a href="{$item_list_link}class_id/{$class_id}" title="{$class_name}">{$class_name}</a></li>						
+			<li><a href="{$item_list_link}sort_id/{$sort_id}" title="{$sort_name}">{$sort_name}</a></li>			
+			{/if}
+		{/if}
+		{if $smarty.const.ACTION_NAME == 'item_detail'}
+			<li><a href="{$item_list_link}" title="所有商品分类">所有分类</a></li>
+
+			{if $smarty.get.package == '1'}
+			<li><a href="{$item_list_link}package/1" title="套餐商品">套餐商品</a></li>						
+			{else}
+			<li><a href="{$item_list_link}class_id/{$class_id}" title="{$class_name}">{$class_name}</a></li>						
+			<li><a href="{$item_list_link}sort_id/{$sort_id}" title="{$sort_name}">{$sort_name}</a></li>					
+			{/if}
+		{/if}
+		{if $smarty.const.ACTION_NAME == 'integral_exchange'}
+			<li><a href="{$item_list_link}" title="所有商品分类">所有分类</a></li>
+
+			<li><a href="{$integral_exchange_link}" title="积分兑换">积分兑换</a></li>						
+		{/if}
+		{if $smarty.const.MODULE_NAME == 'FrontUser' || $smarty.const.MODULE_NAME == 'FrontOrder' || $smarty.const.MODULE_NAME == 'FrontAddress' || $smarty.const.MODULE_NAME == 'FrontPassword' || $smarty.const.MODULE_NAME == 'FrontIntegral' || $smarty.const.ACTION_NAME == 'my_collect'}
+			<li><a href="{$home_link}" title="首页">首页</a></li>						
+			<li><a href="{$personal_center_link}" title="会员中心">会员中心</a></li>						
+		{/if}
+	</ul>
+</div>

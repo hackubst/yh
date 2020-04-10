@@ -1,0 +1,697 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+	<!--主内容区-->
+	<div id="detailCon" class="detail_wrap"> 
+		<!--订单当前状态和可操作-->
+		<div class="order_head"> 
+				<div class="od_content"> 
+					<div class="state_detail_list"> 
+						<p class="state_detail"><h6>订单状态：<h3 class="od_status">{$order_info.order_status_name}</h3></h6></p> 
+					</div> 					
+					{if $order_info.order_status == OrderModel::PRE_PAY}
+						<h5 class="state_detail">请尽快支付。</h5> 
+					{elseif $order_info.order_status == OrderModel::PAYED}
+						<h5 class="state_detail">请耐心等待系统发货。</h5> 
+					{elseif $order_info.order_status == OrderModel::DELIVERED}
+						<h5 class="state_detail">请收到货后及时确认。</h5> 
+					{elseif $order_info.order_status == OrderModel::CONFIRMED}
+						<h5 class="state_detail">感谢您的支持，欢迎再次购买。</h5> 
+					{/if}
+				</div> 
+				<!--可执行操作-->
+				<div class="my_order_btns clearfix">
+					{if $order_info.order_status == OrderModel::PRE_PAY}
+						<a href="{$pay_order_link}{$order_info.order_id}" class="oh_btn toPay" id="toPay" >去支付</a>
+						<a href="javascript:void(0)"  onclick="cancel_order({$order_info.order_id}, {OrderModel::CANCELED})" class="oh_btn toPay quit_order" id="closeDeal">取消订单</a>
+					{elseif $order_info.order_status == OrderModel::DELIVERED}
+						<a href="javascript:void(0)"  onclick="confirm_order({$order_info.order_id}, {OrderModel::CONFIRMED})" class="oh_btn toPay" id="toConfirm" >确认收货</a>
+					{elseif $order_info.order_status == OrderModel::CONFIRMED}
+						<a href="{$assessment_link}/order_id/{$order_info.order_id}" class="oh_btn toPay">评价</a>
+					{/if}
+					{if $order_info.order_status != OrderModel::PAYED && $order_info.order_status != OrderModel::CONFIRMED }
+					
+					{else}
+						<a href="{$apply_refund_link}/order_id/{$order_info.order_id}" class="oh_btn toPay quit_order">申请退款</a>
+						{/if}
+				</div>
+		</div>
+		<!-- 物流查询信息 -->
+		<!-- 如果是待付款则隐藏  -->
+		{if $order_info.order_status == OrderModel::PRE_PAY || $order_info.order_status ==
+		OrderModel::PAYED || $order_info.order_status ==
+		OrderModel::CANCELED}
+		{else}
+		<div class="od_base_tit wuliu_cont">
+			<h3 class="od_base_title">物流信息</h3>
+			<a href="javascript:;" class="oh_btn toPay" id="toSearch" >查询</a>
+		</div>
+		<div class="order_flow" id="order_flow">
+			<!-- 快递基本信息 -->
+			<div class="od_content"> 
+				<div class="state_detail_list" id="express_state_div"> 
+					<h5>快递状态：<span class="red">运输中</span></h5>
+
+					<h5>快递公司：{$order_info.express_company_name}</h5>
+					<h5>运单编号： {$order_info.express_number}</h5>
+				</div> 					
+
+			</div> 
+			<!--订单快递流程图-->
+			<div class="od_flow_tit">
+				<h3 class="od_flow_title">快递跟踪</h3>
+			</div>
+			<ul class="od_flow_ul" id="od_flow_ul">
+				<!--流程线-->
+					
+				<!--一流程:当前流程加cur_flow类-->	
+				{foreach from=$order_info['flow_info']['flow_list'] item=flow_arr}
+					{foreach from=$flow_arr key=key item=flow}
+						<li class="od_flow_li {if $flow.addtime == $order_info['flow_info']['cur_time']}cur_flow{/if}">
+							<!--时间-->	
+							<span class="od_flow_time">
+								<span class="flow_hour">{$flow.addtime|date_format:"%H:%M:%S"}</span>
+								<span class="flow_year">{$flow.addtime|date_format:"%Y-%m-%d"}</span>
+							</span>	
+							<!--圆圈：class说明如下当前flow_cur_icon，主干flow_main_icon，分支flow_branch_icon-->	
+							<span class="od_flow_staticon">
+								<div class="{if $flow.addtime == $order_info['flow_info']['cur_time']}flow_cur_icon{elseif count($flow_arr) == 1}flow_main_icon{elseif $key == 0}flow_main_icon{else}flow_branch_icon{/if}"></div>
+							</span>
+							<!--描述-->	
+							<span class="od_flow_desc">
+								<span class="flow_desc">{$flow.remark}</span>
+							</span>
+						</li>	
+					{/foreach}
+				{/foreach}
+			</ul>
+		</div>
+		{/if}
+	
+		<!--订单基本信息-->
+		<div class="od_base_info"> 
+			<div class="od_base_tit">
+				<h3 class="od_base_title">基本信息</h3>
+			</div>
+			<div class="address_row"> 
+				<div class="address_tit">
+					商品总价：
+				</div> 
+				<div class="address_cnt"> 
+					<span class="address_price">&yen;{$order_info.total_amount}</span> 
+				</div> 
+			</div> 
+
+			<div class="address_row"> 
+				<div class="address_tit">
+					配送费：
+				</div> 
+				<div class="address_cnt"> 
+					<span class="address_price">&yen;{$order_info.express_fee}</span> 
+				</div> 
+			</div> 
+	
+			<div class="address_row"> 
+				<div class="address_tit">
+					收&nbsp;货&nbsp;人：
+				</div> 
+				<div class="address_cnt">
+					{$order_info.realname}
+				</div> 
+			</div>  
+			
+			<div class="address_row"> 
+				<div class="address_tit">
+					电话：
+				</div> 
+				<div class="address_cnt">
+					{$order_info.mobile}
+				</div> 
+			</div>
+			
+			<div class="address_row"> 
+				<div class="address_tit">
+					地址：
+				</div> 
+				<div class="address_cnt">
+					{$order_info.address}
+				</div> 
+			</div>
+
+			<div class="address_row"> 
+				<div class="address_tit">
+					下单时间：
+				</div> 
+				<div class="address_cnt">
+					{$order_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}
+				</div> 
+			</div>  
+	
+			<div class="address_row"> 
+				<div class="address_tit">
+					支付时间：
+				</div> 
+				<div class="address_cnt">
+					{if $order_info.pay_time}
+						{$order_info.pay_time|date_format:"%Y-%m-%d %H:%M:%S"}
+					{else}
+						--
+					{/if}
+				</div> 
+			</div> 
+	
+			<div class="address_row"> 
+				<div class="address_tit">
+					支付方式：
+				</div> 
+				<div class="address_cnt">
+					{if $order_info.payway_name && $order_info.order_status != OrderModel::PRE_PAY}
+						{$order_info.payway_name}
+					{else}
+						--
+					{/if}
+				</div> 
+			</div>  
+		
+			<div class="address_row"> 
+				<div class="address_tit">
+					确认收货时间：
+				</div> 
+				<div class="address_cnt">
+					{if $order_info.confirm_time}
+						{$order_info.confirm_time|date_format:"%Y-%m-%d %H:%M:%S"}
+					{else}
+						--
+					{/if}
+				</div> 
+			</div> 
+			
+			<div class="address_row"> 
+				<div class="address_tit">
+					订单编号：
+				</div> 
+				<div class="address_cnt">
+					{$order_info.order_sn}
+				</div> 
+			</div>
+		</div>
+
+		<!--订单商品信息-->
+		<div class="od_item_cont"> 
+			<ul class="case_item">
+				{foreach from=$order_info['order_item_list'] item=item}
+					<li>
+						<a href="{$item_detail_link}{$item.item_id}" class="od_item_link">
+							<div class="case_item_photo">
+								<img class="photo" src="{$item.small_pic}" alt="{$item.item_name}"  onerror="no_pic(this);"/>
+							</div>
+							<div class="case_item_cont">
+								<h3 class="case_item_name">
+									{$item.item_name}
+								</h3>
+								<h3 class="case_item_price">
+									<span class="case_i_price">
+										￥{$item.real_price}
+									</span>
+								</h3>
+								<label class="case_item_count">
+									<h6 class="case_i_count">数量：</h6>
+									<span class="case_i_count_txt"> {$item.number} </span>
+								</label>
+							</div>
+						</a>
+					</li>
+				{/foreach}
+			</ul>
+		</div>
+		<!--确认加钱弹层支付-->
+		<div class="pay_pwd_tan" id="pay_tan_fix">
+			<form id="recharge_form" name="recharge_form" action="" method="post">
+			<div class="pay_tan_tit">选择支付方式支付</div>	
+			<div class="pay_tan_num">
+				支付金额：<i>&yen;</i><i id="pay_add_num"></i>
+			</div>
+			{foreach from=$payway_list item=payway}
+			<div class="pay_rechrg_select {if $payway.payway_id == $order_info.payway}selected{/if}">
+				<i class="icon_select show_pwd" onclick="toggleRadio(this);"></i>	
+				<label for="{$payway.payway_id}" onclick="toggleRadio(this);" class="show_pwd">{if $payway.pay_tag == 'wallet'}{$SYSTEM_MONEY_NAME}<em class="pay_left_money">余额：&yen;{$user_info.left_money}</em>{else}{$payway.pay_name}{/if}</label>
+				<input type="radio" id="{$payway.payway_id}" name="payway_id" data-pay_tag='{$payway.pay_tag}' value="{$payway.payway_id}" style="display:none;" {if $payway.payway_id == $order_info.payway}checked{/if}/>
+			</div>
+			{/foreach}		
+			<input type="password" name="pay_password" id="pay_password" placeholder="输入六位支付密码" maxlength="6" style="display:none;"/>
+			<a href="javascript:void(0);" id="pay_pwd_ok" class="pay_tan_link pay_ok"><span>支付</span></a>
+			<a href="javascript:void(0);" id="pay_pwd_quit" class="pay_tan_link pay_quit"><span>取消</span></a>
+			<input type="hidden" name="act" value="pay">
+			<!-- <input type="hidden" id="total_pay_amount" value="{$order_info.pay_amount}" /> -->
+			</form>
+		</div>
+		<!--层背景-->
+		<div id="screenIfm" style="z-index:10;" class="screenIfm" onclick="$('#pay_tan_fix').hide();$(this).hide();" style="display:none;">
+		</div>
+		<!--s分享到朋友圈-->
+		<div class="win-mask" style="display: none;"></div>
+		<div class="fx_font  text-center" style="display: none;">
+			<img src="__PUBLIC__/Images/front/fx_font.png" width="100%" />
+			<span class="share_txt">分享给好友，抢马上到优惠券</span>
+		</div>
+		<!--e分享到朋友圈-->
+	</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/Js/front/order.js?version={$version}" type="text/javascript"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=i41ahj7TpHiyxFFycxt4R9Ul"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+var jsApiParameters;
+var password = '{$pay_password}';
+var order_id = {$order_info.order_id};
+var canceled = {OrderModel::CANCELED};
+var confirmed = {OrderModel::CONFIRMED};
+var delivered = {OrderModel::DELIVERED};
+var order_status = {$order_info.order_status};
+var IMG_DOMAIN = '{$IMG_DOMAIN}';
+var rob_state = parseInt({$rob_state});
+//var lon = parseFloat('{$order_info.foot_man_info.lon}');
+//var lat = parseFloat('{$order_info.foot_man_info.lat}');
+var lon = parseFloat('{$order_info["foot_man_info"]["longitude"]}');
+var lat = parseFloat('{$order_info["foot_man_info"]["latitude"]}');
+var route_path = new Array();
+var start_point = '';
+var viewport = new Array();
+var index = 0;
+var map_called = false;
+{foreach from=$order_info['route_path'] key=key1 item=route}
+	route_path['{$key1}'] = new Array();
+	{foreach from=$route key=key2 item=val}
+		route_path['{$key1}']['{$key2}'] = '{$val}';
+	{/foreach}
+{/foreach}
+console.log(route_path);
+console.log(lon + ',' + lat);
+var map;
+var car;
+var i = 0;
+var timer;
+var label;
+
+//分享信息
+var link = '{$freight_activity_info.link}';
+var img = '{$freight_activity_info.activity_small_pic}';
+var title = '{$freight_activity_info.activity_name}';
+var desc = '{$freight_activity_info.activity_desc}';
+var has_red_bag = '{$has_red_bag}';
+var freight_activity_id = '{$freight_activity_info.freight_activity_id}';
+wx.config({
+    debug: false,
+    appId: '{$signPackage.appId}',
+    timestamp: '{$signPackage.timestamp}',
+    nonceStr: '{$signPackage.nonceStr}',
+    signature: '{$signPackage.signature}',
+   jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo'
+      ]
+});
+{literal}
+
+//抢单模块处理
+//alert(rob_state);
+if (rob_state == 0)
+{
+	//当前等待商家确认
+	$('.od_footman_cont').hide();
+	$('.od_grab_cont').hide();
+	//timer = setInterval(get_rob_info, 5000);
+}
+if (rob_state == 1)
+{
+	//当前商家已全部确认，等待镖师抢单
+	$('.od_footman_cont').hide();
+	$('.od_grab_cont').show();
+	timer = setInterval(get_rob_info, 5000);
+}
+else if (rob_state == 2)
+{
+	$('.od_footman_cont').show();
+	$('.od_grab_cont').hide();
+}
+
+function share_freight_coupon(){
+	$(".win-mask").height($(document).height());
+	$(".win-mask").show();
+	$(".fx_font").show();
+	$('html, body').animate({scrollTop:0}, 'slow');
+}
+$(function()
+{
+	/*$("#closeDeal").click(function()
+	{
+		confirm("您确认要取消订单吗？", "set_order_state(order_id, canceled)");
+		if (confirm("您确认要取消订单吗？"))
+		{
+			set_order_state(order_id, canceled);
+		}
+	});*/
+
+	/*$("#toConfirm").click(function()
+	{
+		//confirm("您确认要确认收货吗？", "set_order_state(order_id, confirmed)");
+		if (confirm("您确认要确认收货吗？"))
+		{
+			set_order_state(order_id, confirmed);
+		}
+	});*/
+	
+	//隐藏弹出框	
+	$('.win-mask,.fx_font').click(function(){
+		$('.win-mask').hide();
+		$('.fx_font').hide();
+	});
+	//折叠实时地图
+	/*$("#fold_real_map").toggle(
+		function()
+		{
+			$("#real_map").animate({height: "410px"},"slow");
+			$("#fold_arrow_icon").css("transform","rotate(180deg)");
+			realtime_express_query();
+		},
+		function()
+		{
+			$("#real_map").animate({height: "0px"},"slow");
+			$("#fold_arrow_icon").css("transform","rotate(0deg)");
+		}
+	);*/
+	$("#fold_real_map").click(function() {
+		var $map = $('#real_map');
+		isHeight0 = $map.is(function() {
+	      return $map.height() == 0;
+	    });
+	    if(isHeight0){
+	    	$map.animate({height: "410px"},"slow");
+			$("#fold_arrow_icon").css("transform","rotate(180deg)");
+			realtime_express_query();
+	    }else{
+	    	$map.animate({height: "0px"},"slow");
+			$("#fold_arrow_icon").css("transform","rotate(0deg)");
+	    }
+	});
+
+
+});
+
+//打开地图
+/*function open_real_map()
+{
+	$("#real_map").animate({height: "410px"},"slow");
+	$("#close_map").show();
+	realtime_express_query();
+}*/
+function sub(obj)
+{
+	var tmp=parseInt($(obj).next().find('em').html());
+	tmp--;
+	if(tmp<0)
+	{
+		tmp=0;
+	}
+	$(obj).next().find('em').html(tmp);
+}
+
+function add(obj)
+{
+	var tmp=parseInt($(obj).prev().find('em').html());
+	tmp++;
+	$(obj).prev().find('em').html(tmp);
+}
+//确定加钱
+function add_submit(){
+	var add_gold_num = $('.od_foot_gold em').html();
+	//$('#pay_add_num').html(parseInt(add_gold_num));
+	$('#pay_add_num').html(add_gold_num);
+	$('#pay_tan_fix,#screenIfm').show();
+
+}
+$(function(){
+	$('#pay_pwd_quit').click(function() {
+		$('#pay_tan_fix,#screenIfm').hide();
+	});
+	$('#pay_tan_fix .pay_rechrg_select:first .show_pwd').click(function() {
+		$('#pay_password').show();
+	});
+	$('#pay_tan_fix .pay_rechrg_select:not(:first) .show_pwd').click(function() {
+		$('#pay_password').hide();
+	});
+	//点击支付
+	$('#pay_pwd_ok').click(function(e){
+		//获取支付tag
+		var pay_tag = $('input[name=payway_id]:checked').data('pay_tag');
+		var payway_id = $('input[name=payway_id]:checked').val();
+		if (pay_tag == 'wallet')
+		{
+			if(password != '')
+			{
+				//支付密码验证
+				//password_valid();
+				//var price = parseInt($('#pay_add_num').html());
+				//var pay_password = $('#pay_password').val();
+			}
+			else
+			{
+				confirm('您未设置支付密码，前去设置','location.href="/FrontPassword/edit_pwd"');
+			}
+		}
+		else
+		{
+			//微信支付
+			//jsApiParameters = d.msg;
+			//callpay();
+			//$('#recharge_form').submit();
+		}
+		//var price = parseInt($('#pay_add_num').html());
+		var price = $('#pay_add_num').html();
+//alert(price);
+		var pay_password = $('#pay_password').val();
+		addFreight(price, payway_id, pay_password, pay_tag);
+	});
+});
+//取消订单
+function cancel_order(o_id, canceled)
+{
+	order_id = o_id;
+	confirm("您确认要取消订单吗？", "set_order_state(order_id, canceled)");
+	/*if (confirm("您确认要取消订单吗？"))
+	{
+		set_order_state(order_id, canceled);
+	}*/
+}
+
+//确认收货
+function confirm_order(o_id, confirmed)
+{
+	order_id = o_id;
+	confirm("您确认要确认收货吗？", "set_order_state(order_id, confirmed)");
+	/*if (confirm("您确认要确认收货吗？"))
+	{
+		set_order_state(order_id, confirmed);
+	}*/
+}
+//单选
+function toggleRadio(obj){
+	var has_slbing_selted = $(obj).parent().siblings().hasClass("selected");
+	if(has_slbing_selted){
+		$(obj).parent().siblings().removeClass("selected");
+	}
+	$(obj).parent().addClass("selected");
+	$(obj).parent().find("input:radio").attr("checked", "checked");
+}
+
+//生成红包，暂时弃用，后期点击生成用
+function share_coupon()
+{
+	$.ajax(
+	{
+		url:"/FrontOrder/share_coupon",
+		type:"POST",
+		data:{
+			order_id: order_id,
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {				
+				if(d.code == 0)
+				{
+					var freight_coupon_id = d.freight_coupon_id;
+					//分享
+				}
+				else
+				{
+					switch(d.code)
+					{
+						case -1:
+							var error="抱歉，无效的订单";	
+							break;
+						case 0:
+							var error="抱歉，当前无活动";	
+							break;
+					}
+					$("#tan").html(error);
+					tishi();
+				}
+			}
+		}
+	});
+}
+
+wx.ready(function () {
+  // 1 判断当前版本是否支持指定 JS 接口，支持批量判断
+    wx.checkJsApi({
+      jsApiList: [
+        'getNetworkType',
+        'previewImage',
+         'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo'
+      ],
+      success: function (res) {
+        //alert('support: ' + JSON.stringify(res));
+      }
+    });
+//alert('tile = ' + title + ', desc = ' + desc + ', link = ' + link + ', img = ' + img);
+  var shareData = {
+    title: title,
+      desc: desc,
+      link: link,
+      imgUrl: img,
+      trigger: function (res) {
+        //alert('用户点击发送给朋友');
+      },
+      success: function (res) {
+        //alert('已分享');
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert('call fail: ' + JSON.stringify(res));
+      }
+  };
+  wx.onMenuShareAppMessage(shareData);
+  wx.onMenuShareTimeline(shareData);
+  wx.onMenuShareQQ(shareData);
+  wx.onMenuShareWeibo(shareData);
+});
+wx.error(function (res) {
+  //alert('error: ' + res.errMsg);
+});
+
+//调用微信JS api 支付
+function jsApiCall()
+{
+	WeixinJSBridge.invoke(
+		'getBrandWCPayRequest',
+		jQuery.parseJSON(jsApiParameters),
+		function(res)
+		{
+			if(res.err_msg == "get_brand_wcpay_request:ok" )
+			{
+				//支付成功
+				//location.href = '/FrontOrder/pre_deliver_order';
+				$('#pay_tan_fix,#screenIfm').hide();
+			}
+			else
+			{
+				//WeixinJSBridge.log(res.err_msg);
+				//alert(res.err_code);
+				//alert(res.err_desc);
+				//alert(res.err_msg);
+			}
+		}
+	);
+}
+
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		}
+	}else{
+		jsApiCall();
+	}
+}
+
+//查询打开和收起订单快递信息
+	$("#toSearch").click(
+		function()
+		{
+			var obj = $('#order_flow');
+			if(obj.is(':visible') == false) //查询调用接口写在此处，防止重复调用 定义一个布尔值判断
+			{
+				$.post('/FrontUser/query_express', {"order_id":order_id}, function(data, textStatus){
+				console.log(data);
+					if (data.code == 0)
+					{
+						var html1 = '<h5>快递状态：<span class="red">' + (data.is_end == 1 ? '已收货' : '运输中') + '</span></h5>';
+						html1 += '<h5>快递公司：' + data.com + '</h5>';
+						html1 += '<h5>运单编号：' + data.express_number + '</h5>';
+						html2 = '';
+						for (var i = 0; i < data.detail.length; i++)
+						{
+							html2 += '<li class="od_flow_li clearfix ' + (i == 0 ? 'cur_flow' : '') + '">';
+							html2 += '<span class="od_flow_time">';
+							html2 += '<span class="flow_hour">' + data.detail[i].datetime + '</span>';
+							// html2 += '<span class="flow_year">' + data.detail[i].datetime + '</span>';
+						    html2 += '</span>';
+							html2 += '<!--圆圈：class说明如下当前flow_cur_icon，主干flow_main_icon，分支flow_branch_icon-->';
+							html2 += '<span class="od_flow_staticon">';
+							html2 += '<div class="' + (i ==0 ? 'flow_cur_icon' : '') +  '"></div>';
+							html2 += '</span>';
+							html2 += '<!--描述-->';
+							html2 += '<div class="od_flow_desc">';
+							html2 += '<span class="flow_desc">' + data.detail[i].remark + '</span>';
+							html2 += '</div>';
+							html2 += '</li>';
+						}
+						$('#express_state_div').html(html1);
+						$('#od_flow_ul').html(html2);
+
+						layer.hide();
+					}
+				}, 'json');
+				obj.show();
+				$(this).text('收起');
+			}
+			else
+			{
+				obj.hide();
+				$(this).text('查询');
+
+			}
+
+		}
+	);
+
+</script>
+{/literal}
+{/block}

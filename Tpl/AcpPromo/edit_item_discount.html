@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=">
+<title>{$head_title}</title>
+</head>
+<body>
+
+</body>
+</html>{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<form action='' method='post' class="bs-docs-example" id="add_item_discount">
+        <div class="tabs clearfix">  
+            <a href="javascript:;" class="active tabs_a fl" data-origin="discount" data-index="1"><span class="wizardstep-num">1</span>添加商品促销活动  </a>    
+    		<a href="javascript:;" class="tabs_a fl" data-origin="discount" data-index="2"><span class="wizardstep-num">2</span>添加商品促销</a>   
+        </div>
+        <!-- end tabs -->  
+        <div class="tabs-content" data-origin="discount">
+
+            <div class="tc hide" data-index="2">  
+            <div class="tablesWrap tj-all hide">  
+    		<div class="tables-searchbox"> 
+            	<div class="t-dis-list">
+                    <span class="tbs-txt">名称：</span>  
+                    <input type="text" name='s_name' id='s_name' value='' />
+                </div> 
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择分类：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="s_category" id='s_category'>
+                    			<option value="">--请选择--</option>
+                    			{foreach from=$arr_category item=row1}
+                				<option value="1.{$row1.class_id}" {if "1."|cat:$row1.class_id EQ $category_id}selected{/if}>{$row1.class_name}</option>
+                				{foreach from=$row1.sort_info item=row2}
+                				<option value="2.{$row2.sort_id}" {if "2."|cat:$row2.sort_id EQ $category_id}selected{/if}>{$row2.sort_name}</option>
+                				{/foreach}
+                				{/foreach}
+                			</select>  
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择品牌：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="s_brand" id='s_brand'>  
+                                <option value="0" selected>--请选择--</option>
+                    			{foreach from=$arr_brand item=row}
+                    			<option value="{$row.brand_id}">{$row.brand_name}</option>
+                    			{/foreach}  
+                            </select>  
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                	<span class="tbs-txt">成本价不少于：</span>  
+                    <input type="text" name='s_cost_price' id='s_cost_price' class="mini" value='' />
+                </div>
+                <div class="t-dis-list search"><span class="btn search_item"><i class="gicon-search"></i>查询</span></div>
+            </div>  
+    		<!-- end tables-searchbox -->  
+   			<table class="wxtables">  
+                <colgroup>  
+                <col width="10%">  
+                <col width="10%">  
+                <col width="25%">  
+                <col width="12%">  
+                <col width="12%">  
+                <col width="12%">  
+                <col width="30%">  
+                </colgroup>  
+                <thead>  
+                    <tr>  
+                        <td>选择</td> 
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>批发价</td>  
+                        <td>活动</td>  
+                        <td>活动后(参考)</td>  
+                        <td>操作</td>  
+                    </tr>  
+                </thead>  
+                <tbody class='item_list'>
+                	<tr><td colspan='7'>暂无商品可选，点击搜索获取商品信息</td></tr> 
+                </tbody>  
+            </table>  
+    		<!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">
+                <div class="fl select">  
+                    <a href="javascript:;" class="btn btn-blue all">全选</a>  
+                    <a href="javascript:;" class="btn btn-blue cancel">取消</a>  
+                </div>  
+                <div class="fr">  
+                    <div class="paginate"> 
+                    	
+                    </div>  
+                    <!-- end paginate -->  
+                </div> 
+            </div>  
+    		<!-- end tables-btmctrl -->  
+		</div>  
+            <!--<button type="button" class="btn" onclick="clik()">添加商品</button>  -->
+		<!-- end tablesWrap --> 
+<!--    
+		<div class="wizardstep-actions mgt10">  
+            <a href="###" class="btn j-wizardstep" data-origin="test" data-type="prev">上一步</a>  
+            <a href="###" class="btn btn-blue j-wizardstep" data-origin="test" data-type="next">下一步</a>  
+        </div>
+        -->
+        <a type="submit" class="btn btn-blue" onclick='clik()'>选择商品</a>
+		<h6>已选择参加活动的商品：</h6>
+		<div class="tablesWrap tj-all" style="width:60%;" id='slected_item'>  
+   			<table class="wxtables">  
+                <colgroup>  
+                <col width="10%">  
+                <col width="55%">  
+                <col width="10%"> 
+                <col width="15%">  
+                </colgroup>  
+                <thead>  
+                    <tr>   
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>批发价</td>   
+                        <td>操作</td> 
+                    </tr>  
+                </thead>  
+                <tbody class='item_list'>
+                {if $item_list}
+                {section name=row loop=$item_list}
+					<tr class='has_item flag_{$item_list[row].item_id}'>
+						<input type='hidden' name='choose[]' value='{$item_list[row].item_id}'>
+						<td><img src="{$item_list[row].small_img}" width='50' height='50' ></td>
+					    <td>{$item_list[row].item_name}</td>
+					    <td><span>¥</span><span>{$item_list[row].cost_price}</span></td>
+					    <td><a href='javascript:;' class='btn' onclick='del_item_element({$item_list[row].item_id})' title='删除'>删除</a></td>
+					</tr>
+				{/section}
+				{else}
+                    <tr class='no_one'><td colspan='4'>暂无商品可选，点击搜索获取商品信息</td></tr>
+                {/if}
+                </tbody>  
+            </table>  
+    		<!-- end wxtables -->  
+		</div>
+		
+        		<input type='hidden' name='act' value='edit' />
+        		<button type="submit" class="btn btn-blue">提交</button>
+            </div>
+           
+
+            <div class="tc" data-index="1">  
+                 <div class="formitems inline">  
+            		<label class="fi-name">活动类型：</label>  
+            		<div class="form-controls" style="line-height:32px;">指定商品直接优惠</div>  
+        		 </div>
+        		 
+        		 <div class="formitems inline">
+    			 	<label class="fi-name"><span class="colorRed">*</span>类型：</label>  
+    			 	<div class="form-controls">  
+        				<div class="radio-group">  
+            				<label><input type="radio" name="dis_type" value='1' {if $promo_info.discount_type ==1}checked{/if}>打折</label>  
+            				<label><input type="radio" name="dis_type" value='2' {if $promo_info.discount_type ==2}checked{/if}>减价</label>
+        				</div>  
+        				<span class="fi-help-text"></span>  
+    				</div>  
+				</div>
+				  
+		        <div class="formitems inline type">  
+		            <label class="fi-name"><span class="colorRed">*</span>幅度：</label>  
+		            <div class="form-controls">
+		             	<input type="text" name='discount' placeholder="" value='{$promo_info.discount_total}' class="mini">
+		                <span class="fi-help-text">举例：如果打9折，请输入0.9。85折请输入0.85</span>   
+		            </div>  
+		        </div> 
+		       
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed">*</span>促销活动名称：</label>  
+		            <div class="form-controls">  
+		                <input type="text" placeholder="" name='title' value='{$promo_info.title}' class="xlarge">  
+		                <span class="fi-help-text">活动的名称</span>  
+		            </div>  
+		        </div>
+		         
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed">*</span>需购买数量：</label>  
+		            <div class="form-controls">  
+		                <input type="text" placeholder="" name='total' value='{$promo_info.item_total}'  class="mini">  
+		                <span class="fi-help-text">请填写数字(达到购买数量时才能参与活动，默认为1件)</span>  
+		            </div>  
+		        </div>
+		        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>开始日期：</label>  
+		            <div class="form-controls">  
+		                <input type="text" autocomplete="off" name='start_time' value='{$promo_info.start_time}' class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">  
+		                <span class="fi-help-text">只有达到开始日期，活动才会生效。若不指定，则表示即刻生效。</span>  
+		            </div>  
+		        </div> 
+		        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>结束日期：</label>  
+		            <div class="form-controls">  
+		                <input type="text" autocomplete="off" name='end_time' value='{$promo_info.end_time}' class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">  
+		                <span class="fi-help-text">当达到结束日期时，活动会结束。若不指定，则表示一直生效。</span>  
+		            </div>  
+		        </div>  
+		        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>适合的客户：</label>  
+		            <div class="form-controls">  
+		                <div class="checkbox-group">
+		                	{section name=row loop=$rank_list}
+		                    <label><input type="checkbox" name="rank_need[]" value='{$rank_list[row].user_rank_id}' {if in_array($rank_list[row].user_rank_id,$rank_need)}checked{/if}>{$rank_list[row].rank_name}</label>
+		                    {/section} 
+		                </div>  
+		                <span class="fi-help-text">不勾选表示适用于所有分销商</span>  
+		            </div>  
+		        </div>
+		        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>活动是否启用：</label>  
+		            <div class="radio-group">  
+            			<label><input type="radio" name="used" value='1' {if $promo_info.isuse == 1}checked{/if}>是</label>  
+            			<label><input type="radio" name="used" value='2' {if $promo_info.isuse == 2}checked{/if}>否</label> 
+        			</div>  
+        			<span class="fi-help-text"></span> 
+		        </div> 
+		        
+		        <div class="formitems inline"> 
+		        	<label class="fi-name">&nbsp;</label> 
+		        	<div class="radio-group">
+		        		<a href="javascript:;" id="jump2" class="btn btn-blue">编辑商品</a>
+		        	</div>
+		        </div>
+            </div>
+           
+        </div> 
+    </form>
+
+  
+<script>
+	var item_arr = new Array();
+	{section name=row loop=$item_list}
+		item_arr.push(''+{$item_list[row].item_id}+'');
+	{/section}
+</script>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpPromo/add_item_discount.js"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpPromo/add_list_item_discount.css" />
+{/block}

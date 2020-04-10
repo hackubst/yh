@@ -1,0 +1,148 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+<style>
+a{
+	display: block;
+}
+.on-sale{
+	height: 80px;
+	background-color: #fff;
+	border-bottom: 1px solid #e9e9e9;
+	padding: 9px 10px;
+}
+.info{
+	float: left;
+	position: relative;
+}
+.img{
+	float: left;
+	width: 80px;
+	height: 80px;
+	margin-right: 10px;
+}
+.name{
+	font-size: 17px;
+	color: #333;
+	width: 60%;
+}
+.tip{
+	font-size: 11px;
+	color: #9a9a9a;
+	width: 76%;
+	margin-top: 7px;
+	margin-bottom: 9px;
+	height: 28px;
+	overflow: hidden;
+}
+.price{
+	font-size: 12px;
+	color: #abca26;
+}
+.price .del_price{
+	font-size: 10px;
+	color: #ddd;
+	margin-left: 2px;
+}
+.supply{
+	font-size: 10px;
+	color: #ddd;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+.shop{
+	font-size: 12px;
+	color: #666;
+	text-align: right;
+	width: 35%;
+	position: absolute;
+	top: 1px;
+	right: 0;
+}
+.name,.shop{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<script>
+function infoW()
+{
+	var totalW = $(".on-sale").width()-20,
+	imgW = $(".img").width()+10;
+	$(".info").width(totalW-imgW);
+}
+
+$(function()
+{
+	infoW();
+})
+</script>
+
+{include file="../header.html"}
+<div class="main" id="going_list">
+	{foreach from=$special_offer_list item=row}
+		<a href="{$item_list_link}/merchant_id/{$row.merchant_id}/item_id/{$row.item_id}" class="on-sale">
+			<img src="{$row.base_pic}" class="img"/>
+			<div class="info">
+				<h2 class="name">{$row.item_name}</h2>
+				<h3 onclick="location.href='{$item_list_link}/merchant_id/{$row.merchant_id}'" class="shop">{$row.shop_name}</h3>
+				<p class="tip">{$row.title}</p>
+				<span class="price">￥{$row.promotion_price}<del class="del_price">{$row.mall_price}</del></span>
+				<span class="supply">销量{$row.sales_num}件/库存{$row.stock}件</span>
+			</div>
+		</a>
+	{/foreach}
+</div>
+<div class="kongbai"></div>
+{include file="../footer.html"}
+{/block}
+
+{block name="js"}
+<script type="text/javascript">
+var firstRow = parseInt('{$firstRow}');
+var total = parseInt('{$total}');
+var item_list_link = '{$item_list_link}';
+var per_page_num = '{$per_page_num}';
+{literal}
+$(function(){
+	var range = 500; //距下边界长度/单位px  
+	var elemt = 500; //插入元素高度/单位px  
+	var num = firstRow;  
+	var totalheight = 0;  
+	var main = $("#going_list"); //主体元素  
+    $(window).scroll(function(){
+		var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+		totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+		if(($(window).height()+range) <= totalheight  && total > num)
+		{
+			num = parseInt(num) + parseInt(per_page_num);
+			//获取商品列表
+			$.post('/FrontCoupon/ajax_item_coupon_list', {"firstRow": num}, function(data, textStatus)
+			{
+				if (data != 'failure')
+				{
+					var len = data.length;
+					for (i = 0; i < len; i++)
+					{
+						var html = '<a href="' + item_list_link + '/merchant_id/' + data[i].merchant_id + '/item_id/' + data[i].item_id + '" class="on-sale"> <img src="' + data[i].base_pic + '" class="img"/> <div class="info" style="width: 1310px;"> <h2 class="name">' + data[i].item_name + '</h2> <h3 onclick="location.href=\'' + item_list_link + '/merchant_id/' + data[i].merchant_id + '\';" class="shop">' + data[i].shop_name + '</h3> <p class="tip">' + data[i].title + '</p> <span class="price">￥' + data[i].promotion_price + '<del class="del_price">' + data[i].mall_price + '</del></span> <span class="supply">销量' + data[i].sales_num + '件/库存' + data[i].stock + '件</span> </div> </a>';
+						main.append(html);
+						console.log(html);
+					}
+				}
+			}, 'json');
+		}
+		else
+		{
+			$('#item_ending').show();
+		}
+	}); 
+}); 
+</script>
+{/literal}
+{/block}

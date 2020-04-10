@@ -1,0 +1,272 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-detail-top">
+	<input type="hidden" id="order_type" value="{$order_type}">
+	<input type="hidden" id="order_id" name="order_id" value="{$order_info.order_id}">
+	<input type="hidden" id="admin_remark" name="admin_remark" value="{$order_info.admin_remark}">
+	<input type="hidden" id="pay_amount" name="pay_amount" value="{$order_info.pay_amount}">
+	<input type="hidden" id="total_amount" name="total_amount" value="{$order_info.total_amount}">
+	<input type="hidden" id="express_fee" name="express_fee" value="{$order_info.express_fee}">
+	<input type="hidden" id="express_number" name="express_number" value="{$order_info.express_number}">
+	<div class="top-tit">当前订单（{$order_info.order_sn}）状态：{$order_info.order_status}</div>
+    <div class="top-but">
+		{if $order_info.order_status_num == 0}
+			<button type="button" class="btn" id="change_price_btn">修改价格</button>  
+			{if isset($order_type) && $order_type == 3}
+				<a href="javascript:;" onclick="offline_pay({$order_info.order_id}, 1)" class="btn">已线下收款</a>  
+			{else}
+				<a href="javascript:;" onclick="offline_pay({$order_info.order_id}, 0)" class="btn">已线下收款</a>  
+			{/if}
+		{/if}
+        <button type="button" class="btn" id="cancel_order_btn">关闭订单</button>  
+    </div>
+</div>
+<input type="hidden" id="order_type" value="{$order_type}">
+<div class="t-detail-goods">
+	<div class="t-detail-goods-tit">商品信息:</div>
+    <div class="t-detail-goods-con">
+    	<table class="wxtables">  
+        <colgroup>  
+			<col width="35%">  
+			<col width="8%">  
+			<col width="15%">  
+			<col width="8%">  
+			<col width="8%">  
+			<col width="8%"> 
+			<col width="10%"> 
+			<col width="8%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+				<td>商品名称</td>  
+				<td>规格属性</td>  
+				<td>货号</td>  
+				<td>商品价格</td>  
+				<td>购买数量</td>  
+				<td>总价</td>  
+				<td>备注</td>  
+				<td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+			{foreach from=$item_list item=item_info}
+			<tr>  
+				<td>  
+					<b class="pic-t"><img src="{$item_info.small_pic}" /></b>
+					<span>{$item_info.item_name}</span> 
+				</td>  
+				<td>  
+					{if $item_info.property == ''}
+						无
+					{else}
+						{$item_info.property} 
+					{/if}
+				</td>  
+				<td>{$item_info.item_sn}</td>  
+				<td>{$item_info.real_price}</td> 
+				<td>{$item_info.number}</td> 
+				<td>  
+					<span>￥</span>  
+					<span>{$item_info.real_price * $item_info.number}</span>  
+				</td>  
+				<td>无</td>  
+				{if $order_info.order_status_num == 0}
+					<td>
+						<a href="javascript:del({$order_info.order_id}, {$item_info.order_item_id});" class="btn" title="删除">删除</a>   
+					</td>  
+				{/if}
+			</tr>  
+			{/foreach}
+        </tbody>  
+        </table>  
+    </div>
+    <div class="t-detail-goods-tit mag">购买人信息：</div>
+    <div class="t-detail-goods-con t-border">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="10%">  
+                <col width="40%">
+                <col width="10%">  
+                <col width="40%">   
+            </colgroup>  
+            <tbody>
+                <tr>  
+                    <td class="tables-form-title">分销商：</td>  
+                    <td>{$user_info.username}</td>
+                    <td class="tables-form-title">姓名：</td>  
+                    <td>{$user_info.realname}</td>      
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">电话：</td>  
+                    <td>{$user_info.mobile}</td>
+                    <td class="tables-form-title">地址：</td>  
+					<td>{$user_info.address}</td>      
+                </tr>
+                <!--<tr>  
+                    <td class="tables-form-title">网店地址：</td>  
+                    <td>demohu.taobao.com</td>
+                    <td class="tables-form-title">网店名：</td>  
+                    <td>demohu</td>      
+				</tr>-->  
+            </tbody>  
+        </table>   
+    </div>
+	<form method="POST" action="" id="order_info_set_form" name="order_info_set_form">
+	<div class="t-detail-goods-tit mag">收货人信息：</div>
+	<div class="t-detail-goods-con t-border">
+		<table class="wxtables tables-form">  
+			<colgroup>  
+				<col width="10%">  
+				<col width="40%">
+				<col width="10%">  
+				<col width="40%">   
+			</colgroup>  
+			<tbody>  
+				<tr>  
+					<td class="tables-form-title">收货人姓名：</td>  
+					<td><input type="text" placeholder="" class="mini" id="consignee" name="consignee" value="{$user_address_info.realname}">
+						<span class="fi-help-text"></span>
+					</td>
+					<td class="tables-form-title">联系手机：</td>  
+					<td><input type="text" placeholder="" class="small" id="mobile" name="mobile" value="{$user_address_info.mobile}">
+						<span class="fi-help-text"></span>
+					</td>      
+				</tr>
+				{include file="../area_form.html"}
+			</tbody>  
+		</table>   
+	</div>
+
+    <div class="t-detail-goods-tit mag">订单实收款结算：</div>
+    <div class="t-detail-goods-con t-border">
+    	<table class="wxtables tables-form">  
+            <colgroup>
+                <col width="20%">  
+                <col width="80%">   
+            </colgroup>  
+            <tbody>
+                <tr>  
+                    <td class="tables-form-title">商品金额（元）：</td>  
+					<td>{$order_info.total_amount}
+					</td>   
+                </tr>  
+				<tr>  
+					<td class="tables-form-title">商品总重量（克）：</td>  
+					<td>{$order_info.weight}</td> 
+				</tr> 
+				<tr>  
+					<td class="tables-form-title">运费：</td>  
+					<td>{$order_info.express_fee}</td> 
+				</tr> 
+				<tr>  
+					<input type="hidden" name="express_company_name" id="express_company_name" value="{$order_info.express_company_name}">
+					<td class="tables-form-title">配送方式：</td>  
+					<td>
+					<select class="small" id="express_company_id" name="express_company_id">
+						{foreach from=$express_company_list item=express_company_info}
+							<option value="{$express_company_info.shipping_company_id}" {if $order_info.express_company_id == $express_company_info.shipping_company_id}selected{/if}>{$express_company_info.shipping_company_name}</option> 
+						{/foreach}
+					</select> 
+					<span class="fi-help-text"></span>
+					</td> 
+				</tr> 
+				<tr>  
+					<td class="tables-form-title">物流单号：</td>  
+					<td><input type="text" class="large" name="express_number" id="express_number" value="{$order_info.express_number}"> 
+						<span class="fi-help-text"></span>
+					</td> 
+				</tr> 
+                <tr>  
+                    <td class="tables-form-title">订单实收款（元）：</td>
+					<td><input type="text" placeholder="20.00" class="mini" name="pay_amount" id="pay_amount" value="{$order_info.pay_amount}"> 
+						<span class="fi-help-text"></span>
+					</td> 
+                </tr> 
+            </tbody>  
+        </table>   
+    </div>
+	<input type="hidden" name="order_id" value="{$order_info.order_id}">
+	<input type="hidden" name="act" value="submit">
+    <div class="t-set-baocun"><button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存修改</button>  </div>
+	</form>
+</div>
+{/block} 
+
+{block name="js"}
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/order_detail.js?version={$version}"></script>
+<script>
+var order_type = '{$order_type}';
+$('#express_company_id').change(function(){
+	var express_company_name = $('#express_company_id option:selected').text();
+	$('#express_company_name').val(express_company_name);
+})
+
+$("#order_info_set_form").validate({
+	rules: {
+		consignee: {
+			required: true
+		},
+		mobile:{
+			required: true,
+			check_phone:true
+		},
+		province_id:{
+			equal_select: true
+		},
+		city_id:{
+			equal_select: true
+		},
+		address:{
+			required: true
+		},
+		express_company_id:{
+			required: true
+		},
+		total_amount:{
+			required: true,
+			number:true
+		}
+	},
+	messages: {
+		consignee: {
+			required: "对不起，收货人姓名不能为空！"
+		},
+		mobile: {
+			required: "对不起，联系手机不能为空！",
+			check_phone: "对不起，联系手机格式有误！",
+		},
+		province_id:{
+			equal_select: "对不起，请选择省份！"
+		},
+		city_id:{
+			equal_select: "对不起，请选择城市！"
+		},
+		address:{
+			required: "对不起，请输入详细地址！"
+		},
+		express_company_id:{
+			required: "对不起，请选择物流公司！"
+		},
+		total_amount:{
+			required: "对不起，订单实收款不能为空！",
+			number: "对不起，运费格式有误！"
+		}
+	},
+	errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+	success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+});
+</script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_detail.css" type="text/css" />
+{literal} 
+<style>
+#jpops .fi-name{width:100px;}
+#jpops .form-controls{margin-left:100px;}
+</style>
+{/literal} 
+{/block}

@@ -1,0 +1,307 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/my_order.css">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+        <div class="wx_wrap">
+            <!-- S 导航 -->
+            <div class="my_nav">
+                <ul id="nav">
+                    <li class="order_nav" id="all_order">
+                        <a href="javascript:;">
+                            全部订单
+                        </a>
+                    </li>
+                    <li class="order_nav" id="n_pay">
+                        <a href="javascript:;">
+                            待支付
+                            <span class="num" id="payDeaLNum">
+                                1
+                            </span>
+                        </a>
+                    </li>
+                    <li id="n_send" class="order_nav">
+                        <a href="javascript:;">
+                            待发货
+                            <span class="num" id="receiveDeaLNum">
+                            </span>
+                        </a>
+                    </li>
+                    <li id="n_query" class="order_nav cur">
+                    	<a href="javascript:;">
+                    		待确认
+                    		<span class="num" id="queryDeaLNum">99</span>
+                    	</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- E 导航 -->
+            <!-- S 内容 -->
+            <div class="my_order_wrap">
+                <div class="my_order_inner" id="cont">
+                    <!-- S 所有订单 -->
+                    <div class="my_order hide">
+                        <div id="cont1">
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="#" class="oh_content">
+                                        <p>
+                                            <span>状<i></i> 态：</span>
+                                            <em class="co_red">
+                                                待支付
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<i></i> 价：</span>
+                                            <em class="co_red">
+                                                ￥128.00
+                                            </em>
+                                        </p>
+                                    </a>
+                                    <a href="javascript:;" class="oh_btn toPay">
+                                        去支付
+                                    </a>
+                                </div>
+                                <div class="order_item">
+                                    <a href="" class="oi_content">
+                                        <img class="image" src="__PUBLIC__/Images/front/541a873aN82c30380.jpg" width="50" height="50">
+                                        <p>
+                                            第九衣品男士休闲裤男 男装修身长裤子男韩版中腰小脚 黑色休闲裤男LY219 枣红色 28(二尺一)
+                                        </p>
+                                        <p>
+                                            <span class="count">
+                                                1 件
+                                            </span>
+                                            <span class="price">
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="" class="oh_content">
+                                        <p>
+                                             <span>状<i></i> 态：</span>
+                                            <em class="co_blue">
+                                                已取消
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<i></i> 价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="order_item">
+                                    <a href="" class="oi_content">
+                                        <img class="image" src="__PUBLIC__/Images/front/541a873aN82c30380.jpg" width="50" height="50">
+                                        <p>
+                                            第九衣品男士休闲裤男 男装修身长裤子男韩版中腰小脚 黑色休闲裤男LY219 枣红色 28(二尺一)
+                                        </p>
+                                        <p>
+                                            <span class="count">
+                                                1 件
+                                            </span>
+                                            <span class="price">
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+														<div class="order">
+                                <div class="order_head">
+                                    <a href="" class="oh_content">
+                                        <p>
+                                             <span>状<i></i> 态：</span>
+                                            <em class="co_blue">
+                                                待发货
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<i></i> 价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="order_item">
+                                    <a href="" class="oi_content">
+                                        <img class="image" src="__PUBLIC__/Images/front/541a873aN82c30380.jpg" width="50" height="50">
+                                        <p>
+                                            第九衣品男士休闲裤男 男装修身长裤子男韩版中腰小脚 黑色休闲裤男LY219 枣红色 28(二尺一)
+                                        </p>
+                                        <p>
+                                            <span class="count">
+                                                1 件
+                                            </span>
+                                            <span class="price">
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="" class="oh_content">
+                                        <p>
+                                             <span>状<i></i> 态：</span>
+                                            <em class="co_blue">
+                                                待确认
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<i></i> 价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="order_item">
+                                    <a href="" class="oi_content">
+                                        <img class="image" src="__PUBLIC__/Images/front/541a873aN82c30380.jpg" width="50" height="50">
+                                        <p>
+                                            第九衣品男士休闲裤男 男装修身长裤子男韩版中腰小脚 黑色休闲裤男LY219 枣红色 28(二尺一)
+                                        </p>
+                                        <p>
+                                            <span class="count">
+                                                1 件
+                                            </span>
+                                            <span class="price">
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="" class="oh_content">
+                                        <p>
+                                             <span>状<i></i> 态：</span>
+                                            <em class="co_blue">
+                                                已签收
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<i></i> 价：</span>
+                                            <em class="co_red">
+                                                ￥199.90
+                                            </em>
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="order_item">
+                                    <a href="" class="oi_content">
+                                        <img class="image" src="__PUBLIC__/Images/front/541a873aN82c30380.jpg" width="50" height="50">
+                                        <p>
+                                            第九衣品男士休闲裤男 男装修身长裤子男韩版中腰小脚 黑色休闲裤男LY219 枣红色 28(二尺一)
+                                        </p>
+                                        <p>
+                                            <span class="count">
+                                                1 件
+                                            </span>
+                                            <span class="price">
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wx_ending">
+                            已经没有更多订单了！
+                        </div>
+                    </div>
+                    <!-- E 所有订单 -->
+                    <!-- S 待支付 -->
+                    <div class="my_order hide">
+                        <div id="cont2">
+                            <div class="order">
+                                <div class="order_head">
+                                    <a href="#" class="oh_content">
+                                        <p>
+                                            <span>状<i></i> 态：</span>
+                                            <em class="co_red">
+                                                待支付
+                                            </em>
+                                        </p>
+                                        <p>
+                                             <span>总<i></i> 价：</span>
+                                            <em class="co_red">
+                                                ￥128.00
+                                            </em>
+                                        </p>
+                                    </a>
+                                    <a href="javascript:;" class="oh_btn toPay">
+                                        去支付
+                                    </a>
+                                </div>
+                                <div class="order_item">
+                                    <a href="" class="oi_content">
+                                        <img class="image" src="__PUBLIC__/Images/front/541a873aN82c30380.jpg" width="50" height="50">
+                                        <p>
+                                            第九衣品男士休闲裤男 男装修身长裤子男韩版中腰小脚 黑色休闲裤男LY219 枣红色 28(二尺一)
+                                        </p>
+                                        <p>
+                                            <span class="count">
+                                                1 件
+                                            </span>
+                                            <span class="price">
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wx_ending">
+                            已经没有更多订单了！
+                        </div>
+                    </div>
+                    <!-- E 待支付 -->
+                    <!-- S 待发货 -->
+                    <div class="my_order hide">
+                        <div id="cont3">
+                        </div>
+                        <div class="wx_ending">
+                        	您暂时没有待发货订单
+                        </div>
+                    </div>
+                    <!-- E 待发货 -->
+                    <!-- S 待确认 -->
+										<div class="my_order show">
+                        <div id="cont4">
+                        </div>
+                        <div class="wx_ending">
+                        	您暂时没有待确认订单
+                        </div>
+                    </div>
+                    <!-- E 待确认 -->
+                </div>
+            </div>
+            <!-- E 内容 -->
+        </div>
+        <!-- END wx_wrap -->
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+$(function(){
+	$('.order_nav').click(function(){
+$(this).addClass("cur").siblings().removeClass("cur");
+$(".my_order").hide().eq($('.order_nav').index(this)).show();
+});	
+});	
+</script>       
+{/literal}
+{/block}

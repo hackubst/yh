@@ -1,0 +1,156 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<form action='' method='post' class="bs-docs-example" id="add_item_discount">
+        
+        <!-- end tabs -->  
+        <div class="tabs-content" data-origin="discount">
+
+            <div class="tablesWrap tj-all hide">  
+            <div class="tables-searchbox"> 
+                <div class="t-dis-list">
+                    <span class="tbs-txt">名称：</span>  
+                    <input type="text" name='s_name' id='s_name' value='' />
+                </div> 
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择分类：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="s_category" id='s_category'>
+                                <option value="">--请选择--</option>
+                                {foreach from=$arr_category item=row1}
+                                <option value="1.{$row1.class_id}" {if "1."|cat:$row1.class_id EQ $category_id}selected{/if}>{$row1.class_name}</option>
+                                {foreach from=$row1.sort_info item=row2}
+                                <option value="2.{$row2.sort_id}" {if "2."|cat:$row2.sort_id EQ $category_id}selected{/if}>{$row2.sort_name}</option>
+                                {foreach from=$row2.genre_info item=row3}
+                                <option value="3.{$row3.class_genre_id}" {if "3."|cat:$row3.class_genre_id EQ $category_id}selected{/if}>{$row3.genre_name}</option>
+                                {/foreach}
+                                {/foreach}
+                                {/foreach}
+                            </select> 
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:60px; font-weight:normal;">选择品牌：</label>  
+                        <div class="form-controls" style=" margin-left:60px;">  
+                            <select name="s_brand" id='s_brand'>  
+                                <option value="0" selected>--请选择--</option>
+                                {foreach from=$arr_brand item=row}
+                                <option value="{$row.brand_id}">{$row.brand_name}</option>
+                                {/foreach}  
+                            </select>  
+                        </div>  
+                    </div>
+                </div>
+                <div class="t-dis-list">
+                    <span class="tbs-txt">售价不少于：</span>  
+                    <input type="text" name='s_mall_price' id='s_mall_price' class="mini" value='' />
+                </div>
+                <div class="t-dis-list search"><span class="btn search_item"><i class="gicon-search"></i>查询</span></div>
+            </div>  
+            <!-- end tables-searchbox -->  
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="10%">  
+                <col width="10%">  
+                <col width="25%">  
+                <col width="12%">  
+                <col width="30%">  
+                </colgroup>  
+                <thead>  
+                    <tr>  
+                        <td>选择</td> 
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>本店价</td>
+                        <td>操作</td>  
+                    </tr>  
+                </thead>  
+                <tbody class='item_list'>
+                    <tr><td colspan='7'>暂无商品可选，点击搜索获取商品信息</td></tr>
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">
+                <div class="fl select">  
+                    <a href="javascript:;" class="btn btn-blue all">全选</a>  
+                    <a href="javascript:;" class="btn btn-blue cancel">取消</a>  
+                </div>  
+                <div class="fr">  
+                    <div class="paginate"> 
+                    
+                    </div>  
+                    <!-- end paginate -->  
+                </div> 
+            </div>  
+            <!-- end tables-btmctrl -->  
+        </div>  
+            <!--<button type="button" class="btn" onclick="clik()">添加商品</button>  -->
+        <!-- end tablesWrap --> 
+<!--    
+        <div class="wizardstep-actions mgt10">  
+            <a href="###" class="btn j-wizardstep" data-origin="test" data-type="prev">上一步</a>  
+            <a href="###" class="btn btn-blue j-wizardstep" data-origin="test" data-type="next">下一步</a>  
+        </div>
+        -->
+        <a type="submit" class="btn btn-blue" onclick='clik()'>选择商品</a>
+        <h6>已选择商品：</h6>
+        <div class="tablesWrap tj-all" style="width:60%;" id='slected_item'>  
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="20%">  
+                <col width="30%">  
+                <col width="20%"> 
+                {if $smarty.const.ACTION_NAME == 'first_buy_item_set'}
+                <col width="15%">  
+                <col width="15%">
+                {else}
+                <col width="30%">  
+                {/if}
+                </colgroup>  
+                <thead>  
+                    <tr>   
+                        <td>商品图</td> 
+                        <td>商品名</td>  
+                        <td>本店价</td> 
+                        {if $smarty.const.ACTION_NAME == 'first_buy_item_set'}
+                        <td>预设数量</td>
+                        {/if}
+                        <td>操作</td> 
+                    </tr>  
+                </thead>  
+                <tbody class='item_list'>
+                    <tr class='no_one'><td colspan='4'>暂无商品可选，点击搜索获取商品信息</td></tr>
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+        </div>
+        
+        <input type='hidden' name='act' value='add' />
+        <button type="submit" class="btn btn-blue">提交</button>
+
+            
+        </div>
+
+    </form>
+<script>
+    var item_arr = new Array();
+</script>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+{if $smarty.const.ACTION_NAME == 'first_buy_item_set'}
+<script src="__ACPJS__/AcpItemPackage/add_item_package.js"></script>
+{else}
+<script src="__ACPJS__/AcpItem/add_item_package.js"></script>
+{/if}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpPromo/add_list_item_discount.css" />
+{/block}

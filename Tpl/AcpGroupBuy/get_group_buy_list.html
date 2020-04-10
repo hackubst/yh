@@ -1,0 +1,355 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+        <form method="post">
+            <span class="tbs-txt">团购名称：</span>
+            <input type="text" name="group_name" value="{$group_name}">
+
+                <span class="tbs-txt">添加时间：</span>
+                <input type="text" autocomplete="off" class="Wdate" name="start_date" value="{$start_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <span class="tbs-txt">至</span>
+                <input type="text" autocomplete="off" class="Wdate" name="end_date" value="{$end_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </form>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="3%">
+            <col width="3%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="5%">
+            <col width="3%">
+            <col width="3%">
+            <col width="3%">
+            <col width="7%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>编号</td>
+            <td>团购名称</td>
+            <td>商品名称</td>
+            <td>团购时间</td>
+            <td>团购价格</td>
+            <td>限制人数</td>
+            <td>已参团人数</td>
+            <td>排序号</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$group_buy_list item=item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$item.group_buy_id}" name="checkIds[]"></td>
+            <td>{$smarty.foreach.list.iteration + $page->firstRow}.</td>
+            <td>{$item.group_name}</td>
+            <td>
+                <a href="{$item.link_item}" target="_blank">{$item.item_name}</a>
+            </td>
+            <td>{$item.start_time|date_format:"%Y-%m-%d %H:%M:%S"}--{$item.end_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td>{$item.group_price}</td>
+            <td>{$item.people_limit|default:0}</td>
+            <td>{$item.num|default:0}</td>
+            <td>{$item.serial}</td>
+            <td>
+                {if $opt == 'onsale'}
+                <a href="javascript:;" class="btn J_store" onclick="set_isuse({$item.group_buy_id}, 3)" title="下架">下架</a>
+                <a href="javascript:;" onclick='group_buy_link({$item.group_buy_id})' class="btn" title="复制商品链接">复制商品链接</a>
+                {elseif $opt == 'store'}
+                <a href="javascript:;" class="btn J_display" onclick="set_isuse({$item.group_buy_id}, 1)" title="上架">上架</a>
+                <a href="/AcpGroupBuy/edit_group_buy/group_buy_id/{$item.group_buy_id}" class="btn" title="编辑">编辑</a>
+                <a href="javascript:;" class="btn J_del" title="删除" onclick="delete_item({$item.group_buy_id})">删除</a>
+                {/if}
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_store" onclick="batch_set_isuse(1)">上架</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_store" onclick="batch_set_isuse(3)">下架</a>
+            <!--<a href="javascript:;" class="btn btn-blue J_batch_del">删除</a>-->
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$page->show()}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<!--<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script src="__JS__/front/jquery.showLoading.min.js?version={$version}"></script>-->
+<link rel="stylesheet" href="__CSS__/front/showLoading.css?version={$version}">
+<script>
+var item_name = '{$ITEM_NAME}';
+var url = '{$url}';
+
+function sync_item()
+{
+    var html = "确定执行此操作，本操作将比较费时，请耐心等候!";
+	$.jPops.custom({
+		title:"同步商品资料",  
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+                $('body').showLoading();
+                $.post('/Global/sync',{},function(data) {
+                    $("body").hideLoading();
+                    if (data == 'success') {
+                        alert('同步成功');
+                        location.reload();
+                    } else {
+                        alert('同步失败，请稍后再试');
+                    }
+                });
+			}
+            return true;  
+		}
+	});
+}
+
+function general_code(id)
+{
+    if (!id) {
+        alert('出错啦');
+    }
+    var url_link = url + id;
+    $.jPops.custom({
+		title:"商品链接地址",  
+		content:url_link,
+		okBtnTxt:"确定",  
+        cancelBtnTxt:"取消",  
+        callback:function(r)
+        {
+            return true;
+        } 
+    });
+
+}
+function get_flash_go_link()
+{
+    var url_link = "/FrontFlashItem/get_flash_item_list";
+    $.jPops.custom({
+		title:"商品链接地址",  
+		content:url_link,
+		okBtnTxt:"确定",  
+        cancelBtnTxt:"取消",  
+        callback:function(r)
+        {
+            return true;
+        } 
+    });
+
+}
+
+function get_ticket_link()
+{
+    //var url_link = "/FrontFlashItem/get_flash_item_list";
+    //var url_link = "开发中，敬请期待";
+    var url_link = "/FrontTicketList/get_ticket_list";
+    $.jPops.custom({
+		title:"商品链接地址",  
+		content:url_link,
+		okBtnTxt:"确定",  
+        cancelBtnTxt:"取消",  
+        callback:function(r)
+        {
+            return true;
+        } 
+    });
+
+}
+{literal}
+function set_isuse(question_class_id, opt)
+{
+    var is_opt;
+    if(opt == 1) {
+    
+        is_opt = '上架';
+    } else if(opt == 3){
+    
+        is_opt = '下架';
+    }
+
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要"+is_opt+"这件商品吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpGroupBuy/set_isuse', {"group_buy_id":question_class_id, "isuse":opt}, function(data, textStatus) 
+				 {
+                 console.log(data);
+					if (data == 'success')
+					{
+						alert('恭喜您，'+is_opt+'成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，'+is_opt+'失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_set_isuse(opt)
+{
+    var is_opt;
+    if(opt == 1) {
+    
+        is_opt = '上架';
+    } else if(opt == 3){
+    
+        is_opt = '下架';
+    }
+
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要"+is_opt+"这些商品吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 var question_class_ids = '';
+				 var count = 0;
+				 $('input[name="checkIds[]"]:checked').each(function(){
+					 count ++;
+					 question_class_ids += $(this).val() + ',';
+				 });
+
+				 if (!count)
+				 {
+					 alert('对不起，请选择至少一项进行'+is_opt+'！');
+					 return;
+				 }
+
+				 question_class_ids = question_class_ids.substr(0, question_class_ids.length - 1);
+
+				 $.post('/AcpGroupBuy/batch_set_isuse', {"group_buy_ids":question_class_ids, "isuse":opt}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，'+is_opt+'成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，'+is_opt+'失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });
+}
+function delete_item(id)
+{
+	$.jPops.custom({
+		title:"删除团购",  
+		content:'您确定要删除这个团购吗',
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+                $.post('/AcpGroupBuy/delete_group_buy',{'group_buy_id':id},function(data) {
+                    if (data == 'success') {
+                        alert('删除成功');
+                        location.reload();
+                    } else {
+                        alert('删除失败，请稍后再试');
+                    }
+                });
+			}
+            return true;  
+		}
+	});
+}
+
+
+//复制商品链接
+function group_buy_link(group_buy_id)
+{
+    var link = 'http://' + document.domain + '/FrontGroupBuy/group_buy_item_detail/group_buy_id/' + group_buy_id;
+    $.jPops.custom({
+        title:"请复制链接",  
+        content:'<div>商品链接：' + link + '</div>',
+        okBtnTxt:"复制",  
+        cancelBtnTxt:"关闭",  
+        callback:function(r)
+        {
+            if(r)
+            {
+                text = link;
+                copy_text('jpops-btn-ok');
+            }
+            else
+            {
+                return true;  
+            }
+        }
+    });
+}
+function copy_text(id)
+    {
+        var clipboard = new Clipboard('#' + id, {
+            text: function() {
+                return text;
+            }
+        });
+
+        clipboard.on('success', function(e) {
+            console.log(e);
+            alert('复制成功');
+        });
+
+        clipboard.on('error', function(e) {
+            console.log(e);
+            alert('复制失败，请手动复制');
+        });
+    } 
+{/literal}
+</script>
+{/block}

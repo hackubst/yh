@@ -1,0 +1,70 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{/block}
+
+{block name="content"}
+
+   	<form action="" method="post">
+		<div class="add_bike_head clearfix">
+            <div class="add_bt" id="J_add_pic" onclick="handle_touch_event();" style="width:50px;height:50px;border:1px solid #000;margin: 5px;">
+				<a href="javascript:;" class="add" id="add_link" title="上传一张新的图片"><img src="__PUBLIC__/Images/front/icon_tianjia.png" /></a>
+				<span>添加图片</span>
+			</div>
+		</div>
+		
+	</form>
+{/block}
+
+{block name="js"}
+<script type="text/javascript">
+var img_path = '__IMAGES__';
+{literal}
+
+var max_photos = 8;//最多显示几张照片
+var result = wx_image_uploader.images_info;
+wx_image_uploader.upload_limit = max_photos;
+wx_image_uploader.success_callback = upload_ok;
+
+function upload_ok () {
+    var content = wx_image_uploader.images_info.html;
+    var serverIDs = wx_image_uploader.images_info.serverId;
+    for (x in content)
+    {
+        $('#J_add_pic').before(
+
+             '<div class="img_box"><img src="'+content[x]+'" /><input type="hidden" name="pic[]" value="' +serverIDs[x]+ '"><a href="javascript:;" class="del J_del_pic" onclick="wx_upload_delImage(this);")" title="删除这张图"><i class="icon quxiao"></i></a></div>'
+        	);
+    }
+    if($('.img_box').length >= max_photos)
+    {
+        $('#J_add_pic').hide();
+
+    }
+    wx_image_uploader.upload_limit = parseInt(max_photos - $('.img_box').length);
+    wx_image_uploader.images_info.html =[];
+    wx_image_uploader.images_info.serverId = [];
+}
+
+
+function wx_upload_delImage(obj)
+{
+    var preview = $(obj);
+    preview.parent().find('input[name="pic[]"]').val(null);
+    preview.parent().remove();
+
+    if($('.img_box').length < max_photos)
+    {
+        $('#J_add_pic').show();
+
+    }
+    wx_image_uploader.upload_limit = parseInt(max_photos - $('.img_box').length);
+
+    wx_image_uploader.images_info.html =[];
+    wx_image_uploader.images_info.serverId = [];
+}
+
+
+</script>
+{/literal}
+{/block}

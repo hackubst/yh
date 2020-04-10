@@ -1,0 +1,67 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>礼品名称：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="name" id="name" value="{$material_info.name}">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+{upload_image_widget($pic_data)}
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>所需金豆：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="large" name="money" id="money" value="{$material_info.money}">
+        <span class="fi-help-text hide"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>排序号：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="large" name="serial" id="serial" value="{$material_info.serial}">
+        <span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>物品详情：</label>
+        <div class="form-controls" id="J_KindEditor">
+            <script id="editor" name="content" type="text/plain" style="width:700px;height:500px;">{$material_info.content}</script>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+        <input type="hidden" name="id" id="id" value="{$material_info.material_id}">
+
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>
+            保存
+        </button>
+    </div>
+</div>
+</form>
+{/block}
+
+{block name="js"}
+<!-- 编辑器 -->
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__UE__/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+</script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+{/block}
+<script>
+
+</script>

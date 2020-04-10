@@ -1,0 +1,63 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="wholesale" action="" method="post">
+<div class="formitems inline">  
+    <div class="form-controls">  
+        <span class="colorRed">只有所有规格价格都相同的商品才可设置批发价</span>
+    </div>
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+        <span  class="btn btn-blue" onclick='add_qj()'>增加</span> 
+        <!-- <span class="fi-help-text">当前设置的最大批发数量为{$max_wholesale}</span>  -->
+    </div>  
+</div> 
+
+{foreach from=$price_list item=v name=foo}
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>购买数量：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="mini " name="min_num[]"  value="{$v.min_num}">  <!-- <span class="fi-text">-</span>  
+                <input type="text" placeholder="" class="mini " name="max_num[]"  value="{$v.max_num}"> -->
+         <!-- <span class="btn" onclick='add_qj()'>增加区间</span> -->
+         <span class="btn" onclick="del_qj($(this))">删除</span>
+         
+        <span class="fi-help-text hide"></span>
+    </div>
+    <label class="fi-name"><span class="colorRed">*</span>批发优惠：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="mini " name="price[]"  value="{$v.price}">元
+        <span class="fi-help-text hide"></span>
+    </div> 
+</div> 
+{/foreach}
+
+
+<div class="formitems inline" id='set_btn'>  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="set" />
+        <input type="hidden" name="item_id" value="{$item_id}" />
+        <span  class="btn btn-blue submit"><i class="gicon-check white"></i>设置</span>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+<script type="text/javascript" src='__ACPJS__/AcpItem/set_wholesale_price.js?version={$version}'></script>
+<script type="text/javascript">
+var i = '{$num}';
+i = parseInt(i);
+{literal}
+
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+{/block}

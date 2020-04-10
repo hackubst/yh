@@ -1,0 +1,96 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+        <form method="post">
+            <span class="tbs-txt">种子名称：</span>
+
+            <input type="text" name="item_name" value="{$item_name}">
+			<button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+
+        </form>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="5%">
+            <col width="8%">
+            <col width="10%">
+            <col width="8%">
+            <col width="8%">
+            <col width="8%">
+            <col width="10%">
+            <col width="10%">
+            <col width="8%">
+            <col width="10%">
+            <col width="10%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>图片</td>
+            <td>状态</td>
+            <td>种子名称</td>
+            <td>土壤温度</td>
+            <td>箱体温度</td>
+            <td>箱体湿度</td>
+            <td>光照强度</td>
+            <td>光照时间</td>
+            <td>液位</td>
+			<td>状态持续天数</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$seed_state_list item=state}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$state.seed_state_id}" name="checkIds[]"></td>
+            <td><img src="{$state.img_path}" alt="" width="50" height="50" onerror="no_pic(this);"></td>
+            <td>{$state.state_name}</td>
+            <td>{$state.item_name}</td>
+            <td>{$state.temperature}</td>
+            <td>{$state.outside_temperature}</td>
+            <td>{$state.humidity}</td>
+            <td>{$state.illuminance_limit}Lux以上</td>
+            <td>{$state.illuminance_hour}小时/天</td>
+            <td>{$state.liquid_level}</td>
+            <td>{$state.last_day}</td>
+            <td>
+				<a href="/AcpSeedState/edit_seed_state/seed_state_id/{$state.seed_state_id}" class="btn" title="编辑">编辑</a>
+            </td>
+        </tr>
+        {foreachelse}
+			<tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_del">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+{/block}

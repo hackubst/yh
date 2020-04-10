@@ -1,0 +1,35 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/search.css?version={$version}">
+{/block}
+{block name="content"}
+	<div class="search_cnt">
+    <form class="search_form" method="get" action="/FrontSearch/search_shop_result">
+        <div class="head_cnt">
+            <div class="head_cnt_input">
+            		<select class="search_selet">
+            			<option value="0">商铺</option>	
+            			<option value="1">商品</option>	
+            		</select>
+            		<i class="select_arrow"></i>
+                <input type="search" name="keyword" class="search_input" placeholder="搜店铺、找商品" autocomplete="off" />
+            </div>
+            <a class="cancel" href="javascript:history.go(-1);">取消</a>
+        </div>
+        <!--热门搜索标签-->
+        {if {count($hot_keywords)} gt 1}
+        <div class="key_list">
+        	<div class="key_line">
+					{foreach from=$hot_keywords item=keywords}
+						<a class="key_block" href="{$search_shop_result_link}/keyword/{$keywords}">{$keywords}</a>
+					{/foreach}
+        	</div>
+        </div>
+        {/if}
+    </form>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/front/search.js?version={$version}"></script>
+{/block}

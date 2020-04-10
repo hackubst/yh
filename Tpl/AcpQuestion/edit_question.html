@@ -1,0 +1,125 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>问题标题：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="question_title" id="question_title" value="{$question_info.question_title}">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>选择问题分类：</label>  
+	<div class="form-controls" style="margin-left:15px;float:left;">  
+        <select name="question_class_id" id="question_class_id">
+            <option value="">--请选择--</option>
+			{foreach from=$question_class_list item=question_class}
+				<option value="{$question_class.question_class_id}">{$question_class.class_name}</option>
+			{/foreach}
+        </select>
+		<span class="fi-help-text hide"></span>
+    </div>
+	<div style="font-size:20px;margin-top:8px;margin-left:10px;float:left;">
+	 &nbsp; 
+	</div>
+	<div class="form-controls" style="margin-left:10px;float:left;">
+        <select name="question_sort_id" id="question_sort_id">  
+            <option value="">--请选择--</option>
+			{foreach from=$question_sort_id_list item=question_sort}
+				<option value="{$question_class.question_class_id}">{$question_sort.sort_name}</option>
+			{/foreach}
+        </select>
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>问题关键词：</label>  
+    <div class="form-controls">  
+        <textarea name="question_keywords" id="question_keywords">{$question_info.question_keywords}</textarea>
+        <span class="fi-help-text" style="font-weight:700;color:red;"></span>    
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">显示：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+			<label><input type="radio" name="isuse" value="1" {if $question_info.isuse == 1}checked="checked"{/if} />是</label>  
+            <label><input type="radio" name="isuse" value="0" {if $question_info.isuse == 0}checked="checked"{/if}  />否</label>   
+        </div>  
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">答案：</label>  
+    <div class="form-controls" id="J_KindEditor">  
+		<textarea name="contents" id="contents" class="large">{$question_info.answer}</textarea>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="edit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>修改</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+<script>
+var question_class_id = '{$question_info.question_class_id}';
+var question_sort_id = '{$question_info.question_sort_id}';
+$(function()
+{
+	$('#question_class_id').change(function()
+	{
+        var question_class_id = $(this).val();
+		change_class(question_class_id, question_sort_id);
+	})
+	change_class(question_class_id, question_sort_id);
+})
+
+function change_class(question_class_id, question_sort_id)
+{
+    //$('#question_sort_id').html("<option value='0'>--选择二级分类--</option>");
+	$('#question_class_id option[value=' + question_class_id + ']').attr('selected', 'selected');
+    $.post('/AcpQuestion/get_question_sort_list', {
+        "question_class_id": question_class_id
+	}, function(data)
+	{
+        if (!data) {
+            return false;
+        }
+        var result = eval(data);
+        var length = result.length;
+        var str = '<option value="0">--选择二级分类--</option>';
+        for (i = 0; i < length; i++) {
+            str += '<option value="' + result[i]['question_sort_id'] + '">' + result[i]['sort_name'] + '</option>';
+        }
+        $('#question_sort_id').html(str);
+        if (question_sort_id) {
+            $('#question_sort_id option[value=' + question_sort_id + ']').attr('selected', 'selected');
+        }
+
+    }, 'json');
+}
+
+</script>
+<link rel="stylesheet" href="__KD__/themes/default/default.css" />
+<script charset="utf-8" src="__KD__/kindeditor.js?version={$version}" > </script>
+<script charset="utf-8" src="__KD__/lang/zh_CN.js?version={$version}" > </script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

@@ -1,0 +1,101 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+<style type="text/css">
+	.home_fun{
+		margin:0 0 30px 0;
+	}
+	#out_login{
+		display: block;
+		margin:0 auto;
+	}
+</style>
+{/block}
+{block name="content"}
+
+	<!--主内容-->
+	<div class="setup_main">
+		<!--功能入口-->
+		<div class="home_fun">
+			<ul>
+				<li>
+					<a href="{$help_list_link}">
+						<div class="psn_svg_wrap"><svg class="setup_icon order_i"><use xlink:href="#help"></use></svg></div>
+						<div class="psn_svg_txt">用户帮助</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$notice_list_link}">
+						<div class="psn_svg_wrap"><svg class="setup_icon addr_i"><use xlink:href="#gonggao"></use></svg></div>
+						<div class="psn_svg_txt">最新公告</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$suggest_link}">
+						<div class="psn_svg_wrap"><svg class="setup_icon psndata_i"><use xlink:href="#suggest"></use></svg></div>
+						<div class="psn_svg_txt">意见反馈</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$news_list_link}">
+						<div class="psn_svg_wrap"><svg class="setup_icon colet_i"><use xlink:href="#news"></use></svg></div>
+						<div class="psn_svg_txt">新闻资讯</div>
+					</a>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<a href="{$bind_mobile_link}">
+						<div class="psn_svg_wrap"><svg class="setup_icon setup_i"><use xlink:href="#bindphone"></use></svg></div>
+						<div class="psn_svg_txt">修改手机号<span class="user_mobi" id="user_mobile">{if $user_info.mobile}{$user_info.mobile}{else}未绑定{/if}</span></div>
+					</a>
+				</li>
+			</ul>	
+			<ul>
+				<li>
+					<a href="{$about_us_link}">
+						<div class="psn_svg_wrap"><svg class="setup_icon rechrg_i"><use xlink:href="#aboutus"></use></svg></div>
+						<div class="psn_svg_txt">关于我们</div>
+					</a>
+				</li>
+				<li>
+					<a href="tel:{$customer_tel}">
+						<div class="psn_svg_wrap"><svg class="setup_icon pwd_i"><use xlink:href="#foottel"></use></svg></div>
+						<div class="psn_svg_txt">客服热线<span class="customer_tel">{$customer_tel}</span></div>
+					</a>
+				</li>
+			</ul>			
+		</div>
+		<a href="javascript:;" id="out_login" class="submit online_pay wallet_color ">
+               退出登录
+		</a>
+	</div>
+
+{/block}
+{block name="js"}
+{literal}
+<script>
+$(function()
+{ 
+  var phone = $("#user_mobile").html();
+  if(/^\d+$/.test(phone))
+  {
+	  var mphone =phone.substr(3,4);
+	  var lphone = phone.replace(mphone,"****");
+	  $("#user_mobile").html(lphone);   
+	}
+});	
+	window.onload = function() {
+		if (is_wechat()) {
+	       $("#out_login").hide();
+	    }
+	}
+	
+
+	$("#out_login").on("click",function(){
+		native_listen('out_login')
+	})
+</script>
+{/literal}
+{/block}

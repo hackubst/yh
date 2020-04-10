@@ -1,0 +1,64 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>标题：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="title" id="title" value="{$article_data.title}">  
+		<span class="fi-help-text hide"></span>
+	</div>  
+</div> 
+<!-- <div class="formitems inline">
+	<label class="fi-name">缩略图：</label>
+	<div class="form-controls">
+		<ul class="fi-imgslist">
+			<li class="fi-imgslist-item pic{if !$article_data.path_img} hide{/if}">
+				<div class="pic-wrap">
+					<img id="J_Preview" class="pic-preview" />
+				</div>
+				<input type="hidden" name="img_url" id="J_ImgUrl" data-id="{if $article_data.path_img}{$article_data.article_id}{/if}" value="{$article_data.path_img}" />
+				<a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove"></i></a>
+				<img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+				<div class="pic-mask" id="J_Mask"></div>
+			</li>
+			<li class="fi-imgslist-item{if $article_data.path_img} hide{/if}">
+				<a href="javascript:;" class="add" title="上传一张新的图片" id="J_Uploader">+</a>
+			</li>
+		</ul>
+		<span class="fi-help-text">文章列表的缩略图，暂时只支持上传单张2M以内JPEG,PNG,GIF格式图片</span>
+	</div>
+</div> -->
+
+<div class="formitems inline">  
+    <label class="fi-name">文章内容：</label>  
+    <div class="form-controls" id="J_KindEditor">  
+        <script id="editor" name="contents" type="text/plain" style="width:700px;height:500px;">{$article_data.contents}</script>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="submit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__UE__/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+</script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

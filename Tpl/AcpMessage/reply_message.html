@@ -1,0 +1,66 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-detail">
+    <div class="t-detail-con">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="15%">  
+                <col width="85%">  
+            </colgroup>  
+            <tbody>  
+                <tr>  
+                    <td class="tables-form-title">标题：</td>  
+                    <td>{$messageinfo.message_info.message_title}</td>
+                </tr>  
+                <tr>  
+                    <td class="tables-form-title">发件人：</td>  
+                    <td>{$messageinfo.message_info.send_username}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">时间：</td>  
+                    <td>{$messageinfo.message_info.addtime} </td>  
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">内容：</td>  
+                    <td>{$messageinfo.message_info.message_contents} </td> 
+                </tr>
+                {$replyinfo = $messageinfo.reply_info}
+                {section name=row loop=$replyinfo}
+                <tr>
+                    {if {$smarty.section.row.index} == 0}
+                    <td class="tables-form-title"  style='background-color:#F8F8F8;'>回复内容 1</td>
+                    {else}
+                    <td class="tables-form-title" style='background-color:#F8F8F8;'>{$smarty.section.row.index+1}</td>
+                    {/if}
+                    <td class="t-me-ri t-m-c">{$replyinfo[row].r_send_username}({$replyinfo[row].send_username})：{$replyinfo[row].message_contents}  ({$replyinfo[row].addtime})</td>
+                </tr>
+                {/section}
+                
+            </tbody>  
+        </table>  
+    </div>
+</div>
+
+<div class="t-message">
+    <form action="" method="post" name="message_reply_form" id="message_reply_form">
+        <dl class="t-mess-tex">
+            <dd class="t-me-le">回复内容：</dd>
+            <dd class="t-me-ri"><textarea name="reply_contents" id="reply_contents" class="default"></textarea><span class='fi-help-text error'></span></dd>
+        </dl>
+        <input type="hidden" name="main_message" value="{url_jiami($messageinfo.message_info.message_id)}">
+        <input type="hidden" name="submit" value="submit" />
+        <div class="t-mes-baocun"><button type="submit" class="btn btn-blue message_reply">回复</button>  </div>
+    </form>
+</div>
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/reply_message.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/reply_message.css" type="text/css" />
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/view_agent_apply_detail.css" type="text/css" />
+{/block}

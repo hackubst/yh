@@ -1,0 +1,18 @@
+<div class="formitems inline batch_image_widget" id="{$name}" data-dir="{$dir}" data-module="{$module}">
+    <label class="fi-name">{if $must}<span class="colorRed">*</span>{/if}{$title}：</label>
+    <div class="form-controls">
+        <ul class="fi-imgslist">
+            {foreach from=$pic_arr item=pic_url}
+                <li class="fi-imgslist-item">
+                    <img src="{$pic_url}" alt="">
+                    <input type="hidden" name="{$name}[]" value="{$pic_url}">
+                    <a href="javascript:;" onclick="delete_batch_image(this);" class="del J_del_pic" title="删除这张图"><i class="gicon-remove"></i></a>
+                </li>
+            {/foreach}
+            <li class="fi-imgslist-item" id="J_add_pic">
+                <a href="javascript:;" class="add" id="{$name}_uploader" title="上传一张新的图片">+</a>
+            </li>
+        </ul>
+        <span class="fi-help-text {if $warn}error{/if}">{$help}</span>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+<div class="formitems inline">
+    <label class="fi-name">开启注册限制：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+			<label><input type="radio" name="limit_reg_open" value="1" {if $config.LIMIT_REG_OPEN == 1}checked="checked"{/if} />是</label>
+            <label><input type="radio" name="limit_reg_open" value="0" {if $config.LIMIT_REG_OPEN == 0}checked="checked"{/if} />否</label>   
+        </div>
+    </div>
+</div>
+
+
+
+<div class="formitems inline">  
+    <label class="fi-name">注册人数：</label>  
+    <div class="form-controls">  
+        <input type="text" name='limit_reg_num' value='{$config.LIMIT_REG_NUM}' placeholder="">
+        <span class="fi-help-text"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">提示内容：</label>  
+    <div class="form-controls">  
+        <textarea name="limit_reg_desc" id="" >{$config.LIMIT_REG_DESC}</textarea>
+        <span class="fi-help-text"></span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form> 
+{/block} 
+
+{block name="js"}
+<script>
+{literal}
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+{/block}

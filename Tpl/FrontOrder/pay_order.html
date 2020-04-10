@@ -1,0 +1,263 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+.pay_left_money{
+	 top:0;
+}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+	<!--主内容区-->
+  <div class="pay_main">
+	  <div class="pay_cont">
+	  {if $act == 'pay'}
+			<div class="pay_cont_wrap">
+				<div class="pay_top_total">
+					<h5 class="pay_total_tit">支付金额：</h5>
+					<div class="pay_total_price"><span class="pay_rmb_sym">&yen;</span>{$amount}</div>
+				</div>
+
+				{if $pay_tag == 'wxpay'}
+						<script type="text/javascript">
+						//调用微信JS api 支付
+						function jsApiCall()
+						{
+							WeixinJSBridge.invoke(
+								'getBrandWCPayRequest',
+								{$jsApiParameters},
+								function(res)
+								{
+									if(res.err_msg == "get_brand_wcpay_request:ok" )
+									{
+										//支付成功
+										location.href = '/FrontOrder/pre_deliver_order';
+									}
+									else
+									{
+										//WeixinJSBridge.log(res.err_msg);
+										//alert(res.err_code);
+										//alert(res.err_desc);
+										//alert(res.err_msg);
+									}
+								}
+							);
+						}
+
+						function callpay()
+						{
+							if (typeof WeixinJSBridge == "undefined"){
+								if( document.addEventListener ){
+									document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+								}else if (document.attachEvent){
+									document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+									document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+								}
+							}else{
+								jsApiCall();
+							}
+						}
+
+						callpay();
+						</script>
+						<div class="submit_btn" id="sbmBtn">
+							<a href="javascript:void(0);" class="submit" onclick="callpay()">立即支付</a>
+						</div>
+				{/if}
+			 </div>
+		 {else}
+		 <form id="recharge_form" name="recharge_form" action="" method="post">
+			  <div class="pay_cont_wrap">
+			  	<div class="pay_top_total">
+						<h5 class="pay_total_tit">总价：</h5>
+						<div class="pay_total_price"><span class="pay_rmb_sym">&yen;</span>{$order_info.pay_amount}</div>
+					</div>
+					<div class="pay_rechrg_style">
+						<h5 class="pay_rechrg_tit">选择支付方式：</h5>
+						{foreach from=$payway_list item=payway}
+							<div class="pay_rechrg_select {if $payway.payway_id == $order_info.payway && $payway.pay_tag != 'cardpay'}selected{/if}" {if $payway.pay_tag !='wallet'}style="display:none;{/if}">
+								<i class="icon_select" onclick="toggleRadio(this);"></i>
+								<label for="{$payway.payway_id}" onclick="toggleRadio(this);">
+                                    {if $payway.pay_tag == 'wallet'}{$SYSTEM_MONEY_NAME}<em class="pay_left_money">余额：&yen;{$user_info.left_money}</em>
+                                    {else}
+                                    {$payway.pay_name}
+                                    {/if}</label>
+								<input type="radio" id="{$payway.payway_id}" name="payway_id" data-pay_tag='{$payway.pay_tag}' value="{$payway.payway_id}" 
+                                       {if $payway.payway_id == $order_info.payway && $payway.pay_tag != "cardpay"} checked{/if} data-card_code='{$payway.card_code|default:0}'/>
+							</div>
+						{/foreach}
+					</div>
+                    <input type="hidden" name="card_code" id="card_code" />
+					<input type="hidden" name="act" value="pay">
+					<div class="submit_btn" id="sbmBtn">
+						<a class="submit" >立即支付</a>
+					</div>
+			  </div>
+			  {/if}
+		</div>
+		<!--马上付时输入支付密码支付-->
+		<div class="pay_pwd_tan" id="pay_tan_fix">
+			<div class="pay_tan_tit">请输入支付密码</div>
+			<div class="pay_tan_num">支付金额：<i>&yen;{$order_info.pay_amount}</i></div>
+			<input type="password" name="pay_password" id="pay_password" placeholder="输入六位支付密码" maxlength="6"/>
+			<a href="javascript:void(0);" id="pay_pwd_ok" class="pay_tan_link pay_ok"><span>确定</span></a>
+			<a href="javascript:void(0);" id="pay_pwd_quit" class="pay_tan_link pay_quit"><span>取消</span></a>
+			<input type="hidden" id="total_pay_amount" value="{$order_info.pay_amount}" />
+		</div>
+		</form>
+		<!--弹出层背景透明化-->
+		<div id="screenIfm" style="z-index:10;" class="screenIfm" style="display:none;"></div>
+  </div>
+{/block}
+{block name="js"}
+<script src="__PUBLIC__/Plugins/native/native_event.js"></script>
+<script>
+var order_id = '{$order_id}';
+var err_msg = '{$err_msg.msg}';
+var err_url = '{$err_msg.url}';
+var err_code = '{$err_msg.code}';
+var paying = true;
+{literal}
+$(function()
+{
+	if(err_msg != ''){
+		paying =false;
+		// alert();
+		$("#tan").html(err_msg);
+		tishi();
+		if(err_url != ''){
+			setTimeout('location.href="'+err_url+'"',2000);
+		}
+		else if(err_code == '-1'){
+			history.back(-1);
+		}
+	}
+
+	$('#chinabank_pay').click(function(e){
+		$("#chinabank_pay_form").submit();
+	});
+	$('#sbmBtn').click(function(e){
+		if(!paying){
+			return;
+		}
+		//获取支付tag
+		var pay_tag = $('input[name=payway_id]:checked').data('pay_tag');
+		var card_code = $('input[name=payway_id]:checked').data('card_code');
+        $('#card_code').val(card_code);
+		if (pay_tag == 'wallet' || pay_tag == 'cardpay')
+		{
+			if(password != '')
+			{
+				$('#pay_tan_fix,#screenIfm').show();
+				$('#pay_password').prop("autofocus",true);
+				//密码验证
+				$('#pay_pwd_ok').click(function()
+				{
+					//支付密码验证
+					//password_valid();
+					$('#recharge_form').submit();
+					
+				});							
+			}
+			else
+			{
+				confirm('您未设置支付密码，前去设置','location.href="/FrontPassword/edit_pwd"');
+			}
+		}
+		else
+		{
+			if (is_wechat()) {
+				$('#recharge_form').submit();
+			}
+			
+		}
+	});
+	
+	$('#pay_pwd_quit').click(function()
+	{
+		$('#pay_tan_fix,#screenIfm').hide();
+	});
+});
+
+//验证支付密码
+function password_valid()
+{
+	var total_pay_amount = $('#total_pay_amount').val();
+	var pay_password = $('#pay_password').val();
+	$.ajax(
+	{
+		url:"/FrontPassword/password_valid",
+		type:"POST",
+		data:{
+			pay_password: pay_password,
+			total_pay_amount: total_pay_amount,
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {				
+				if(d == 'success')
+				{
+
+					// alert('恭喜您，订单付款成功','/FrontOrder/pre_deliver_order',true);
+					$("#tan").html("恭喜您，订单付款成功");
+						tishi();
+					setTimeout(function(){location.href = "/FrontOrder/pre_deliver_order";},1000);
+				}
+				else
+				{
+					switch(d)
+					{
+						case '1':
+							var error="对不起，余额不足，请使用其他方式支付";	
+							break;
+						case '2':
+							var error="密码错误";	
+							break;
+						case '3':
+							var error="请输入密码";	
+							break;	
+						case 'failure':
+							var error="支付失败";	
+							break;
+					}
+					$("#tan").html(error);
+					tishi();
+				}
+			}
+		}
+	});
+}
+
+function toggleRadio(obj){
+	var has_slbing_selted = $(obj).parent().siblings().hasClass("selected");
+	if(has_slbing_selted){
+		$(obj).parent().siblings().removeClass("selected");
+	}
+	$(obj).parent().addClass("selected");
+	$(obj).parent().find("input:radio").attr("checked", "checked");
+}
+
+$("#sbmBtn .submit").on("click",function(){
+
+	if(!paying){
+		return;
+	}
+
+	var pay_tag = $('input[name=payway_id]:checked').data('pay_tag');
+	//console.log(pay_tag);
+	if(pay_tag == 'mobile_wxpay'){
+		native_listen('wx_pay',{
+		    order_id : order_id,
+		    pay_tag : pay_tag
+		});
+		//alert("wx")
+	}
+
+})
+</script>
+{/literal}
+{/block}

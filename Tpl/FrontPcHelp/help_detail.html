@@ -1,0 +1,34 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+  
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+    <!-- s面包屑导航 -->
+    {include file="../breadcrum_nav.html"}
+    <!-- e面包屑导航 -->
+    <!-- s主内容 -->
+    <div class="help_content">
+        <div class="help_contentri news_detail">
+            <div class="help_contentri_tit">{$help_info.title}</div>
+            <div class="help_contentri_infor">
+                <!-- <span class="time">发布时间：{$help_info.addtime|date_format:"%Y-%m-%d"}</span> -->
+            </div>
+            <div class="help_contentri_con">
+              {$help_contents}
+            </div>
+        </div>
+    </div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+{/block}

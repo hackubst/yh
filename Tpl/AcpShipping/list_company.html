@@ -1,0 +1,349 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <table class="wxtables">  
+        <colgroup>  
+              <col width="35%">  
+              <col width="50%">  
+              <col width="15%">    
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>是否开启全国统一邮费</td>  
+                <td>运费说明</td>  
+                <td>执行操作</td>    
+            </tr>  
+        </thead>  
+        <tbody>  
+            <tr>  
+                <td>  
+					<input type="hidden" id="is_default_set" value="{if $shipping_fee}1{else}0{/if}" />
+                    <input type="checkbox" class="checkbox" id="_checkbox"{if $shipping_fee} checked="checked"{/if} /> 
+                    <b>启用统一费用</b>&nbsp;&nbsp;<b>配送费用为：</b><input type="text" placeholder="" name="uniform_shipping_fee" id="uniform_shipping_fee" style="display:inline-block; width:40px;"{if $shipping_fee} value="{$shipping_fee}"{/if} /><b>元</b> 
+                </td>  
+                <td>当启用统一运费设置时，所有商品配送费用跟重量无关，按设置的费用计算。</td>  
+                <td>  
+                    <a href="javascript:;" class="btn" title="设置" id="set_fee"><i class="gicon-wrench black"></i>设置</a>     
+                </td>  
+            </tr>  
+        </tbody>  
+    </table>  
+</div>
+
+<div class="tablesWrap">  
+    <table class="wxtables">  
+        <colgroup>  
+              <col width="25%">  
+              <col width="60%">  
+              <col width="15%">    
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>选择默认物流</td>  
+                <td>说明</td>  
+                <td>执行操作</td>    
+            </tr>  
+        </thead>  
+        <tbody>  
+            <tr>
+				<td>
+					<div class="formitems inline" style="vertical-align: top; display: inline-block; margin-left: 0;>  
+						<div class="form-controls">  
+							<select name="shipping_company_id" id="shipping_company_id">
+								<option value="0">--选择物流公司--</option>
+								{foreach from=$shipping_company_list item=this key=k}
+								<option value="{$this.shipping_company_id}" {if $default_express_company == $this.shipping_company_id}selected{/if}>{$this.shipping_company_name}</option>
+								{/foreach}
+							</select>  
+							<span class="fi-help-text hide"></span>
+						</div>
+					</div>
+				</td>
+                <td>仅当关闭统一运费设置时，该选项有效。选择某物流公司后，前台计算将以该物流公司的运费计算模板计算运费。</td>
+                <td>  
+                    <a href="javascript:;" class="btn" title="设置" id="set_default_express_company"><i class="gicon-wrench black"></i>设置</a>     
+                </td>  
+            </tr>  
+        </tbody>  
+    </table>  
+</div>
+<div class="tablesWrap" style="margin-top:20px;">  
+	<div class="tables-searchbox">  
+        <a href={"/AcpShipping/add_company"|U} class="btn btn-blue"><i class="gicon-plus white"></i>添加配送方式</a>
+    </div>
+    <table class="wxtables">  
+        <colgroup>  
+            <col width="5%">  
+            <col width="15%">  
+            <col width="25%">  
+            <col width="15%">  
+            <col width="15%"> 
+            <col width="25%"> 
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>序号</td>  
+                <td>物流名称</td>  
+                <td>配送方式描述</td>  
+                <td>配送费用</td>  
+                <td>状态</td> 
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+		{if $shipping_company_list}
+		{foreach from=$shipping_company_list item=this key=k}
+            <tr>  
+                <td>  
+                    {$k + 1}.
+                </td>  
+                <td>  
+                    <p style="font-weight:bold; color:#000;">{$this.shipping_company_name}</p>
+                </td>  
+                <td>
+                    <p>首重重量：{$this.start_weight}<b>(kg)</b></p>
+                    <p>续重重量：{$this.added_weight}<b>(kg)</b></p>
+                </td>  
+                <td>  
+                    <p>首重费用：{$this.start_weight_price}</p>
+                    <p>续重费用：{$this.added_weight_price}</p>
+                </td>  
+                <td style="color:red; font-weight:bold;">{if $this.isuse eq 1}开启{elseif $this.isuse eq 0}关闭{/if}</td>  
+                <td>  
+                    <a href={"/AcpShipping/add_region/cid/{$this.shipping_company_id}"|U} class="btn"><i class="gicon-plus black"></i>添加区域</a>   
+                    <a href={"/AcpShipping/edit_company/id/{$this.shipping_company_id}"|U} class="btn" title="修改"><i class="gicon-edit black"></i>编辑</a>   
+                    <a href="javascript:;" data-id="{$this.shipping_company_id}" class="btn del-company" title="删除"><i class="gicon-trash black"></i>删除</a>   
+                </td>  
+            </tr> 
+			{if $this.shipping_region_list}
+				{foreach from=$this.shipping_region_list item=this_r key=k_r}
+					<tr class="c_{$this.shipping_company_id}">  
+						<td>  
+							({$k_r + 1})
+						</td>  
+						<td colspan="2">  
+							<span style="font-weight:bold; color:#000;">配送区域：</span>
+							{$this_r.province_text}
+						</td>   
+						<td>
+							<p><b style="color:#000;">首重重量：</b>{$this_r.start_weight}<b style="color:#000;">(kg)</b></p>
+							<p><b style="color:#000;">续重重量：</b>{$this_r.added_weight}<b style="color:#000;">(kg)</b></p>
+						</td>  
+						<td>  
+							<p><b style="color:#000;">首重费用：</b>{$this_r.start_weight_price}</p>
+							<p><b style="color:#000;">续重费用：</b>{$this_r.added_weight_price}</p>
+						</td>    
+						<td>  
+							<a href={"/AcpShipping/edit_region/cid/{$this.shipping_company_id}/rid/{$this_r.shipping_company_region_price_id}"|U} class="btn" title="修改"><i class="gicon-edit black"></i>编辑</a>   
+							<a href="javascript:;" data-id="{$this_r.shipping_company_region_price_id}" class="btn del-region" title="删除"><i class="gicon-trash black"></i>删除</a>   
+						</td>  
+					</tr> 
+				{/foreach}
+			{/if}
+		{/foreach}
+		{else}
+			<tr>
+				<td colspan="6" style="text-align: center;">暂无配送方式，您可以<a href={"/AcpShipping/add_company"|U} >添加配送方式</a></td>
+			</tr>
+		{/if}
+        </tbody>  
+    </table>  
+</div>
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('#set_fee').on('click', function(){
+		var msg = '';
+		var param = {};
+		var shippingFee = $('#uniform_shipping_fee').val();
+		var isSet = $('#_checkbox').prop('checked');
+		var isDefaultSet = $('#is_default_set').val();
+		
+		if(isDefaultSet == 0){
+			if(isSet){
+				if('' == shippingFee){
+					msg = '请输入配送费！';
+				} else if(!(/[0-9]+(\.[0-9]+)?/.test(shippingFee))){
+					msg = '请输入纯数值的配送费！';
+				}
+			} else {
+				msg = '请先选中启用统一费用！';
+			}
+		} else if(isDefaultSet == 1) {
+			if(isSet){
+				if('' == shippingFee){
+					msg = '请输入配送费！';
+				} else if(!(/[0-9]+(\.[0-9]+)?/.test(shippingFee))){
+					msg = '请输入纯数值的配送费！';
+				}
+			}
+		}
+		if(msg){
+			$.jPops.alert({
+				title:"提示",
+				content:msg,
+				okBtnTxt:"确定",
+				callback:function(){
+					return true;
+				}
+			});
+			return false;
+		}
+		if(isSet){
+			param.is_set = 1;
+			param.shipping_fee = shippingFee;
+		} else {
+			param.is_set = 0;
+		}
+		$.ajax({
+			url: '/AcpShippingAjax/set_shipping_fee',
+			data: param,
+			dataType: 'json',
+			beforeSend: function(){
+				$.jPops.showLoading();
+			},
+			success: function(data){
+				$.jPops.hideLoading();
+				if(data.status === 1){
+					if(isSet){
+						$('#is_default_set').prop('defaultValue', 1);
+					} else {
+						$('#is_default_set').prop('defaultValue', 0);
+						$('#uniform_shipping_fee').val(null);
+					}
+				}
+				$.jPops.alert({
+					title:"提示",
+					content:data.msg,
+					okBtnTxt:"确定",
+					callback:function(){
+						return true;
+					}
+				});
+			}
+		});
+	});
+
+	$('#set_default_express_company').on('click', function(){
+		//获取shipping_company_id的值
+		shipping_company_id = $('#shipping_company_id').val();
+		if (!shipping_company_id)
+		{
+			alert('对不起，请选择物流公司！');
+			$('#shipping_company_id').focus();
+			return false;
+		}
+
+		$.ajax({
+			url: '/AcpShippingAjax/set_default_express_company',
+			type:"POST",
+			data: {
+				shipping_company_id: shipping_company_id
+			},
+			beforeSend: function(){
+				$.jPops.showLoading();
+			},
+			success: function(data){
+				$.jPops.hideLoading();
+				var msg = '抱歉，默认物流设置失败';
+				if(data == 'success'){
+					msg = '恭喜您，默认物流设置成功';
+				}
+				$.jPops.alert({
+					title:"提示",
+					content:msg,
+					okBtnTxt:"确定",
+					callback:function(){
+						return true;
+					}
+				});
+			}
+		});
+	});
+	
+	$('.del-company').on('click', function(){
+		var _this = this;
+		$.jPops.confirm({
+			title:"提示",
+			content:'您确定要删除这条数据吗？',
+			okBtnTxt:"确定",
+			cancelBtnTxt:"取消",
+			callback:function(r){
+				if(r){
+					var _id = $(_this).data('id');
+					$.ajax({
+						url: '/AcpShippingAjax/del_company',
+						data: {id: _id},
+						dataType: 'json',
+						beforeSend: function(){
+							$.jPops.showLoading();
+						},
+						success: function(data){
+							$.jPops.hideLoading();
+							$(_this).parents('tr').fadeOut(400, function(){
+								$(this).remove();
+							});
+							$('.c_' + _id).fadeOut(400, function(){
+								$(this).remove();
+							});
+							$.jPops.alert({
+								title:"提示",
+								content:data.msg,
+								okBtnTxt:"确定",
+								callback:function(){
+									return true;
+								}
+							});
+						}
+					});
+				}
+				return true;
+			}
+		});
+	});
+	
+	$('.del-region').on('click', function(){
+		var _this = this;
+		$.jPops.confirm({
+			title:"提示",
+			content:'您确定要删除这条数据吗？',
+			okBtnTxt:"确定",
+			cancelBtnTxt:"取消",
+			callback:function(r){
+				if(r){
+					$.ajax({
+						url: '/AcpShippingAjax/del_region',
+						data: {id: $(_this).data('id')},
+						dataType: 'json',
+						beforeSend: function(){
+							$.jPops.showLoading();
+						},
+						success: function(data){
+							$.jPops.hideLoading();
+							$(_this).parents('tr').fadeOut(400, function(){
+								$(this).remove();
+							});
+							$.jPops.alert({
+								title:"提示",
+								content:data.msg,
+								okBtnTxt:"确定",
+								callback:function(){
+									return true;
+								}
+							});
+						}
+					});
+				}
+				return true;
+			}
+		});
+	});
+});
+</script>
+{/literal}
+{/block} 

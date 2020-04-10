@@ -1,0 +1,290 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/front/base1.css" />
+<link rel="stylesheet" href="/Public/Css/front/user.css" />
+{literal}
+<style>
+body{color:#7a7a7a;}
+	.lay_bank{
+		height: 368px;
+		margin-top: -184px;
+	}
+	.form_select{
+		direction: ltr;
+		font-size: 18px;
+		  float: right;
+  		padding-right: 15px;
+	}
+	.cash_num_input{
+		width: 65%;
+	}
+    @media screen and (max-width: 320px) {
+        .cash_li, .form_select, .cash_num_input{
+          font-size: 16px;
+        }
+     }
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<div id="bodyDiv" class="indx_wx">
+		<form action='/FrontUser/deposit_apply'   method='post' id='deposit_apply_form'>
+		<div class="cash_cont">
+			<ul>
+				<li class="cash_li">
+						<span class="cash_title">
+			    			当前余额
+						</span>
+						<span class="cash_num">{$user_info.left_money}</span>
+		                <input type="hidden" id='cash_num' value="">
+				</li>
+				<li class="cash_li">
+						<span class="cash_title">
+			    			提现
+						</span>
+						<input class="blue cash_num_input" style="width:40%;" type="text" placeholder="{$deposit_limit}起提" 
+						id='money' name="money" value="">
+				</li>
+
+
+		        <!-- <li class="cash_li" id='bank_card'>
+		        <span class="cash_title">
+		            提现方式 
+		        </span>
+		        <select name="deposit_type" id="deposit_type" class="cash_num"  style="margin-right:17px;" onchange="change_type(this.value);">
+		        	<option value="0" class="alipay">点击选择</option>
+		        	<option value="1" class="alipay">支付宝</option>
+		        	<option value="2" class="weixin">微信</option>
+		        </select>	
+		        <em class="arrow_right" style="top:20px;"></em>			
+		        </li> -->
+		    </ul>
+
+		    <!-- <div class="btn_wrap" style="width:100%;" id='binding'>
+		        <a href="javascript:;" onclick="show_bank();" class="submit" style="width:40%;font-size:18px;">绑定提款账号</a>
+		    </div> -->
+		</div>
+		<div class="btn_wrap" style="width:100%;margin-top:40px;">
+        	<a href="javascript:;" onclick="goto_deposit_apply();" class="submit" style="width:80%;">申请提现</a>
+		</div>
+
+</div>
+<div class="cash_rule">
+    <div class="rule_tit">提现规则</div>
+	<div class="rule_content">{$about_deposit}</div>
+</div>
+<!-- 搜索层 -->
+<div class="lay_cont lay_bank" id="lay_bank">
+	<form action="" method='post' id='deliver_form'>
+	<div class="layer_title" style="padding:16px;">账号绑定（微信或支付宝）</div>
+	<ul class="lay_se_ul">
+		<li class="cash_li">
+				<span class="cash_title">
+	    			微信账号 
+				</span>
+				<input class="cash_num_input" type="text" placeholder="输入微信账号" id='wx_account' name="wx_account" value="{$user_info.wx_account}">	
+		</li>
+		<li class="cash_li">
+				<span class="cash_title">
+	    			支付宝账号 
+				</span>
+				<input class="cash_num_input" type="text" placeholder="输入支付宝账号" name="alipay_account" id="alipay_account" value="{$user_info.alipay_account}">	
+		</li>
+		<li class="cash_li">
+				<span class="cash_title">
+	    			支付宝姓名 
+				</span>
+				<input class="cash_num_input" type="text" placeholder="输入支付宝姓名" name="alipay_account_name"  id='alipay_account_name' value="{$user_info.alipay_account_name}">	
+		</li>
+	</ul>
+	<div class="btn_wrap" style="width:100%;">
+        <a href="javascript:;" onclick="save_bank_card();" class="submit" style="width:90%;font-size:20px;">确&nbsp;定</a>
+	</div>
+	</form>
+</div>
+<!-- 背景透明层 -->
+<div id="screenIfm" style="z-index:9;" class="screenIfm" onclick="$('#lay_bank').hide();$(this).hide();" style="display:none;">
+</div>
+
+</div>
+{/block}
+
+{block name="js"}
+<script type="text/javascript">
+var deposit_limit  = '{$deposit_limit|default:10}';
+var deposit_max    = '{$deposit_max|default:50}';
+var left_integral     = '{$user_info.left_money|default:0}'
+var upload_flag    = parseInt('{$upload_flag}');
+var charm_link     = '{$charm_link}';
+
+deposit_limit  = parseFloat(deposit_limit);
+deposit_max    = parseFloat(deposit_max);
+left_integral     = parseFloat(left_integral);
+
+var saved_alipay_account     = '{$user_info.alipay_account}';
+var saved_alipay_account_name     = '{$user_info.alipay_account_name}';
+var saved_wx_account     = '{$user_info.wx_account}';
+
+{literal}
+
+//动态计算浮层的宽高
+$(function(){
+	var clientWidth = $(window).width();
+	var lay_contWidth = parseInt(clientWidth * 0.85);
+	$('#lay_bank').width(lay_contWidth);
+	$('#lay_bank').css({
+		'margin-left': -lay_contWidth/2
+	});
+});
+//异步提交银行卡验证
+function show_bank()
+{
+	$('#lay_bank,#screenIfm').show();
+}
+
+function save_bank_card()
+{
+	var html='';
+    var wx_account = $('#wx_account').val(); //微信
+    var alipay_account      = $('#alipay_account').val(); //支付宝账号
+    var alipay_account_name     = $('#alipay_account_name').val(); //支付宝姓名
+    var deposit_type     = $('#deposit_type').val(); //支付宝姓名
+
+    var contents     = '';
+    if (!wx_account)    contents += '请填写微信账号！</br>';
+    if (!alipay_account)         contents += '请填写支付宝账号！</br>';
+    if (!alipay_account_name)        contents += '请填写支付宝姓名！</br>';
+
+    if (contents.length > 0 ) {
+        layer.open({
+            content: contents,
+            btn: ['确认'],
+            shadeClose: false,
+            yes: function(){
+                layer.closeAll();
+            }, 
+        });
+    } else {
+        $.post( '/FrontUser/save_bankcard_info',  //post url
+            {'user_id':user_id,"wx_account":wx_account,"alipay_account":alipay_account, 'alipay_account_name':alipay_account_name, 'deposit_type':deposit_type}, //post data
+            function(data) {  //call back
+                if (data.code == 0) {
+                    $('#lay_bank,#screenIfm, #binding').hide();
+                    $('#bank_card').show();
+					if (alipay_account)
+					{
+						saved_alipay_account = alipay_account;
+						saved_alipay_account_name = alipay_account_name;
+					}
+					else
+					{
+						saved_wx_account = wx_account;
+					}
+                } else {
+                    layer.open({
+                        content: data.msg,
+                        btn: ['确认'],
+                        shadeClose: false,
+                        yes: function(){
+                            layer.closeAll();
+                        }, 
+                    });
+                }
+            }, 'json'
+        );
+    }
+}
+
+//异步验证提现金额
+function goto_deposit_apply()
+{
+    var apply_money = parseFloat($('#money').val());
+
+	if (apply_money < deposit_limit)
+	{
+		layer.open({
+		    content: '抱歉，单次提现金额不得低于' + deposit_limit + '元',
+		    btn: ['确认'],
+		    shadeClose: false,
+		    yes: function(){
+			layer.closeAll();
+		    }, 
+		});
+		return;
+	}
+
+	/*if (apply_money > deposit_max)
+	{
+		layer.open({
+		    content: '抱歉，单次提现限额' + deposit_max + '元哦！',
+		    btn: ['确认'],
+		    shadeClose: false,
+		    yes: function(){
+			layer.closeAll();
+		    }, 
+		});
+		return;
+	}*/
+
+	var contents='';
+    if ( apply_money > left_integral )    contents += '余额不足，请修改提现金额！'; 
+
+	/*var deposit_type = $('#deposit_type').val();
+
+	if (deposit_type == 0)
+	{
+		contents += '请选择提现方式'; 
+	}*/
+
+    if ( contents.length > 0 ) {
+        layer.open({
+	    content: contents,
+	    btn: ['确认'],
+	    shadeClose: false,
+	    yes: function(){
+	        layer.closeAll();
+	    }, 
+        });
+        return;
+	}
+	else
+	{
+		$.post('/FrontUser/deposit_apply',  //post url
+            {"money":apply_money}, //post data
+			function(data)
+			{
+				layer.open({
+					content: data.msg,
+					btn: ['确认'],
+					shadeClose: false,
+					yes: function(){
+						if (data.code == 0)
+						{
+							//跳转到提现申请列表页
+							//location.href = '/FrontUser/get_deposit_apply_list';
+							location.reload();
+		                }else{
+		                	layer.closeAll();
+		                }
+								
+					}, 
+				});
+            }, 'json');
+    } 
+}
+
+function change_type(deposit_type)
+{
+	if (deposit_type == 1 && !saved_alipay_account)
+	{
+		show_bank();
+	}
+	if (deposit_type == 2 && !saved_wx_account)
+	{
+		show_bank();
+	}
+}
+</script>
+{/literal}
+{/block}

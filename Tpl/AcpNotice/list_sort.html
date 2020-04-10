@@ -1,0 +1,398 @@
+﻿{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+
+
+{block name="content"}
+<div class="t-art" style="margin-bottom:10px;">
+	<a href="javascript:;" class="btn btn-blue" id="add-new"><i class="gicon-plus white"></i>添加栏目</a>
+</div>
+<div class="tablesWrap">
+	<div class="tables-searchbox">
+	<form name="form1" action="/AcpNotice/list_sort" method="get">
+		<div class="t-list">
+			<span class="tbs-txt">栏目名称：</span>  
+			<input type="text" name="keyword" id="keyword" value="{$keyword}">
+		</div> 
+		<div class="t-list">
+			<input type="hidden" name="act" value="submit" />
+			<button class="btn" type="submit"><i class="gicon-search"></i>搜索</button> 
+		</div>    
+	</form>
+	</div>
+	<!-- end tables-searchbox -->
+	<table class="wxtables">
+		<colgroup>
+		<col width="10%">
+		<col width="45%">
+		<col width="15%">
+		<col width="15">
+		<col width="15%">
+		</colgroup>
+		<thead>
+			<tr>
+				<td>编号</td>
+				<td>栏目名称</td>
+				<td>排序</td>
+				<td>是否显示</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody>
+		{if $notice_category_list}
+		{foreach from=$notice_category_list item=this key=k}
+			<tr>
+				<td>{$this.no}</td>
+				<td class="sort-name">{$this.notice_sort_name}</td>
+				<td class="serial">
+					<img src="__IMAGES__/ajax-loading.gif" class="hide" />
+					<input type="text" title="点击更改排序" style="width:40px; text-align:center; border-color: #fff;" value="{$this.serial}" onblur="setSerial({$this.notice_sort_id}, this);">
+				</td>
+				<td>
+					<img src="__IMAGES__/ajax-loading.gif" class="hide" />
+				{if $this.isuse == 1}
+					<a href="javascript:;" title="点击禁用" onclick="setUse({$this.notice_sort_id}, this);"><i class="gicon-ok black"></i></a>
+				{elseif $this.isuse == 0}
+					<a href="javascript:;" title="点击启用" onclick="setUse({$this.notice_sort_id}, this);"><i class="gicon-remove black"></i></a>
+				{/if}
+				</td>
+				<td>
+					<a href="javascript:;" onclick="editSort({$this.notice_sort_id}, this);" class="btn" title="修改"><i class="gicon-edit black"></i>编辑</a> 
+					<a href="javascript:;" onclick="delSort({$this.notice_sort_id}, this);" class="btn" title="删除"><i class="gicon-trash black"></i>删除</a> 
+				</td>
+			</tr>
+		{/foreach}
+		{else}
+			<tr>
+			{if $is_search}
+				<td colspan="5" class="center">暂未搜索到相关公告栏目，您可以尝试其他搜索</td>
+			{else}
+				<td colspan="5" class="center">暂无公告栏目，您可以<a href="#add-new">添加公告栏目</a></td>
+			{/if}
+			</tr>
+		{/if}
+		</tbody>
+	</table>
+	<!-- end wxtables -->
+	{if $notice_category_list}
+	<div class="tables-btmctrl clearfix">
+		<div class="fr">
+			<div class="paginate">
+				{$pagination}
+			</div>
+			<!-- end paginate -->
+		</div>
+	</div>
+	{/if}
+	<!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap --> 
+<form id="form1" style="display: none;">
+	<div class="formitems inline">
+		<label class="fi-name"><span class="colorRed">*</span>分类名称：</label>
+		<div class="form-controls">
+			<input type="text" name="sort_name" id="sort_name">
+			<span class="fi-help-text"></span>
+		</div>
+	</div>
+	<div class="formitems inline">
+		<label class="fi-name">分类介绍：</label>
+		<div class="form-controls">
+			<textarea name="description" id="description"></textarea>
+		</div>
+	</div>
+</form>
+{/block} 
+
+{block name="js"}
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('.serial input').mouseenter(function(){
+		$(this).css('cursor', 'pointer');
+	})
+	.click(function(){
+		$(this).css('cursor', 'text');
+		$(this).css('border-color', '#72b7cd');
+	})
+	.blur(function(){
+		$(this).css('border-color', '#fff');
+	});
+	
+	//添加标签
+	$("#add-new").click(function() {
+		var _html = $('#form1').clone().show();
+		$.jPops.custom({
+			title:"添加栏目",
+			content:_html,
+			okBtnTxt:"确定",
+			callback:function(r){
+				acp.popFormStatus=false;//弹窗表单验证状态
+				
+				if(r){//点击确定按钮执行的事件
+                    $.validator.setDefaults({
+                        submitHandler: function() {
+                            var param = $('#jpops #form1').serialize();
+							$.ajax({
+								url: '/AcpNoticeAjax/add_sort',
+								data: param,
+								dataType: 'json',
+								success: function(data){
+									$.jPops.alert({
+										title:"提示",
+										content:data.msg,
+										okBtnTxt:"确定",
+										callback:function(){
+											if(data.status === 1){
+												location.href = '/AcpNotice/list_sort';
+											}
+											return true;
+										}
+									});
+								}
+							});
+                            acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+                        }
+                    });
+					
+                    //表单验证规则
+                    $("#jpops #form1").validate({
+                        rules: {
+                            sort_name: {
+                                required: true
+                            }
+                        },
+                        messages: {
+                            sort_name: {
+                                required: "请输入栏目名称！"
+                            }
+                        },
+                        errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+                        success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+                    });
+					
+					//模拟提交表单
+					$("#jpops #form1").submit();
+					
+                    return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+                }
+				return true;
+			}
+		});
+	});
+});
+
+function editSort(_id, _this){
+	if(_id < 10){
+		$.jPops.alert({
+			title:"提示",
+			content:'对不起，该栏目不能修改！',
+			okBtnTxt:"确定",
+			callback:function(){
+				return true;
+			}
+		});
+		return false;
+	}
+	
+	var _html = $('#form1').clone().show();
+	var _json = $('#edit-' + _id).val();
+	if(_json == undefined){
+		$.ajax({
+			url: '/AcpNoticeAjax/fetch_sort',
+			data: {id: _id},
+			dataType: 'json',
+			async: false,
+			success: function(data){
+			//	console.log(data);
+				$('#sort_name', _html).val(data.notice_sort_name);
+				$('#description', _html).text(data.description);
+				$('#form1').append('<input type="hidden" value="' + encodeURIComponent(JSON.stringify(data)) + '" id="edit-' + data.notice_sort_id + '"  />');
+			}
+		});
+	}
+	else
+	{
+		_json = $.parseJSON(decodeURIComponent(_json));
+		$('#sort_name', _html).val(_json.notice_sort_name);
+		$('#description', _html).text(_json.description);
+	}
+	
+	$.jPops.custom({
+		title:"修改栏目",
+		content:_html,
+		okBtnTxt:"确定",
+		callback:function(r){
+			acp.popFormStatus=false;//弹窗表单验证状态
+			
+			if(r){//点击确定按钮执行的事件
+				$.validator.setDefaults({
+					submitHandler: function() {
+						var param = $('#jpops #form1').serialize();
+						param += '&id=' + _id;
+						$.ajax({
+							url: '/AcpNoticeAjax/edit_sort',
+							data: param,
+							dataType: 'json',
+							success: function(data){
+							//	console.log(data);
+								if(data.status === 1){
+									$('#edit-' + _id).val(encodeURIComponent(JSON.stringify(data)));
+									$(_this).parents('tr').children('.sort-name').text(data.notice_sort_name);
+								}
+								$.jPops.alert({
+									title:"提示",
+									content:data.msg,
+									okBtnTxt:"确定",
+									callback:function(){
+										return true;
+									}
+								});
+							}
+						});
+						acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+					}
+				});
+				
+				//表单验证规则
+				$("#jpops #form1").validate({
+					rules: {
+						sort_name: {
+							required: true
+						}
+					},
+					messages: {
+						sort_name: {
+							required: "请输入栏目名称！"
+						}
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+				
+				//模拟提交表单
+				$("#jpops #form1").submit();
+				
+				return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+			}
+			return true;
+		}
+	});
+}
+
+function delSort(_id, _this){
+	if(_id < 10){
+		$.jPops.alert({
+			title:"提示",
+			content:'对不起，该栏目不能删除！',
+			okBtnTxt:"确定",
+			callback:function(){
+				return true;
+			}
+		});
+		return false;
+	}
+	$.jPops.confirm({
+		title:"提示",
+		content:'您确定要删除这条数据吗？',
+		okBtnTxt:"确定",
+		cancelBtnTxt:"取消",
+		callback:function(r){
+			if(r){
+				$.ajax({
+					url: '/AcpNoticeAjax/del_sort',
+					data: {id: _id},
+					dataType: 'json',
+					success: function(data){
+						if(data.status === 1){
+							$(_this).parents('tr').fadeOut(400, function(){
+								$(this).remove();
+							});
+						}
+						$.jPops.alert({
+							title:"提示",
+							content:data.msg,
+							okBtnTxt:"确定",
+							callback:function(){
+								return true;
+							}
+						});
+					}
+				});
+			}
+			return true;
+		}
+	});
+}
+
+function setUse(_id, _this){
+	$.ajax({
+		url: '/AcpNoticeAjax/edit_cat_isuse',
+		data: {id: _id},
+		dataType: 'json',
+		beforeSend: function(){
+			$(_this).prev().removeClass('hide');
+			$(_this).children().addClass('hide');
+		},
+		success: function(data){
+			$(_this).prev().addClass('hide');
+			if(data.isuse === 0){
+				$(_this).children().attr('class', 'gicon-remove black')
+			}else if(data.isuse === 1){
+				$(_this).children().attr('class', 'gicon-ok black');
+			}
+		}
+	});
+}
+
+function setSerial(_id, _this){
+	var initVal = _this.defaultValue;
+	var curVal = $(_this).val();
+	if(curVal == ''){
+		$(_this).val(initVal);
+		return false;
+	}
+	if(curVal == initVal){
+		return false;
+	}
+	$.ajax({
+		url: '/AcpNoticeAjax/edit_cat_serial',
+		data: {id: _id, serial: curVal},
+		dataType: 'json',
+		beforeSend: function(){
+			$(_this).prev().removeClass('hide');
+			$(_this).addClass('hide');
+		},
+		success: function(data){
+			$(_this).prev().addClass('hide');
+			$(_this).removeClass('hide');
+			if(data.status === 1){
+				_this.defaultValue = curVal;
+			} else {
+				$(_this).val(initVal);
+			}
+			$.jPops.alert({
+				title:"提示",
+				content:data.msg,
+				okBtnTxt:"确定",
+				callback:function(){
+					return true;
+				}
+			});
+		}
+	});
+}
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpNotice/list_sort.css" type="text/css" />
+{literal}
+<style>
+#jpops .fi-name{width:75px;}
+#jpops .form-controls{margin-left:80px;}
+.t-list{ float:left;}
+</style>
+{/literal}
+{/block}

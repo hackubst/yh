@@ -1,0 +1,158 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--主内容-->
+	<div class="psn_main">
+		<!--基本信息-->
+		<div class="psn_info" id="psn_info">
+			<div class="psn_info1">
+				<div class="psn_pic"><img src="{if $user_info.headimgurl}{$user_info.headimgurl}{else}__PUBLIC__/Images/front/avatar.png{/if}"></div>
+				<h1 class="psn_nickname">{$user_info.nickname}</h1>
+				<!-- <span class="psn_integral">
+					<span class="psn_igr_tit">积分数</span>
+					<span class="psn_igr_txt">{if $user_integral_list}{$user_integral_list[0].end_integral}{else}0{/if}</span>
+				</span> -->
+				{if $user_info.rank_name}
+					<span class="psn_vip"><span class="vip_txt">vip</span>{$user_info.rank_name}</span>
+				{/if}
+			</div>
+			<div class="psn_info2 clearfix">
+				<div class="psn_l_money psn_info_wrap fl">
+					<div>￥{$user_info.left_money|default:0.0}</div>
+					<div>账户余额</div>			
+				</div>
+				<div class="psn_gold psn_info_wrap fl">
+					<div>￥{$user_info.consumed_money|default:0.0}</div>
+					<div>消费总金额</div>
+				</div>
+				<!-- 镖金池改为抵用券形式，暂且弃用 -->
+				<!--<div class="psn_gold psn_info_wrap">
+					<div>{if $user_freight_list}{$user_freight_list[0].end_freight}{else}0{/if}</div>					
+					<div>镖金</div>
+				</div>-->
+				<!-- <div class="v_line"></div> -->
+			</div>		
+		</div>
+		<!--功能入口-->
+		<div class="home_fun">
+			<ul>
+				<li>
+					<a href="{$all_order_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon order_i"><use xlink:href="#porder"></use></svg></div>
+						<div class="psn_svg_txt">订单</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$address_list_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon addr_i"><use xlink:href="#address"></use></svg></div>
+						<div class="psn_svg_txt">地址</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$personal_data_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon psndata_i"><use xlink:href="#personaldata"></use></svg></div>
+                        <div class="psn_svg_txt">个人资料</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/FrontUser/my_qr_code">
+                        <div class="psn_svg_wrap"><svg class="psn_icon psndata_i"><use xlink:href="#personaldata"></use></svg></div>
+                        <div class="psn_svg_txt">我的推广码</div>
+                    </a>
+				</li>
+			</ul>
+			<ul>
+				<li style="display:none !important;">
+					<a href="{$recharge_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon rechrg_i"><use xlink:href="#recharge"></use></svg></div>
+						<div class="psn_svg_txt">充值</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$getcash_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon rechrg_i"><use xlink:href="#recharge"></use></svg></div>
+						<div class="psn_svg_txt">提现</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$edit_pwd_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon pwd_i"><use xlink:href="#password"></use></svg></div>
+						<div class="psn_svg_txt">支付密码</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$account_list_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon acont_i"><use xlink:href="#account"></use></svg></div>
+						<div class="psn_svg_txt">财务明细</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$integral_list_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon intgrl_i"><use xlink:href="#integral"></use></svg></div>
+						<div class="psn_svg_txt">积分明细</div>
+					</a>
+				</li>
+				{if $is_fenxiao_open}
+					<li>
+						<a href="/FrontUser/set_rate">
+							<div class="psn_svg_wrap"><svg class="psn_icon intgrl_i"><use xlink:href="#setup"></use></svg></div>
+							<div class="psn_svg_txt">提成设置</div>
+						</a>
+					</li>
+					<li>
+						<a href="/FrontUser/my_team">
+							<div class="psn_svg_wrap"><svg class="psn_icon intgrl_i"><use xlink:href="#integral"></use></svg></div>
+							<div class="psn_svg_txt">我的收益</div>
+						</a>
+					</li>
+				{/if}
+			</ul>	
+			<ul>
+				<!-- <li>
+					<a href="{$message_list_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon setup_i"><use xlink:href="#message"></use></svg></div>
+						<div class="psn_svg_txt">消息中心</div>
+					</a>
+				</li> -->
+				<li>
+					<a href="{$setup_link}">
+						<div class="psn_svg_wrap"><svg class="psn_icon setup_i"><use xlink:href="#setup"></use></svg></div>
+						<div class="psn_svg_txt">设置</div>
+					</a>
+				</li>
+			</ul>			
+		</div>
+	</div>
+
+
+{include file="$footer_path"}
+
+{/block}
+{block name="js"}
+	<script type="text/javascript">
+		$(".psn_pic img").on("click",function(){
+			native_listen('up_head');
+		});
+	</script>
+	<script type="text/javascript">
+	// $(".psn_pic img").on("click",function(){
+	// 	$(".psn_pic img").attr("src","{$user_info.headimgurl}"+"?"+Math.random());
+	// 	return;
+	// });
+	add_native_callback('img_refresh',function(){
+		$.ajax({
+			url:'/FrontUser/setAvater',
+			type:'post',
+			data:{},
+			success:function(data){
+				$(".psn_pic img").attr("src",data);
+				return;
+			}
+		});
+		
+    })
+   </script>
+   {/block}

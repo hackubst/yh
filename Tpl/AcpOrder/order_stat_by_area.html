@@ -1,0 +1,201 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-n-s-top">
+    <div class="tables-searchbox">
+		<form method="POST" action="">
+        <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>统计筛选内容：
+            </label>
+            <div class="form-controls">
+                <input type='radio' class="area" id="big_area" name="area" value="big_area"   {if !isset($small_area)}checked{/if}> 大区 </input>
+                <input type='radio' class="area" id="small_area" name="area" value="small_area" {if isset($small_area)}checked{/if}> 区域 </input>
+            </div>
+        </div>
+        <div class="formitems inline" id="big_area_display" {if isset($small_area)}style="display:none"{/if}>
+            <label class="fi-name">
+                <span class="colorRed">*</span>大区：
+            </label>
+            <div class="form-controls">
+                <select name="big_area_id">
+                    <option value="0">--请选择--</option>
+                    {foreach from=$big_area_list item=item}
+                    <option value="{$item.big_area_id}" {if isset($big_area_id) && $big_area_id == $item.big_area_id}selected{/if}>{$item.area_name}</option>
+                    {/foreach}
+                </select>
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+        <div class="formitems inline" id="small_area_display" {if !isset($small_area)}style="display:none"{/if}>  
+            <label class="fi-name"><span class="colorRed">*</span> 选择城市：</label>  
+            <div class="form-controls">  
+                <!--
+                <select class="small" id="province_id" name="province_id">  
+                    <option value="0">--选择省份--</option>  
+                    {foreach from=$province_list item=province_info}
+                        <option value="{$province_info.province_id}" {if isset($province_id) && $province_id == $province_info.province_id}selected{/if}>{$province_info.province_name}</option>  
+                    {/foreach}
+                </select> 
+                <select class="small" id="city_id" name="city_id">  
+                    <option value="0">--选择城市--</option>  
+                </select> 
+                <span id="div_area">
+                    <select class="small" id="area_id" name="area_id">  
+                        <option value="0">--选择地区--</option>  
+                    </select> 
+                </span>
+                -->
+                <select class="small" id="province_id" name="province_id">  
+                    {if !$province_id}
+                    <option value="0">--选择省份--</option>
+                    {/if}
+                    {foreach from=$province_list item=province_item}
+                        <option value="{$province_item.province_id}" {if isset($province_id) && $province_id == $province_item.province_id}selected{/if}>{$province_item.province_name}</option>  
+                    {/foreach}
+                </select> 
+                <select class="small" id="city_id" name="city_id">  
+                    {if !$city_id}
+                    <option value="0">--选择城市--</option>  
+                    {/if}
+                    {foreach from=$city_list item=city_item}
+                        <option value="{$city_item.city_id}" {if isset($city_id) && $city_id == $city_item.city_id}selected{/if}>{$city_item.city_name}</option>  
+                    {/foreach}
+                </select> 
+                <span id="areaSelP">
+                    <select class="small" id="area_id" name="area_id">  
+                    <option value="0">--选择区域--</option>  
+                    {foreach from=$area_list item=area_item}
+                        <option value="{$area_item.area_id}" {if isset($area_id) && $area_id == $area_item.area_id}selected{/if}>{$area_item.area_name}</option>  
+                    {/foreach}
+                    </select> 
+                </span>
+                <span class="fi-help-text"></span>  
+            </div>  
+        </div>
+
+        <div class="formitems inline" id="small_area_display">  
+            <label class="fi-name"><span class="colorRed"></span></label>  
+            <div class="form-controls">  
+                <button type="submit" class="btn"><i class="gicon-search"></i>确定</button>
+                <span class="fi-help-text"></span>  
+            </div>  
+        </div>  
+
+        <div class="t-month-chart" id="month_container"></div>
+	</div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+var order_amount_stat_list = '[';
+var cost_amount_stat_list = '[';
+var day_list = '[';
+for (var i = 1; i <= {$day_num}; i ++)
+{
+	day_list = day_list + i + ',';
+}
+day_list = day_list.substring(0, day_list.length - 1);
+day_list += ']';
+
+{foreach from=$order_amount_stat_list key=key item=item}
+	order_amount_stat_list = order_amount_stat_list + {$item} + ',';
+{/foreach}
+order_amount_stat_list = order_amount_stat_list.substring(0, order_amount_stat_list.length - 1);
+order_amount_stat_list += ']';
+
+{foreach from=$cost_amount_stat_list key=key item=item}
+	cost_amount_stat_list = cost_amount_stat_list + {$item} + ',';
+{/foreach}
+cost_amount_stat_list = cost_amount_stat_list.substring(0, cost_amount_stat_list.length - 1);
+cost_amount_stat_list += ']';
+
+var d = '{$date}';
+{literal}
+$(function (){
+	/*$("#month_container").highcharts(
+		{
+		chart: { 
+            defaultSeriesType: 'line', //图表类型line(折线图), 
+            zoomType: 'x'   //x轴方向可以缩放 
+        }, 
+		"credits":{"text":"@\u542f\u535a\u8f6f\u4ef6","enabled":false,"href":"http:\/\/www.yurtree.com","position":{"align":"right","y":-10}},"legend":{"enabled":true,"layout":"vertical","align":"right","verticalAlign":"middle","borderWidth":0},"xAxis":{"categories":['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],"title":{"text":"时间"}},"title":{"text":"订单交易量统计(" + 111 + "年)"},"yAxis":{"title":{"text":"交易量"},"allowDecimals":false,"plotLines":[{"value":0,"width":1,"color":"#808080"}],"min":0},"plotOptions":{"line":{"dataLabels":{"enabled":true},"enableMouseTracking":true}},"series":[{"type":"column","name":"交易量","data":eval(cost_amount_stat_list)}]}
+	);*/
+var chart = new Highcharts.Chart({
+	chart: {
+		renderTo: 'month_container',
+		defaultSeriesType: 'line'
+	},
+	title: {
+		text: d + ' 订单统计'
+	},
+	subtitle: {
+		text: ''
+	},
+	xAxis: {
+		categories: eval(day_list)
+	},
+	yAxis: {
+		title: {
+			text: 'RMB(元)'
+		}
+	},
+	tooltip: {
+		enabled: false,
+		formatter: function() {
+			return '<b>'+ this.series.name +'</b><br/>'+
+				this.x +': '+ this.y +'°C';
+		}
+	},
+	plotOptions: {
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	},
+	series: [{
+		name: '本月销售额',
+		data: eval(order_amount_stat_list)
+	}, {
+		name: '上月销售额',
+		data: eval(cost_amount_stat_list)
+	}]
+});
+
+$("input[name=area]").click(function(){
+    showArea();
+});
+
+function showArea(){
+    switch($("input[name=area]:checked").attr("id")){
+        case "big_area":
+            $("#big_area_display").show();
+            $("#small_area_display").hide();
+        break;
+        case "small_area":
+            $('#big_area_display').hide();
+            $('#small_area_display').show();
+        break;
+        default:
+            break;
+    }
+}
+});
+
+
+
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_num_stat.css" type="text/css" />
+{/block} 
+                <input type='radio' class="area" id=““””name="area" value="big_area"   {if !isset($small_area)}checked{/if}> 大区 </input>

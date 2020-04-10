@@ -1,0 +1,104 @@
+/*helpcenter*/
+.hpct-left-listPanel{
+	width:190px;
+	overflow: hidden;
+	background-color: #f0f0f0;
+}
+.hpct-left-listPanel dl{
+	margin-bottom:1px;
+}
+.hpct-ll-title{
+	display:block;
+	background: url(/Public/Images/common/hpct_left_title.png) no-repeat #f0f0f0;
+}
+.hpct-ll-title{
+	text-indent: -9999px;
+	width:190px;
+	height: 36px;
+}
+.hpcticon{
+	position:absolute;
+	top: 10px;
+	display:block;
+	width:9px;
+	height:9px;
+	background: url(/Public/Images/common/sprite_hpct.png) no-repeat;
+	_font-size:0;
+}
+.hpcticon.arrowRight{background-position:  0px 0px;}
+.hpcticon.arrowDown{background-position:  0px -9px;}
+.hpcticon.square{background-position:  0px -18px;}
+
+.hpcticon.arrowRight,
+.hpcticon.arrowDown{right: 12px;}
+.hpcticon.square{left: 12px;}
+
+.hpct-ll-list{
+	position:relative;
+	background: #d9d9d9;
+}
+
+.hpct-ll-list a{
+	display:block;
+	text-indent: 30px;
+	height: 30px;
+	width:170px;
+	padding-right:20px;
+	line-height: 30px;
+	color: #333;
+}
+/*hpct-ll-list-sub*/
+.hpct-ll-list-sub{
+	background: #f0f0f0;
+}
+.hpct-ll-list-sub a{
+	display:block;
+	text-indent: 45px;
+	height: 28px;
+	line-height: 28px;
+	width:170px;
+	padding-right:20px;
+	color: #666;
+	background: url(/Public/Images/common/square.gif) 32px center no-repeat;
+}
+.hpct-ll-list a,
+.hpct-ll-list-sub a{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	-o-text-overflow:ellipsis;
+	overflow: hidden;
+}
+.hpct-ll-list a:hover,
+.hpct-ll-list-sub a:hover{
+	color: #f98800;
+}
+.hpct-right-article{
+	margin:0 auto;
+	padding:10px;
+	border:1px solid #dfdfdf;
+	width:768px;
+	overflow: hidden;
+	background:#fff;
+}
+/*end helpcenter*/
+
+/*bradcrumbs*/
+.comm-breadcrumbs{
+	padding:10px 0 10px 20px;
+	width:970px;
+	background: url(/Public/Images/common/home.jpg) left center no-repeat;
+}
+.comm-breadcrumbs-arrow{
+	display: inline-block;
+	margin:0 5px;
+	width:9px;
+	height:11px;
+	background: url(/Public/Images/common/arrow.png) no-repeat;
+	vertical-align: -2px;
+	*vertical-align: 2px;
+	_vertical-align: -3px;
+}
+.comm-breadcrumbs a{
+	color:#666;
+}
+/*end bradcrumbs*/

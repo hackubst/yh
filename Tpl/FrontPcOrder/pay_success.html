@@ -1,0 +1,47 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+    
+{block name="css"}
+<link rel="stylesheet" href="__PUBLIC__/Css/front/order.css">
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+   <!-- s支付结果说明 -->
+	<div class="pay-suc">
+		<div class="xg_mc">
+			<i></i>
+			<h5>您已成功支付，我们会尽快为您发货！</h5>
+		</div>
+	</div>
+   <!-- e支付结果说明 -->
+   <!-- s商品信息 -->
+	<table class="table pay-suc-table">
+		<thead>
+			<tr>
+				<th>商品名称</th>
+				<th>数量</th>
+				<th>支付金额</th>
+				<th>获得积分</th>
+			</tr>
+		</thead>
+	    <tbody>
+	      <tr>
+	        <td>3M口罩</td>
+	        <td>2</td>
+	        <td>￥20.0</td>
+	        <td>20</td>
+	      </tr>
+	    </tbody>
+	  </table>
+   <!-- e商品信息 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+{/block}

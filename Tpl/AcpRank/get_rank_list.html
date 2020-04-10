@@ -1,0 +1,295 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <!-- <div class="t-rank-tit" style="margin:10px;"><a href="/AcpGift/add_gift" class="btn btn-blue"><i class="gicon-plus white"></i>添加礼品</a></div> -->
+    <div class="tables-searchbox">
+        <form method="post">
+            <div class="mgt10">
+                <span class="tbs-txt">昵称：</span>
+                <input type="text" name="nickname" value="{$nickname}">
+
+                <span class="tbs-txt">手机号：</span>
+                <input type="text" name="mobile" value="{$mobile}">
+
+                <span "tbs-txt">排行榜时间：</span>  
+                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" id="rank_time" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+                
+
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+                <br>
+                <a href="javascript:;" class="btn btn-blue j_form" title="添加" data-id="0">添加</a>
+                <span>(排行榜根据奖励从高到低排序)</span>
+                <a href="javascript:;" class="btn btn-blue" onclick="send_rank_reward()" title="发放当天奖励">发放当天奖励</a>
+
+            </div>
+        </form>
+    </div>
+    <!--end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <!-- <col width="10%"> -->
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="15%">
+            <col width="10%">
+            <col width="10%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+        	<td>排行时间</td>
+           	<td>名次</td>
+            <td>ID</td>
+            <td>昵称</td>
+            <td>盈利金豆</td>
+            <td>排行榜奖励</td>           
+            <td>是否发放</td>
+            <td>是否领取</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$rank_list item=rank name=list}
+        <tr>
+            <td>{$rank.addtime|date_format:"%Y-%m-%d"}</td>
+            <td>{$rank.order}</td>
+            <td><a href="/AcpUser/user_detail/user_id/{$rank.user_id}" title="查看用户详情"><span style="color: blue">{$rank.id}</span></a></td>
+
+            <td>{$rank.nickname}</td>
+            <td>{$rank.win}</td>
+            <td>{$rank.reward}</td>
+            <td>{if $rank.is_send == 1}已发放{else}未发放{/if}</td>
+            <td>{if $rank.is_received == 1}已领取{elseif $rank.is_received == 0}未领取{else}已过期{/if}</td>
+            <td>
+				<a href="javascript:;" class="btn j_form" title="调整" data-id="{$rank.rank_list_id}" data-nickname="{$rank.nickname}" data-order="{$rank.order}"
+                   data-win="{$rank.win}" data-reward="{$rank.reward}">调整</a>
+
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <!-- <a href="javascript:;" onclick="Select()" class="btn btn-blue">全选</a>
+            <a href="javascript:;" onclick="Cancel()" class="btn btn-blue">取消</a> -->
+<!--             <a href="javascript:;" onclick="batch_set_enable(0)" class="btn btn-blue">下架</a>
+            <a href="javascript:;" onclick="batch_set_enable(1)" class="btn btn-blue">上架</a> -->
+            <!-- <a href="javascript:;" onclick="batch_delete_gift()" class="btn btn-blue">删除</a> -->
+        </div>
+        <div class="fr">
+            <div class="paginate">
+            {$show}
+            </div>
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+
+	$(function() {
+
+	var html='<form id="pop_demo">                                                                '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>昵称：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="nickname" name="nickname" >                                 '+
+			'		<span class="fi-help-text" id="amount_ts"></span>       	'+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>排行榜名次：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="index" name="index">                                 '+
+			'		<span class="fi-help-text" id="amount_ts">格式如: 1</span>       	'+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>盈利金豆：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="win" name="win">                                 '+
+			'		<span class="fi-help-text" id="amount_ts">格式如: 99</span>       	'+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>排行奖励：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="reward" name="reward">                                 '+
+			'		<span class="fi-help-text" id="amount_ts">格式如: 99</span>       	'+
+			'	</div>                                                                            '+
+			'</div>   																			'+
+			'</form>                                                                              ';
+			
+	$(".j_form").click(function(){
+		
+		var rank_list_id = $(this).data('id');
+		var nickname = $(this).data('nickname');
+		var order = $(this).data('order');
+		var win = $(this).data('win');
+		var reward = $(this).data('reward');
+
+		reward = reward ? reward : '';
+		rank_list_id = rank_list_id ? rank_list_id : '';
+		nickname = nickname ? nickname : '';
+		order = order ? order : '';
+		win = win ? win : '';
+
+		var html='<form id="pop_demo">                                                                '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>昵称：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="nickname" name="nickname" value='+nickname+'>                                 '+
+			'		<span class="fi-help-text" id="amount_ts"></span>       	'+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			// '<div class="formitems inline">                                                       '+
+			// '	<label class="fi-name"><span class="colorRed">*</span>排行榜名次：</label>          '+
+			// '	<div class="form-controls">                                                       '+
+			// '		<input type="text" id="index" name="index" value='+order+'>                                 '+
+			// '		<span class="fi-help-text" id="amount_ts">格式如: 1</span>       	'+
+			// '	</div>                                                                            '+
+			// '</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>盈利金豆：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="win" name="win" value='+win+'>                                 '+
+			'		<span class="fi-help-text" id="amount_ts">格式如: 99</span>       	'+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name"><span class="colorRed">*</span>排行奖励：</label>          '+
+			'	<div class="form-controls">                                                       '+
+			'		<input type="text" id="reward" name="reward" value='+reward+'>                                 '+
+			'		<span class="fi-help-text" id="amount_ts">格式如: 99</span>       	'+
+			'	</div>                                                                            '+
+			'</div>   																			'+
+			'</form>                                                                              ';
+
+
+		$.jPops.custom({
+			title:"调整",
+			content:html,
+			callback:function(r){
+				acp.popFormStatus=false;//弹窗表单验证状态
+				if(r){
+					$.validator.setDefaults({
+						submitHandler: function() {
+							acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+							var win=$("#jpops #win").val();
+							var reward=$("#jpops #reward").val();
+							var nickname=$("#jpops #nickname").val();
+							var index=$("#jpops #index").val();
+							var rank_time=$("#rank_time").val();
+							
+							$.ajax({
+								url : '/AcpRank/set_rank', 
+								type : 'POST', 
+								dataType : 'JSON',
+								timeout : 1000,
+								data : {action : "set",rank_list_id : rank_list_id,win : win,reward : reward,nickname : nickname,index : index,rank_time : rank_time},
+								error : function() {
+									$.jPops.message({title:"操作提示",content: "操作失败请重试",timing:3000});
+								},
+								success : function(result) {
+									if(result.code == 200)
+									{
+										$.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+										//刷新页面
+										setTimeout(function(){window.location.reload() },2000);
+									}
+									else
+									{
+										$.jPops.message({title:"操作提示",content: result.msg,timing:3000});
+									}
+								}
+							});
+							
+						}
+					});
+
+					//表单验证规则
+					$("#pop_demo").validate({
+						rules: {
+							amount: {required: true}
+						},
+						messages: {
+							amount: {required: "请输入变动金额", check_float: "格式如: 99.00 或 99.99"}
+						},
+						errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+						success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+					});
+
+					//模拟提交表单
+					$("#pop_demo").submit();
+
+					return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+				}
+				else{//点击取消按钮执行的事件
+					return true;
+				}
+			}
+			
+		});
+	})
+ });
+
+	function send_rank_reward() {
+        $.jPops.confirm(
+            {
+                title:"提示",
+                content:"您确定要执行该操作吗？",
+                okBtnTxt:"确定",
+                cancelBtnTxt:"取消",
+                callback:function(r)
+                {
+                    if(r)
+                    {
+                        $.post('/AcpRank/send_rank_reward', {}, function(data, textStatus)
+                        {
+                            if (data == 'success')
+                            {
+                                alert('恭喜您，发放成功！');
+                                location.reload();
+                            }
+                            else
+                            {
+                                alert('对不起，发放失败');
+                            }
+                        });
+                    }
+                    return true;
+                }
+            });
+    }
+
+
+
+
+</script>
+{/literal}
+{/block}

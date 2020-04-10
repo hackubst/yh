@@ -1,0 +1,179 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+<!-- end tables-searchbox -->  
+<table class="wxtables">  
+    <colgroup>  
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    </colgroup>
+    <thead>
+        <tr>  
+            <td>需求名称</td>
+            <td>用户名</td>
+            <td>希望解决时间</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>  
+    </thead>  
+	{foreach from=$user_requirement_list item=item}
+    <tbody class="combo-tbody">  
+        <tr>
+			<td>{$item.requirement_short}</td>  
+			<td>{$item.user_name}</td>  
+			<td>{$item.require_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>  
+            <td>{$item.state_name}</td>  
+            <td>  
+				<a href="/AcpRequirement/requirement_detail/id/{$item.user_requirement_id}.html" class="btn" title="详情">详情</a>  
+                {if $item.state == UserRequirementModel::UNFINISHED}
+                <a href="javascript:;" class="btn" title="解决" onclick="set_state({$item.user_requirement_id}, {UserRequirementModel::FINISHED}, {$item.user_id})">解决</a>  
+                <a href="javascript:;" class="btn" title="拒绝" onclick="set_state({$item.user_requirement_id}, {UserRequirementModel::REJECTED}, {$item.user_id})">拒绝</a>  
+                {/if}
+            </td>  
+        </tr>
+    </tbody>
+	{foreachelse}   
+    <tbody>    
+		<tr>
+			<td colspan="7">
+				没有符合条件的记录
+			</td>
+		<tr>
+    </tbody>  
+	{/foreach}
+</table>  
+<!-- end wxtables -->  
+<div class="tables-btmctrl clearfix">  
+    <!--
+    <div class="fl">  
+        <a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+        <a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+        <a href="javascript:;" onclick="batch_delete()" class="btn btn-blue">删除</a>
+    </div>  
+    -->
+    <div class="fr">  
+        <div class="paginate">
+			{$page_str} 
+        </div>  
+        <!-- end paginate -->  
+    </div>  
+</div>  
+<!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{literal}
+<script>
+//全选
+function Select(){
+    var sel=document.getElementsByName("a[]");
+    for(var i=0;i<sel.length;i++){
+        sel[i].checked=true;
+    }
+}
+//取消全选
+function Cancel(){
+    var sel=document.getElementsByName("a[]");
+    for(var i=0;i<sel.length;i++){
+        sel[i].checked=false;
+    }
+}
+
+function set_state(id, state,user_id)
+{
+	var html='';
+
+	var html='<form id="deliver_form">' + 
+			'<div class="formitems inline">'+
+				'<label class="fi-name"><span class="colorRed">*</span>消息内容：</label>'+ 
+				'<div class="form-controls">'+
+					'<textarea name="freight_name" id="freight_name" />'+
+                    '<span class="fi-help-text"> </span>'+
+				'</div>' + 
+			'</div>'+
+		'</form>';
+	
+	$.jPops.custom({
+		title:"需求接纳信息",  
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+			    var refund_total  = $('#freight_name').val();
+
+				$.validator.setDefaults(
+				{
+					//表单验证通过后的处理，异步提交表单
+					submitHandler: function()
+					{
+						$.post('/AcpRequirement/set_state',{"id":id, "content":refund_total,"state":state,"user_id": user_id},function(data)
+						{
+							if (data == 'success')
+							{
+								alert('恭喜您，操作成功');
+								location.reload();
+							}
+							else
+							{
+								alert('对不起，操作失败');
+							}
+						})
+						acp.batchDeliverFormStatus = true;
+					}
+				});
+			
+				//表单验证规则
+				$("#deliver_form").validate(
+				{
+					rules: 
+					{
+						freight_name: 
+						{
+							required: true,
+						},
+					},
+					messages: 
+					{
+						freight_name: 
+						{
+							required: "对不起，请填写备注内容",
+						},
+					},
+					errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+					success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+				});
+
+				//模拟提交表单
+				$("#deliver_form").submit();
+				return acp.batchDeliverFormStatus;
+			}
+			else
+			{
+				return true;  
+			}
+		}
+    });  	
+}
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link type="text/css" rel="stylesheet" href="__ACPCSS__/tip.css" />
+{literal}
+<style>
+.PageNext{page-break-after: always; height:1px;}
+</style>
+{/literal}
+{/block} 

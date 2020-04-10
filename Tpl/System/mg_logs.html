@@ -1,0 +1,96 @@
+{extends file="../acp.html"}
+{block name="title"}{$head_title}{/block} 
+{block name="content"}
+<div class="path_css">当前位置：<a href="__APP__/acp/index">后台管理首页</a> > {$head_title}</div>
+<div class="show_notice">带 <span class="cRed">*</span> 号的项目为必填项</div>
+<div class="blank10"></div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<form action="__APP__/system/mg_logs" method="post" name="search">
+  <tr>
+    <td align="left" height="40">&nbsp;
+    数据表名：<input name="tb_name" type="text" value="{$tb_name}" />&nbsp;&nbsp;&nbsp;&nbsp;
+    数据ID：<input name="tb_id" type="text" value="{$tb_id}" />&nbsp;&nbsp;&nbsp;&nbsp;
+    操作者用户名或ID：<input name="op_key" type="text" value="{$op_key}" />&nbsp;&nbsp;&nbsp;&nbsp;
+    受影响的用户名或ID：<input name="change_key" type="text" value="{$change_key}" /><div class="blank10"></div>&nbsp;
+	状态：<span class="select" style="width:120px; height:20px;"><select style="width:122px; height:28px;" name="op_type">
+	<option value="0">所有类型</option>
+	<option value="1"{if $op_type == 1} selected="selected"{/if}>增加</option>
+	<option value="2"{if $op_type == 2} selected="selected"{/if}>修改</option>
+	<option value="3"{if $op_type == 3} selected="selected"{/if}>删除</option>
+	<option value="4"{if $op_type == 4} selected="selected"{/if}>查看</option>
+	</select></span>&nbsp;&nbsp;&nbsp;&nbsp;
+	操作日期：{html_select_date prefix="s_" start_year=2010 display_days=false display_months=false time=$s_time}年{html_select_date display_days=false display_years=false time=$s_time month_format="%m" prefix="s_"}月{html_select_date display_years=false display_months=false time=$s_time prefix="s_"}日　至　{html_select_date start_year=2010 display_days=false display_months=false time=$e_time prefix="e_"}年{html_select_date display_days=false display_years=false time=$e_time month_format="%m" prefix="e_"}月{html_select_date display_years=false display_months=false time=$e_time prefix="e_"}日&nbsp;&nbsp;&nbsp;&nbsp;
+	<input name="search_b" type="submit" class="submit_b" value="统计" style="margin:0" />
+	</td>
+  </tr>
+</form>
+</table>
+
+<div class="blank10"></div>
+
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="1" class="table_list_bg">
+  <tr align="left" bgcolor="#ffffff"> 
+	<td colspan="50" align="right" style="padding:5px;">{$page_str}</td>
+  </tr>
+  <tr height=25 class="table_list_bg"> 
+	<td align="center"><strong>ID</strong></td>
+	<td align="center"><strong>日志</strong></td>
+	<td align="center"><strong>数据表名</strong></td>
+	<td align="center"><strong>数据ID</strong></td>
+	<td align="center"><strong>操作时间</strong></td>
+	<td align="center"><strong>操作类型</strong></td>
+	<td align="center"><strong>操作者</strong></td>
+	<td align="center"><strong>受影响用户</strong></td>
+	<td align="center"><strong>IP</strong></td>
+  </tr>
+{section name=row loop=$m_list}
+  <tr {if $smarty.section.row.index % 2}class="table_color_bg"{else}class="table_blank_bg"{/if} id="tr_{$smarty.section.row.index}" onMouseOver="sbar('tr_{$smarty.section.row.index}', '#DDFF88');" onMouseOut="sbar('tr_{$smarty.section.row.index}', '');" height=25> 
+	<td align="center">{$m_list[row].log_id}</td>
+	<td align="left" style="padding-left:10px;">
+{if $m_list[row].mark|count_characters:true > 50}
+<span style="display:inline-block; text-align:center; vertical-align:middle; width:14px; height:14px; border:1px solid #999; cursor:pointer" id="zk_ss_{$smarty.section.row.index}" onclick="zk_ss('{$smarty.section.row.index}');">+</span>
+<span id="ss_c_{$smarty.section.row.index}">{$m_list[row].mark|truncate:50:"...":true}</span>
+<span id="zk_c_{$smarty.section.row.index}" style="display:none">{$m_list[row].mark}</span>
+{else}
+{$m_list[row].mark}
+{/if}
+    </td>
+	<td align="center">{$m_list[row].tb_name}</td>
+	<td align="center">{$m_list[row].tb_id}</td>
+	<td align="center">{$m_list[row].op_date_time}</td>
+	<td align="center">{if $m_list[row].op_type == 1}增加{/if}{if $m_list[row].op_type == 2}修改{/if}{if $m_list[row].op_type == 3}删除{/if}{if $m_list[row].op_type == 4}查看{/if}</td>
+	<td align="center">{$m_list[row].op_user_id}{if $m_list[row].linkman}（{$m_list[row].linkman}）{/if}</td>
+	<td align="center">{if $m_list[row].change_user_id}{$m_list[row].change_user_id}{/if}{if $m_list[row].change_linkman}（{$m_list[row].change_linkman}）{/if}</td>
+	<td align="center">{$m_list[row].ip}</td>
+  </tr>
+{/section}
+  <tr align="left" bgcolor="#ffffff"> 
+	<td colspan="50" align="right" style="padding:5px;">{$page_str}</td>
+  </tr>
+</table>
+
+
+
+{/block} 
+
+{block name="script"}
+{$smarty.block.parent}
+{literal}
+<script language="JavaScript">
+function zk_ss(v) {
+	var obj = document.getElementById('zk_ss_' + v);
+	var mv = obj.innerHTML;
+	if (mv == '+') {
+		obj.innerHTML = '-';
+		document.getElementById('ss_c_' + v).style.display = 'none';
+		document.getElementById('zk_c_' + v).style.display = '';
+	} else {
+		obj.innerHTML = '+';
+		document.getElementById('ss_c_' + v).style.display = '';
+		document.getElementById('zk_c_' + v).style.display = 'none';
+	}
+}
+</script>
+{/literal}
+{/block} 

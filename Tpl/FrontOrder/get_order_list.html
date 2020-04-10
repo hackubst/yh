@@ -1,0 +1,120 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order_new.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<div id="load_wrapper">
+	<div id="scroller">
+		<ul class="tab clearfix">
+			<li class="fl{if $opt == 'all'} active{/if}" id="all_order">
+				<a href="{$all_order_link}">全部</a>
+			</li>
+			<li class="fl{if $opt == 'pre_pay'} active{/if}" id="n_pay">
+					<a href="{$pre_pay_order_link}">
+						待支付
+						{if $pre_pay_order_num}<span class="num" id="payDeaLNum">{$pre_pay_order_num}</span>{/if}
+					</a>
+			</li>
+			<li class="fl{if $opt == 'payed'} active{/if}" id="n_send">
+					<a href="{$pre_deliver_order_link}">
+						待发货
+						{if $pre_deliver_order_num}<span class="num" id="receiveDeaLNum">{$pre_deliver_order_num}</span>{/if}
+					</a>
+			</li>
+			<li class="fl{if $opt == 'delivered'} active{/if}" id="n_query">
+					<a href="{$pre_confirm_order_link}">
+						待确认
+						{if $pre_confirm_order_num}<span class="num" id="queryDeaLNum">{$pre_confirm_order_num}</span>{/if}
+					</a>
+			</li>
+		</ul>
+		
+		<div class="main" id="new_list">
+			{foreach from=$order_list item=order}
+			<div class="box">
+				<a href="{$order_detail_link}{$order.order_id}">
+				<div class="title clearfix">
+					<p class="fl">下单时间:{$order.addtime}</p>
+					<span class="fr">{$order.order_status_name}</span>
+				</div>
+				<ul class="img_box clearfix">
+					{foreach from=$order.item_list item=item}
+					<li class="fl">
+						<img src="{$item.small_pic}" onerror="no_pic(this);"/>
+						<p class="txt_limit">{$item.item_name}</p>
+					</li>
+					{/foreach}
+				</ul>
+				{if $order.send_way}
+				<div class="address">
+					<p>门店:{$order.send_way}</p>
+				</div>
+				{/if}
+				</a>
+				<div class="price clearfix">
+					<p class="fr"><!-- 共<span>4</span>件商品 -->&nbsp;合计:<i>&nbsp;&yen;&nbsp;{$order.pay_amount}</i>{if $order.express_fee != 0.00}(含配送费&nbsp;&yen;&nbsp;{$order.express_fee}){/if}</p>
+					{if $order.order_status == OrderModel::PRE_PAY}
+						<a href="javascript:;" onclick="goPay({$order.order_id});" class="btn fr"> 去支付 </a>
+					{elseif $order.order_status == OrderModel::DELIVERED}
+						<a href="javascript:;" class="btn fr" onclick="confirm_order({$order.order_id}, {OrderModel::CONFIRMED})"> 确认收货 </a>
+					{elseif $order.order_status == OrderModel::CONFIRMED}
+						<a href="{$assessment_link}/order_id/{$order.order_id}" class="btn fr">评价</a>
+					{/if}	
+				</div>
+			</div>
+			{/foreach}
+		</div>
+		<div id="pullUp" style="margin-bottom: 3rem;">
+			<span class="pullUpIcon index jiazaizhong3x"></span><span class="pullUpLabel">上拉加载...</span>
+		</div>
+	</div>
+</div>
+
+
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="__PUBLIC__/Js/front/iscroll.js" ></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/order_list.js" ></script>
+<script src="__PUBLIC__/Js/front/order.js?version={$version}"></script>
+<script>
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+var item_name = '{$item_name}';
+var opt = '{$opt}';
+var pre_pay = '{$pre_pay}';
+var delivered = '{$delivered}';
+var confirmed = '{$confirmed}';
+var order_id = 0; 
+{literal}
+function no_pic(obj) {
+    obj.setAttribute("src", "/Public/Images/front/default.png");
+}
+
+function confirm_order(o_id, confirmed)
+{
+	order_id = o_id;
+	confirm("您确认要确认收货吗？", "set_order_state(order_id, confirmed)");
+	/*if (confirm("您确认要确认收货吗？"))
+	{
+		set_order_state(order_id, confirmed);
+	}*/
+}
+
+function search()
+{
+	if ($('#item_name').val())
+	{
+		$('#searchForm').submit();
+	}
+}
+
+</script>       
+{/literal}
+{/block}

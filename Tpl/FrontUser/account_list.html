@@ -1,0 +1,110 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/loading.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/list_style2.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--所有记录 -->
+
+<div id="load_wrapper">
+  <div id="scroller" style="padding-bottom: 2.4rem;">
+    <ul class="main" id="new_list">
+      {foreach from=$account_list item=account}
+      <li>
+        <div class="header clearfix">
+          <p class="fl">{$account.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</p>
+          <span class="fr">{$account.change_type}</span>
+        </div>
+        <div class="cont">
+          <h1>&yen;{$account.amount_in}</h1>
+          <div class="cont_top clearfix">
+            <p class="fl">变动前金额:</p>
+            <span class="fl">{$account.amount_before_pay}</span>
+          </div>
+          <div class="cont_top clearfix">
+            <p class="fl">变动后金额:</p>
+            <span class="fl">{$account.amount_after_pay}</span>
+          </div>
+        </div>
+        <div class="footer">
+          {if $account.order_sn}
+          <div class="footer_cont">
+            <p>订单号:</p>
+            <span>{$account.order_sn}</span>
+          </div>
+          {/if}
+          <div class="footer_cont">
+            <p>操作人:</p>
+            <span>{$account.operater}</span>
+          </div>
+          <div class="footer_cont">
+            <p>备注:</p>
+            <span>{$account.remark}</span>
+          </div>
+        </div>
+      </li>
+      {/foreach}
+    </ul>
+    <div id="pullUp">
+      <span class="pullUpLabel">上拉加载...</span>
+    </div>
+  </div>
+</div>
+{if !$account_list}
+<div class="dlist_error"> —————— &nbsp;&nbsp;暂时没有记录&nbsp;&nbsp;—————— </div>
+{/if}
+{/block}
+{block name="js"}
+<script type="text/javascript" src="__PUBLIC__/Js/front/iscroll.js"></script>
+<script type="text/javascript">
+var firstRow = parseInt('{$firstRow}');
+var total = parseInt('{$total}');
+var change_type = parseInt('{$change_type}');
+{literal}
+// $(function(){  
+//     var range = 500; //距下边界长度/单位px  
+//     var elemt = 500; //插入元素高度/单位px  
+//     var num = firstRow;  
+//     var totalheight = 0;  
+//     var main = $("#going_list"); //主体元素  
+//     $(window).scroll(function(){  
+//       var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+//       totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+//       if(($(window).height()+range) <= totalheight  && total > num)
+//       {  
+//         num = parseInt(num) + parseInt(firstRow);
+//         //获取商品列表
+//         $.post('/FrontUser/get_account_list', {"firstRow":num - parseInt(firstRow),"change_type":change_type}, function(data, textStatus)
+//          {
+//           if (data != 'failure')
+//           {
+//             var len = data.length;
+//             console.log(len);
+//             for (i = 0; i < len; i++)
+//             {
+//             	var html = '<div class="dlink_record"><p><span>金额：</span><i>&yen;'+data[i].amount_in+'</i></p><p><span>变动前金额：</span> <em>'+data[i].amount_before_pay+'</em> </p><p> <span>变动后金额：</span> <em>'+data[i].amount_after_pay+'</em> </p><p> <span>变动时间：</span> <em>'+data[i].addtime+'</em> </p><p> <span>订单号：</span> <em>'+data[i].order_id+'</em> </p><p> <span>变动类型：</span> <em>'+data[i].change_type+'</em> </p><p> <span>操作人：</span> <em>'+data[i].operater+'</em> </p><p> <span>备注：</span> <em>'+data[i].remark+'</em> </p></div>';
+
+//                 /*if(data[i].isuse == 1){
+//                     html += '<a class="apply_btn" href="/FrontActivity/activity_apply/activity_id/'+data[i].activity_id+'">在线报名</a></div>';
+//                   }else{
+//                     html += '<a class="disable_btn apply_btn" href="javascript:void(0);">在线报名</a></div>';
+//                   }*/
+                
+//                   main.append(html);  
+//             }
+ 
+//           }
+//         }, 'json');
+//       } 
+//        else
+//       {
+//         $('#item_ending').show();
+//       }
+//     }); 
+    
+//   }); 
+</script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/item_list.js"></script>
+{/literal}
+{/block}

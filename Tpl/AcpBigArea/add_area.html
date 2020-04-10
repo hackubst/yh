@@ -1,0 +1,43 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>大区名称：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="big_area_name" id="big_area_name" value="{$big_area_info.area_name}">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>拥有省份：</label>  
+    <div class="form-controls">  
+    <div class="add-role-list">
+    <ul>
+        {foreach from=$province_list item=item}
+        <li><input type="checkbox" name="province_ids[]" id="{$item.province_id}" {if in_array($item.province_id, $big_area_provices)}checked{/if} class="che-li" value="{$item.province_id}"/><label for="{$item.province_id}">{$item.province_name}</label></li>
+        {/foreach}
+    </ul>
+    </div>  
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="add" />
+        <button type="submit" class="btn btn-blue" name="act" value="submit"><i class="gicon-check white"></i>添加</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpRole/add_role.css" type="text/css" />
+{/block}

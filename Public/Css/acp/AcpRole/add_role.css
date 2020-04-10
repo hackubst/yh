@@ -1,0 +1,8 @@
+.add_role_box{overflow:hidden; margin-left:180px; padding:20px 0;}
+.add-role-list{ width:800px; border:#ddd solid 1px; padding:10px; position:relative; margin-bottom:35px;}
+.add-role-tit{ background:#FFF; padding:0 5px; position:absolute; top:-10px; left:10px;}
+.add-role-list ul{ overflow:hidden; display:block;}
+.add-role-list ul li{ float:left; width:140px; height:30px; line-height:30px; overflow:hidden; margin-left:30px; display:inline;}
+.add-role-list ul li label{ float:left; color:#666; margin-left:4px; vertical-align:middle;}
+.add-role-list ul li .che-li{ float:left; margin-top:8px;}
+.t-set-baocun{ margin-left:180px;}

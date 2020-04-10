@@ -1,0 +1,128 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/collect.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+
+<div class="wx_wrap">
+		<!-- S 导航 -->
+    <div class="my_nav">
+        <ul id="nav">
+			<li class="order_nav{if $state == 1} cur{/if}" id="going_nav">
+				<a href="{$my_plant_link}1">
+                    进行中
+                    <span class="num" id="goingNum">
+						{if $going_num}{$going_num}{/if}
+                    </span>
+                </a>
+            </li>
+            <li class="order_nav{if $state == 2} cur{/if}" id="complete_nav">
+				<a href="{$my_plant_link}2">
+                    已完成
+                    <span class="num" id="completeNum">
+						{if $complete_num} {$complete_num}{/if}
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+     <!-- E 导航 -->
+    <ul id="going_list" class="mod_list collect_list">
+	{foreach from=$planter_seed_list item=seed}
+        <li>
+			<a href="{if $state == 1}{$main_home_link}{$seed.planter_seed_id}{else}{$my_plant_detail_link}{$seed.planter_seed_id}{/if}">
+            	<div class="list_inner">
+					<div class="photo">
+						<img src="{$seed.base_pic}" alt="{$seed.item_name}">
+					</div>
+					<div class="info">
+						<p class="title"> {$seed.item_name} </p>
+						<p class="sku" style="display:"> 状态：{$seed.state} </p>
+						<p class="sku">
+							<span>
+								开始时间：<span id="">{$seed.plant_time|date_format:"%Y-%m-%d %H:%M:%S"}</span>
+							</span>
+						</p>
+					</div>
+            	</div>
+            </a>
+        </li>
+	{/foreach}
+    </ul>
+	{if !$planter_seed_list}
+    <div class="collect_null" id="no_goods_fav">
+        您还没有种任何植物，
+        <br>
+        快去
+        <a style="color:green;" id="collect_null_here" href="{$mall_home_link}">
+            这里
+        </a>
+        看看吧！
+    </div>
+	{/if}
+</div>
+{/block}
+
+{block name="js"}
+<script>
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+var state = '{$state}';
+{literal}   
+$(function(){
+
+		var range = 50; //距下边界长度/单位px  
+		var elemt = 500; //插入元素高度/单位px  
+		var num = firstRow;  
+		var totalheight = 0;  
+		var main = $("#going_list"); //主体元素  
+		$(window).scroll(function(){  
+			var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+			//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+			//console.log("页面的文档高度 ："+$(document).height());  
+			//console.log('浏览器的高度：'+$(window).height());  
+			totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+			if(($(document).height()-range) <= totalheight  && total > num)
+			{  
+				num = parseInt(num) + parseInt(firstRow);
+				//获取植物列表
+				$.post('/FrontPlanter/get_seed_list', {"firstRow":num - parseInt(firstRow), "state":state}, function(data, textStatus) 
+				 {
+					if (data != 'failure')
+					{
+						var len = data.length;
+						for (i = 0; i < len; i++)
+						{
+							var html = '<li> <a href="';
+							if (state == 1)
+							{
+								html += '/FrontControl/main_home/planter_seed_id/' + data[i].planter_seed_id;
+							}
+							else
+							{
+								html += '/FrontPlanter/my_plant_detail/planter_seed_id/' + data[i].planter_seed_id;
+							}
+							html += '"> <div class="list_inner"> <div class="photo"> <img src="' + data[i].base_pic + '" alt="' + data[i].item_name + '"> </div> <div class="info"> <p class="title"> ' + data[i].item_name + ' </p> <p class="sku" style="display:"> 状态：' + data[i].state + ' </p> <p class="sku"> <span> 开始时间：<span id="">' + data[i].plant_time + '</span> </span> </p> </div> </div> </a> </li>';
+							main.append(html);
+						}
+					}
+				}, 'json');
+			}  
+		}); 
+
+ 
+	$('.order_nav').click(function(){
+		$(this).addClass("cur").siblings().removeClass("cur");
+		$(".mod_list").hide().eq($('.order_nav').index(this)).show();
+	});	
+});	
+</script>   
+{/literal}
+{/block}

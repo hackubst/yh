@@ -1,0 +1,118 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/front/group_css/base.css" />
+<link rel="stylesheet" href="/Public/Css/front/group_css/global.css" />
+{/block}
+{block name="content"}
+<header class="common_head">
+    <a class="back" id="redir_back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+    <div class="header_title{if $merchant_info.online == 0} offline{/if}">
+        {$head_title}
+    </div>
+</header>
+		<div class="header">
+            <p>{$group_buy_info.group_name}</p>
+			<p>支付后开团并邀请1人参团，人数不足自动退款，详见下方拼团玩法</p>
+		</div>
+		<div class="wire"></div>
+		<div class="purchase">
+			<div class="purchase_left">
+                <p>￥{$group_buy_info.group_price|default:9999}</p>
+                <a id="go_group">
+                    {if $is_over}已结束{else if $group_buy_info.status == 1 || $group_buy_info.status == 2}去参团{else}去开团{/if}
+				</a>
+			</div>
+			<div class="purchase_wire">
+				<p></p>
+			</div>
+			<div class="purchase_right clearfix">
+                <p>￥{$item_info.mall_price|default:9999}</p>
+                <a href="/FrontMall/item_detail/item_id/{$group_buy_info.item_id}">单独购买</a>
+			</div>
+		</div>
+		<div class="time">
+			<div class="time_center clearfix">
+				<p class="icon icon_shijian"></p>
+				<p>距本活动结束:</p>
+                <p id="rtime">{if $is_over == 1}00天00时00分00秒{else}{$last_time}{/if}</p>
+			</div>
+		</div>
+		<div class="step clearfix">
+			<p>拼团玩法</p>
+			<a href="#">查看详情</a>
+			<div class="step_div clearfix">
+				<span class="icon icon_step1"></span><p>选择商品</p>
+				<span class="icon icon_step2_no"></span><p>支付开团或参团</p>
+				<span class="icon icon_step3_no"></span><p>等待好友参团支付</p>
+				<span class="icon icon_step4_no"></span><p>达到人数团购成功</p>
+			</div>
+		</div>
+		<div class="strip"></div>
+		<div class="content">
+			<p>宝贝详情</p>
+            {$item_info.detail}
+		</div>
+        <form action="/FrontGroupBuy/go_add_group.html" id="add_btn" method="post">
+            <input type="hidden" name="group_buy_id" value="{$group_buy_info.group_buy_id}">
+        </form>
+        {/block}
+        {block name="js"}
+        <script>
+            var is_over = parseInt({$is_over});
+            console.log(is_over);
+
+            var end_date = '{$group_buy_info.end_date}';
+            if (!is_over) {
+                var cal_time = setInterval(calculate_time,1000);
+            }
+
+            function calculate_time()
+            {
+                var times ='';
+                var EndTime = new Date(end_date);
+                var NowTime = new Date();
+                var t =EndTime.getTime() - NowTime.getTime();
+
+                var days=Math.floor(t/1000/60/60/24);
+                var hours=Math.floor(t/1000/60/60%24);
+                var minutes=Math.floor(t/1000/60%60);
+                var seconds=Math.floor(t/1000%60);
+
+                //如果都为零,则停掉
+                if ((days == 0 || days < 0) && (hours == 0 || hours < 0) && (minutes == 0 || minutes < 0) && (seconds == 0 || seconds < 0)) {
+                    $("#rtime").empty();
+                    $("#rtime").html('00天00时00分00秒');
+                    clearInterval(cal_time);
+                }
+
+                days = mktime_format(days);
+                hours= mktime_format(hours);
+                minutes= mktime_format(minutes);
+                seconds= mktime_format(seconds);
+
+                times = days + '天' + hours + '时' + minutes + '分' + seconds + '秒';
+
+                $("#rtime").empty();
+                $("#rtime").html(times);
+
+            }
+
+            function mktime_format(time)
+            {
+                if (time < 10) {
+                    return '0' + time;
+                    } else {
+                    return time;
+                }
+            }
+
+            $('#go_group').click(function(){
+                if (!is_over) 
+                {
+                    $('#add_btn').submit();
+                }
+            });
+
+        </script>
+        {/block}

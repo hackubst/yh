@@ -1,0 +1,128 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form name="form1" id="form1" action="" method="post">
+<div class="formitems inline">  
+	<label class="fi-name">物流公司：</label>  
+	<div class="form-controls" style="line-height: 32px;">{$shipping_company_info.shipping_company_name}</div>  
+</div>  
+<div class="formitems inline">  
+	<label class="fi-name">默认标准重量：</label>  
+	<div class="form-controls" style="line-height: 32px;">  
+		首重重量：<u>{$shipping_company_info.start_weight}</u>&nbsp;&nbsp;续重重量：<u>{$shipping_company_info.added_weight}</u>
+	</div>  
+</div>
+<div class="formitems inline">  
+	<label class="fi-name">默认标准费用：</label>  
+	<div class="form-controls">  
+		首重费用：<u>{$shipping_company_info.start_weight_price}</u>&nbsp;&nbsp;续重费用：<u>{$shipping_company_info.added_weight_price}</u>
+	</div>
+</div>  
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>重量设置：</label>  
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 15px;">  
+		<label style="vertical-align: baseline;">首重重量：</label>
+		<input name="start_weight" id="start_weight" class="mini" />
+		<span class="fi-help-text">单位：千克</span>
+	</div>
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 0;">
+		<label style="vertical-align: baseline;">续重重量：</label>
+		<input name="added_weight" id="added_weight" class="mini" />
+		<span class="fi-help-text">单位：千克</span>
+	</div>  
+</div>  
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>配送费用：</label>  
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 15px;">  
+		<label style="vertical-align: baseline;">首重费用：</label>
+		<input type="text" placeholder="" class="mini" name="start_weight_price" id="start_weight_price" />
+		<span class="fi-help-text">单位：元</span>
+	</div>  
+	<div class="form-controls" style="vertical-align: top; display: inline-block; margin-left: 0;">  
+		<label style="vertical-align: baseline;">续重费用：</label>
+		<input type="text" placeholder="" class="mini" name="added_weight_price" id="added_weight_price" />
+		<span class="fi-help-text">单位：元</span>
+	</div>  
+</div>  
+<div class="formitems inline">
+	<label class="fi-name"><span class="colorRed">*</span>配送区域设置：</label>
+	<div class="form-controls">
+		<textarea name="province_text" id="province_text"></textarea>
+		<span class="fi-help-text">点击选择配送区域</span>
+	</div>
+</div>
+<div class="formitems inline"> 
+	<div class="form-controls"> 
+		<input type="hidden" name="province_id" id="province_id" />
+		<input type="hidden" name="act" value="submit" />
+		<button type="submit" class="btn btn-blue bigbutton"><i class="gicon-check white"></i>保存</button>    
+		<button type="reset" class="btn bigbutton"><i class="gicon-repeat white"></i>重置</button>  
+	</div>
+</div> 
+</form>
+<div id="location" itemsid="" itemid="" isupdate="false">
+	<span><a href="javascript:hideLocation();"><img src="__ACPIMAGES__/close.gif"></a></span> 
+	
+	<ul id="divisions">
+	{foreach from=$address_province_list item=this}
+		<li>
+			<input id="divisions_{$this.province_id}" type="checkbox" value="{$this.province_id}" />
+			<label for="divisions_{$this.province_id}">{$this.province_name}</label>
+		</li>
+	{/foreach}
+	</ul>
+	<hr>
+
+	<div>
+		<input type="button" onclick="doSelectLocation();" value="确定" style="cursor: pointer;" />
+		<input type="button" onclick="hideLocation();" value="取消" style="cursor: pointer;" />
+	</div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__ACPJS__/AcpShipping/shipping_region_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<style type="text/css">
+/*location*/
+div#location{
+	border:2px #9EBEEC solid; 
+	width:450px;
+	display:none;
+	background:#FFFBE7;
+	position:absolute; 
+	top:-2000px; 
+	left:-2000px; 
+	padding:5px;
+}
+#location ul{
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	text-align:left;
+}
+#location ul li{
+	display:block;
+	float:left;
+	width:20%;
+}
+#location hr{
+	clear:both; 
+	border-top:1px #B7CCEB dashed;
+}
+div#location div{
+	clear:both; 
+	width:100%; 
+	height:24px;
+}
+div#location span{
+	display:block; 
+	position:absolute; 
+	right:5px; 
+	top:5px;
+}
+</style>
+{/block}

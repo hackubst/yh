@@ -1,0 +1,225 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<div class="t-detail-goods-tit mag">订单情况：</div>
+    <div class="t-detail-goods-con t-border">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="20%">  
+                <col width="80%">   
+            </colgroup>  
+            <tbody>  
+                <tr>  
+                    <td class="tables-form-title">订单编号：</td>  
+					<td><a href="" title="点击查看原始订单" target="_blank">{$order_info.order_sn}</a></td>   
+                </tr> 
+                <tr>  
+                    <td class="tables-form-title">当前状态：</td>  
+					<td>{$order_info.order_status}</td> 
+                </tr> 
+                <tr>  
+                    <td class="tables-form-title">下单时间：</td>  
+					<td>{$order_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>   
+                </tr>  
+                <tr>  
+                    <td class="tables-form-title">商品金额：</td>  
+					<td>{$order_info.total_amount} 元</td> 
+                </tr>
+                <tr>
+                    <td class="tables-form-title">快递金额：</td>  
+					<td>{$order_info.express_fee} 元</td> 
+                </tr>
+                <tr>
+                    <td class="tables-form-title">订单实付款：</td>  
+					<td>{$order_info.pay_amount} 元</td> 
+                </tr>
+
+            </tbody>  
+        </table>   
+    </div>
+    
+    <div class="t-detail-goods-tit mag">物流信息：</div>
+    <div class="t-detail-goods-con t-border">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="20%">  
+                <col width="80%">   
+            </colgroup>  
+            <tbody>  
+                <tr>  
+                    <td class="tables-form-title">配送方式：</td>  
+					<td>{$order_info.express_company_name}{if $order_info.express_number}：{$order_info.express_number}{/if}</td> 
+                </tr> 
+                <tr>  
+                    <td class="tables-form-title">收货地址：</td>  
+					<td>{if $order_info.address}{$order_info.address}，{/if}{if $order_info.consignee}{$order_info.consignee}，{/if}{if $order_info.mobile}{$order_info.mobile}{/if}</td> 
+                </tr> 
+               
+                {if $order_info.user_remark != '' }
+                <tr>  
+                    <td class="tables-form-title">买家留言：</td>  
+					<td>{$order_info.user_remark}</td> 
+                </tr>  
+                {/if}
+            </tbody>  
+        </table>   
+    </div>
+
+	<div class="t-detail-goods-tit mag">{$operate_type_name}情况：</div>
+    <div class="t-detail-goods-con t-border">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="20%">  
+                <col width="80%">   
+            </colgroup>  
+            <tbody>  
+                <tr>  
+                    <td class="tables-form-title">申请时间：</td>  
+					<td>{$refund_apply_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td> 
+                </tr> 
+                <tr>  
+                    <td class="tables-form-title">{$operate_type_name}状态：</td>  
+					<td>{$refund_apply_info.status}</td> 
+                </tr> 
+                <tr>  
+                    <td class="tables-form-title">{$operate_type_name}金额：</td>  
+					<td><input type="text" placeholder="" class="mini" name="refund_money" id="refund_money" value="{$refund_apply_info.refund_money}"> <a href="javascript:;" class="btn btn-blue" onclick="saveRefundMoney({$refund_apply_info.item_refund_change_id})"><i class="gicon-check white"></i>修改</a></td> 
+                </tr> 
+                {if $refund_apply_info.express_number != ''}
+                <tr>  
+                    <td class="tables-form-title">{$operate_type_name}单号：</td>  
+					<td>{$refund_apply_info.express_number}</td> 
+                </tr>
+                {/if}
+                <tr>  
+                    <td class="tables-form-title">{$operate_type_name}理由：</td>  
+					<td>{$refund_apply_info.reason}</td> 
+                </tr>
+                {if $refund_apply_info.proof != '' }
+                <tr>  
+                    <td class="tables-form-title">截图凭证：</td>  
+					<td>
+					<a href="{$refund_apply_info.proof}" target="_blank" title="点击查看截图">
+					<img src="{$refund_apply_info.proof}" width="30" height="30" />
+					</a>
+					</td> 
+                </tr> 
+                {/if}
+                <tr>  
+                    <td class="tables-form-title">审核操作：</td>  
+					<td>{if $refund_apply_info.state == 0}
+							<div class="top-but">
+								<button type="button" class="btn btn-blue" onclick="passItemRefundChangeApply({$refund_apply_info.item_refund_change_id})">同意申请</button>  
+								<button type="button" class="btn btn-blue" onclick="refuseItemRefundChangeApply({$refund_apply_info.item_refund_change_id})">拒绝申请</button>   
+							</div>
+						{/if}
+					</td> 
+                </tr>
+                
+            </tbody>  
+        </table>   
+    </div>
+    
+    <div class="t-detail-goods-tit mag">{$operate_type_name}商品:</div>
+    <div class="t-detail-goods-con">
+    	<table class="wxtables">  
+    <colgroup>  
+        <col width="30%">
+        <col width="10%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="8%">  
+        <col width="10%"> 
+        <col width="12%"> 
+		<!--<col width="8%">-->
+    </colgroup>  
+    <thead>  
+        <tr>  
+            <td>商品名称</td>  
+            <td>规格属性</td>  
+            <td>货号</td>  
+            <td>商品价格</td>  
+            <td>购买数量</td>  
+            <td>总价</td>  
+            <td>退货数量</td>  
+        </tr>  
+    </thead>  
+    <tbody>  
+		{foreach from=$item_list item=item_info}
+		<tr>  
+            <td>  
+				<b class="pic-t"><img src="{$item_info.small_pic}" /></b>
+				<span>{$item_info.item_name}</span> 
+            </td>  
+            <td>  
+				{if $item_info.property == ''}
+					无
+				{else}
+					{$item_info.property} 
+				{/if}
+            </td>  
+			<td>{$item_info.item_sn}</td>  
+			<td>{$item_info.real_price} 元</td> 
+            <td>{$item_info.number} 件</td> 
+            <td>  
+                <span>￥</span>  
+				<span>{$item_info.totalprice} 元</span>  
+            </td>  
+            <td>{$item_info.refund_number} 件</td> 
+        </tr>  
+		{/foreach}
+    </tbody>  
+	</table>  
+    </div>
+{/block} 
+
+{block name="js"}
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<script src="__JS__/acp/AcpOrder/order_detail.js?version={$version}"></script>
+{literal}
+<script>
+function saveRefundMoney(item_refund_change_id)
+{
+	var refund_money = $('#refund_money').val();
+	if (!refund_money)
+	{
+		$('#refund_money').next().html('<font color="red">对不起，请填写退还金额</font>');
+		return false;
+	}
+
+	refund_money = parseFloat(refund_money);
+	if (!refund_money)
+	{
+		$('#refund_money').next().html('<font color="red">对不起，退还金额格式有误</font>');
+		return false;
+	}
+
+	$.post('/AcpOrderAjax/set_refund_money',{"item_refund_change_id":item_refund_change_id,"refund_money":refund_money},function(data)
+	{
+		if (data == 'success')
+		{
+			alert('恭喜您，订单退还金额修改成功！');
+			$('#express_number').val(start_express_number);
+		}
+		else
+		{
+			alert('对不起，订单退还金额修改失败！');
+		}
+		location.reload();
+	})
+}
+</script>
+{/literal}
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_detail.css" type="text/css" />
+{literal}
+<style>
+#jpops .fi-name{width:50px;}
+#jpops .form-controls{margin-left:50px;}
+</style>
+{/literal}
+{/block} 

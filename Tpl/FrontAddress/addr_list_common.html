@@ -1,0 +1,36 @@
+<!--主内容-->
+	<div class="addr_cont" id="addr_cont">
+		<!--定位-->
+		<!-- <div class="addr_location">
+			<a href="javascript:void(0);" class="addr_loc_link" id="positionBtn">
+				<h3 id="pos_text">定位获取中...</h3>
+				<svg class="location_icon"><use xlink:href="#position"></use></svg>
+			</a>
+		</div> -->
+		<!--新增和选择微信地址-->
+		<div class="addr_add_wx">
+			<!--<a href="javascript:void(0);" onClick="calladdr();"><h3>使用我的微信地址</h3></a>-->
+			<a href="{$add_address_link}?jump={$jump_type}"><h3>新增收货地址</h3></a>
+		</div>
+		<!--地址列表-->
+		<div class="addr_history">
+			<ul id="addr_list" class="addr_list">
+			{foreach from=$user_address_list item=address}
+				<li class="{if $address.user_address_id == $user_default_addr.user_address_id}selected{/if} addr_list_li" address_id="{$address.user_address_id}">
+					<div class="def_click_area">
+						<div class="addr_name_tel">
+							<h3>{$address.realname}</h3>
+							<h3 class="addr_mobile">{$address.mobile}</h3>
+						</div>
+						<div class="addr_address">
+							<i class="default_txt">{if $address.user_address_id == $user_default_addr.user_address_id}[默认]&nbsp;{/if}</i>{$address.area_name}{$address.building_name}{$address.address}
+						</div>
+					</div>
+					<a href="{$edit_address_link}{$address.user_address_id}/jump/{$jump_type}" class="edit_addr_link"><svg class="edit_addr_icon"><use xlink:href="#edit"></use></svg></a>
+					<a href="javascript:void(0);" onclick="deleteaddress(this,{$address.user_address_id});" class="del_addr_link"><svg class="del_addr_icon"><use xlink:href="#del"></use></svg></a>
+					<input type="hidden" id="user_addr_id" value="{$address.user_address_id}">
+				</li>
+			{/foreach}
+			</ul>
+		</div>
+	</div>

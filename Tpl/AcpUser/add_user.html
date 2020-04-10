@@ -1,0 +1,130 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<!-- end tabs -->
+<div class="tabs-content" data-origin="additem">
+<form method="post" id="form_addAgent" enctype="multipart/form-data">
+
+<div class="tc" data-index="1">
+
+<!--         <div class="formitems inline">
+            <label class="fi-name"><span class="colorRed">*</span>身份：</label>
+            <div class="form-controls">
+                <div class="radio-group">
+                    <label><input type="radio" name="role_type" value="3" {if $item.role_type == 3 || empty($item.role_type)}checked {/if}>用户</label>
+                    <label><input type="radio" name="role_type" value="4" {if $item.role_type == 4}checked {/if}>代理商</label>
+                </div>
+                <span class="fi-help-text error"></span>
+            </div>
+        </div> -->
+
+        <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>昵称：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" class="small" name="nickname">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+<!--         <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>联系人：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" class="small" name="realname">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div> -->
+
+        <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>手机号：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" class="small" name="mobile" value="{$mobile}">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+        <div class="formitems inline">
+            <label class="fi-name">
+                邮箱：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" name="email" value="{$email}">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+        <div class="formitems inline">
+            <label class="fi-name">
+                QQ：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" class="small" name="qq" value="{$qq}">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+
+        <div class="formitems inline">  
+            <label class="fi-name">初始密码：</label>  
+            <div class="form-controls">  
+                <input type="password" placeholder="" name='password' id='password' value='' class="small">
+                <span class="fi-help-text">若不填写，则默认与手机号相同(不能少于6位)</span>    
+            </div>  
+        </div>
+
+        <div class="formitems inline">  
+            <label class="fi-name">重复密码：</label>  
+            <div class="form-controls">  
+                <input type="password" placeholder="" name='re_password' id='re_password' value='' class="small">
+                <span class="fi-help-text" id='notice_re_password'>当手动设置密码时，请在此处再次输入密码</span>    
+            </div>  
+        </div>
+
+
+        <!-- <div class="formitems inline">  
+            <label class="fi-name"><span class="colorRed">*</span> 选择城市：</label>  
+            <div class="form-controls">  
+                <select class="small" id="province_id" name="province_id">  
+                    <option value="0">--选择省份--</option>  
+                    {foreach from=$province_list item=province_info}
+                        <option value="{$province_info.province_id}" {if isset($province_id) && $province_id == $province_info.province_id}selected{/if}>{$province_info.province_name}</option>  
+                    {/foreach}
+                </select> 
+                <select class="small" id="city_id" name="city_id">  
+                    <option value="0">--选择城市--</option>  
+                </select> 
+                <span id="div_area">
+                    <select class="small" id="area_id" name="area_id">  
+                        <option value="0">--选择地区--</option>  
+                    </select> 
+                </span>
+                <span class="fi-help-text"></span>  
+            </div>  
+        </div> 
+ -->
+        <div class="formactions mgl180">
+            <input type="hidden" name="action" value="add">
+            <button class="btn btn-blue"><i class="gicon-ok white"></i>提交</button>
+        </div>
+</div>
+
+<!-- end 基本信息 -->
+</form>
+</div>
+{/block}
+{block name="css"}
+{literal}
+<style>
+    #jpops .fi-name{width:65px;}
+    #jpops .form-controls{margin-left:75px;}
+    #j-item-extend li{margin-bottom:10px;}
+    .edit_item_tip{font-size: 18px;color: #a0a0a0;background-color: inherit;text-decoration: none;margin: 20px 180px;}
+</style>
+{/literal}
+{/block}
+{block name="js"}
+<script type="text/javascript" src="__ACPJS__/AcpArticle/user_save.js?version={$version}"></script>
+<script src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_step1.js?version={$version}"></script>
+{/block}

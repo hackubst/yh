@@ -1,0 +1,55 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" enctype="multipart/form-data" id="add_rank">
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>等级名：</label>
+        <div class="form-controls">
+            <input type="text" name='level_name' placeholder="" class="small">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>达到该级的最小经验：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="" name='min_exp' class="small" oninput = "value=value.replace(/[^\d]/g,'')" >
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>达到该级的最大经验：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="" name='max_exp' class="small" oninput = "value=value.replace(/[^\d]/g,'')" >
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>可领取的每日救济豆：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="" name='sign_reward' class="small" oninput = "value=value.replace(/[^\d]/g,'')" >
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>卡密兑换额外支付金豆比例%：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="" name='exchange_rate' class="small"  value="{$level_info.exchange_rate}">%
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    <div class="formactions mgl180">
+        <input type="hidden" name="submit" value="add" />
+        <button tpye="button" class="btn btn-blue"><i class="gicon-ok white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpUser/edit_rank.js?version={$version}"></script>
+{/block}

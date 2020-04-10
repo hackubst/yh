@@ -1,0 +1,183 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <div class="tables-searchbox">  
+        <a href="__APP__/AcpConfig/add_menu" class="btn btn-blue"><i class="gicon-plus white"></i>添加头部菜单</a>
+    </div>  
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="15%">  
+        <col width="10%">  
+        <col width="20%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="15%">  
+        <col width="10%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>菜单文字</td>  
+                <td>菜单类型</td>  
+                <td>菜单内容</td>  
+                <td>下拉图片</td>  
+                <td>排列顺序</td>  
+                <td>是否显示</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+        {if $top_menu_list}
+		{foreach from=$top_menu_list item=this}
+            <tr>  
+                <td>{$this.title}</td>  
+                <td>{$this.menu_type}</td>  
+                <td>{$this.link_id}</td>  
+                <td>
+                {if $this.path_img != ''}
+                <a href="{$this.path_img}" target="_blank">查看图片</a>
+                {else}
+                无图片
+                {/if}
+                </td>  
+                <td class="serial"><input type="text" placeholder="1" class="mini" style="width:40px; text-align:center; border-color: #fff;" value="{$this.serial}" onblur="setSerial({$this.id}, this);" /></td>   
+                <td>
+                	<img src="__IMAGES__/ajax-loading.gif" class="hide" id="ajax-loading" />
+					{if $this.isuse == 1}
+						<a href="javascript:;" title="点击禁用" onclick="setUse({$this.id}, this);"><i class="gicon-ok black"></i></a>
+					{elseif $this.isuse == 0}
+						<a href="javascript:;" title="点击启用" onclick="setUse({$this.id}, this);"><i class="gicon-remove black"></i></a>
+					{/if}
+                </td>   
+                <td>   
+                    <a href="__APP__/AcpConfig/edit_menu/id/{$this.id}" class="btn" title="编辑">编辑</a>   
+                    <a href="javascript:;" onclick="delMenu({$this.id}, this);" class="btn" title="删除">删除</a>    
+                </td>  
+            </tr>
+		{/foreach}
+		{else}
+			<tr>
+				<td colspan="7" class="center">暂无头部菜单，你可以<a href="__APP__/AcpConfig/add_menu">添加头部菜单</a></td>
+			</tr>
+		{/if}
+		
+            
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+           
+        </div>  
+         <div class="fr">  
+            <div class="paginate">  
+                {$page_html}
+            </div>  
+            <!-- end paginate -->  
+        </div>   
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script language="javascript">
+{literal}
+$('.serial input').mouseenter(function(){
+	$(this).css('cursor', 'pointer');
+})
+.focus(function(){
+	$(this).css('cursor', 'text');
+	$(this).css('border-color', '#ccc');
+})
+.blur(function(){
+	$(this).css('border-color', '#fff');
+});
+
+function setSerial(_id, _this){
+	var _serial = $(_this).val();
+	if(_serial == _this.defaultValue){
+		return false;
+	}
+	else
+	{
+		_this.defaultValue = _serial;
+	}
+	$.ajax({
+		url: '__APP__/AcpConfigAjax/edit_menu_series',
+		data: {id: _id, serial: _serial},
+		dataType: 'json',
+		success: function(data){
+			$.jPops.alert({
+				title:"提示",
+				content:data.msg,
+				okBtnTxt:"确定",
+				callback:function(){
+					return true;
+				}
+			});
+		}
+	});
+}
+
+function delMenu(_id, _this){
+	$.jPops.confirm({
+		title:"提示",
+		content:'您确定删除这条数据吗？',
+		okBtnTxt:"确定",
+		cancelBtnTxt:"取消",
+		callback:function(r){
+			if(r){
+				$.ajax({
+					url: '__APP__/AcpConfigAjax/del_menu',
+					data: {id: _id},
+					dataType: 'json',
+					success: function(data){
+						$.jPops.message({
+							title:"提示",
+							content:data.msg,
+							callback:function(){
+								$(_this).parents('tr').fadeOut();
+								//	$(_this).parents('tr').remove();
+								return true;
+							}
+						});
+					}
+				});
+			}
+			return true;
+		}
+	});
+}
+
+
+function setUse(_id, _this){
+	$.ajax({
+		url: '__APP__/AcpConfigAjax/edit_menu_isuse',
+		data: {id: _id},
+		dataType: 'json',
+		beforeSend: function(){
+			$(_this).prev('img').removeClass('hide');
+			$(_this).children().addClass('hide');
+		},
+		success: function(data){
+			$(_this).prev('img').addClass('hide');
+			if(data.isuse === 0){
+				$(_this).children().attr('class', 'gicon-remove black')
+			}else if(data.isuse === 1){
+				$(_this).children().attr('class', 'gicon-ok black');
+			}
+		}
+	});
+}
+
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+
+{/block}

@@ -1,0 +1,79 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap">
+        <div class="tables-searchbox">
+            <form method="post">
+                <div class="mgt10">
+                    <span class="tbs-txt" >登陆时间：</span>
+                    <input type="text" id="start_time" name="start_time" value="{if $start_time}{date('Y-m-d H:i:s',$start_time)}{/if}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                    <span class="fi-text">-</span>
+                    <input type="text" id="end_time"name="end_time" value="{if $end_time}{date('Y-m-d H:i:s',$end_time)}{/if}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+
+                    <button type="submit" class="btn"><i class="gicon-search"></i>查询</button>
+                </div>
+                <div class="formitems inline" style="float:left;">
+
+
+                    <!--<div class="form-controls" style="margin-left:80px;">-->
+
+                    <!--</div>-->
+
+                </div>
+            </form>
+        </div>
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="7%">  
+            <col width="12%">  
+            <col width="15%">  
+            <col width="10%">  
+            <col width="10%">  
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>昵称</td>
+                    <td>登录时间</td>
+                    <td>状态</td>
+                    <td>IP</td>
+                    <td>IP所在城市</td>
+                </tr>  
+            </thead>  
+            <tbody>
+				{foreach from=$login_log_list item=row}
+                <tr>  
+                    <td>{$row.nickname}</td>  
+                    <td>{$row.login_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                    <td>{if $row.status == 1}登陆成功{else}登陆失败{/if}</td>
+                    <td>{$row.ip}</td>  
+                    <td>{if $row.ip_address}{$row.ip_address}{else}--{/if}</td>
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的记录</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fr">  
+                <div class="paginate">  
+                    {$page_str}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

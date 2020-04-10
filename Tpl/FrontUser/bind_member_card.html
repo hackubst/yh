@@ -1,0 +1,129 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+<script src="__PUBLIC__/Js/front/JsBarcode.all.min.js?version={$version}"></script>
+<script src="__PUBLIC__/Js/front/jquery.qrcode.min.js?version={$version}"></script>
+{literal}
+<style>
+body{background-color:#efefef;}
+.layermchild table{
+    margin: auto;
+}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<!--主内容-->
+<div class="pay_main">
+    <div class="pay_cont">
+        {if $user_info.member_card_id}
+            <div class="pay_cont_wrap">
+                <div class="rcg_top_num">
+                    <label>关联手机号：</label><span>{$user_info.mobile}</span>
+                </div>
+                {foreach from=$member_card_list item=row}
+                <div class="rcg_top_num" onclick="show_code('{$row.card_code}')">
+                    <label>会员卡卡号：</label>
+                    <span class="card_num">{$row.card_code}</span>
+                    <em class="pay_left_money">余额：&yen;{$row.current_balance|default:'0.0'}</em>
+                    <span style="float:right;margin-right:5%;">展示</span>
+                </div>
+                {/foreach}
+                <div class="submit_btn" id="sbmBtn">
+                    <a class="submit" href="{$more_card_bind_link}">增加绑定</a>
+                </div>
+            </div>
+        {else}
+        <form id="bind_form" name="bind_form" action="" method="post">
+            <div class="rcg_top_num">
+                <label>关联手机号: </label><span>{$user_info.mobile|default:"请先去个人中心设置手机号码"}</span>
+            </div>
+            <div class="rcg_top_num">
+                <label>关联卡号: </label>
+                <input type="tel" style="width:70%; font-size:15px;" placeholder="请输入会员卡号" 
+                name="num" id="member_card_id" autofocus="true"/>
+            </div>
+            <input type="hidden" name="act" value="bind">
+            {if $user_info.mobile}
+            <div class="submit_btn" id="sbmBtn">
+                <a class="submit" onclick="on_submint();">立即绑定</a>
+            </div>
+            {else}
+            {/if}
+        </form>
+        {/if}
+    </div>
+</div>
+<div id="img_container" style="display:none">
+    <table style="text-align:center;">
+        <tr><td>条形码</td></tr>
+        <tr><td><img id="barcode"></td></tr>
+        <tr><td><hr></td></tr>
+        <tr><td>二维码</td></tr>
+        <tr><td><div id="qrcode"></div></td></tr>
+    </table>
+</div>
+{/block}
+{block name="js"}
+{literal}
+<script>
+function show_error(msg) {
+    layer.open({
+        content: msg,
+        style:'width:70%;color:#000;',
+        shadeClose:true
+    });
+}
+
+function show_code(code) {
+    $('#qrcode').html('');
+    $("#barcode").JsBarcode(code,{displayValue:true, fontSize:10});
+    $('#qrcode').qrcode({
+		render	: "table",
+		text	: code,
+        width   : 180,
+        height   : 180,
+	});	
+    // $('#img_container').show();
+    layer.open({
+       content: $('#img_container').html(),
+       style:'width:100%;color:#000;',
+       shadeClose:true
+    });
+}
+
+function on_submint() {
+    var member_card_id = parseInt($('#member_card_id').val());
+    if (!member_card_id) {
+        show_error("卡号不能为空");
+    } else {
+        $.ajax({
+            url:"/FrontUser/ajax_bind_card",
+            type:"POST",
+            data:$('#bind_form').serialize(),
+            timeout:1000,
+            success:function(d){ 
+                if (d == 'success') {
+                    var lay_contact = layer.open({
+                        content: '恭喜, 绑定成功',
+                        btn:['好的'],
+                        style:'width:70%;color:#000;',
+                        yes:function() {
+                            location.reload();
+                        },
+                    });     
+                } else {
+                    show_error(d);
+                }
+            }
+        });
+
+    }
+
+}
+</script>
+{/literal}
+{/block}
+
+

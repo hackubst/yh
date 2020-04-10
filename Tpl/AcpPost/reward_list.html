@@ -1,0 +1,96 @@
+{extends file="../acp.html"}
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+	    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+          
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>打赏人</td>
+            <td>打赏时间</td>
+            <td>打赏礼物</td>
+            <td>打赏数量</td> 
+            <td>总价值</td> 
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$reword_list item=reword_item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$reword_item.id}" name="a[]"></td>
+            
+            <td>{$reword_item.username}</td>
+            <td>{$reword_item.changetime}</td>  
+            <td>{$reword_item.giftname}</td>
+            <td>{$reword_item.num}</td>
+            <td>{$reword_item.moneys}</td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+     <div class="fr">  
+        <div class="paginate">  
+            {$show}
+        </div>  
+    </div>
+
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script>
+{literal}
+delete_post = function(id)
+{
+
+	$.jPops.confirm({  
+		 title:"提示",  
+		 content:"您确定要执行这个操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r) {  
+			 if(r) {
+			 		$.post('/AcpPost/delete_post', {"id":id}, function(data, textStatus) 
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+set_top = function(id)
+{
+	$.post('/AcpPost/set_post', {"id":id}, function(data, textStatus) 
+	{
+		if($data = 'success') {
+			alert('恭喜你,操作成功');
+			window.location.reload();
+		} else {
+			alert('对不起,操作失败');
+		}
+	})
+
+}
+{/literal}
+</script>
+{/block}

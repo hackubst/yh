@@ -1,0 +1,99 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/detail.css?version={$version}">
+{literal}
+<style>
+body{background-color:white;}	
+</style>
+{/literal}
+{/block}
+{block name="content"}
+	<!--商家基本信息-->
+	<div class="shop_cont">
+	  <a class="shop_link" href="{$item_list_link}/merchant_id/{$merchant_info.merchant_id}">
+	      <div class="shop_pic_wrap">
+	        <div class="shop_pic">
+	            <img src="{$merchant_info.logo}" />
+	        </div>
+	      </div>
+	      <div class="shop_content">
+	          <div class="shop_name_wrap">
+	              <span class="shop_name_txt">{$merchant_info.shop_name}</span>	
+	          </div>
+	          <div class="shop_type fresh">
+	              {$merchant_info.class_name}               
+	          </div>
+	          <div class="shop_score_avg">
+	          	评分：<span class="detail_info_rate">{$merchant_info.score_avg}</span>
+	          </div>	
+	          <div class="shop_sale_num">
+	          	{$merchant_info.total_sales_num}销量
+	          </div>	                    
+	          <div class="shop_desc">
+	              <span class="shop_time_txt"><svg class="time_loct_icon"><use xlink:href="#madetime"></use></svg>制作时间：{$merchant_info.make_time_avg}分钟</span>
+	              <span class="shop_intime_rate">准时率：{$merchant_info.on_time_rate}%</span>
+	          </div>
+	      </div>
+	  </a>
+	</div>
+	<!--商家地址-->
+	<div class="shop_addr">
+		<a href="{$map_detail_link}/merchant_id/{$merchant_info.merchant_id}" class="shop_addr_link">
+			<span class="shop_addr_info">
+				<svg class="loct_icon"><use xlink:href="#location"></use></svg>
+				<span class="shop_addr_txt">{$merchant_info.address}</span>
+			</span>
+			<span class="shop_addr_dist">距离：{$merchant_info.distance}米</span>			
+		</a>	
+	</div>
+	<!--商家收藏和电话-->
+	<div class="shop_fav_tel">
+		<div class="shop_fav">
+			<a href="javascript:void(0);" onClick="toggleFav(this);" class="{if $is_collect}fav_checked{/if}"><i class="fav_icon"></i><span class="fav_txt">收藏店铺</span></a>
+		</div>
+		<div class="shop_tel">
+			<a href="tel:{$merchant_info.mobile}">
+				<svg class="tel_icon"><use xlink:href="#tel"></use></svg>
+				<span class="tel_txt">{$merchant_info.mobile}</span>
+			</a>
+		</div>
+	</div>
+	<!--商家优惠活动/一期无活动-->
+	<div class="shop_activity">
+		<div class="line_bg"></div>
+		<div class="shop_aty_tit">
+			优惠活动
+		</div>
+		<div class="error_cont" style="margin-top:37px;">
+	  	<div class="error_img" style="margin-top:0;"><svg class="error_icon"><use xlink:href="#error"></use></svg></div>
+	  	<div class="error_txt">暂无优惠活动</div>
+  	</div>
+	</div>
+	<!--提示层-->
+  <div id="tan_wrap"><div id="tan"></div></div>
+{/block}
+{block name="js"}
+<script src="__JS__/front/collect.js?version={$version}"></script>
+<script>
+var merchant_id = {$merchant_info.merchant_id};
+{literal}
+function toggleFav(obj){
+	var fav_checked = $(obj).hasClass("fav_checked");
+	if(fav_checked){
+		cancel_collect(merchant_id);
+		$(obj).removeClass("fav_checked");
+		var tip="取消收藏成功";
+		$("#tan").html(tip);
+		tishi();
+	}else{
+		collect(merchant_id);
+		$(obj).addClass("fav_checked");
+		var tip="添加收藏成功";
+		$("#tan").html(tip);
+		tishi();
+	}
+}	
+</script>
+{/literal}
+{/block}

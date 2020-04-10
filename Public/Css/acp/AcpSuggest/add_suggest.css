@@ -1,0 +1,10 @@
+.t-suggest{ width:100%; overflow:hidden; padding:10px;}
+.t-suggest-tit{ width:80%; height:30px; line-height:30px; color:#666; font-weight:bold; overflow:hidden; border-bottom:#ddd solid 1px; padding-left:10px; margin-bottom:30px;}
+.t-suggest-con{ overflow:hidden;}
+.t-sug-yz{ width:100%; overflow:hidden;}
+.t-name{ float:left; width:165px; text-align:right; font-weight:bold; line-height:32px;}
+.t-form-controls{ float:left; margin-left:15px; display:inline;}
+.t-mini{ float:left;}
+.t-yzm{ display:block; float:left;overflow:hidden; margin-left: 10px;}
+.t-yzm img{ width:68px; height:32px; overflow:hidden;}
+.t-but{ overflow:hidden; margin-left:180px; margin-top:20px;}

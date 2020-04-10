@@ -1,0 +1,102 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/base.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/integral_mall_home.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/swiper.3.1.2.min.css?version={$version}">
+{/block}
+{block name="content"}
+		<!-- 轮播图 -->
+		<div class="home_banner swiper-container">
+			<ul class="swiper-wrapper">
+				{foreach from=$cust_flash_list item=img}
+					<li class="swiper-slide"><a href="{$img.link}"><img src="{$img.pic}" class="swiper-lazy" onerror="no_slide_pic(this);"><div class="swiper-lazy-preloader"></div></a></li>
+				{/foreach}
+			</ul>
+			<div class="swiper-pagination"></div>
+		</div>
+		<!-- 快捷入口 -->
+		<div class="short_link">
+			<div class="short_once">
+				<a href="javascript:;">
+					<i class="int_icon integral_icon"></i>
+					<span>积分<em>{$user_info.left_integral|default:0}</em></span>
+				</a>
+			</div>
+			<div class="short_once">
+				<a href="{$integral_exchange_list_link}">
+					<i class="int_icon duihuan_icon"></i>
+					<span>兑换记录</span>
+				</a>
+			</div>
+			<div class="short_once">
+				<a href="{$integral_list_link}">
+					<i class="int_icon list_icon"></i>
+					<span>积分明细</span>
+				</a>
+			</div>
+		</div>
+		<div class="min_spacing"></div>
+
+	<!--导航栏-->
+		<ul class="home_nav5 clearfix">
+			{foreach from=$class_list item=class}
+			<a href="{$integral_item_list_link}/class_id/{$class.class_id}" class="nav_a">
+				<img src="{$class.class_icon}" data-original="{$item.pic}" class="lazyload" />
+				<p>{$class.class_name}</p>
+			</a>
+			{/foreach}
+		</ul>
+	<!--全部商品-->
+		<div class="home_title clearfix">
+			<span class="index fenlei3x"></span>
+			<p>限量抢兑</p>
+		</div>
+		<div>
+			<div>
+				<div class="home_main">
+					<ul class="home_content clearfix" id="new_list">
+						{foreach from=$integral_item_list item=item}
+						<li class="item_list_li">
+							
+							<a href="{$integral_item_detail_link}{$item.item_id}" class="content_left">
+							
+								<img src="/Public/Images/front/default.png" data-original="{$item.small_img}" class="lazyload" />
+								<p>{$item.item_name}</p>
+								<h4>{$item.integral_exchange}积分</h4>
+							</a>
+						</li>
+						{foreachelse}
+							<div style="margin:40px;text-align:center;">抱歉，暂无可兑换的商品。</div>
+						{/foreach}
+			</div>
+		</div>
+		<div class="spacing"></div>
+		{include file="$footer_path"}
+{/block}
+{block name="js"}
+<script src="__PUBLIC__/Js/front/swiper.3.1.2.jquery.min.js"></script>
+<script src="__PUBLIC__/Js/front/jquery.lazyload.min.js"></script>
+{literal}
+<script type="text/javascript">
+	function no_pic(obj) {
+	    obj.setAttribute("src", "/Public/images/front/default.png");
+	}
+	var mySwiper = new Swiper('.swiper-container', {
+		autoplay: 3000,//可选选项，自动滑动
+		pagination : '.swiper-pagination',
+		lazyLoading : true,
+	})
+	var imgW = $(".swiper-slide").width();
+	var imgH = imgW/36*11; //720*220
+	$(".swiper-slide").height(imgH);
+
+	$(function()
+	{
+		$(".lazyload").lazyload({
+			effect : "fadeIn"
+		});
+	});
+</script>
+{/literal}
+{/block}

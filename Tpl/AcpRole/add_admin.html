@@ -1,0 +1,93 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='add_admin'>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>联系人：</label>  
+    <div class="form-controls">  
+        <input type="text" name='linkman' value='' id='linkman' placeholder="" class="small"> 
+        <span class="fi-help-text"></span>   
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>登录用户名：</label>  
+    <div class="form-controls">
+    	<input type="text" name='name'  id='name' value='' class="small">
+    	<span class="fi-help-text">全站唯一</span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">初始密码：</label>  
+    <div class="form-controls">  
+        <input type="password" placeholder="" name='password' id='password' value='' class="small">
+        <span class="fi-help-text">若不填写，则默认与登录名相同(不能少于6位)</span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">重复密码：</label>  
+    <div class="form-controls">  
+        <input type="password" placeholder="" name='re_password' id='re_password' value='' class="small">
+        <span class="fi-help-text" id='notice_re_password'>当手动设置密码时，请在此处再次输入密码</span>    
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>手机：</label>  
+    <div class="form-controls">  
+        <input type="text" name='mobile' value='' id='mobile' placeholder="" class="default">
+        <span class="fi-help-text" id='notice_mobile'>手机和固话至少填写一个</span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">固话：</label>  
+    <div class="form-controls">  
+        <input type="text" name='tel' value='' id='tel' placeholder="" class="default">
+        <span class="fi-help-text"></span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>电子邮件：</label>  
+    <div class="form-controls">  
+        <input type="text" name='email' value='' id='email' placeholder="" class="default">
+        <span class="fi-help-text">必填</span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">性别：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">
+        	<label><input type="radio" name="sex" value='0' >女</label>  
+            <label><input type="radio" name="sex" value='1' checked>男</label>   
+            <label><input type="radio" name="sex" value='2' >保密</label>  
+        </div>  
+        <span class="fi-help-text"></span>
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name"><span class='colorRed'>*</span>所属角色：</label>  
+    <div class="form-controls">  
+        <select name="group"> 
+            {section name=row loop=$group_list}  
+            <option value='{$group_list[row].group_id}'>{$group_list[row].group_name}</option>	
+            {/section} 
+        </select>  
+    </div>  
+</div>
+  
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='submit' value='submit' />
+    	<input type='hidden' name='uid' value='{url_jiami($user_info.user_id)}' />
+    	<button type="submit" class="btn btn-blue" onclick='return checkAddAdmin()'><i class="gicon-ok white"></i>保存</button>  
+    	<button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> 
+    </div>  
+</div>
+</form>  
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/user_group.js?version={$version}"></script>
+{/block} 

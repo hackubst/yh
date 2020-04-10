@@ -1,0 +1,156 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/integral_item_detail.css?version={$version}">
+<link rel="stylesheet" href="__PUBLIC__/Css/front/swiper.3.1.2.min.css">
+{/block}
+{block name="content"}
+<div class="wrapper detail">
+    <!--轮播-->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {foreach from=$item_photo_list item=item_photo}
+                <div class="swiper-slide">
+                    <img data-src="{$item_photo}" onerror="no_pic(this);" class="swiper_img swiper-lazy">
+                    <div class="swiper-lazy-preloader"></div>
+                </div>
+            {/foreach}
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="name">{$item_info.item_name}</div>
+    {if $item_txt}
+    <div class="it_detail">
+        <div class="it_title"><span class="it_line_l"></span>商品简介<span class="it_line_r"></span></div>
+        <div class="item_content">{$item_txt}</div>
+    </div>
+    {/if}
+
+</div>
+
+<!--添加备注弹出层-->
+            <div class="pay_pwd_tan" id="pay_tan_fix">
+                <ul class="order_remark_cont">
+                     <li class="remark_wrap">
+                            <div class="pay_tan_tit">确定兑换吗？</div>
+                            <div class="pay_tan_num">
+                                使用积分：
+                                <i>
+                                    <label id="pay_amount_label">
+                                        {$item_info.integral_exchange}
+                                    </label>
+                                </i>
+    
+                            </div>
+                            <span>积分不足时，不足部分可用金钱</span>
+                     </li>
+                     <a herf="javascript:void(0);" onclick="submit_exchange({$item_info.integral_exchange});"><li id="cfm_ok" class="cfm_btn">确定</li></a>
+                     <a herf="javascript:void(0);" onclick="$('#pay_tan_fix').hide();$('#screenIfm').hide();"><li id="cfm_quit" class="cfm_btn">取消</li></a>
+                </ul>
+            </div>          
+            <!--添加备注层背景-->
+<!--添加备注层背景-->
+            <div id="screenIfm" style="z-index:10;" class="screenIfm" onclick="$('#fix_box').hide();$('#pay_tan_fix').hide();$(this).hide();paying=false;" style="display:none;">
+            </div>
+
+<!--底部固定购物车商品数量-->
+<div id="cart" class="cart">
+	<div class="cart_tip">
+		<div class="cart_icon_wrap">
+			单价：<em>{$item_info.integral_exchange}</em>&nbsp;积分<!-- &nbsp;+&nbsp;<em>&yen 55</em> -->
+		</div>
+	</div>
+	<div class="cart_btns" style="">
+		<a class="cart_btn_confirm" href="javascript:;"><span class="combtn inner">立即兑换</span></a>
+	</div>
+</div>
+{/block}
+{block name="js"}
+<script src="__PUBLIC__/Js/front/swiper.3.1.2.jquery.min.js"></script>
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<script>
+var integral_exchange = {$item_info.integral_exchange};
+var item_id = {$item_id};
+var paying = false;
+{literal}
+//轮播
+var isSingle = false;
+if($(".swiper-container .swiper-slide").size() == 1) 
+    isSingle = true;
+var mySwiper = new Swiper ('.swiper-container', {
+    autoplay: 4000,
+    //loop: true,
+    lazyLoading: true,
+    pagination: isSingle ? '' : '.swiper-pagination'
+});
+var clientWidth = $(window).width();
+$('.swiper-container').height(clientWidth);
+
+$('.cart_btn_confirm').click(function(){
+    $('#pay_tan_fix').show();
+    $('#screenIfm').show();
+})
+function submit_exchange(integral){
+    if(!integral){
+        return;
+
+    } 
+    if(!paying){
+        $.ajax({
+            url : "/FrontOrder/add_integral_order",
+            type:"POST",
+            dataType:"json",
+            data :{
+                integral : integral,
+                item_id : item_id,
+
+            },
+            
+            success : function(d){
+
+                switch(d.code){
+                    case 1:
+                        $("#tan").html(d.msg);
+                        tishi();
+                         paying = true;
+                        setTimeout(' location.reload()', 500);
+                        break;
+                    case 2:
+                        $("#tan").html(d.msg);
+                        tishi();
+                        break;
+                    case 3:
+                        $("#tan").html(d.msg);
+                        tishi();
+                        break;
+                    case 4:
+                        $("#tan").html(d.msg);
+                        tishi();
+                        break;
+                    case 5:
+                        $("#tan").html(d.msg);
+                        tishi();
+                        break;
+                    case 6:
+                        $("#tan").html(d.msg);
+                        tishi();
+                        break;
+                    default :
+                        $("#tan").html(d.msg);
+                        tishi();
+                        break;
+                }
+            }
+        });
+       
+    }
+}
+{/literal}
+</script>
+{/block}

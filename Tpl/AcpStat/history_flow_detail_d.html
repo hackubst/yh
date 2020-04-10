@@ -1,0 +1,98 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-n-s-top">
+    <div class="tables-searchbox">
+	<form method="post">
+		<div class="mgt10">
+			<span class="tbs-txt">选择时间：</span>
+			<input type="text" autocomplete="off" class="Wdate" name="add_time" value="{$add_time|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+			<button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+		</div>
+	</form>
+	</div>
+
+	<div class="t-month-chart" id="month_container">
+	</div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+var pv_list = '[';
+var uv_list = '[';
+{foreach from=$pv_list key=key item=item}
+	pv_list = pv_list + {$item} + ',';
+{/foreach}
+pv_list = pv_list.substring(0, pv_list.length - 1);
+pv_list += ']';
+
+{foreach from=$uv_list key=key item=item}
+	uv_list = uv_list + {$item} + ',';
+{/foreach}
+uv_list = uv_list.substring(0, uv_list.length - 1);
+uv_list += ']';
+var d = '{$date}';
+{literal}
+$(function (){
+	/*$("#month_container").highcharts(
+		{
+		chart: { 
+            defaultSeriesType: 'line', //图表类型line(折线图), 
+            zoomType: 'x'   //x轴方向可以缩放 
+        }, 
+		"credits":{"text":"@\u542f\u535a\u8f6f\u4ef6","enabled":false,"href":"http:\/\/www.yurtree.com","position":{"align":"right","y":-10}},"legend":{"enabled":true,"layout":"vertical","align":"right","verticalAlign":"middle","borderWidth":0},"xAxis":{"categories":['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],"title":{"text":"时间"}},"title":{"text":"订单交易量统计(" + 111 + "年)"},"yAxis":{"title":{"text":"交易量"},"allowDecimals":false,"plotLines":[{"value":0,"width":1,"color":"#808080"}],"min":0},"plotOptions":{"line":{"dataLabels":{"enabled":true},"enableMouseTracking":true}},"series":[{"type":"column","name":"交易量","data":eval(uv_list)}]}
+	);*/
+var chart = new Highcharts.Chart({
+	chart: {
+		renderTo: 'month_container',
+		defaultSeriesType: 'line'
+	},
+	title: {
+		text: d + ' 流量统计'
+	},
+	subtitle: {
+		text: ''
+	},
+	xAxis: {
+		categories: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
+	},
+	yAxis: {
+		title: {
+			text: 'times (次数)'
+		}
+	},
+	tooltip: {
+		enabled: false,
+		formatter: function() {
+			return '<b>'+ this.series.name +'</b><br/>'+
+				this.x +': '+ this.y +'°C';
+		}
+	},
+	plotOptions: {
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	},
+	series: [{
+		name: '浏览次数(PV)',
+		data: eval(pv_list)
+	}, {
+		name: '独立访客数(UV)',
+		data: eval(uv_list)
+	}]
+});
+});
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_num_stat.css" type="text/css" />
+{/block} 

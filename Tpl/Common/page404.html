@@ -1,0 +1,39 @@
+{extends file="../home.html"}
+{block name="title"}404{/block}
+
+{block name="content"}
+<div class="page404">
+	<div class="page404-img"></div>
+	<div class="page404-tipsPanel">
+		
+		{if $system_config.SYSTEM_OPEN}
+
+		<h2 class="page404-tips-title">抱歉，您访问的页面不存在...</h2>
+		<dl class="page404-tips">
+			<dt>最有可能的原因是：</dt>
+			<dd>
+				<ul class="page404-tips-list">
+					<li>您输入的网址可能不正确</li>
+					<li>链接可能已过期</li>
+				</ul>
+			</dd>
+		</dl>
+		{else}
+		<h2 class="page404-tips-title">抱歉，网站暂时关闭中!</h2>
+		<dl class="page404-tips">
+			<dt>原因是：</dt>
+			<dd>
+				<ul class="page404-tips-list">
+					<li>{$system_config.SYSTEM_CLOSE_REASON}</li>
+				</ul>
+			</dd>
+		</dl>
+		{/if}
+
+	</div>
+</div>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="__COMMCSS__/page404.css" />
+{/block}

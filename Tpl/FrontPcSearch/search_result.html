@@ -1,0 +1,250 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/search_panel.css?version={$version}">
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<div class="hd_bar" id="J_bar1">
+    <form action="" class="hd_search_frm hd_search_frm_focus" onsubmit="return false;" id="searchForm">
+        <input type="search" class="hd_search_txt hd_search_txt_null" id="keyWord" autocomplete="off" placeholder="搜索全部商品">
+    </form>
+    <!--div class="hd_search_tit hide" id="resFilterTipBlock"></div-->
+    <div class="hd_me">
+        <a href="javascript:" id="cancelBtn" class="hd_search_btn display-no">
+            取消
+        </a>
+        <a href="javascript:" id="filterBtn" class="hd_search_btn">
+            筛选
+        </a>
+    </div>
+</div>
+<div class="wx_wrap">
+		<div class="screen display-no" id="M_screen">
+			<ul>
+				<li><a href="">植物幼苗</a></li>
+	      <li><a href="">营养液</a></li>
+	      <li><a href="">潘朵拉魔盒</a></li>
+			</ul>
+		</div>
+
+    <div id="searchResBlock" class="">
+        <div class="s_null hide" id="sNull01">
+            <h5>
+                抱歉，没有找到符合条件的商品。
+            </h5>
+        </div>
+        <div class="s_found" id="sFound">
+            <p class="found_tip_2">
+                <!--span id="sFoundTip1" class="hide">隐藏了不相关的商品，</span-->
+                找到
+                <!--span class="letter15" id="foundKeyTip"></span-->
+                相关商品
+                <span id="totResult">
+                    397
+                </span>
+                件。
+                <span class="location" id="addName">
+                    配送至：浙江
+                </span>
+            </p>
+        </div>
+
+        <div class="mod_itemlist_small" id="itemList">
+            <div class="hproduct">
+                <a href="javascript:">
+                    <p class="cover">
+                        <img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg">
+                    </p>
+                    <p class="fn">
+                        康宝(Canbo) ZTP80A-25(H) 立式
+                        <font class="skcolor_ljg">
+                            消毒柜
+                        </font>
+                    </p>
+                    <p class="prices" id="price_664485">
+                        <strong>
+                            <em id="dp_J_664485">
+                                ￥478.00
+                            </em>
+                        </strong>
+                    </p>
+                    <p class="sku" cg="0-3-1">
+                        <span class="comment_num">
+                        	销量：
+                            <span id="com_664485">
+                                4070
+                            </span>
+                        </span>
+                        <span class="comment_rate hide">
+                            好评率90%
+                        </span>
+                        <span class="stock hide" id="stock_664485">
+                            无货
+                        </span>
+                    </p>
+                </a>
+            </div>
+
+        </div>
+        <div class="mod_itemlist_small" id="itemList">
+            <div class="hproduct">
+                <a href="javascript:">
+                    <p class="cover">
+                        <img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg">
+                    </p>
+                    <p class="fn">
+                        康宝(Canbo) ZTP80A-25(H) 立式
+                        <font class="skcolor_ljg">
+                            消毒柜
+                        </font>
+                    </p>
+                    <p class="prices" id="price_664485">
+                        <strong>
+                            <em id="dp_J_664485">
+                                ￥478.00
+                            </em>
+                        </strong>
+                    </p>
+                    <p class="sku" cg="0-3-1">
+                        <span class="comment_num">
+                        	销量：
+                            <span id="com_664485">
+                                4070
+                            </span>
+                        </span>
+                        <span class="comment_rate hide">
+                            好评率90%
+                        </span>
+                        <span class="stock hide" id="stock_664485">
+                            无货
+                        </span>
+                    </p>
+                </a>
+            </div>
+
+        </div>  
+        <div class="mod_itemlist_small" id="itemList">
+            <div class="hproduct">
+                <a href="javascript:">
+                    <p class="cover">
+                        <img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg">
+                    </p>
+                    <p class="fn">
+                        康宝(Canbo) ZTP80A-25(H) 立式
+                        <font class="skcolor_ljg">
+                            消毒柜
+                        </font>
+                    </p>
+                    <p class="prices" id="price_664485">
+                        <strong>
+                            <em id="dp_J_664485">
+                                ￥478.00
+                            </em>
+                        </strong>
+                    </p>
+                    <p class="sku" cg="0-3-1">
+                        <span class="comment_num">
+                        	销量：
+                            <span id="com_664485">
+                                4070
+                            </span>
+                        </span>
+                        <span class="comment_rate hide">
+                            好评率90%
+                        </span>
+                        <span class="stock hide" id="stock_664485">
+                            无货
+                        </span>
+                    </p>
+                </a>
+            </div>
+
+        </div>  
+        <div class="mod_itemlist_small" id="itemList">
+            <div class="hproduct">
+                <a href="javascript:">
+                    <p class="cover">
+                        <img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg">
+                    </p>
+                    <p class="fn">
+                        康宝(Canbo) ZTP80A-25(H) 立式
+                        <font class="skcolor_ljg">
+                            消毒柜
+                        </font>
+                    </p>
+                    <p class="prices" id="price_664485">
+                        <strong>
+                            <em id="dp_J_664485">
+                                ￥478.00
+                            </em>
+                        </strong>
+                    </p>
+                    <p class="sku" cg="0-3-1">
+                        <span class="comment_num">
+                        	销量：
+                            <span id="com_664485">
+                                4070
+                            </span>
+                        </span>
+                        <span class="comment_rate hide">
+                            好评率90%
+                        </span>
+                        <span class="stock hide" id="stock_664485">
+                            无货
+                        </span>
+                    </p>
+                </a>
+            </div>
+
+        </div>  
+                                     
+        <div class="s_empty hide" id="noMoreTips">
+            已无更多商品，您可以换一个关键字搜一下哦~
+        </div>
+    </div>
+</div>
+<div id="M_Mask" class="ui-mask display-no"></div>
+{/block}
+
+{block name="js"}
+{literal} 
+<script type="text/javascript">  
+	$(function(){  
+		var range = 50; //距下边界长度/单位px  
+		var elemt = 500; //插入元素高度/单位px  
+		var num = 1;  
+		var totalheight = 0;  
+		var main = $("#itemList"); //主体元素  
+		$(window).scroll(function(){  
+			var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+			//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+			//console.log("页面的文档高度 ："+$(document).height());  
+			//console.log('浏览器的高度：'+$(window).height());  
+			totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+			if(($(document).height()-range) <= totalheight) {  
+				main.append('<div class="hproduct"><a href="javascript:"><p class="cover"><img src="__PUBLIC__/Images/front/541a9d3fN12591e6d.jpg"></p><p class="fn">康宝(Canbo)ZTP80A-25(H)立式<font class="skcolor_ljg">消毒柜</font></p><p class="prices"id="price_664485"><strong><em id="dp_J_664485">￥478.00</em></strong></p><p class="sku"cg="0-3-1"><span class="comment_num">销量：<span id="com_664485">4070</span></span><span class="comment_rate hide">好评率90%</span><span class="stock hide"id="stock_664485">无货</span></p></a></div> ');  
+				num++;  
+			}  
+		}); 
+		
+		$("#filterBtn").click(function(){
+			$(this).hide().prev(".hd_search_btn").show();
+			$("#M_screen").show();
+			$("#M_Mask").show();
+		}); 
+		
+		$("#cancelBtn").click(function(){
+			$(this).hide().next(".hd_search_btn").show();
+			$("#M_screen").hide();
+			$("#M_Mask").hide();
+		});
+	});  
+</script>      
+{/literal}
+{/block}

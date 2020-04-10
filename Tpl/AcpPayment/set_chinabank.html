@@ -1,0 +1,90 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" id="payway_set_form" enctype="multipart/form-data">
+    <div class="formitems inline">
+        <label class="fi-name">支付方式名称：</label>
+        <div class="form-controls">
+			<input type="text" class="xxlarge" name="pay_name" id="pay_name" value="{$payway_info.pay_name}" disabled>
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">支付方式描述：</label>
+        <div class="form-controls">
+			<textarea name="pay_desc" id="pay_desc" class="default">{$payway_info.pay_desc}</textarea>
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">商户编号：</label>
+        <div class="form-controls">
+			<input type="text" class="xlarge" name="chinabank_account" id="chinabank_account" value="{$payway_info.pay_config.chinabank_account}">
+			<span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">MD5密钥：</label>
+        <div class="form-controls">
+			<input type="text" class="xlarge" name="chinabank_key" id="chinabank_key" value="{$payway_info.pay_config.chinabank_key}">
+			<a href="https://merchant3.chinabank.com.cn/adminMD5.js?version={$version}p" style="font-size:15px;font-weight:700;color:red;" target="_blank">获得/设置MD5密钥</a>
+			<span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>是否启用：</label>
+        <div class="form-controls">
+            <div class="radio-group">
+				<label><input type="radio" name="isuse" value="1" {if $payway_info.isuse == 1}checked{/if}>是</label>
+                <label><input type="radio" name="isuse" value="0" {if $payway_info.isuse == 0}checked{/if}>否</label>
+            </div>
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+
+    <div class="formactions mgl180">
+		<input type="hidden" name="act" value="set">
+        <button class="btn btn-blue" type="submit"><i class="gicon-ok white"></i>提交</button>
+    </div>
+
+</form>
+{/block} 
+
+{block name="js"}
+<script>
+$("#payway_set_form").validate({
+		rules: {
+			pay_desc:{
+				required: true
+			},
+			chinabank_account:{
+				required: true
+			},
+			chinabank_key:{
+				required: true
+			},
+		},
+		messages: {
+			pay_desc:{
+				required: "对不起，请填写支付方式描述"
+			},
+			chinabank_account:{
+				required: "对不起，请填写商户编号"
+			},
+			chinabank_key:{
+				required: "对不起，请填写MD5密钥"
+			}
+		},
+		errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+		success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+	});
+</script>
+{/block}
+
+{block name="css"}
+{/block}

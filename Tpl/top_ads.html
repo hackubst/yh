@@ -1,0 +1,9 @@
+{if $top_ads_list}
+<div id="top-ads" class="top-ads">
+	{foreach from=$top_ads_list item=item}
+	<a class="top-ads-wrap" href="{$item.link}">
+		<img src="{$item.pic}" alt="{$item.title}" class="top-ads-img">
+	</a>
+	{/foreach}
+</div>
+{/if}

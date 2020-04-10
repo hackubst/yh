@@ -1,0 +1,122 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <table class="wxtables">
+        <colgroup>
+            <col width="40%">
+            <col width="40%">
+            <col width="20%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>系列名称</td>
+            <td>是否启用</td>
+            <td>操作</td>
+
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$game_series_list item=v}
+        <tr>
+
+            <td>{$v.game_series_name}</td>
+            <td>{if $v.isuse == 1}启用{else}禁用{/if}</td>
+            <td>
+                <a href="/AcpGame/game_type_list/series_id/{$v.game_series_id}" class="btn" title="查看游戏类型">游戏类型</a>
+                {if $v.isuse == 1}
+                <a href="javascript:;" class="btn" title="禁用"
+                   onclick="set_enable({$v.game_series_id}, 0)">禁用</a>
+                {else}
+                <a href="javascript:;" class="btn" title="启用"
+                   onclick="set_enable({$v.game_series_id}, 1)">启用</a>
+                {/if}
+
+                <!--<a href="javascript:;" class="btn" title="卡奖重启"-->
+                   <!--onclick="restart({$v.game_series_id})">卡奖重启</a>-->
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+
+
+
+function set_enable(id, enable)
+{
+    var opt = enable ? '启用':'禁用';
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定要执行这个操作吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/series_set_enable', {"series_id":id, "opt":enable}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您，' + opt + '成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，'+ opt +'失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+
+function restart(id)
+{
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定要重启卡奖这个操作吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/restart_game', {"series_id":id}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您,重启成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，重启失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+
+</script>
+{/literal}
+{/block}

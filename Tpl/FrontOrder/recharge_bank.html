@@ -1,0 +1,99 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+    
+{block name="css"}
+<link rel="stylesheet" href="__PUBLIC__/Css/front/order.css">
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+   <!-- s支付说明 -->
+	<div class="xg_jd_notes">
+		<div class="xg_mc">
+			<!-- <i></i> -->
+			<h1>充值金额：<b class="red">{$amount}</b>&nbsp;元</h1>
+		</div>
+	</div>
+   <!-- e支付说明 -->
+   <!-- s选择支付方式 -->
+	<div class="pay-box cle" id="pay-box">
+			
+		<div style="clear:both;"></div>			
+
+		<dl>
+			<dt>银行卡：</dt>
+			<dd class="union_bank">
+				{foreach from=$bank_list key=key item=bank}
+					<em>
+						<input type="radio" name="pay_tag" id="pay_tag{$bank.payway_id}" value="{$bank.pay_tag}"/>
+						<label for="pay_tag{$bank.payway_id}"><img src="{$bank.pay_logo}" /></label>
+					</em>
+				{/foreach}
+			</dd>
+		</dl>
+    </div>
+    <div class="form-button fr mt20" id="pay">去充值</div>
+
+   <!-- e选择支付方式 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+var amount = parseFloat('{$amount}');
+{literal}
+	$('#pay').click(function(){
+		var pay_tag = $('input[name="pay_tag"]:checked').val();
+		if (pay_tag == undefined)
+		{
+			alert('请选择支付方式');
+			return false;
+		}
+		if (pay_tag == 'alipay')
+		{
+			location.href = alipay_link;
+		}
+		else if (pay_tag == 'chinabank')
+		{
+			$('#chinabank_pay_form').submit();
+		}
+		else if (pay_tag == 'wallet')
+		{
+			$('#wallet_pay_form').submit();
+		}
+		else
+		{
+			//获取链接
+			$.ajax({
+				url:"/FrontOrder/getPayBankLink",
+				type:"POST",
+				dataType:"json",
+				data:{
+					pay_tag: pay_tag,
+					amount: amount,
+				},
+				timeout:10000,
+				success:function(d){
+					if(d) {
+						if(d.code == 0)
+						{
+							//返回成功，代码写这里
+							location.href = d.link;
+						}
+						else
+						{
+							alert(d.msg);
+						}
+					}
+				}
+			});
+		}
+	});
+</script>
+{/literal}
+{/block}

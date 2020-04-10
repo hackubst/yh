@@ -1,0 +1,65 @@
+{extends file="../home.html"}
+{block name="title"}用户登录{/block}
+
+{block name="content"}
+<div class="clearfix pdt50">
+	<div class="comm-breadcrumbs">
+		<a href="/">返回首页</a>
+		<span class="comm-breadcrumbs-arrow"></span>
+	</div>
+</div>
+<!--end comm-breadcrumbs-->
+
+<div class="userPanel clearfix">
+	<div class="userPanel-left fl">
+		<form id="form_login" action='' method='post'>
+			<h2 class="userPanel-left-title">用户登录<span>LOGIN</span></h2>
+			<div class="formitems">  
+			    <label class="fi-name" placeholder="" for="username">账号</label>  
+				<input type="text" placeholder="您的登录账号" id="username" name="username">  
+			    <span class="fi-help-text hide">用户名至少为6位</span> 
+			</div>
+			<div class="formitems">  
+			    <label class="fi-name" for="password">密码</label>  
+			    <input type="password" id="password" name="password">
+			    <span class="fi-help-text hide">密码至少为6位</span>
+			    <a href="user_pw_find.html" class="fi-block link" target="_blank" >忘记密码？</a>
+			</div>
+			<div class="formactions">
+				<input type='hidden' name='act' value='submit' />
+				<button type="submit" class="userbtn btn_login">登录</button>
+			</div>
+		</form>
+	</div>
+	<!--end left-->
+	<div class="userPanel-right fr">
+		<div class="userPanel-right-title">您还不是网站会员？</div>
+		<div class="userPanel-right-sbtn">
+			<a href="{$register_link}" class="userbtn sbtn_register">立即注册</a>
+		</div>
+	</div>
+	<!--end right-->
+</div>
+<!--end userPanel-->
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="__COMMCSS__/user.css" />
+{/block}
+
+{block name="js"}
+<script src="__JS__/jquery/jquery.validate-min.js?version={$version}"></script>
+<script src="__COMMJS__/user_login.js?version={$version}"></script>
+<script>
+      $(function(){
+	       $('.userPanel-rlgwy-list').find('li').mouseover(function(){
+		         $(this).find('i').removeClass('useric-link');
+				 $(this).find('i').addClass('useric-hover');
+		   });
+		   $('.userPanel-rlgwy-list').find('li').mouseout(function(){
+		         $(this).find('i').removeClass('useric-hover');
+				 $(this).find('i').addClass('useric-link');
+		   });
+	  })
+</script>
+{/block}

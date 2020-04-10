@@ -1,0 +1,70 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+
+{block name="content"}
+<div class="comm-breadcrumbs">
+	<a href="/">网站首页</a>
+	<span class="comm-breadcrumbs-arrow"></span>
+	<a href="{$list_src}">{$list_title}</a>
+	<span class="comm-breadcrumbs-arrow"></span>
+	{$head_title}
+</div>
+<!--end comm-breadcrumbs-->
+
+<div class="j-layout clearfix">
+	<div class="j-layout-col w190 mgr10">
+	{foreach from=$article_category_list item=this}
+		<dl class="article-list-leftPanel">
+			<dt>
+				<h3 class="article-llp-title">
+					<a href="/Article/article_list/id/{$this.article_sort_id}"{if $article_sort_id eq $this.article_sort_id} style="color: #ff7f00;"{/if}>{$this.article_sort_name}</a>
+				</h3>
+			</dt>
+			<dd>
+				<ul class="article-llp-list">
+				{foreach from=$this.left_article_list item=this_a}
+					<li>
+						<a href="/Article/article_display/id/{$this_a.article_id}" title="商品发布数量规则调整通知">{$this_a.title}</a>
+					</li>
+				{/foreach}
+				</ul>
+			</dd>
+		</dl>
+	{/foreach}
+		<!--end article-list-leftPanel-->
+	</div>
+	<!--end w190-->
+	<div class="j-layout-col w790">
+		<div class="article-list-rightPanel">
+			<div class="article-lrp-title display">
+				<h1>{$general_article_info.title}</h1>
+			</div>
+			<!--end article-lrp-title-->
+	
+			<ul class="article-lrp-data">
+				<li class="clearfix">
+					<span class="fl">发布时间：{$general_article_info.addtime}</span>
+					<span class="fr">浏览：{$general_article_info.clickdot}次</span>
+				</li>
+			{if $general_article_info.article_source}
+				<li>来源：{$general_article_info.article_source}</li>
+			{/if}
+			</ul>
+			<!--end article-lrp-data-->
+			<div class="article-lrp-display-excerpt">
+				{$summary}
+			</div>
+			<div class="article-lrp-content">
+				{$general_article_contents}
+			</div>
+		</div>
+		<!--end article-list-rightPanel-->
+	</div>
+	<!--end w790-->
+</div>
+<!-- end j-layout-->
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="__COMMCSS__/article.css" />
+{/block}

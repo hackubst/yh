@@ -1,0 +1,140 @@
+{extends file="../app_home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<!--主内容-->
+<div class="mall_home_cont">
+	<!--轮播图片-->
+	<div class="img_po">
+		<div class="img_poa" id="img_poa">
+	    	<div class="hge">
+	    	  <div id="slider_cont" class="flexslider">
+	    	    <ul class="slides" id="slides"> 
+	    	    	{foreach from=$cust_flash_list item=img}              
+	  	          <li><div class="img"><a href="{$img.link}"><img src="{$img.pic}" class="slide_img" /></a></div></li>              
+	  	      	{/foreach}
+	  	        </ul>
+	  	      </div>
+			</div>
+	  </div>
+	</div>
+	<div class="line_row"></div>
+  <!--各大模块入口-->  	
+  <div class="index_category">
+    <div class="index_wrap">
+    	  <a href="{$mall_list_link}" class="item">
+	          	<div class="icon_quan">
+	          		<img class="icon_quan_img" src="__PUBLIC__/Images/front/cuxiao.png" />
+	          	</div>
+	          	<div class="item_name">促销</div>
+	      </a>
+	      <a href="{$mall_list_link}" class="item">
+	          	<div class="icon_quan">
+	          		<img class="icon_quan_img" src="__PUBLIC__/Images/front/taocan.png" />
+	          	</div>
+	          	<div class="item_name">套餐</div>
+	      </a>
+    	{foreach from=$class_list item=item}
+	      <a href="{$mall_list_link}/class_id/{$item.class_id}" class="item">
+	          	<div class="icon_quan">
+	          		<img class="icon_quan_img" src="{$item.class_icon}" />
+	          	</div>	          	
+	          	<div class="item_name">{$item.class_name}</div>
+	      </a>
+	    {/foreach}
+	      <a href="{$mall_list_link}" class="item">
+	          	<div class="icon_quan" style="background-color:transparent;">
+	          		<img class="icon_quan_img" src="__PUBLIC__/Images/front/more.png" />
+	          	</div>          
+	          	<div class="item_name">更多</div>
+	      </a>
+	    
+    </div>
+  </div>
+	<div class="line_row"></div>
+	<!--推荐（商铺）模块-->
+	{if $hot_item_list}
+	<div class="index_shop">
+	    <div class="shop_tit">
+	    	<div class="fl">
+	    		<span class="list_icon"></span>
+	    		<span>热卖商品</span>
+	    	</div>
+	    	<div class="hot_right_tit">
+	    		<span>更多></span>	
+	    	</div>
+	    </div>
+	    <!--商铺一-->
+	    <div class="shop_cont">
+	    {foreach from=$hot_item_list item=item}
+       		<a href="{$item_list_link}item_id/{$item.item_id}/item_id/{$item.item_id}" class="shop_item_link">
+       			<div class="shop_item_pic">
+       				<img src="{$item.base_pic}" onerror="no_pic(this);" />
+       				<div class="item_info">	 
+       					<div class="item_title">{$item.item_name}</div>
+       					<div class="price_info">
+       						<span class="item_price">￥{$item.vip_price}</span>
+       						<del class="item_del_price">￥{$item.mall_price}</del>
+       					</div>     		
+       					
+       				</div>	
+       			</div>	
+       		</a>
+	    {/foreach}
+	    </div>
+	</div>
+	{/if}
+
+</div>
+{/block}
+{block name="js"}
+<script>
+var slide_length= '{$cust_flash_num}';
+{literal}
+$(function()
+{
+	//轮播图自适应手机
+	var windowWith = window.innerWidth;
+	var slide_ul_width = windowWith * slide_length;
+	var slide_ul_height = windowWith / 2;	
+	$('#slides').width(slide_ul_width);
+	$('#slides').height(slide_ul_height);
+	$('#img_poa').height(slide_ul_height);
+	var swipeImgArray = $('.slide_img');
+	for(var i = 0; i < swipeImgArray.length; i++){
+		$(swipeImgArray[i]).width(windowWith);
+		$(swipeImgArray[i]).height(slide_ul_height);
+  }
+  $('#slider_cont').flexslider({
+      animation: "slide",
+      direction: "horizontal",
+      easing: "swing"
+  });
+  //商品图片高度
+  var item_height = windowWith * 0.46;
+  //var rec_item_height = windowWith * 0.216;
+  var shopItemArray = $('.shop_item_pic img');
+  for(var i = 0; i < shopItemArray.length; i++){
+		$(shopItemArray[i]).height(item_height);
+  }
+  //$('.rec_item_pic').height(item_height);
+  //$('.rec_item_sPic,.rec_item_srPic').height(rec_item_height);
+
+  /*var shop_h = item_height + 10;
+  var shopItemContArray = $('.shop_item_cont');
+  for(var i = 0; i < shopItemContArray.length; i++){
+		$(shopItemContArray[i]).height(shop_h);
+  }*/
+
+
+	
+});
+
+{/literal}
+</script>
+<script src="__JS__/front/slider.js?version={$version}" type="text/javascript"></script>
+{/block}

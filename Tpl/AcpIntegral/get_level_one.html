@@ -1,0 +1,170 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+<!-- end tables-searchbox -->  
+<table class="wxtables">  
+    <colgroup>  
+    <col width="10%">
+    <col width="30%">
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    </colgroup>
+    <thead>
+        <tr>  
+            <td>选择</td>  
+            <td>分类名称</td>
+            <td>排序号</td>
+            <td>是否有效</td>
+            <td>操作</td>
+        </tr>  
+    </thead>  
+	{foreach from=$question_class_list item=question_class}
+    <tbody class="combo-tbody">  
+        <tr>
+			<td><input type="checkbox" class="checkbox" name="a[]" value="{$question_class.integral_change_class_id}"></td>
+			<td>{$question_class.class_name}</td>  
+			<td>{$question_class.serial}</td>  
+			<td>{if $question_class.isuse == 1}是{else}否{/if}</td>  
+            <td>  
+				<a href="/AcpIntegral/edit_level_one/class_id/{$question_class.integral_change_class_id}/mod_id/{$mod_id}" class="btn" title="修改">修改</a>  
+        <a href="javascript:;" class="btn" title="删除" onclick="delete_question_class({$question_class.integral_change_class_id})">删除</a>  
+            </td>  
+        </tr>
+    </tbody>
+	{foreachelse}   
+    <tbody>    
+		<tr>
+			<td colspan="7">
+				没有符合条件的记录
+			</td>
+		<tr>
+    </tbody>  
+	{/foreach}
+</table>  
+<!-- end wxtables -->  
+<div class="tables-btmctrl clearfix">  
+    <div class="fl">  
+        <a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+        <a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+        <a href="javascript:;" onclick="batch_delete()" class="btn btn-blue">删除</a>
+    </div>  
+    <div class="fr">  
+        <div class="paginate">
+			{$page_str} 
+        </div>  
+        <!-- end paginate -->  
+    </div>  
+</div>  
+<!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{literal}
+<script>
+	//全选
+	function Select(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=true;
+		}
+	}
+	//取消全选
+	function Cancel(){
+		var sel=document.getElementsByName("a[]");
+		for(var i=0;i<sel.length;i++){
+			sel[i].checked=false;
+		}
+	}
+
+function delete_question_class(question_class_id)
+{
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要删除这条数据吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpIntegral/delete_level_one', {"class_id":question_class_id}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，删除成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，一级分类下面存在二级分类数据关联，删除失败！！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_delete()
+{
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要删除这些数据吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 var question_class_ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 question_class_ids += $(this).val() + ',';
+				 });
+
+				 if (!count)
+				 {
+					 alert('对不起，请选择至少一项进行删除！');
+					 return;
+				 }
+
+				 question_class_ids = question_class_ids.substr(0, question_class_ids.length - 1);
+
+				 $.post('/AcpIntegral/batch_delete_level_one', {"question_class_ids":question_class_ids}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，删除成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，一级分类下面存在二级分类数据关联，删除失败！！');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });
+}
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link type="text/css" rel="stylesheet" href="__ACPCSS__/tip.css" />
+{literal}
+<style>
+.PageNext{page-break-after: always; height:1px;}
+</style>
+{/literal}
+{/block} 

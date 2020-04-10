@@ -1,0 +1,292 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap">
+    <div class="t-rank-tit" style="margin:10px;"><a href="/AcpCouponSet/add_coupon_set" class="btn btn-blue"><i class="gicon-plus white"></i>添加领券</a></div>
+        <div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                    <div class="t-a-wait-top-li" style="width:400px;">
+                        <div class="formitems inline">
+                            <label class="fi-name" style="width:70px; font-weight:normal;">添加时间：</label>
+                            <div class="form-controls" style="margin-left:80px;">
+                                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+
+                                <span class="fi-text">-</span>
+
+                                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+                </form>
+            </div>
+        </div>
+        <table class="wxtables">
+            <colgroup>
+                <col width="10%">
+                <col width="10%">
+                <col width="20%">
+                <col width="20%">
+                <col width="10%">
+                <col width="10%">
+                <col width="20%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <td>选择</td>
+                    <td>标题</td>
+                    <td>类型</td>
+                    <td>活动时间</td>
+                    <td>添加时间</td>
+                    <td><a class="{$isuse_sort_order}" href="{$isuse_sort_url}">状态</a></td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            {foreach from=$coupon_set_list item=item_info}
+            <tbody class="combo-tbody">
+            <tr>
+                <td><input type="checkbox" class="checkbox" value="{$item_info.coupon_set_id}" name="a[]"></td>
+                <td>{$item_info.title}</td>
+                <td>{if $item_info.type_num eq 1}新人优惠券{elseif $item_info.type_num eq 2}注册领券{elseif $item_info.type_num eq 3}通用领券{elseif $item_info.type_num eq 4}支付成功领券{/if}</td>
+                <td>{$item_info.start_time|date_format:"%Y-%m-%d %H:%M:%S"} -- {$item_info.end_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                <td>{$item_info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                <td>{if $item_info.isuse EQ 0}未启用{else}启用{/if}</td>
+                <td>
+                    <a href="/AcpCouponSet/edit_coupon_set/coupon_set_id/{$item_info.coupon_set_id}" class="btn" title="编辑">编辑</a>
+				<a href="javascript:;" class="btn" title="删除" onclick="delete_coupon_set({$item_info.coupon_set_id})">删除</a>
+                {if $item_info.isuse EQ 1}
+				<a href="javascript:;" class="btn" title="禁用" onclick="set_enable({$item_info.coupon_set_id}, 0)">禁用</a>
+                {else}
+                <a href="javascript:;" class="btn" title="启用" onclick="set_enable({$item_info.coupon_set_id}, 1)">启用</a>
+                {/if}
+				<a href="/AcpVouchers/get_all_vouchers_list/coupon_set_id/{$item_info.coupon_set_id}" class="btn" title="查看优惠券">查看优惠券</a>
+                </td>
+            </tr>
+            </tbody>
+            {foreachelse}
+            <tbody>
+            <tr>
+                <td colspan="7">
+                    没有符合条件的记录
+                </td>
+                <tr>
+                    </tbody>
+                    {/foreach}
+                </table>
+                <!-- end wxtables -->
+
+                <div class="tables-btmctrl clearfix">
+                    <div class="fl">
+                        <a href="javascript:;" onclick="Select()" class="btn btn-blue">全选</a>
+                        <a href="javascript:;" onclick="Cancel()" class="btn btn-blue">取消</a>
+                        <a href="javascript:;" onclick="batch_set_enable(1)" class="btn btn-blue">启用</a>
+                        <a href="javascript:;" onclick="batch_set_enable(0)" class="btn btn-blue">禁用</a>
+                        <a href="javascript:;" onclick="batch_delete_gift()" class="btn btn-blue">删除</a>
+                        <a href="javascript:;" onclick='coupon_link()' class="btn btn-blue" title="复制领券链接">复制领券链接</a>
+                    </div>
+                    <div class="fr">
+                        <div class="paginate">
+                            {$show}
+                        </div>
+                    </div>
+                </div>
+                <!-- end tables-btmctrl -->
+            </div>
+            <!-- end tablesWrap -->
+        </div>
+        {/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{literal}
+<script>
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+function delete_coupon_set(id)
+{
+	$.jPops.confirm({
+		 title:"提示",
+		 content:"您确定要执行这个操作吗？",
+		 okBtnTxt:"确定",
+		 cancelBtnTxt:"取消",
+		 callback:function(r) {
+			 if(r) {
+				 $.post('/AcpCouponSet/delete_coupon_set', {"coupon_set_id":id}, function(data, textStatus)
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }
+			 return true;
+		 }
+	 });
+}
+
+function batch_delete_coupon_set()
+{
+	$.jPops.confirm({
+		 title:"提示",
+		 content:"您确定要执行这个操作吗？",
+		 okBtnTxt:"确定",
+		 cancelBtnTxt:"取消",
+		 callback:function(r) {
+			 if(r) {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count) {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+				 $.post('/AcpCouponSet/batch_delete_coupon_set', {"coupon_set_ids":ids}, function(data, textStatus)
+				 {
+					if (data == 'success') {
+						alert('恭喜您，删除成功！');
+						location.reload();
+					} else {
+						alert('对不起，删除失败！');
+					}
+				});
+			 }
+			 return true;
+		 }
+	 });
+}
+
+function set_enable(id, enable)
+{
+    var opt = enable ? '启用':'禁用';
+	$.jPops.confirm({
+		 title:"提示",
+		 content:"您确定要执行这个操作吗？",
+		 okBtnTxt:"确定",
+		 cancelBtnTxt:"取消",
+		 callback:function(r) {
+			 if(r) {
+				 $.post('/AcpCouponSet/set_enable', {"coupon_set_id":id, "opt":enable}, function(data, textStatus)
+				 {
+					if (data == 'success') {
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					} else {
+						alert('对不起，'+ opt +'失败！');
+					}
+				});
+			 }
+			 return true;
+		 }
+	 });
+}
+
+function batch_set_enable(enable)
+{
+    var opt = enable ? '启用':'禁用';
+	$.jPops.confirm({
+		 title:"提示",
+		 content:"您确定要执行这个操作吗？",
+		 okBtnTxt:"确定",
+		 cancelBtnTxt:"取消",
+		 callback:function(r) {
+			 if(r) {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count) {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+				 $.post('/AcpCouponSet/batch_set_enable', {"coupon_set_ids":ids, "opt":enable}, function(data, textStatus)
+				 {
+					if (data == 'success') {
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					} else {
+						alert('对不起，'+ opt +'失败！');
+					}
+				});
+			 }
+			 return true;
+		 }
+	 });
+}
+
+//复制商品链接
+function coupon_link()
+{
+    var link = 'http://' + document.domain + '/FrontCoupon/get_coupon';
+    $.jPops.custom({
+        title:"请复制链接",  
+        content:'<div>领券链接：' + link + '</div>',
+        okBtnTxt:"复制",  
+        cancelBtnTxt:"关闭",  
+        callback:function(r)
+        {
+            if(r)
+            {
+                text = link;
+                copy_text('jpops-btn-ok');
+            }
+            else
+            {
+                return true;  
+            }
+        }
+    });
+}
+function copy_text(id)
+    {
+        var clipboard = new Clipboard('#' + id, {
+            text: function() {
+                return text;
+            }
+        });
+
+        clipboard.on('success', function(e) {
+            console.log(e);
+            alert('复制成功');
+        });
+
+        clipboard.on('error', function(e) {
+            console.log(e);
+            alert('复制失败，请手动复制');
+        });
+    } 
+</script>
+{/literal}
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

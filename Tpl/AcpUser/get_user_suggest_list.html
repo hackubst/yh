@@ -1,0 +1,218 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+    	<div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                <div class="t-a-wait-top-li"><span>意见内容：</span><input type="text" placeholder="" value="{$message}" class="mini" name="message"> </div>
+                <div class="t-a-wait-top-li">
+                <select class="small" name="message_type">
+                    <option value="0" >--选择类型--</option>
+                    {foreach from=$type_list key=key item=row}
+						<option value="{$key}" {if $key == $message_type}selected{/if} >{$row}</option>
+                    {/foreach}
+                </select>
+                </div>
+
+                <div class="t-a-wait-top-li">
+                <select class="small" name="state">
+                    <option value="-1" >--选择状态--</option>
+                    {foreach from=$state_list key=key item=row}
+						<option value="{$key}" {if is_numeric($state) && $key == $state}selected{/if} >{$row}</option>
+                    {/foreach}
+                </select>
+                </div>
+
+                <div class="t-a-wait-top-li" style="width:400px;">
+                    <div class="formitems inline">  
+                        <label class="fi-name" style="width:70px; font-weight:normal;">提交时间：</label>  
+                        <div class="form-controls" style="margin-left:80px;">  
+				            <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+
+                            <span class="fi-text">-</span>  
+                            
+                            <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+                        </div>  
+                    </div> 
+                </div>
+
+                <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+              </form>
+            </div>        
+        </div> 
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="5%"> 
+            <col width="8%">
+            <col width="15%"> 
+            <col width="28%">
+            <col width="10%">
+            <col width="11%">  
+            <col width="25%">
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>选择</td>  
+                    <td>意见类型</td>  
+                    <td>反馈用户</td>  
+                    <td>意见内容</td>  
+                    <td>提交时间</td>  
+                    <td>状态</td>
+                    <td>操作</td>  
+                </tr>  
+            </thead>  
+            <tbody>
+				{foreach from=$user_suggest_list item=user_suggest}
+                <tr>  
+                    <td><input type="checkbox" class="checkbox" value='{$user_suggest.user_suggest_id}' name="a[]"></td> 
+                    <td>{$user_suggest.message_type_name}</td>  
+                    <td>{$user_suggest.username}</td>  
+                    <td>{$user_suggest.message}</td>
+                    <td>{$user_suggest.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                    <td>{$user_suggest.state_name}</td>
+                    <td>  
+						<a href="/AcpUser/user_detail/user_id/{$user_suggest.user_id}" class="btn" title="查看用户详情">用户详情</a>   
+						{if $user_suggest.message_type == 1 && $user_suggest.state == 0}
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 2)" title="标记为无用">无用</a>   
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 2)" title="标记为有待商榷">有待商榷</a>   
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 3)" title="标记为有用">有用</a>   
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 4)" title="标记为将更新到系统中">将更新到系统中</a>   
+						{elseif $user_suggest.message_type == 1 && $user_suggest.state == 2}
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 3)" title="标记为有用">有用</a>   
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 4)" title="标记为将更新到系统中">将更新到系统中</a>   
+						{elseif $user_suggest.message_type == 1 && $user_suggest.state == 3}
+							<a href="javascript:;" class="btn" onclick="set_state({$user_suggest.user_suggest_id}, 4)" title="标记为将更新到系统中">将更新到系统中</a>   
+						{/if}
+                    </td>  
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的用户</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fl">  
+				<a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+				<a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_set_state(1)">批量标记无用</a> 
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_set_state(2)">批量标记有待商榷</a> 
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_set_state(3)">批量标记有用</a> 
+                <a href="javascript:void(0);" class="btn btn-blue" onclick="batch_set_state(4)">批量标记将更新到系统中</a> 
+            </div> 
+            <div class="fr">  
+                <div class="paginate">  
+                    {$show}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{literal} 
+<script>
+//全选
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+function set_state(id, state)
+{
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行该操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpUserAjax/set_user_suggest_state', {"user_suggest_id":id, "state":state}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，操作成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，操作失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_set_state(state)
+{
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行这些操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="a[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count)
+				 {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+
+				 $.post('/AcpUserAjax/batch_set_user_suggest_state', {"user_suggest_ids":ids, "state":state}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，操作成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，操作失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });
+}
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

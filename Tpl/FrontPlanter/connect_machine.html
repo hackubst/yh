@@ -1,0 +1,156 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<section>
+	<div class="pos-rel over-hidden c_header_bk">
+		<div class="pos-rel">
+			<div class="avatar-img">
+				<img src="__PUBLIC__/Images/front/avatar.png">	
+			</div>
+		</div>
+		<div class="uname" style="margin-top:.5em;">欢迎 {$user_info.nickname}</div>
+	</div>
+  </section>
+  <div class="uname"><span class="green01">请选择您要连接的种植机</span></div>
+
+  <!--<nav class="nav-state flex mt5">
+	<a href="{$bind_machine_link}"><span>绑<span class="pr10em"></span>定</span></a>
+	<a href="{$mall_home_link}"><span>商<span class="pr10em"></span>城</span></a>
+  </nav>-->
+  <section class="mlr10">
+	  <div class="pt20 display-bl">
+		<ul class="">
+			{foreach from=$planter_list item=planter}
+				<li class="lh35">
+					<div class="pos-rel macNmeDiv">
+						{if $current_planter_id == $planter.planter_id}
+							<a href="/FrontPlanter/pandorabox">
+						{else}
+							<a href="javascript:;"{if $current_planter_id != $planter.planter_id} title="点我切换" alt="点我切换"{/if} onclick="change_machine({$planter.planter_id})">
+						{/if}
+							<div class="c_machine_name f13em display-ib bk-green bai br4 lh35 plr10">名称：<span class="new_mac_name">{$planter.planter_name}</span>
+							</div>
+						</a>
+						<div class="f12em display-ib award-list fr c_edit_n">
+							{if $current_planter_id == $planter.planter_id}
+								<span class="pr10em green01 c_edit_name"><b>使用中</b></span>
+							{/if}
+							<span class="pr10em green01 c_edit_name">编辑名称</span><i id="up" class="jiantou"></i>
+						</div>
+						<div class="mt10 mb29 zk_cont" style="display: none;">
+							 <form id="bind_form" name="bind_form" action="" method="post">
+								  <div class="pos-rel display-bl">
+									<div class="form_inpText1">
+										<input type="text" placeholder="输入种植机名称" name="planter_name" id="planter_name" class="formElem" value="{$planter.planter_name}"/>
+										<div class="sendBtn">
+											<a class="sendMacName" onclick="set_planter_name({$planter.planter_id}, this);">确<span class="pr10em"></span>定</a>
+										</div>
+									</div>
+								  </div>
+							  </form>
+						</div>
+					</div>
+					<hr class="hr2" />
+				</li>
+			{/foreach}
+		</ul>
+	</div>
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+<div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+<script>
+var current_planter_id = '{$current_planter_id}';
+var planter_id = 0;
+{literal}
+$( function(){
+	$('.award-list').click(function(){
+		$(this).find('i').toggleClass('jiantou-up');
+		$(this).next('.zk_cont').slideToggle();	
+	});
+});
+
+function change_machine(p_id)
+{
+	if (p_id != current_planter_id)
+	{
+		planter_id = p_id;
+		confirm('您确定要切换到该种植机吗？', "real_change_machine()");
+	}
+};
+
+function real_change_machine()
+{
+	//保存到数据库
+	$.ajax(
+	{
+		url:"/FrontPlanter/change_machine",
+		type:"POST",
+		data:{
+			planter_id: planter_id,
+		},
+		timeout:10000,
+		success:function(d)
+		{
+			if (d != 'failure')
+			{
+				alert('恭喜您，切换成功！');
+				//跳转页面
+				location.href = '/FrontPlanter/pandorabox';
+			}
+		}
+	});
+}
+
+function set_planter_name(planter_id, obj)
+{
+	var planter_name = $(obj).parent().parent().find("input[name=planter_name]").val();
+	if(!planter_name)
+	{
+		var error="请输入机器名称";
+		$("#tan").html(error);
+		tishi();
+		return;
+	}
+	$(obj).parents(".macNmeDiv").find(".new_mac_name").html(planter_name);
+	//保存到数据库
+	$.ajax(
+	{
+		url:"/FrontPlanter/set_planter_name",
+		type:"POST",
+		data:{
+			planter_id: planter_id,
+			planter_name: planter_name,
+		},
+		timeout:10000,
+		success:function(d)
+		{
+		}
+	});
+};
+//弹出提示
+function tishi()
+{
+	$('.kuan-cont').fadeIn(1500);
+	//$('.black-bg').fadeIn(1500);
+	$('.kuan-cont').fadeOut(1500);
+	//$('.black-bg').fadeOut(1500);
+}
+</script>
+{/literal}
+{/block}

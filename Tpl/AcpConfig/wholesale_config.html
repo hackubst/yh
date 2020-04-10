@@ -1,0 +1,90 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="form1" action=""  method="post">
+<div class="formitems inline">  
+    <label class="fi-name">混批规则：</label>  
+    <div class="form-controls">  
+        <div class="radio-group" id="mixed_wholesale_rule">  
+            <label><input type="radio" name="mixed_wholesale_rule" value='1'{if $config_wholesale.mixed_wholesale_rule eq 1} checked="checked"{/if} />数量优先</label>  
+            <label><input type="radio" name="mixed_wholesale_rule" value='2'{if $config_wholesale.mixed_wholesale_rule eq 2} checked="checked"{/if} />价格优先</label> 
+		</div>  
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">起批数量：</label>  
+    <div class="form-controls">  
+        <input type="text" name="mixed_wholesale_num" id="mixed_wholesale_num" value="{$config_wholesale.mixed_wholesale_num}"{if $config_wholesale.mixed_wholesale_rule eq 2}disabled="disabled"{/if} />
+		<span class="fi-help-text">当混批规则设置为数量优先时生效，即订单中商品总数满足该值时才能下单</span>
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">起批价格：</label>  
+    <div class="form-controls">  
+		<input type="text" name="mixed_wholesale_price" id="mixed_wholesale_price" value="{$config_wholesale.mixed_wholesale_price}"{if $config_wholesale.mixed_wholesale_rule eq 1}disabled="disabled"{/if} />
+		<span class="fi-help-text">当混批规则设置为价格优先时生效，即订单中商品总价满足该值时才能下单</span>
+    </div>  
+</div>  
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+   		<input type="hidden" name="act" value="submit" />  
+		<button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> 
+    </div>  
+</div>
+</form>  
+{/block} 
+
+{block name="js"}
+<script type="text/javascript">
+$(function(){
+	$('#mixed_wholesale_rule label').on('click', function(){
+		var _checked = $(':checked', this).val();
+		if(_checked == 1){
+			$('#mixed_wholesale_num').removeAttr('disabled');
+			$('#mixed_wholesale_price').attr('disabled', 'disabled').removeClass('error').next().removeClass('error').addClass('hide');
+		} else if(_checked == 2) {
+			$('#mixed_wholesale_num').attr('disabled', 'disabled').removeClass('error').next().removeClass('error').addClass('hide');
+			$('#mixed_wholesale_price').removeAttr('disabled');
+		}
+	});
+	$("#form1").validate({
+		rules: {
+			mixed_wholesale_rule: {
+				required: true
+			},
+			mixed_wholesale_num: {
+				required: true,
+				digits: true
+			},
+			mixed_wholesale_price: {
+				required: true,
+				number: true
+			}
+		},
+		messages: {
+			mixed_wholesale_rule: {
+				required: "请选择混批规则"
+			},
+			mixed_wholesale_num: {
+				required: "请输入起批数量",
+				digits: "请输入纯数字的起批数量"
+			},
+			mixed_wholesale_price: {
+				required: "请输入起批价格",
+				number: "请输入纯数值的起批价格"
+			}
+		},
+		errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+		success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+	});
+});
+</script>
+{/block} 
+
+{block name="css"}
+
+{/block}

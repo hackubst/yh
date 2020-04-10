@@ -1,0 +1,55 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<!--代理-->
+<div class="agent">
+	<div class="agent_top clearfix">
+		<a class="top_left" href="/FrontUser/agent_list/agent_type/1/user_id/{$user_id}">
+			<p class="p1">一级代理人数</p>
+			<p class="p2">{$first_agent_num}人</p>
+		</a>
+		<a class="top_right" href="/FrontUser/account_list/change_type/9/user_id/{$user_id}">
+			<p class="p1">代理收益</p>
+			<p class="money">&yen;{$first_agent_gain}</p>
+		</a>
+	</div>
+	{if $fenxiao_level >= 2}
+	<div class="agent_bottom clearfix">
+		<a class="top_left" href="/FrontUser/agent_list/agent_type/2/user_id/{$user_id}">
+			<p class="p1">二级代理人数</p>
+			<p class="p2">{$second_agent_num}人</p>
+		</a>
+		<a class="top_right" href="/FrontUser/account_list/change_type/10/user_id/{$user_id}">
+			<p class="p1">代理收益</p>
+			<p class="money">&yen;{$second_agent_gain}</p>
+		</a>
+	</div>
+	{/if}
+	{if $fenxiao_level >= 3}
+	<div class="agent_bottom clearfix">
+		<a class="top_left" href="/FrontUser/agent_list/agent_type/3/user_id/{$user_id}">
+			<p class="p1">三级代理人数</p>
+			<p class="p2">{$third_agent_num}人</p>
+		</a>
+		<a class="top_right" href="/FrontUser/account_list/change_type/11/user_id/{$user_id}">
+			<p class="p1">代理收益</p>
+			<p class="money">&yen;{$third_agent_gain}</p>
+		</a>
+	</div>
+	{/if}
+</div>
+<!-- <div class="submit_btn">
+	<a href="{$getcash_link}" id="submit" class="submit">申请提现</a>
+</div> -->
+{/block}
+
+{block name="js"}
+{/block}

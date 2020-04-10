@@ -1,0 +1,40 @@
+﻿{extends file="../home.html"}
+{block name="css"}
+{literal}
+<style>
+		html{overflow-x:hidden; overflow-y:hidden;} 
+		body{margin: 0;padding: 0; overflow-x:hidden; overflow-y:hidden;height:100%;background:url(__PUBLIC__/Images/front/w_background.jpg) no-repeat;background-size:cover;}
+		.page-sidebar{display:none;}
+		.container{margin:0;}
+		.page-content1{background-color:transparent;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<div class="w_body1_bk" id="w_body1_bk">
+	<div class="w_logo_quan"><div class="logo_quan_img"></div></div>
+	<div class="w_logo_text"><div class="logo_text_img"></div></div>
+	<div class="w_btn"><a href="javscript:;" class="w_btn_link" id="w_btn_link">开启无限可能</a></div>
+	<div class="w_alink"><a href="{$welcome_video_link}" class="w_alink_text">观看介绍影片<span class="w_alink_icon"></span></a></div>
+</div>
+<div class="w_body2_bk" id="w_body2_bk" style="position:relative;left:640px;display:none;">
+	<div class="w2_logo"><div class="logo2_img"></div></div>
+	<div class="w2_big"><div class="w2_big_img"><img src="__PUBLIC__/Images/front/pandora_box.png" /></div></div>
+	<div class="w2_btn"><a href="/FrontMall/mall_list/class_tag/planter" class="w_btn_link">立即购买</a></div>
+	<div class="w2_alink"><a href="{$bind_machine_link}" class="w_alink_text">已经购买，前去绑定<span id="w2_alink_icon" class="w_alink_icon"></span></a></div>
+</div>
+{/block}
+{block name="js"}
+{literal}
+<script>
+$(function(){
+		$("#w_btn_link").click(function(){
+			$("#w_body1_bk").hide();
+			$("#w_body2_bk").show();
+	 	 $("#w_body2_bk").animate({left: '0px'}, "100");
+	
+	});	
+});
+</script>
+{/literal}
+{/block}

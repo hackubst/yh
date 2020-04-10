@@ -1,0 +1,8 @@
+.t-pay-top{ width:100%; height:37px; line-height:37px;  overflow:hidden;}
+.t-pay-top .apiece{float:left; margin-right:10px; display:inline;}
+.t-pay-top .apiece span{ color:#666;}
+.t-pay-time{ width:100%; margin-top:10px; overflow:hidden;}
+.t-pay-time-le{ float:left; width:425px; height:37px; overflow:hidden;}
+.t-pay-time-ri{ float:left; height:37px;overflow:hidden;}
+.t-pay-time-name{float:left;width:48px;text-align:right; height:32px; line-height:32px;}
+.t-le{ margin-right:20px;}

@@ -1,0 +1,62 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+  <section class="mlr10">
+	  <div class="pt20 display-bl">
+		  <form id="bind_form" name="bind_form" action="" method="post">
+			  <div class="pos-rel display-bl">
+				<div class="form_inpText">
+					<input type="text" placeholder="输入序列号" name="serial_num" id="serial_num" value="{$serial_num}" class="formElem" autofocus="true"/>
+				</div>
+
+				<div class="sbmBtn mt5 mb10">
+					<a id="machineNum-submit">确<span class="pr10em"></span>定</a>
+				</div>
+			  </div>
+
+			  <input type="hidden" name="act" value="bind">
+		  </form>
+		</div>
+
+  </section>
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+	$( function(){
+			$('.sbmBtn a').click(function(e){
+				e.preventDefault();
+				if(!$("input[name=serial_num]").val()){
+					var error="请输入有效的机器码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+
+				$("#bind_form").submit();
+			});
+		});
+		
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		 //$('.black-bg').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+		 //$('.black-bg').fadeOut(1500);
+	  }
+</script>
+{/literal}
+{/block}

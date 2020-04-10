@@ -1,0 +1,77 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">  
+    <div class="tables-searchbox">  
+       <form action='/AcpRole/list_admin' method='post'>
+        <span class="tbs-txt">联系人：</span>  
+        <input type="text" name='linkman' value='{$s_linkman}' /> 
+        <span class="tbs-txt">角色：</span>
+        <select name="group" class="mini"> 
+            <option value="0" selected="">全部</option>
+            {section name=row loop=$group_list}  
+            <option value='{$group_list[row].group_id}' {if $s_group_id == $group_list[row].group_id}selected{/if}>{$group_list[row].group_name}</option>	
+            {/section}
+        </select>
+        	<input type='hidden' name='submit' value='search' />
+            <button class="btn"><i class="gicon-search"></i>查询</button>
+      </form>  
+    </div> 
+    <div class="tables-searchbox"> 
+        <a href="/AcpRole/add_admin/mod_id/0" class="btn btn-blue"><i class="gicon-plus white"></i>添加管理员</a>  
+    </div>
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="15%">
+        <col width="15%">  
+        <col width="20%">  
+        <col width="25%">  
+        <col width="25%">    
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>联系人</td>
+                <td>角色</td>  
+                <td>邮件地址</td>  
+                <td>创建时间</td>    
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody> 
+        {if $user_list}
+        {section name=row loop=$user_list} 
+            <tr>  
+                <td>{$user_list[row].realname}</td>  
+                <td>{$user_list[row].group_name}</td>
+                <td>{$user_list[row].email}</td>  
+                <td>{$user_list[row].reg_time}</td>  
+                <td>  
+                    <a href="/AcpRole/edit_admin/u/{url_jiami($user_list[row].user_id)}/redirect/{$cur_url}" class="btn" title="修改">编辑</a>   
+                </td>  
+            </tr> 
+         {/section} 
+         {else}
+         	<tr><td colspan=5>未找到符合条件的管理员用户</td></tr>
+         {/if}  
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">    
+        <div class="fr">  
+            <div class="paginate">  
+                {$page_str}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 

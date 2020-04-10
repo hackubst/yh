@@ -1,0 +1,54 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<section>
+	<div class="pos-rel h130 over-hidden" style="background:url(__PUBLIC__/Images/front/greenh_bk.jpg) no-repeat center center;background-size:cover;">
+		<div class="pos-rel">
+			<div class="avatar-img">
+				<img src="__PUBLIC__/Images/front/avatar.png">	
+			</div>
+		</div>
+		<div class="uname">欢迎 Jerry Wang</div>
+	</div>
+  </section>
+  <div class="uname"><span class="f12em green01">您还没有绑定您的种植机？</span></div>
+
+  <section class="mlr10">
+	  <div class="display-bl">
+			  <div class="pos-rel display-bl">
+				<div class="sbmBtn mt5 mb10">
+					<a href="/Index/bind_machine.html" id="machine-bind">绑<span class="pr10em"></span>定</a>
+				</div>
+				<div class="sbmBtn mt5 mb10">
+					<a href="/Index/mall_home.html" id="machine-buy">商城购买</a>
+				</div>
+				<div class="sbmBtn mt5 mb10">
+					<a href="/Index/choose_plant.html" id="planting-try">尝试虚拟种植</a>
+				</div>
+			  </div>
+
+
+		</div>
+
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+{literal}
+{/literal}
+{/block}

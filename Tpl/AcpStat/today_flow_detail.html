@@ -1,0 +1,125 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="wxMain" id="detail">
+	<div class="tabs clearfix">
+		<a href="javascript:;" onClick="javascript:location.href='__APP__/AcpStat/today_flow_detail/f/1';" class="active tabs_a fl">今日流量明细</a>
+		<a href="javascript:;" onClick="javascript:location.href='__APP__/AcpStat/today_flow_detail/f/2';" class="tabs_a fl">今日流量统计</a>
+	</div>
+	<div class="tablesWrap">
+		<table class="wxtables">
+			<colgroup>
+				<col width="10%">
+				<col width="7%">
+				<col width="15%">
+				<col width="10%">
+				<col width="10%">
+				<col width="8%">
+				<col width="8%">
+				<col width="8%">
+				<col width="8%">
+				<col width="8%">
+			</colgroup>
+			<thead>
+			<tr>
+				<td>浏览时间</td>
+				<td>会员ID</td>
+				<td style='text-align:left;'>受访页面</td>
+				<td>页面标题</td>
+				<td>IP</td>
+				<td>新访客</td>
+				<td>操作系统</td>
+				<td>语言</td>
+				<td>浏览器</td>
+				<td>屏幕分辨率</td>
+			</tr>
+			</thead>
+			<tbody>
+			{foreach from=$pv_detail_list item=list}
+				<tr>
+					<td>{$list.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+					<td>{$list.user_id}</td>
+					<td style='text-align:left;'>&nbsp;{$list.visit_url}</td>
+					<td>{$list.page_title}</td>
+					<td>{$list.ip}</td>
+					<td>
+						{if $list.is_new_visitor == 1}
+							是
+						{else}
+							否
+						{/if}
+					</td>
+					<td>{StatModel::convertOS($list.os_id)}</td>
+					<td>{StatModel::convertLanguage($list.language_id)}</td>
+					<td>{StatModel::convertBrowserVersion($list.browser)}</td>
+					<td>{StatModel::convertScreen($list.screen_id)}</td>
+				</tr>
+			{foreachelse}
+				<tr><td colspan="10">没有找到任何记录</td></tr>
+			{/foreach}
+			</tbody>
+		</table>
+		<!-- end wxtables -->
+		<div class="tables-btmctrl clearfix">
+			<div class="fr">
+				<div class="paginate">
+					{$show}
+				</div>
+				<!-- end paginate -->
+			</div>
+		</div>
+		<!-- end tables-btmctrl -->
+	</div>
+</div>
+
+<div class="wxMain" id="stat">
+	<div class="tabs clearfix">
+		<a href="javascript:;" onClick="javascript:location.href='__APP__/AcpStat/today_flow_detail/f/1';" class="tabs_a fl">今日流量明细</a>
+		<a href="javascript:;" onClick="javascript:location.href='__APP__/AcpStat/today_flow_detail/f/2';" class="active tabs_a fl">今日流量统计</a>
+	</div>
+	<div class="tablesWrap">
+		<table class="wxtables">
+			<colgroup>
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+			</colgroup>
+			<thead>
+			<tr>
+				<td>pv总数</td>
+				<td>uv总数</td>
+				<td>新访客数</td>
+				<td>老访客数</td>
+				<td>IP数</td>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>{$pv_total}</td>
+				<td>{$uv_total}</td>
+				<td>{$new_visitor_num}</td>
+				<td>{$old_visitor_num}</td>
+				<td>{$ip_num}</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+var tab_tag = {$tab_tag};
+if (tab_tag == 1)
+{
+	$('#stat').hide();;
+}
+else
+{
+	$('#detail').hide();;
+}
+</script>
+{/block}

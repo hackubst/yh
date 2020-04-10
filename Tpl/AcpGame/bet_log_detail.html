@@ -1,0 +1,61 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div id="print_div">
+    <div class="t-detail-goods">
+
+    {foreach from=$old_bet_json item=v}
+    <div class="t-detail-goods-tit mag">{$v.name}</div>
+    <div class="t-detail-goods-con t-border">
+
+    <table class="wxtables">
+        <colgroup>
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>投注号码</td>
+            <td>投注金额</td>
+            <td>获得金额</td>
+        </thead>
+        <tbody>
+        {foreach from=$v.bet_json item=vi}
+        <tr>
+            <td>{$vi.name}</td>
+            <td>{if $vi.money}{$vi.money}{else}0{/if}</td>
+            <td>{if $vi.win}{$vi.win}{else}0{/if}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    </div>
+
+    {/foreach}
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+
+</script>
+<script src="__JS__/acp/AcpOrder/order.js?version={$version}"></script>
+<!--<script src="__JS__/acp/AcpOrder/order_detail.js?version={$version}"></script>-->
+<style>
+    #jpops .fi-name{width:100px;}
+    #jpops .form-controls{margin-left:100px;}
+</style>
+{/literal}
+{/block}
+
+{block name="css"}
+{literal}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_detail.css" type="text/css" />
+<style>
+</style>
+{/literal}
+{/block}

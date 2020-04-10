@@ -1,0 +1,211 @@
+/*article comm*/
+.pdb15{padding:10px 0;}
+.article-list-leftPanel{
+	border: 1px solid #d1d1d1;
+	background: #f0f0f0;
+	margin-bottom: -1px;
+	*position: relative;
+}
+.article-llp-title{
+	font-size: 14px;
+	padding: 8px 0 8px 20px;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #d1d1d1;
+	color: #838383;
+	background: url(/Public/Images/common/article_llp_title.png) repeat-x;
+}
+.article-llp-title a{
+	color: #838383;
+}
+.article-llp-title a:hover{
+	color: #ff7f00;
+	text-decoration: underline;
+}
+.article-llp-list li{
+	padding:10px 0;
+}
+.article-llp-list a{
+	display:block;
+	width:160px;
+	padding-left:20px;
+	color: #333;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	-o-text-overflow:ellipsis;
+	overflow: hidden;
+	background: url(/Public/Images/common/square.gif) 10px center no-repeat;
+}
+.article-llp-list a:hover{
+	color:#ff7f00;
+}
+.article-list-rightPanel{
+	width:790px;
+	overflow: hidden;
+}
+.article-lrp-title{
+	padding: 8px 0 7px 0;
+	border-top:4px solid #d1d1d1;
+	border-bottom:1px dotted #b5b5b5;
+}
+/*end article comm*/
+
+/*article list*/
+.article-lrp-titleicon{
+	display: inline-block;
+	*margin-right:5px;
+	background: url(/Public/Images/common/sprite_article.png) no-repeat;
+}
+.article-lrp-titleicon.lf{
+	width:4px;
+	height: 14px;
+	background-position:-3px 0;
+}
+.article-lrp-titleicon.info{
+	width:89px;
+	height:14px;
+	background-position:-7px 0;
+}
+.article-lrp-title i,
+.article-lrp-title b{
+	display: inline-block;
+	vertical-align: middle;
+}
+.article-lrp-title b{
+	font-size: 16px;
+}
+.article-lrp-title b,
+.article-lrp-list,
+.article-lrp-list a{
+	color: #838383;
+}
+.article-lrp-list a:hover{
+	color:#ff7f00;
+}
+.article-lrp-list li{
+	border-bottom:1px dotted #dfdfdf;
+}
+.article-lrp-list li:last-child{border-bottom: none;}
+.article-lrp-list-context{
+	width: 777px;
+}
+.article-lrp-lc-line .title{
+	font-size: 14px;
+}
+.article-lrp-lc-line .excerpt{
+	text-indent: 2em;
+	line-height: 1.8em;
+}
+.article-lrp-list-img{
+	width:140px;
+	height:100px;
+	border:3px solid #dbdbdb;
+	overflow: hidden;
+}
+.article-lrp-list-img img{
+	width: 140px;
+	height: 100px;
+}
+/*end article list*/
+.article-lrp-title.display{
+	text-align: center;
+	color: #ff7f00;
+	font-size: 16px;
+	font-family:"simsun";
+}
+.article-lrp-data,
+.article-lrp-display-excerpt{
+	color: #838383;
+	line-height:1.8em;
+}
+.article-lrp-data{
+	padding: 10px 0;
+}
+.article-lrp-display-excerpt{
+	padding: 5px;
+	border:1px dotted #dfdfdf;
+	text-indent: 2em;
+}
+.article-lrp-content{
+	padding:15px 0;
+	line-height: 1.5em;
+}
+/*article display*/
+
+/*end article display*/
+
+/*bradcrumbs*/
+.comm-breadcrumbs{
+	padding:10px 0 10px 20px;
+	width:970px;
+	background: url(/Public/Images/common/home.jpg) left center no-repeat;
+}
+.comm-breadcrumbs-arrow{
+	display: inline-block;
+	margin:0 5px;
+	width:9px;
+	height:11px;
+	background: url(/Public/Images/common/arrow.png) no-repeat;
+	vertical-align: -2px;
+	*vertical-align: 2px;
+	_vertical-align: -3px;
+}
+.comm-breadcrumbs a{
+	color:#666;
+}
+/*end bradcrumbs*/
+
+/*paginate*/
+.article-lrp-paginate{
+	color:#959595;
+	margin:10px 0;
+	text-align:right;
+}
+.article-lrp-paginate a{
+	display: inline-block;
+	*display: inline;
+	margin-left:-1px;
+	padding:4px 9px;
+	color:#5e5e5e;
+	border:1px solid #ddd;
+	vertical-align:middle;
+}
+.article-lrp-paginate a.prev{
+	padding-left:18px;
+	background:url(/Public/Images/common/paginte_left.gif) 5px center no-repeat;
+}
+.article-lrp-paginate a.prev.disabled{
+	color:#ccc;
+	padding-left:18px;
+	background:url(/Public/Images/common/paginte_left_disable.gif) 5px center no-repeat #f8f8f8;
+}
+.article-lrp-paginate a.next.disabled{
+	color:#ccc;
+	background-color: #f8f8f8
+}
+.article-lrp-paginate a.next{
+	padding-right:18px;
+	background:url(/Public/Images/common/paginte_right.gif) 50px center no-repeat;
+}
+.article-lrp-paginate a:hover,
+.article-lrp-paginate a.cur{
+	background-color: #ff7f00;
+	color:#fff;
+}
+
+.article-lrp-paginate span,
+.article-lrp-paginate button,
+.article-lrp-paginate a{
+	vertical-align: middle;
+}
+.article-lrp-paginate span{
+	margin:0 10px;
+}
+.article-lrp-paginate input{
+	padding:3px 0;
+	width:30px;
+	background: #fff;
+	border:1px solid #ccc;
+	*vertical-align:-3px;
+	text-align: center;
+}
+/*end paginate*/

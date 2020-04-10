@@ -1,0 +1,162 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/cart.css?version={$version}">
+{/block}
+{block name="content"}
+<div id="cart_content">
+	<!-- 送货地址 -->
+	<div class="cart_addr" id="cart_addr">
+		<a class="wuliu_link" id="wuliu_link" href="{$address_list_link}?jump=cart">
+			{if $user_default_addr}
+			<div class="def_cart_area">
+				<div class="wuliu"><svg class="wuliu"><use xlink:href="#wuliu"></use></svg></div>
+				<div class="addr_name_tel">
+					<h4>{$user_default_addr.realname}</h4>
+					<h4 class="addr_mobile">{$user_default_addr.mobile}</h4>
+				</div>
+				<div class="addr_address">
+					<i class="default_txt"></i>{$area_name}{$building_name}{$user_default_addr.address}
+				</div>
+			</div>
+			{else}
+			<div class="cart_error">未设置收货地址，点击添加</div>
+			{/if}
+		</a>
+	</div>
+    	<!-- <div class="cart_line_tip">
+			<label class="tip_txt">提示：购物车中仅显示当前上班的商家商品。</label>
+    	</div> -->	
+{if !empty($item_list)}
+	  <!--主内容区-->
+    <div class="wx_wrap" id="cart_cont">
+    	<!--顶部功能按键-->
+    	<div class="ctrl_cont">
+    		<div class="sel_all">
+    			<i class="icon_select" id="select_all" onClick="toggleSelectAll(this);"></i>
+    			<h3>全选</h3>	
+    		</div>
+    		<a href="javascript:confirm('是否确认删除已选商品？','delet()');" class="del_item">删除商品</a>
+    	</div>	
+    	<!--所有商品列表-->
+      <div id="listContent" class="listContent">
+      	<!--一商家下的所有商品-->	
+			<div id="list" class="list_shop">
+				<!--商品列表-->
+				{foreach from=$item_list item=item}
+				  <div class="cart_goods">
+					<div id="" class="item" name="checkgroup">
+						<i class="icon_select" onclick="toggleSelect(this);">
+						</i>
+						<!-- <a
+							href="{$item_list_link}/merchant_id/{$item.merchant_id}/item_id/{$item.item_id}"
+							class="link"> -->
+						<a href="{$item_detail_link}{$item.item_id}" class="link">
+							<img class="image" src="{$item.small_pic}" alt="">
+						</a>
+						<div class="content">
+							<h3 class="name">
+								{$item.item_name}
+							</h3>
+                            <h3 class="name clearfix" style="color:#A09F9B;top:32px;font-size:12px;">
+                                <span class="fl"style="margin-right:10px;">颜色分类：01</span>
+                                <span class="fl">尺寸：02</span>
+                            </h3>
+							<h3 class="shop-price">
+								<span class="price">
+									￥{$item.real_price}
+								</span>
+							</h3>
+							<label class="count">
+								<h6 class="count_txt">数量：</h6>
+								<a href="javascript:void(0);" class="min" onClick="sub(this);">－</a>
+								<input class="input_count" type="text" value="{$item.number}" data-number="{$item.number}" data-real_price="{$item.real_price}" data-shopping_cart_id="{$item.shopping_cart_id}" data-max="200" data-prevalue="1" id="item_num">
+								<a href="javascript:void(0);" class="add" onClick="add(this);">＋</a>
+								<input type="hidden" value="{$item.number}">
+							</label>
+						</div>
+					</div>
+				  </div>
+			  {/foreach}
+			  <div class="list_shop_line"></div>         
+			</div>
+    </div>
+
+    <!--底部固定算价格-->
+    <div id="mainViewFoot">
+      <div class="pay_bar">
+        <span class="total">
+            总计：
+            <b>
+                ￥
+                <label id="totalPrice">
+				{$total_amount}
+                </label>
+            </b>
+            <em>
+                （共
+                <span id="totalNum">
+					{$total_num}
+                </span>
+                件，不含运费）
+            </em>
+        </span>
+        <form method="POST" action="{$order_submit_link}" id="cart_form">
+            <input type="hidden" name="number_list" id="number_list" />
+            <input type="hidden" name="shopping_cart_id_list" id="shopping_cart_id_list" />
+            <a class="btn_pay cart_btn" id="button" onClick="javascript:;">
+                结算
+            </a>
+        </form>
+        <a href="{$mall_home_link}" class="cart_btn">逛逛</a>
+      </div>
+    </div>
+{else}
+<!-- 没有商品的情况，写这里 -->
+  <div class="error_cont">
+		<div class="error_img"><svg class="error_icon"><use xlink:href="#error"></use></svg></div>
+		<div class="error_txt">抱歉，购物车里没有商品!</div>
+		<a href="{$mall_home_link}" class="go_btn">马上逛逛</a>
+	</div>
+{/if}
+</div>
+</div>
+
+{include file="../coupon_tip.html"}
+{/block}
+{block name="js"}
+<script src="__JS__/front/cart.js?version={$version}"></script>
+<script>
+var user_default_addr = '{$user_default_addr}';
+var cart_ids = '';
+var number_str = '';
+
+{literal}
+var cart_url = window.location.href;
+$(function()
+{
+	$("#wuliu_link").click(function(){
+		set_cart_dir();
+	});
+});
+function set_cart_dir()
+{
+	$.post('/FrontAddress/set_cart_url', {"cart_url": cart_url}, function(data) 
+	{
+		if (data != 'failure')
+		{
+			//window.location.reload();
+		}
+		else
+		{
+
+		}
+	});
+}
+
+//默认全选
+toggleSelectAll(document.getElementById('select_all'));
+</script>
+<script src="__PUBLIC__/Js/front/coupon.js?version={$version}"></script>
+{/literal}
+{/block}

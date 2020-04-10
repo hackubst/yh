@@ -1,0 +1,56 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+
+{block name="content"}
+<div class="comm-breadcrumbs">
+	<a href="/">网站首页</a>
+	<span class="comm-breadcrumbs-arrow"></span>
+	{$head_title}
+	<span class="comm-breadcrumbs-arrow"></span>
+	{$help_title}
+</div>
+<!--end comm-breadcrumbs-->
+
+<div class="j-layout clearfix">
+	<div class="j-layout-col w190 mgr10">
+		<div class="hpct-left-listPanel">
+			<h2 class="hpct-ll-title">帮助中心</h2>
+			{foreach from=$help_center_category_list item=this}
+			<dl>
+				<dt class="hpct-ll-list">
+					<i class="hpcticon square"></i>
+					<a href="javascript:;" title="{$this.help_sort_name}" class="j-hpct-list">{$this.help_sort_name}<i class="hpcticon arrowDown"></i></a>
+				</dt>
+				<dd>
+					<ul class="hpct-ll-list-sub">
+					{foreach from=$this.left_help_center_menu item=this_h}
+						<li>
+							<a href="/Article/helpcenter/id/{$this_h.help_id}">{$this_h.title}</a>
+						</li>
+					{/foreach}
+					</ul>
+				</dd>
+			</dl>
+			{/foreach}
+		</div>
+	</div>
+	<!--end w190-->
+	<div class="j-layout-col w790">
+		<div class="hpct-right-article">
+		{if $help_contents}
+			{$help_contents}
+		{/if}
+		</div>
+	</div>
+	<!--end w790-->
+</div>
+<!-- end j-layout-->
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="__COMMCSS__/helpcenter.css" />
+{/block}
+
+{block name="js"}
+<script src="__COMMJS__/helpcenter.js?version={$version}"></script>
+{/block}

@@ -1,0 +1,57 @@
+<div class="pager-container">
+	<div class="pager">
+		<div class="show-items">共{if $package_tag == 1}{$package_total}{else}{$total}{/if}个商品</div>
+	</div>
+</div>
+<!-- 商品列表 -->
+{if $item_list}
+<div class="new-product-block" style="border:none;">
+	<ul class="product-grid">
+    {foreach from=$item_list item=item}
+		<li class="item_li">
+      <a href="{$item_detail_link}{$item.item_id}" class="prod-link">
+        <div class="prod-img">
+          <img title="{$item.item_name}" alt="{$item.item_name}" src="{$item.middle_img}" onerror="no_pic(this);" />
+        </div>
+        <div class="prod-content">
+          <sapn>{$item.item_name}</span>
+        </div>
+        <div class="prod-price">￥{$item.mall_price}</div>
+        <del class="prod-price del-price">￥{$item.market_price}</del>
+      </a>
+    </li>
+    {/foreach}
+	</ul>
+</div>
+<!-- 分页 -->
+<div class="pagination">
+  <ul>{$show}</ul>
+</div>
+{elseif $package_tag == 1}
+<div class="new-product-block" style="border:none;">
+  <ul class="product-grid">
+    {foreach from=$item_package_list item=item}
+    <li class="item_li">
+      <a href="{$item_detail_link}{$item.item_package_id}/package/1" class="prod-link">
+        <div class="prod-img">
+          <img title="{$item.item_name}" alt="{$item.item_name}" src="{$item.middle_img}" onerror="no_pic(this);" />
+        </div>
+        <div class="prod-content">
+          <span>{$item.item_name}</span>
+        </div>
+        <div class="prod-price">￥{$item.mall_price}</div>
+        <del class="prod-price del-price">￥{$item.market_price}</del>
+      </a>
+    </li>
+    {/foreach}
+  </ul>
+</div>
+<!-- 分页 -->
+<div class="pagination">
+  <ul>{$show}</ul>
+</div>
+{else}
+<div class="error_content">
+  暂无商品
+</div>
+{/if}

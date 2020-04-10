@@ -1,0 +1,32 @@
+/*friendlinks*/
+.friendlinksPanel{
+	border:1px solid #ccc;
+	width:988px;
+}
+.flp-title{
+	border-top:1px solid #fff;
+	padding: 9px 10px;
+	background: #f5f5f5;
+	background:-webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+	background:-moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+	background:-ms-linear-gradient(top,#f5f5f5,#f1f1f1);
+}
+.flp-list{
+	margin-bottom:-1px;
+	overflow: hidden;
+}
+.flp-list li{
+	float: left;
+}
+.flp-list a{
+	display:block;
+	padding: 30px 0 30px 20px;
+	width:78.8px;
+	border-bottom: 1px dotted #dfdfdf;
+	background: url(/Public/Images/common/square.gif) 10px center no-repeat;
+}
+
+.flp-list a:hover{
+	color: #ff7f00;
+}
+/*end friendlinks*/

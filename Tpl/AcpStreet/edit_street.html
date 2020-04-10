@@ -1,0 +1,71 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" enctype="multipart/form-data" action="" id="add_rank">
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span> 选择城市：</label>  
+        <div class="form-controls">  
+            <select class="small" id="province_id" name="province_id">  
+                <option value="0">--选择省份--</option>  
+                {foreach from=$province_list item=province_info}
+                <option value="{$province_info.province_id}" {if isset($street_info.province_id) && $street_info.province_id == $province_info.province_id}selected{/if}>{$province_info.province_name}</option>  
+                {/foreach}
+            </select> 
+            <select class="small" id="city_id" name="city_id">  
+                <option value="0">--选择城市--</option>  
+                {foreach from=$city_list item=city_info}
+                <option value="{$city_info.city_id}" {if isset($street_info.city_id) && $street_info.city_id == $city_info.city_id}selected{/if}>{$city_info.city_name}</option>  
+                {/foreach}
+            </select> 
+            <span id="div_area">
+                <select class="small" id="area_id" name="area_id">  
+                    <option value="0">--选择地区--</option>  
+                    {foreach from=$area_list item=area_info}
+                    <option value="{$area_info.area_id}" {if isset($street_info.area_id) && $street_info.area_id == $area_info.area_id}selected{/if}>{$area_info.area_name}</option>  
+                    {/foreach}
+                </select> 
+            </span>
+            <span class="fi-help-text"></span>  
+        </div>  
+    </div>
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>街道名称：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="" class="xlarge" name="street_name" id="street_name" value="{$street_info.street_name}">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div> 
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>排序号：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="" class="mini" name="serial" id="serial" value="{$street_info.serial}">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div> 
+
+    <div class="formitems inline">  
+        <label class="fi-name">显示：</label>  
+        <div class="form-controls">  
+            <div class="radio-group">  
+                <label><input type="radio" name="isuse" value="1" {if $street_info.isuse == 1}checked="checked"{/if} />是</label>  
+                <label><input type="radio" name="isuse" value="0" {if $street_info.isuse == 0}checked="checked"{/if} />否</label>   
+            </div>  
+        </div>  
+    </div> 
+
+    <div class="formactions mgl180">
+        <input type="hidden" name="act" value="add" />
+        <button tpye="button" class="btn btn-blue"><i class="gicon-ok white"></i>确定</button>
+    </div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script>
+</script>
+{/block}
+

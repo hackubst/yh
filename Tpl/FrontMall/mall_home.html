@@ -1,0 +1,253 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/mall_home.css?version={$version}">
+{literal}
+<style>
+	.shop_name .shop_name_txt{
+		  height: 18px;
+  overflow: hidden;
+  line-height: 18px;
+  display: inline-block;
+	}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+    function no_slide_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/slide_default.jpg");
+    }
+</script>
+<!--头部模块-->
+<header class="index_head">
+    <a class="search" href="javascript:void(0);" id="search_enter">
+    	<svg class="sear_icon"><use xlink:href="#search"></use></svg>
+    	<!-- <span class="sear_txt">找商品</span> -->
+    </a>
+    <!-- <a class="message" href="{$message_list_link}">
+    	<svg class="msg_icon"><use xlink:href="#message"></use></svg>
+    	{if $not_read_num}<span class="msg_num">{$not_read_num}</span>{/if}
+    </a> -->
+</header>
+<!-- 地址模块 -->
+<!--主内容-->
+<div class="mall_home_cont">
+	<!--轮播图片-->
+	<div class="img_po">
+		<div class="img_poa" id="img_poa">
+	    	<div class="hge">
+	    	  <div id="slider_cont" class="flexslider">
+	    	    <ul class="slides" id="slides" style="height:100px;overflow:hidden;"> 
+	    	    {foreach from=$cust_flash_list item=img}              
+	  	          <li><div class="img"><a href="{$img.link}"><img src="{$img.pic}" class="slide_img" onerror="no_slide_pic(this);"/></a></div></li>              
+	  	      	{/foreach}
+	  	      </ul>
+	  	    </div>
+				</div>
+	  </div>
+	</div>
+  <!--各大模块入口-->  	
+  <div class="index_category">
+    <div class="index_wrap">
+    	{foreach from=$class_list item=item}
+	      <a href="{$item_list_link}/class_id/{$item.class_id}" class="item">
+	          	<img class="icon_quan" src="{$item.class_icon}" />
+	          	<div class="item_name">{$item.class_name}</div>
+	      </a>
+	    {/foreach}
+	      <a href="{$item_list_link}" class="item">
+	          <div id="icon_8" class="icon_quan"><svg class="index_icon"><use xlink:href="#all"></use></svg></div>
+	          <div class="item_name">全部</div>
+	      </a>
+	    
+    </div>
+  </div>
+
+	<!--推荐（商铺）模块-->
+	{if $item_list}
+	<div class="index_shop">
+	    <div class="shop_tit">推荐商品</div>
+	    <div class="shop_cont clearfix">
+			{foreach from=$item_list item=item}
+	       <div class="shop_item_cont">
+	       		<a href="{$item_detail_link}{$item.item_id}" class="shop_item_link">
+	       			<div class="shop_item_pic">
+	       				<img src="{$item.base_pic}" onerror="no_pic(this);" />
+	       				{if $item.is_spec == 1}
+						<div class="onsale-tag">
+							<span>特价</span>
+							<span class="r_ant"></span>
+						</div>
+						{/if}
+	       				<div class="shop_item_price">
+	       					<svg class="price_icon"><use xlink:href="#price"></use></svg>
+	       					{if $item.is_spec == 1}
+	       					<span class="price_tag">
+		       					<span class="item_price"><i class="rmb_symbol">￥</i>{$item.special_info.promotion_price}</span>
+		       					<!-- <em class="del_em">￥</em> --><del class="del_price">{$item.special_info.old_price}</del>
+	       					</span>
+	       					{else}
+	       					<span class="price_tag"><i class="rmb_symbol">￥</i>{$item.mall_price}</span>
+	       					{/if}
+	       					
+	       				</div>	
+	       			</div>	
+	       		</a>
+	       </div>
+		   {/foreach}
+	    </div>
+	</div>
+	{/if}
+	{if $item_list}
+	<!--<div class="all_shop">
+		<a href="{$item_list_link}" class="all_shop_btn">全部店铺</a>
+	</div>-->
+	{/if}
+	<!--推荐（商品）模块-->
+	{if $item_list}
+	<!--<div class="index_item">
+	    <div class="item_tit">推荐商品</div>
+	    <div class="item_cont">
+	       <div class="rec_item_cont">
+	       	 {foreach from=$item_list key=key item=item}
+	       	 {if $key == 0}
+	       			<a href="{$item_list_link}/merchant_id/{$item.merchant_id}/item_id/{$item.item_id}">
+	       				<div class="rec_item_pic">
+		       				<img src="{$item.base_pic}" onerror="no_pic(this);" />
+		       				<div class="rec_item_info">
+		       					<span class="rec_item_pTit">价格：</span>
+		       					<span class="rec_item_pTxt"><i class="rmb_icon">￥</i>{$item.mall_price}</span>
+		       					<span class="rec_item_pDel abs_left">{$item.sales_num}销量</span>
+		       				</div>	       					
+	       				</div>	
+	       			</a>
+	       		{elseif $key == 1}       				
+       				<a href="{$item_list_link}/merchant_id/{$item.merchant_id}/item_id/{$item.item_id}" class="rec_item_lnk fr">
+       					<div class="rec_item_sPic">
+       						<img src="{$item.base_pic}" onerror="no_pic(this);" />
+       					</div>
+       					<div class="rec_item_price">
+       							<div class="rec_item_pTit1">价格：</div>
+       							<div class="rec_item_pTxt"><i class="rmb_icon">￥</i>{$item.mall_price}</div>
+       							<span class="rec_item_pDel">{$item.sales_num}销量</sapn>
+       					</div>
+       				</a>
+       				{elseif $key == 2}
+       				<a href="{$item_list_link}/merchant_id/{$item.merchant_id}/item_id/{$item.item_id}" class="rec_item_lnk fr top">
+       					<div class="rec_item_lprice">
+       							<div class="rec_item_pTit1">价格：</div>
+       							<div class="rec_item_pTxt"><i class="rmb_icon">￥</i>{$item.mall_price}</div>
+       							<span class="rec_item_pDel">{$item.sales_num}销量</span>
+       					</div>
+       					<div class="rec_item_srPic">
+       						<img src="{$item.base_pic}" onerror="no_pic(this);" />
+       					</div>
+       				</a>
+       				{/if}
+	       		{/foreach}
+	       </div>
+	    </div>
+	</div>-->
+	{/if}
+
+	<!--系统公告模块-->
+	{if $notice_list}
+	<!--<div class="notice">
+	    <div class="notice_tit">系统公告</div>
+	    <div class="notice_wrap">
+	    	{foreach from=$notice_list item=notice}
+		  	<div class="notice_line">
+		  		<div class="notice_cont">{$notice.title}</div>
+		  		<div class="notice_time">{$notice.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</div>
+		  	</div>
+		  	{/foreach}
+	  	</div>
+	</div>-->
+	{/if}
+	<!--搜索-->
+	<div class="search_cnt" id="home_search">
+    <form class="search_form" method="get" action="/FrontSearch/search_item_result">
+        <div class="head_cnt">
+            <div class="head_cnt_input">
+                <input type="search" name="keyword" class="search_input" placeholder="输入商品名称" autocomplete="off" />
+            </div>
+            <a class="cancel" href="javascript:void(0);" onclick="$('#home_search').hide();$('#screenIfm').hide();">取消</a>
+        </div>
+        <!--热门搜索标签-->
+        {if {count($hot_keywords)} gt 1}
+        <div class="key_list">
+        	<div class="key_line">
+					{foreach from=$hot_keywords item=keywords}
+						<a class="key_block" href="{$search_item_result_link}/keyword/{$keywords}">{$keywords}</a>
+					{/foreach}
+        	</div>
+        </div>
+        {/if}
+    </form>
+	</div>
+	<!--弹出层背景透明化-->
+	<div id="screenIfm" style="z-index:10;display:none;background-color:#fff;opacity:1;" class="screenIfm">
+	</div>
+</div>
+{include file="$footer_path"}
+{/block}
+
+{block name="js"}
+<script>
+var slide_length= '{$cust_flash_num}';
+{literal}
+$(function()
+{
+	//轮播图自适应手机
+	var windowWith = window.innerWidth;
+	var slide_ul_width = windowWith * slide_length;
+	var slide_ul_height = windowWith * 100 / 375;	
+	$('#slides').width(slide_ul_width);
+	$('#slides').height(slide_ul_height);
+	$('#img_poa').height(slide_ul_height);
+	var swipeImgArray = $('.slide_img');
+	for(var i = 0; i < swipeImgArray.length; i++){
+		$(swipeImgArray[i]).width(windowWith);
+		$(swipeImgArray[i]).height(slide_ul_height);
+  }
+  $('#slider_cont').flexslider({
+      animation: "slide",
+      direction: "horizontal",
+      easing: "swing"
+  });
+  //商品图片高度
+  var item_height = windowWith * 0.46;
+  //var rec_item_height = windowWith * 0.216;
+  var shopItemArray = $('.shop_item_pic');
+  for(var i = 0; i < shopItemArray.length; i++){
+		$(shopItemArray[i]).height(item_height);
+  }
+  //$('.rec_item_pic').height(item_height);
+  //$('.rec_item_sPic,.rec_item_srPic').height(rec_item_height);
+
+  var shop_h = item_height + 10;
+  var shopItemContArray = $('.shop_item_cont');
+  for(var i = 0; i < shopItemContArray.length; i++){
+		$(shopItemContArray[i]).height(shop_h);
+  }
+
+  	//搜索
+	$('#search_enter').click(function()
+	{
+		$('#home_search,#screenIfm').show();	
+	});	
+	//隐藏弹出框	
+	$('.win-mask,.fx_font').click(function(){
+		$('.win-mask').hide();
+		$('.fx_font').hide();
+	});
+});
+{/literal}
+</script>
+<script src="__JS__/front/slider.js?version={$version}" type="text/javascript"></script>
+<script src="__JS__/front/search.js?version={$version}"></script>
+{/block}

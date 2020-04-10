@@ -1,0 +1,258 @@
+	<!--<div class="cate-nav">
+  <div class="mall-cate-box">
+	  <ul class="mall-cate">
+		  <li>
+			  <a href="javascript:void(0);" data-type="category">
+				  {if $class_id}
+					  {foreach from=$class_list item=class}
+						{if $class_id == $class.class_id}
+							{$class.class_name}
+						{/if}
+					  {/foreach}
+				  {else}
+					全部分类
+				  {/if}
+				  <em>
+				  </em>
+			  </a>
+		  </li>
+		  <li>
+			  <a href="javascript:void(0);" data-type="district" id="districtLine">
+				  {if $trading_area_id}
+					  {foreach from=$trading_area_list item=trading_area}
+						{if $trading_area_id == $trading_area.trading_area_id}
+							{$trading_area.trading_area_name}
+						{/if}
+					  {/foreach}
+				  {else}
+					  全部商圈
+				  {/if}
+				  <em>
+				  </em>
+			  </a>
+		  </li>
+		  <li>
+			  <a href="javascript:void(0);" data-type="sort">
+				  {if $orderby}
+					  {foreach from=$orderby_list key=key item=order}
+						{if $orderby == $key}
+							{$order}
+						{/if}
+					  {/foreach}
+				  {else}
+					  默认排序
+				  {/if}
+				  <em>
+				  </em>
+			  </a>
+		  </li>
+	  </ul>
+  </div>-->
+  <!--弹出分类-->
+  <!--
+  <div class="sortdrop-wrapper hide" data-type="category">
+	  <div class="sort-wrapper">
+		  <div class="sort-view" style="min-width: 160px;">
+			  <div>
+				  <section>
+					  <a href="{$link}/class_id/0{if $trading_area_id}/trading_area_id/{$trading_area_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}" data-main="category_emptyMenu">
+						  <span class="all">
+							  全部分类
+						  </span>
+						  <em>
+						  </em>
+					  </a>
+				  </section>
+				  {foreach from=$class_list item=class}
+					  <section>
+						  <a href="{$link}/class_id/{$class.class_id}{if $trading_area_id}/trading_area_id/{$trading_area_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+							  <span class="foods">
+								  {$class.class_name}
+							  </span>
+						  </a>
+					  </section>
+				  {/foreach}
+			  </div>
+			  <i class="m-down hide">
+			  </i>
+		  </div>
+	  </div>
+  </div>
+  <div class="sortdrop-wrapper hide" data-type="district">
+	  <div class="sort-wrapper">
+		  <div class="sort-view">
+			  <div>
+				  <section class="select">
+					  <a href="{$link}/trading_area_id/0{if $class_id}/class_id/{$class_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+						  <span>
+							  全部商圈
+						  </span>
+						  <em>
+						  </em>
+					  </a>
+				  </section>
+				  {foreach from=$trading_area_list item=trading_area}
+					  <section>
+						  <a href="{$link}/trading_area_id/{$trading_area.trading_area_id}{if $class_id}/class_id/{$class_id}{/if}{if $orderby}/orderby/{$orderby}{/if}/keyword/{$keyword}">
+							  <span>
+								  {$trading_area.trading_area_name}
+							  </span>
+						  </a>
+					  </section>
+				  {/foreach}
+			  </div>
+			  <i class="m-down hide">
+			  </i>
+		  </div>
+	  </div>
+  </div>
+  <div class="sortdrop-wrapper hide" data-type="sort">
+	  <div class="sort-wrapper">
+		  <div class="sort-view">
+			  <div>
+				  {foreach from=$orderby_list key=key item=orderby}
+					  <section>
+						  <a href="{$link}/orderby/{$key}{if $class_id}/class_id/{$class_id}{/if}{if $trading_area_id}/trading_area_id/{$trading_area_id}{/if}/keyword/{$keyword}">
+							  <span>
+								  {$orderby}
+							  </span>
+						  </a>
+					  </section>
+				  {/foreach}
+			  </div>
+		  </div>
+	  </div>
+  </div>
+</div>
+-->
+<!-- 排序结束 -->
+
+<!--商品结果list-->
+{if $item_list}
+<div class="conter sort-conter" id="content">
+  <!--list-view1-->
+  <div class="list-view">
+	  <ul class="list-ul" id="going_list">
+	  {foreach from=$item_list item=item}
+		<li class="item_cont" onclick="show_detail(this);">
+			<input type="hidden" id="item_id" value="{$item.item_id}">
+			<input type="hidden" id="item_unit" value="{$item.unit}">
+			<input type="hidden" id="base_img" value="{$item.base_pic}">
+			<input type="hidden" id="item_price" value="{$item.mall_price}">
+			<a class="item_link" href="javascript:;">
+				<div class="item_pic_wrap">
+					<div class="item_pic">
+						<img src="{$item.small_img}" onerror="no_pic(this);"/>
+					</div>
+				  </div>
+				<div class="content">
+					<div class="item_name txt_limit" style="width:100%;">
+						<span class="item_name_txt " id="item_name_txt">{$item.item_name}</span>	                    
+					</div>
+					<div class="shop_name">
+						<span class="shop_name_txt">{$item.shop_name}</span>	                    
+					</div>
+					<div class="item_desc">
+						<span class="item_desc_txt" id="item_desc_txt">{$item.item_desc}</span>
+					</div>
+					<div class="item_intro">
+						<span class="item_price"><i class="rmb_symbol">￥</i>{$item.mall_price}</span>
+						<span class="sale_num"><i class="sale_num_txt">{$item.sales_num}</i>销售量</span>		                    
+					</div>
+				</div>
+			</a>
+		</li>
+	  {/foreach}
+	  </ul>
+  </div>
+  <!--分类筛选下的透明背景-->
+  <div class="pop-shade hide">
+  </div>
+</div>
+{else}
+<!--未搜到-->
+<div class="error_cont">
+<div class="error_img"><svg class="error_icon"><use xlink:href="#error"></use></svg></div>
+<div class="error_txt">抱歉，未搜到相关商品！</div>
+<a href="{$mall_home_link}" class="go_btn" id="button">马上逛逛</a>
+</div>
+{/if}
+
+<!--商品详情弹出层-->
+<div class="item_fix_box" id="fix_box">
+	<div class="fix-box-img"><img onerror="no_pic(this);" src="{$item_info.base_pic}"/></div>
+	<div class="item_box_rlt">
+		<div class="fix-box-title"><span class="item_box_name">{$item_info.item_name}</span></div>
+	</div>
+	<div class="item_box_rlt">
+		<div class="fix-box-price"><span>{$item_info.mall_price}元&nbsp;&nbsp;{$item_info.unit}</span></div>
+		<div class="fix-box-add">
+			<span class="add_num popone" id="popone">+1</span>
+			<a href="javascript:;" class="addto_cart">加购物车</a>
+		</div>
+		<div class="fix-box-desc"><span class="item_box_desc">{$item_info.item_desc}</span></div>
+	</div>
+	<div class="close_pic" id="close_pic" onclick="$('#fix_box').hide();$('#screenIfm').hide();"><svg class="close_icon"><use xlink:href="#close"></use></svg></div>
+</div>
+
+<!--详情弹出层背景透明化-->
+<div id="screenIfm" style="z-index:10;" class="screenIfm" onclick="$('#fix_box').hide();$(this).hide();" style="display: none;">
+</div>
+<script>
+{literal}
+function show_detail(obj)
+{
+	cur_item_id = $(obj).find('#item_id').val();
+/*	cur_item_price = $(obj).find('#item_price').val();
+	var unit = $(obj).find('#item_unit').val();
+	var base_img = $(obj).find("#base_img").val();	
+	var item_name = $(obj).find("#item_name_txt").html();
+	$('.fix-box-img img').attr('src', base_img);
+	$('.fix-box-title').find('span').html(item_name);
+	$('.fix-box-price').find('span').html(cur_item_price + '元&nbsp;&nbsp;' + unit);
+	$('.fix-box-desc').find('span').html(item_desc);
+	$('#fix_box,#screenIfm').show();*/
+	addClickdot(cur_item_id);
+	 {/literal}
+    location.href="{$item_detail_link}"+cur_item_id;
+    {literal}
+}
+
+$('.addto_cart').click(function(e)
+{
+	e.stopPropagation();
+	var siblings = $(this).parent().siblings();
+	var popone = $(this).siblings('.popone');
+	var item_price = $(siblings).find("#item_price").val();
+	item_price = item_price == undefined ? (cur_item_price == 0.00 ? temp_item_price : cur_item_price) : item_price;
+	var item_id = $(siblings).find('#item_id').val();
+	item_id = item_id == undefined ? (cur_item_id == 0 ? temp_item_id : cur_item_id) : item_id;
+	console.log(item_id);
+	if (!item_id)
+	{
+		alert('抱歉，请选择商品！');
+		return false;
+	}
+	
+	$.post('/FrontCart/add_cart', {'item_id': item_id}, function(data){
+		if (data != 'failure')
+		{
+			//加购物车成功的代理写这里，主要是在页面上的反馈，具体有哪些元素，查看打印出来的data
+			$(popone).fadeIn(500).fadeOut(2000);
+			var num = $("#cartNum").attr("num");
+			var numb = parseInt(num) + 1;
+			$('#cartNum').attr("num",numb).html(numb).show();
+			var price = $('#cart_price').attr("price");
+			var nprice = parseFloat(price) + parseFloat(item_price);
+			var float_nprice = nprice.toFixed(2);//保留两位小数
+			$('#cart_price').attr("price",float_nprice).html(float_nprice);
+			console.log(data);
+		}
+		else
+		{
+			//添加失败的代码写这里
+		}
+	}, 'json');
+});
+{/literal}
+</script>

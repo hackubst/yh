@@ -1,0 +1,151 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tabs clearfix">
+    <a href="javascript:;" class="tabs_a active fl" data-origin="addtype">基本信息</a>
+    <a href="javascript:;" class="tabs_a fl" data-origin="addtype">规格属性</a>
+    <a href="javascript:;" class="tabs_a fl" data-origin="addtype">扩展属性</a>
+</div>  
+<!-- end tabs -->  
+<div class="tabs-content" data-origin="addtype">
+    <div class="tc">
+        <form method="post" id="form1">
+        <div class="formitems inline">
+            <label class="fi-name"><span class="colorRed">*</span>商品类型名称：</label>  
+            <div class="form-controls">  
+                <input type="text" name="item_type_name" value="{$type.item_type_name}">
+                <span class="fi-help-text error"></span>
+            </div>  
+        </div>
+        <div class="formitems inline">  
+            <label class="fi-name">备注：</label>  
+            <div class="form-controls">  
+                <textarea name="remark">{$type.remark}</textarea>
+                <span class="fi-help-text error"></span>  
+            </div>  
+        </div>  
+        <div class="formactions mgl180">
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="item_type_id" value="{$type.item_type_id}">
+            <input type="hidden" name="id" value="{$type.item_type_id}">
+            <input type="hidden" name="relate_brand" value="{$relate_brand}">
+            <button class="btn btn-blue" type="submit"><i class="gicon-ok white"></i>保存</button>
+            <button class="btn" type="reset"><i class="gicon-repeat"></i>重置</button>
+        </div>
+        </form>
+    </div>
+    <!-- end 编辑类型名称 -->
+    <div class="tc hide">
+        <form method="post" id="form3">
+        <div class="tablesWrap">
+            <div class="tables-searchbox">
+                <a href="###" class="btn btn-blue" id="j-addgg">添加新规格</a>
+            </div>
+            <table class="wxtables">
+                <colgroup>
+                    <col width="20%">
+                    <col width="50%">
+                    <col width="10%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <td>规格名称</td>
+                        <td>规格属性值</td>
+                        <td>排序</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody class="J_sku">
+                {foreach from=$arr_sku item=row}
+                <tr>
+                    <td><input type="text" name="sku_name[]" value="{$row.property_name}"></td>
+                    <td><input type="text" class="xxlarge" name="sku_value[]" value="{$row.prop_value}"></td>
+                    <td><input type="text" class="mini" name="sku_serial[]" value="{$row.serial}"></td>
+                    <td>
+                        <input type="hidden" name="sku_id[]" value="{$row.property_id}">
+                        <a href="javascript:;" class="btn J_prop_del" title="删除">删除</a>
+                    </td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+            <!-- end wxtables -->
+        </div>
+        <!-- end tablesWrap --> 
+        <div class="wizardstep-actions mgt10">
+            <input type="hidden" name="action" value="edit_sku">
+            <input type="hidden" name="id" value="{$type.item_type_id}">
+            <input type="hidden" name="old_sku_ids" value="{$old_sku_ids}">
+            <button class="btn btn-blue" type="submit"><i class="gicon-ok white"></i>保存</button>
+            <button class="btn" type="reset"><i class="gicon-repeat"></i>重置</button>
+        </div>
+        </form>
+    </div>
+    <!-- end 添加规格 -->
+    <div class="tc hide">
+        <form method="post" id="form2">
+            <div class="tablesWrap">
+                <div class="tables-searchbox">
+                    <a href="###" class="btn btn-blue" id="j-addsx">添加扩展属性</a>
+                </div>
+                <table class="wxtables">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="50%">
+                        <col width="10%">
+                        <col width="20%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <td>属性名称</td>
+                        <td>属性值</td>
+                        <td>排序</td>
+                        <td>操作</td>
+                    </tr>
+                    </thead>
+                    <tbody class="J_prop">
+                    {foreach from=$arr_prop item=row}
+                    <tr>
+                        <td><input type="text" name="prop_name[]" value="{$row.property_name}"></td>
+                        <td><input type="text" class="xxlarge" name="prop_value[]" value="{$row.prop_value}"></td>
+                        <td><input type="text" class="mini" name="prop_serial[]" value="{$row.serial}"></td>
+                        <td>
+                            <input type="hidden" name="prop_id[]" value="{$row.property_id}">
+                            <a href="javascript:;" class="btn J_prop_del" title="删除">删除</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+                <!-- end wxtables -->
+            </div>
+            <!-- end tablesWrap -->
+            <div class="wizardstep-actions mgt10">
+                <input type="hidden" name="action" value="edit_prop">
+                <input type="hidden" name="id" value="{$type.item_type_id}">
+                <input type="hidden" name="old_prop_ids" value="{$old_prop_ids}">
+                <button class="btn btn-blue" type="submit"><i class="gicon-ok white"></i>保存</button>
+                <button class="btn" type="reset"><i class="gicon-repeat"></i>重置</button>
+            </div>
+        </form>
+    </div>
+    <!-- end 编辑扩展属性  -->
+</div>
+<!-- end tabs-content --> 
+{/block}
+
+{block name="css"}
+{literal}
+<style>
+#jpops .fi-name{width:90px;}
+#jpops .form-controls{margin-left:100px;}
+</style>
+{/literal}
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/AcpItemType/add_type.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItemType/edit_type.js?version={$version}"></script>
+{/block}

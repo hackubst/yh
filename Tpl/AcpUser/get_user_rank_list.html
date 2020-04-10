@@ -1,0 +1,115 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-list-rank">
+    <div class="t-rank-con">
+        <div class="tablesWrap">  
+        <div class="t-rank-tit" style="margin:10px;"><a href="/AcpUser/add_user_rank/reidrect/{$cur_url}" class="btn btn-blue"><i class="gicon-plus white"></i>添加{$USER_NAME}等级</a></div>
+            <!-- end tables-searchbox -->  
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="15%">  
+                <col width="15%">
+                <col width="22%">
+                <col width="25%">   
+                <col width="20%">  
+                </colgroup>  
+                <thead>  
+                    <tr> 
+                        <td>级别名称</td> 
+                        <td>级别所需额度</td>
+                        <td>折扣</td>  
+                        <td>备注</td>  
+                        <td>操作</td>  
+                    </tr>  
+                </thead>  
+                <tbody>
+                    {section name=row loop=$rank_list}
+                    <tr>  
+                        <td>{$rank_list[row].rank_name}</td>
+                        <td>&yen;{$rank_list[row].upgrade_money}</td>
+                        <td>{$rank_list[row].discount}%</td>  
+                        <td>{$rank_list[row].desc}</td>   
+                        <td class='zt'>   
+                            <a href="/AcpUser/edit_user_rank/rank/{$rank_list[row].user_rank_id}/redirect/{$cur_url}" class="btn" title="修改">编辑</a>   
+                            <input type='hidden' name='rank_id' value='{$rank_list[row].user_rank_id}' />
+                            <!-- <a href="javascript:void(0);" class="btn del_rank" title="删除">删除</a>    -->
+                        </td>  
+                    </tr>
+                    {/section}
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">  
+                <div class="fl">  
+                     
+                </div>  
+                <div class="fr">  
+                    <div class="paginate">  
+                        {$page_str}
+                    </div>  
+                    <!-- end paginate -->  
+                </div>  
+            </div>  
+            <!-- end tables-btmctrl -->  
+        </div>  
+		<!-- end tablesWrap -->       
+    </div>
+    <form action="/AcpUser/add_rank" method="post" enctype="multipart/form-data">
+    <div class="t-alert">
+    	<div class="t-alert-tit"><span class="le">添加{$USER_NAME}等级(带*为必填)：</span><span class="ri"><i class="gicon-remove"></i></span></div>
+        <div class="t-tr">
+            <div class="t-td wid">{$USER_NAME}等级名称：</div>
+            <div class="t-td"><input type="text" name='rankname' placeholder="" class="small"><span class="war">* (请给等级取一个名称)</span></div>
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid">达到该级别所需消费金额：</div>
+            <div class="t-td">
+            	<div class="rmb"> <input type="text" placeholder="" name='money' class="small"><span class="war">* (包含预存款和已消费金额的总额度)</span></div>
+            </div>
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid">{$USER_NAME}采购折扣：</div>
+            <div class="t-td">
+            	<div class="rmb"> <input type="text" placeholder="" name='discount' class="mini" style="width:40px;"><span class="war">* (等级折扣为不能为空，只能是1-100的正整数)</span></div>
+            </div>
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid">备注：</div>
+            <div class="t-td"><textarea name="desc" id="" class="small"></textarea> </div>
+        </div>
+        <div class="t-tr">  
+                <div class="t-td wid">等级图标:</div>
+                <div class="t-td"> 
+                    <div class="fi-img" style='height:45px;width:45px;'>
+                        <img src="/Public/Images/nopic.png" class="J_logo">
+                    </div>
+                    <a href="javascript:;" class="btn">
+                        选择图片
+                        <input type="file" class="fi-btn-upload J_logo_up" name="user_logo">
+                    </a>
+                    <span class="war"> (您可以上传一张您定义的等级logo图片)</span> 
+                </div>  
+        </div>
+        <div class="t-tr">
+            <div class="t-td wid"> </div>
+            <input type="hidden" name="submit" value="add" />
+            <div class="t-td t-but"><button type="submit" name="do"  class="btn">添加</button>  </div>
+        </div>
+        
+    </div>
+   </form>
+</div>
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/edit_rank.js?version={$version}"></script>
+<script>
+
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/list_rank.css" type="text/css" />
+{/block}

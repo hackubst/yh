@@ -1,0 +1,139 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+    
+{block name="css"}
+<link rel="stylesheet" href="__PUBLIC__/Css/front/order.css">
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+   <!-- s支付说明 -->
+	<div class="xg_jd_notes">
+		<div class="xg_mc">
+			<i></i>
+			<h1>订单提交成功，请您尽快付款！</h1>
+			<ul>
+				<li>订单号：{$order_info.order_sn}</li>
+				<li class="last">应付金额：<b>{$amount}</b>元</li>
+				<li class="last">完成交易可获得<span class="red">{$integral}</span>积分</li>
+			</ul>
+			<p>
+				请您在提交订单后24小时内完成支付!
+			</p>
+		</div>
+	</div>
+   <!-- e支付说明 -->
+   <!-- s选择支付方式 -->
+	<div class="pay-box cle" id="pay-box">
+        <dl>
+			<form method="POST" action="https://pay3.chinabank.com.cn/PayGate" target="_blank" id="chinabank_pay_form">
+				<input type="HIDDEN" name='v_mid' value='{$parameter.v_mid}'>
+				<input type="HIDDEN" name='v_oid' value='{$parameter.v_oid}'>
+				<input type="HIDDEN" name='v_amount' value='{$parameter.v_amount}'>
+				<input type="HIDDEN" name='v_moneytype'  value='{$parameter.v_moneytype}'>
+				<input type="HIDDEN" name='v_url'  value='{$parameter.v_url}'>
+				<input type="HIDDEN" name='v_md5info' value='{$parameter.v_md5info}'>
+			</form>
+			<form method="POST" action="" id="wallet_pay_form">
+				<input type="hidden" name='wallet_pay' value='wallet'>
+			</form>
+		</dl>
+			
+		<div style="clear:both;"></div>
+		<!-- <dl>
+			<dt>余额支付：</dt>
+			<dd>
+				<em>
+					<input type="radio" name="pay_tag" value="wallet" id="pay_tag" {if $pay_tag == 'wallet'}checked{/if}><label for="pay_tag"><img src="__PUBLIC__/Images/front/wallet.jpg" /></label>
+				</em>
+			</dd>
+		</dl> -->
+		<dl>
+			<dt>支付宝：</dt>
+			<dd>
+				<em>
+					<input type="radio" name="pay_tag" value="alipay" id="pay_tag2" {if $pay_tag == 'alipay'}checked{/if}><label for="pay_tag2"><img src="__PUBLIC__/Images/front/alipay.jpg" /></label>
+				</em>
+			</dd>
+		</dl>			
+
+		<dl>
+			<dt>银行卡：</dt>
+			<dd class="union_bank">
+				{foreach from=$bank_list key=key item=bank}
+					<em>
+						{if $key == 0}
+						<input type="radio" name="pay_tag" id="pay_tag{$bank.payway_id}" value="{$bank.pay_tag}" {if $pay_tag == 'chinabank'}checked{/if}>
+						{else}
+						<input type="radio" name="pay_tag" id="pay_tag{$bank.payway_id}" value="{$bank.pay_tag}">
+						{/if}
+						<label for="pay_tag{$bank.payway_id}"><img src="{$bank.pay_logo}" /></label>
+					</em>
+				{/foreach}
+			</dd>
+		</dl>
+    </div>
+    <div class="form-button fr mt20" id="pay">去付款</div>
+
+   <!-- e选择支付方式 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+var alipay_link = '{$link}';
+{literal}
+	$('#pay').click(function(){
+		var pay_tag = $('input[name="pay_tag"]:checked').val();
+		if (pay_tag == undefined)
+		{
+			alert('请选择支付方式');
+			return false;
+		}
+		if (pay_tag == 'alipay')
+		{
+			location.href = alipay_link;
+		}
+		else if (pay_tag == 'chinabank')
+		{
+			$('#chinabank_pay_form').submit();
+		}
+		else if (pay_tag == 'wallet')
+		{
+			$('#wallet_pay_form').submit();
+		}
+		else
+		{
+			//获取链接
+			$.ajax({
+				url:"/FrontOrder/getPayLink",
+				type:"POST",
+				dataType:"json",
+				data:{
+					pay_tag: pay_tag,
+				},
+				timeout:10000,
+				success:function(d){
+					if(d) {
+						if(d.code == 0)
+						{
+							//返回成功，代码写这里
+							location.href = d.link;
+						}
+						else
+						{
+							alert(d.msg);
+						}
+					}
+				}
+			});
+		}
+	});
+</script>
+{/literal}
+{/block}

@@ -1,0 +1,34 @@
+﻿{extends file="../home.html"}
+{block name="css"}
+{literal}
+<style>
+		html{overflow-x:hidden; overflow-y:hidden;} 
+		body{margin: 0;padding: 0; overflow-x:hidden; overflow-y:hidden;height:100%;background:url(__PUBLIC__/Images/front/w_background.jpg) no-repeat;background-size:cover;}
+		/*.page-sidebar{display:none;}*/
+		.container{margin-top:-30px;}
+		.w_body1_bk{min-height: 583px;margin-top: 20px;}
+		/*.page-content1{background-color:transparent;}*/
+		/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+		.container {margin-top: -50px;}
+}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+{include file="$header_path"}
+<div class="w_body1_bk" id="w_body1_bk">
+	<!--<video width="100%" height="100%" controls> 
+
+	<source src="http://k.youku.com/player/getFlvPath/sid/3414305108635121f6e71_00/st/flv/fileid/0300020100544FA6E272E401487CC6E2AAC922-FBC2-9D80-B153-31CCB4620927?K=9466dde7bd9e81c42829f834&ctype=12&ev=1&oip=1887191773&token=4849&ep=cSaVHkqNU88A7SXcjT8bZnrkIXAOXP4J9h%2BFg9JjALshTOzJ6DikxZqyO%2FtCF%2F0RdVF1Fp7z2qGUY0IWYYYx2moQ1jqgOfqS%2F%2FXg5a5St%2BNyYh80csTVs1SaSzT4" type="video/mp4" /> 
+
+	<embed src="http://k.youku.com/player/getFlvPath/sid/3414305108635121f6e71_00/st/flv/fileid/0300020100544FA6E272E401487CC6E2AAC922-FBC2-9D80-B153-31CCB4620927?K=9466dde7bd9e81c42829f834&ctype=12&ev=1&oip=1887191773&token=4849&ep=cSaVHkqNU88A7SXcjT8bZnrkIXAOXP4J9h%2BFg9JjALshTOzJ6DikxZqyO%2FtCF%2F0RdVF1Fp7z2qGUY0IWYYYx2moQ1jqgOfqS%2F%2FXg5a5St%2BNyYh80csTVs1SaSzT4" type="application/x-shockwave-flash" 
+	width="100%" height="100%" allowscriptaccess="always" allowfullscreen="true"></embed> 
+	</video>-->
+	<iframe height=100% width=100% src="http://player.youku.com/embed/XODEzNjA0NjQw" frameborder=0 allowfullscreen></iframe>
+</div>
+{/block}
+{block name="js"}
+{/block}

@@ -1,0 +1,94 @@
+/*快递单模板编辑器*/
+.express-settingbox{
+	padding:10px;
+	margin-bottom:20px;
+	border:1px solid #d6d6d6;
+}
+
+#express-editor{
+	position: relative;
+	background:#eee;
+	border:2px solid #ddd;
+}
+#expressimg{
+	display: block;
+}
+.textarea-item{
+	display: none;
+	position:absolute;
+	top:0;
+	left:0;
+	width:190px;
+	height:20px;
+	border:2px solid #000;
+	z-index:11;
+}
+.textarea-item.focus{
+	border-color: #ff6600;
+}
+.textarea-item textarea{
+	width:100%;
+	height:100%;
+	border:none;
+	background:none;
+	font-weight: normal;
+	font-style: normal;
+	font-size:12px;
+	letter-spacing:0;
+	overflow:hidden;
+}
+
+.textarea-item-del,
+.textarea-item-move{
+	position: absolute;
+	top: -17px;
+	z-index:999;
+}
+
+.textarea-item-del{right: 0px;}
+.textarea-item-move{right: 16px;cursor:move;}
+
+.exp-ctrl-icon{
+	display:inline-block;
+	*display: inline;
+	*zoom: 1;
+	width:14px;
+	height: 14px;
+	font-size:0;
+	background: url(/Public/Images/acp/sprite_express_icon.png) no-repeat;
+}
+
+.exp-ctrl-icon.move{background-position:}
+
+.exp-ctrl-icon.remove{background-position:0px 0px;width: 11px;}
+.textarea-item.focus .exp-ctrl-icon.remove{background-position:0px -14px;width: 11px;}
+.exp-ctrl-icon.move{background-position:0px -28px;}
+.textarea-item.focus .exp-ctrl-icon.move{background-position:0px -42px;}
+
+.ckb-font{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	padding: 4px;
+	margin-left:8px;
+	font-size:0;
+	vertical-align:middle;
+	border:1px solid #fff;
+}
+.ckb-font.checked{
+	background:#eee;
+	border-color:#ddd;
+}
+
+.expicon{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	width: 22px;
+	height: 22px;
+	background:url(/Public/Images/acp/sprite_fontset.png) no-repeat;
+	font-size:0;
+}
+
+.expicon.bold{background-position:0 -22px;}
+.expicon.italic{background-position:0 0;}

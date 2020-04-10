@@ -1,0 +1,27 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+   <!--地图-->
+   <div class="ed_map_area" id="map_cont" style="width:100%;">
+   		<div id="container" style="height:400px;"></div>
+   </div>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8904f42a99f576207303619b99e50d52"></script>
+<script>
+var lon = '{$merchant_info.longitude}';
+var lat = '{$merchant_info.latitude}';
+{literal}
+	var map = new BMap.Map("container");
+	map.addControl(new BMap.NavigationControl()); //初始化地图控件                   
+	var point = new BMap.Point(lon,lat);
+	map.centerAndZoom(point,15);
+	var myIcon = new BMap.Icon("__PUBLIC__/Images/front/merchant_logo.png", new BMap.Size(25,35));
+	var marker = new BMap.Marker(point,{icon:myIcon}); //初始化地图标记  
+	map.clearOverlays(); 
+	map.addOverlay(marker);              // 将标注添加到地图中
+	map.panTo(point);      
+	
+</script> 
+{/literal}
+{/block}

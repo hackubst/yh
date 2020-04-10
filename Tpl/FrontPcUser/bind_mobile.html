@@ -1,0 +1,150 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}  
+  <section class="mlr10">
+	  <div class="pt20 display-bl">
+		  <form id="register_form" name="register_form" action="" method="post">
+			  <div class="pos-rel display-bl">
+				<div class="form_inpText">
+					<input type="tel" placeholder="请输入手机号" name="mobile" id="mobile" class="formElem" autofocus="true" value="{$mobile}"/>
+				</div>
+				<div class="form_inpText1">
+					<input type="text" placeholder="输入验证码" name="register-valNum" id="register-valNum" class="formElem" />
+					<div class="sendBtn">
+						<a class="sendValNum" id="code">获取验证码</a>
+					</div>
+				</div>
+
+				<div class="sbmBtn mt5 mb10">
+					<a id="register-submit">{if $mobile}接触绑定{else}绑定{/if}</a>
+				</div>
+			  </div>
+
+			  <input type="hidden" name="action" value="bind">
+		  </form>
+		</div>
+
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+
+{/block}
+
+{block name="js"}
+
+<script>
+var pre_mobile = '{$mobile}';
+var type = pre_mobile == '' ? 1 : 2;
+{literal}  
+	$( function(){
+			
+			
+			var sec = 60;
+			var enabled = true;
+			function goTimer(){
+				enabled = false;
+				$("#code").html(sec+"秒后重发");
+				$("#code").addClass("sendBtn_grey");
+				setTimeout(loop,1000);
+			}
+
+			function loop(){
+				console.log(sec);
+				sec --;
+				$("#code").html(sec+"秒后重发");
+				$("#code").addClass("sendBtn_grey");
+
+				if(sec > 0){
+					setTimeout(loop,1000);
+				}else{
+					$("#code").html("重新发送");
+					$("#code").removeClass("sendBtn_grey");
+					sec = 60;
+					enabled = true;
+				}
+			}
+
+			$('#code').click(function(e){
+				e.preventDefault();
+				if(!enabled){
+					return;
+				}
+				if(!$("input[name=mobile]").val() || !/\d{11}/.test( $("input[name=mobile]").val() ) ){
+					var error="请输入正确的手机号码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+				var thiz = this;
+				$.ajax({
+					url:"/FrontUser/send_vcode",
+					type:"POST",
+					data:{
+						mobile : $("input[name=mobile]").val(),
+						type : type
+					},
+					timeout:10000,
+					success:function(d){
+						if(d)
+						{
+							if(d == 'success'){
+								goTimer();
+							}
+							else
+							{
+								alert("对不起，请不要多次点击！");
+							}
+						}
+					}
+				});
+			});
+			
+			$('.sbmBtn a').click(function(e){
+				e.preventDefault();
+				if(this.parentNode.className.indexOf('disable') != -1) return;
+				if(!$("input[name=mobile]").val() || !/\d{11}/.test( $("input[name=mobile]").val() ) ){
+					var error="请输入正确的手机号码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+
+				if(!$("input[name=register-valNum]").val()){
+					var error="请输入正确的验证码";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+
+				if (type == 2)
+				{
+					confirm('您确定要将该手机号解除绑定吗？', "$('#register_form').submit();");
+				}
+				else
+				{
+					$('#register_form').submit();
+				}
+			});
+		});
+
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		// $('.black-bg').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+		// $('.black-bg').fadeOut(1500);
+	  }
+</script>   
+{/literal}
+{/block}

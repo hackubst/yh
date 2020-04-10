@@ -1,0 +1,64 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" enctype="multipart/form-data" id="add_rank">
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>{$USER_NAME}等级名称：</label>
+        <div class="form-controls">
+            <input type="text" name='rankname' placeholder="" class="small">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>达到该级别所需消费金额：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="" name='money' class="small">
+            <span class="fi-help-text">包含预存款和已消费金额的总额度</span>
+        </div>
+    </div>
+    
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>{$USER_NAME}采购折扣：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="" name='discount' class="mini" style="width:40px;">
+            <span class="fi-help-text"><font class="war">等级折扣为不能为空，只能是1-100的正整数</font></span>
+        </div>
+    </div>
+    
+    <div class="formitems inline">
+        <label class="fi-name">备注：</label>
+        <div class="form-controls">
+            <textarea name="desc" id="" class="small"></textarea>
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    
+<!--     <div class="formitems inline">
+        <label class="fi-name">级别LOGO：</label>
+        <div class="form-controls">
+           <div class="fi-img" style='height:45px;width:45px;'>
+                <img src="/Public/Images/nopic.png" class="J_logo" style="width:45px;height:45px;" />
+                    </div>
+                    <a href="javascript:;" class="btn">
+                        选择图片
+                        <input type="file" class="fi-btn-upload J_logo_up" name="agent_logo">
+                    </a>
+                    <span class="fi-help-text"> <font class="war">(您可以上传一张您定义的等级logo图片)</font></span> 
+        </div>
+    </div>
+-->
+
+    <div class="formactions mgl180">
+        <input type="hidden" name="submit" value="add" />
+        <button tpye="button" class="btn btn-blue"><i class="gicon-ok white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpUser/edit_rank.js?version={$version}"></script>
+{/block}

@@ -1,0 +1,158 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form name="form1" id="form1" action="" method="post" enctype="multipart/form-data">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>菜单显示文字：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="title"> 
+        <span class="fi-help-text">长度限制在10个字符以内，若超出显示限制会自动隐藏</span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name" ><span class="colorRed">*</span>菜单类型：</label>  
+    <div class="form-controls">  
+        <select name="menu_type" id="menu_type" onchange="show_menu_input(this.value);">  
+            <option value="">--请选择--</option>
+			{html_options options=$menu_type_options}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div>
+
+<div class="formitems inline" id="div_items_class" style="display:none;">  
+    <label class="fi-name"><span class="colorRed">*</span>选择商品分类：</label>  
+    <div class="form-controls">  
+        <select name="link_id_items" id="link_id_items" onchange="set_link_id(this.value);">  
+            <option value="">--请选择--</option>
+			{html_options options=$item_list_options}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div>
+
+<div class="formitems inline" id="div_article_class" style="display:none;">  
+    <label class="fi-name"><span class="colorRed">*</span>选择文章分类：</label>  
+    <div class="form-controls">  
+        <select name="link_id_article_class" id="link_id_article_class" onchange="set_link_id(this.value);">  
+            <option value="">--请选择--</option>
+			{html_options options=$article_list_options}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div>
+
+<div class="formitems inline" id="div_limit_total" style="display:none;">  
+    <label class="fi-name" id="label_limit_total"><span class="colorRed">*</span>显示条数：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="limit_total" id="limit_total" class="mini">
+        <span class="fi-help-text">在二级菜单中显示多少条数据</span>    
+    </div>  
+</div>
+<div class="formitems inline" id="div_out_url" style="display:none;">  
+    <label class="fi-name"><span class="colorRed">*</span>外链地址：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="out_url" id="out_url" class="large">
+        <span class="fi-help-text">请输入带http的完整格式的URL地址</span>    
+    </div>  
+</div>
+<div class="formitems inline" id="div_limit_total">  
+    <label class="fi-name" id="label_limit_total">菜单顺序：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="serial" id="serial" class="mini" value="{$max_serial}">
+        <span class="fi-help-text">放在第几个位置</span>    
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">点击后打开：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="target" value="1" checked="checked">当前窗口</label>  
+            <label><input type="radio" name="target" value="2">新窗口</label>   
+        </div>  
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name">下拉图片：</label>  
+    <div class="form-controls">  
+        <div class="fi-img">  
+            <img src="/Public/Images/nopic.png" alt="" class="J_logo">  
+        </div>  
+        <a href="javascript:;" class="btn">  
+            选择图片   
+            <input type="file" class="fi-btn-upload J_logo_up" name="imageUp">
+        </a>  
+        <span class="fi-help-text">如果顶部菜单有下拉效果，图片显示在下拉界面中合适的位置。</span>  
+    </div>  
+</div>  
+<div class="formitems inline">  
+    <label class="fi-name">是否显示：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+            <label><input type="radio" name="isuse" value="1" checked="checked">是</label>  
+            <label><input type="radio" name="isuse" value="0">否</label>   
+        </div>  
+    </div>  
+</div>
+<div class="formitems inline"> 
+    <div class="form-controls"> 
+    	<input type="hidden" name="link_id" id="link_id" value="0">
+       <input type="hidden" name="action" value="add" />
+       <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>添加</button>  
+    </div>
+</div>          
+</form>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/AcpConfig/add_menu.js?version={$version}"></script>
+<script type="text/javascript">
+function show_menu_input(menu_type)
+{
+	var div_limit_total = document.getElementById('div_limit_total');
+	var div_out_url = document.getElementById('div_out_url');
+	var div_items_class = document.getElementById('div_items_class');
+	var div_article_class = document.getElementById('div_article_class');
+	
+	var label_limit_total = document.getElementById('label_limit_total');
+	var link_id_obj= document.getElementById('link_id');
+
+	//先把所有层设为隐藏
+	div_limit_total.style.display='none';
+	div_out_url.style.display='none';
+	div_items_class.style.display='none';
+	div_article_class.style.display='none';
+	label_limit_total.innerHTML = '<span class="colorRed">*</span>显示条数：';
+	link_id_obj.value = 0;
+	
+	//视情况开启
+	if (menu_type == 1)
+	{
+		div_limit_total.style.display='block';
+		div_items_class.style.display='block';
+		label_limit_total.innerHTML = '<span class="colorRed">*</span>二级分类显示条数：';
+	}
+	else if (menu_type == 2)
+	{
+		div_limit_total.style.display='block';
+		div_article_class.style.display='block';
+		label_limit_total.innerHTML = '<span class="colorRed">*</span>下属文章显示条数：';
+	}
+	else if (menu_type == 3)
+	{
+		div_out_url.style.display='block';
+	}
+}
+
+function set_link_id(link_id)
+{
+	var link_id_obj= document.getElementById('link_id');
+	link_id_obj.value = link_id;
+}
+
+</script>
+<script src='__ACPJS__/AcpConfig/edit_water.js?version={$version}'></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+{/block}

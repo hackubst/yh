@@ -1,0 +1,44 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+  
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+    <!-- s面包屑导航 -->
+    {include file="../breadcrum_nav.html"}
+    <!-- e面包屑导航 -->
+    <!-- s主内容 -->
+    <h6 class="form-title mb20">最新公告</h6>
+    {if $notice_list}
+    <div class="new_detlist">
+        <ul>
+          {foreach from=$notice_list item=notice}
+            <li>
+              <a href="{$notice_detail_link}{$notice.notice_id}">{$notice.title}</a>
+              <span>[{$notice.addtime|date_format:"%Y-%m-%d %H:%M:%S"}]</span>
+            </li>  
+            {/foreach}    
+        </ul>
+    </div>
+    <!-- 分页 -->
+    <div class="pagination">
+      <ul>{$show}</ul>
+    </div>
+    {else}
+    <div class="error_content">
+      暂无内容
+    </div>
+    {/if}
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+{/block}

@@ -1,0 +1,187 @@
+
+{block name="title"}{$head_title}{/block}
+
+{block name="css"}
+{literal}
+<style>
+  body {
+    background-color: #fff;
+  }
+
+  a img {
+    border: 0;
+    text-decoration: none;
+  }
+
+  .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+
+  .page {
+    position: relative;
+  }
+
+  .page-top {
+    background: url(/Public/Images/front/loan/banner.png) center 0px no-repeat;
+    max-height: 730px;
+    min-height: 670px;
+  }
+
+  .page-top .qrcode {
+    position: absolute;
+    top: 90px;
+    left: 60%;
+    width: 380px;
+    height: 368px;
+    background: #f3f3f3;
+    overflow: hidden;
+  }
+
+  .page-top .qrcode img {
+    max-width: 380px;
+    width: 100%;
+  }
+
+  .imgbg img {
+    width: 100%;
+    display: block;
+  }
+
+  .mediawidth {
+    background: #fbfbfb;
+    margin-top: 20px;
+  }
+
+  .media {
+    width: 998px;
+    margin: 0 auto;
+    padding: 50px 0 0;
+  }
+
+  .medialist {
+    background: url(//m.ppdaicdn.com/act/pcredguide/img/media.png) no-repeat;
+    padding-left: 30px;
+    color: #666;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 20px;
+  }
+
+  .medialistul ul {
+    margin: 55px 0;
+  }
+
+  .medialistul ul li {
+    display: block;
+    float: left;
+    width: 160px;
+    text-align: center;
+    height: 55px;
+    line-height: 55px;
+  }
+
+  .medialistul ul img {
+    vertical-align: middle;
+  }
+
+  .companyname {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    padding: 15px 0;
+  }
+
+  .companylink {
+    background: #e7e7e7;
+    line-height: 60px;
+    text-align: center;
+  }
+
+  .companylink a {
+    color: #666;
+    font-size: 16px;
+  }
+
+
+  .clmiddle {
+    padding: 0 20px;
+  }
+
+  .copyinfo {
+    text-align: center;
+  }
+
+  .copyinfo p {
+    color: #666;
+    font-size: 12px;
+    padding-top: 10px;
+  }
+</style>
+{/literal}
+{/block}
+
+{block name="content"}
+<!--s主体内容-->
+<div class="page">
+  <div class="page-top">
+    <div class="qrcode">
+      <img src="/Public/Images/front/loan/qrcode.png" alt="">
+    </div>
+  </div>
+  <div class="imgbg">
+    <img src="/Public/Images/front/loan/banner.png" alt="" style="display: none;">
+    <img src="/Public/Images/front/loan/steps.png" alt="">
+    <img src="/Public/Images/front/loan/questions.png" alt="">
+  </div>
+  <div>
+    <div class="mediawidth">
+      <div class="media">
+        <div class="medialist">媒体报道</div>
+        <div class="medialistul clearfix">
+          <ul>
+            <li><img src="/Public/Images/front/loan/cctv.png"></li>
+            <li><img src="/Public/Images/front/loan/people.png"></li>
+            <li><img src="/Public/Images/front/loan/cbn.png"></li>
+            <li><img src="/Public/Images/front/loan/sina_cj.png"></li>
+            <li><img src="/Public/Images/front/loan/fhzx.png"></li>
+            <li><img src="/Public/Images/front/loan/sohu_cj.png"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="copyinfo">
+      <p>联系客服QQ 1928287766 微信 ppkkkf333</p>
+    </div>
+    <!--<div class="rdfooter">-->
+      <!--<div class="footercion" style="padding-top: 20px; text-align: center;">-->
+        <!--<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011502000216" target="_blank"-->
+          <!--style="margin-right: 40px;"><img src="//www.ppdaicdn.com/2014/img/footericon1.png"></a>-->
+
+        <!--<a href="https://ss.knet.cn/verifyseal.dll?sn=e15030931011557866yzjy000000&amp;comefrom=trust&amp;trustKey=dn&amp;trustValue=ppdai.com "-->
+          <!--target="_blank" style="margin-right: 40px;"><img src="//www.ppdaicdn.com/2014/img/footericon2.png"></a>-->
+        <!--<a href="https://trustsealinfo.websecurity.norton.com/splash?form_file=fdf/splash.fdf&amp;dn=ac.ppdai.com&amp;lang=zh_cn"-->
+          <!--target="_blank" style="margin-right: 40px;"><img src="//www.ppdaicdn.com/2014/img/footericon3.png"></a> <a-->
+          <!--id="_jvs_bottomimagelarge_anquan" target="_blank"-->
+          <!--href="http://218.242.124.22:8081/businessCheck/verifKey.do?showType=extShow&amp;serial=9031000020160602102817000000881686-SAIC_SHOW_310000-2013112011475599500&amp;signData=MEUCIQDJzR3k72iO8bSAiXvkeoUqgcgW7byABuLcKRjjFcGs6QIgcP10r2vGY8ic2MUs+WXsukArYioWyRiFWHd2BbzQd0A="-->
+          <!--style="margin-right: 40px;"><img src="//www.ppdaicdn.com/2014/img/footericon5.jpg"></a>-->
+        <!--<a href="http://www.shjbzx.cn" target="_blank"><img alt=""-->
+            <!--src="//www.ppdaicdn.com/2014/img/footericon4.png"></a>-->
+      <!--</div>-->
+    <!--</div>-->
+  </div>
+</div>
+<!--e主体内容-->
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+
+</script>
+
+{/literal}
+{/block}

@@ -1,0 +1,262 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--主内容-->
+	<div class="psn_main">
+		<!--基本信息-->
+		<div class="psn_info" id="psn_info">
+			<div class="psn_info1">
+				<a href="{$personal_data_link}" class="psn_data_link">
+					<div class="psn_pic"><img src="{if $user_info.headimgurl}{$user_info.headimgurl}{else}__PUBLIC__/Images/front/avatar.png{/if}"></div>
+					<h1 class="psn_nickname">{$user_info.nickname}</h1>
+					<!-- vip 等级图标class="vip_1" vip_2 ...vip_5 -->
+					<span class="psn_vip">{$user_info.rank_name} <i class="vip_icon vip_1"></i></span>
+					<span class="psn_jifen">积分：{if $user_integral_list}{$user_integral_list[0].end_integral}{else}0{/if}</span>
+					<i class="psnv2_icon right_arrow"></i>
+				</a>
+			</div>
+			<div class="psn_info2">
+				<div class="psn_l_money psn_info_wrap">
+					<div>￥{$user_info.left_money|default:0.0}</div>
+					<div>账户余额</div>			
+				</div>
+				<div class="psn_gold psn_info_wrap">
+					<div>￥{$user_info.consumed_money|default:0.0}</div>
+					<div>销售额</div>
+				</div>
+				<!-- 镖金池改为抵用券形式，暂且弃用 -->
+				<!--<div class="psn_gold psn_info_wrap">
+					<div>{if $user_freight_list}{$user_freight_list[0].end_freight}{else}0{/if}</div>					
+					<div>镖金</div>
+				</div>-->
+				<!-- <div class="v_line"></div> -->
+			</div>		
+		</div>
+		<!-- 公告栏 -->
+		<div class="notice">
+			<i class="psnv2_icon notice_icon"></i>
+			<span class="notice_txt">
+				<span class="marquee">
+					<span id="totalNum">公告内容1公告内容1公告内容1公告内容1公告内容1公告内容1公告内容1公告内容1公告内容1公告内容1</span>			
+				</span>
+			</span>			
+		</div>
+		<!--功能入口-->
+		<div class="home_fun">
+			{if $is_fenxiao_open}
+			<ul>
+				<li class="multi_li">
+					<a href="javascript:;" class="multi_link">
+						<div class="psn_svg_wrap"><i class="psnv2_icon parter_icon"></i></div>
+						<div class="psn_svg_txt">我是合伙人</div>
+						<span class="total_info">12(55)人</span>
+					</a>
+					<ul class="multi_ul">
+						<li class="single_li">
+							<a href="{$partner_list_link}1">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">一级合伙人</div>
+								<span class="total_info">2(25)人</span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_list_link}2">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">二级合伙人</div>
+								<span class="total_info">2(25)人</span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_list_link}3">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">三级合伙人</div>
+								<span class="total_info">2(25)人</span>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="multi_li">
+					<a href="javascript:;" class="multi_link">
+						<div class="psn_svg_wrap"><i class="psnv2_icon parter_share_icon"></i></div>
+						<div class="psn_svg_txt">合伙人推广</div>
+						<span class="total_info">88单<em class="red">(￥1288)</em></span>
+					</a>
+					<ul class="multi_ul">
+						<li class="single_li">
+							<a href="{$partner_order_list_link}1">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">一级下单未购买</div>
+								<span class="total_info">3单<em class="red">(￥12)</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_order_list_link}1">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">一级下单已购买</div>
+								<span class="total_info">3单<em class="red">(￥12)</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_order_list_link}2">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">二级下单未购买</div>
+								<span class="total_info">3单<em class="red">(￥12)</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_order_list_link}2">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">二级下单已购买</div>
+								<span class="total_info">3单<em class="red">(￥12)</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_order_list_link}3">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">三级下单未购买</div>
+								<span class="total_info">3单<em class="red">(￥12)</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$partner_order_list_link}3">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">三级下单已购买</div>
+								<span class="total_info">3单<em class="red">(￥12)</em></span>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="multi_li">
+					<a href="javascript:;" class="multi_link">
+						<div class="psn_svg_wrap"><i class="psnv2_icon wealth_icon"></i></div>
+						<div class="psn_svg_txt">我的财富</div>
+						<span class="total_info"><em class="red">￥2008</em></span>
+					</a>
+					<ul class="multi_ul">
+						<li class="single_li">
+							<a href="{$award_list_link}/type/1">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">分享奖</div>
+								<span class="total_info"><em class="red">￥2008</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$award_list_link}/type/2">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">傻瓜奖</div>
+								<span class="total_info"><em class="red">￥208</em></span>
+							</a>
+						</li>
+						<li class="single_li">
+							<a href="{$award_list_link}/type/3">
+								<div class="psn_svg_wrap"></div>
+								<div class="psn_svg_txt">全球分红奖</div>
+								<span class="total_info"><em class="red">￥201</em></span>
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			{/if}
+			<ul>
+				{if $user_info.is_extend_user == 1}
+                <li>
+                    <a href="/FrontUser/my_qr_code">
+                        <div class="psn_svg_wrap"><i class="psnv2_icon getcash_icon"></i></svg></div>
+                        <div class="psn_svg_txt">我的二维码</div>
+                    </a>
+				</li>
+                {/if}
+                <li>
+					<a href="{$getcash_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon getcash_icon"></i></div>
+                        <div class="psn_svg_txt">申请提现</div>
+                    </a>
+                </li>	
+				<li>
+					<a href="{$personal_data_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon psn_data_icon"></i></svg></div>
+                        <div class="psn_svg_txt">个人资料</div>
+                    </a>
+                </li>
+                <li>
+					<a href="{$all_order_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon order_icon"></i></div>
+						<div class="psn_svg_txt">我的订单</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$address_list_link}?jump=personal_center">
+						<div class="psn_svg_wrap"><i class="psnv2_icon address_icon"></i></div>
+						<div class="psn_svg_txt">收货地址</div>
+					</a>
+				</li>
+                
+			</ul>
+			<ul>
+				<li>
+					<a href="{$recharge_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon recharge_icon"></i></div>
+						<div class="psn_svg_txt">充值</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$integral_list_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon integral_icon"></i></div>
+						<div class="psn_svg_txt">我的积分</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$account_list_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon account_icon"></i></div>
+						<div class="psn_svg_txt">财务明细</div>
+					</a>
+				</li>
+				<li>
+					<a href="{$edit_pwd_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon pay_psd_icon"></i></div>
+						<div class="psn_svg_txt">支付密码</div>
+					</a>
+				</li>
+				
+			</ul>	
+			<ul>
+				<li>
+					<a href="{$setup_link}">
+						<div class="psn_svg_wrap"><i class="psnv2_icon setup_icon"></i></div>
+						<div class="psn_svg_txt">设置</div>
+					</a>
+				</li>
+			</ul>			
+		</div>
+	</div>
+{include file="$footer_path"}
+{/block}
+{block name="js"}
+<script>
+var str_len = parseInt('90')/3; //90代表传的入公告文字总长度
+{literal}
+$(function(){
+	//公告滚动
+	$('#totalNum').css('-webkit-animation', 'marquee ' + str_len + 's linear infinite');
+	//折叠内容
+	$('.multi_link').on('click', function(event) {
+		event.preventDefault();
+		var _obj = $(this).parent();
+		if(_obj.hasClass('cur'))
+		{
+			_obj.removeClass('cur');	
+		}
+		else
+		{
+			_obj.addClass('cur');
+		}
+		
+	});
+});
+</script>
+{/literal}
+{/block}

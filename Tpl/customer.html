@@ -1,0 +1,36 @@
+<div id="box" style="right: -138px;">
+	<span class="title"></span>
+	<div class="box-right">
+		<!-- <img class="csimg" src="http://www.qifenxiao.com/Public/Images/top.png" width="136" height="6"> -->
+		<div class="main">
+	         <a id="close" href="javascript:;" class="info"><i class="i_1"></i><span>在线客服</span></a>
+			 <div class="tit">售前咨询</div>
+			 <ul>
+				{foreach from=$customer_prev_list item=item}
+			 	 <li>
+					<a rel="nofollow" target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin={$item.account}&amp;site=qq&amp;menu=yes" title="点击这里给我发消息">{$item.customer_service_online_name}</a>
+				 </li>
+			 	 {/foreach}
+			 </ul>
+			 <div class="tit">售后服务</div>
+			 <ul>
+				{foreach from=$customer_after_list item=item}
+			 	 <li>
+					<a rel="nofollow" target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin={$item.account}&amp;site=qq&amp;menu=yes" title="点击这里给我发消息">{$item.customer_service_online_name}</a>
+				 </li>
+			 	{/foreach}
+			 </ul>
+	    </div>
+		<div class="main">
+			 <ul id="main_ul">
+			     <li class="tel">售前电话</li>
+			     <li class="num">{$order_hotline}</li>
+			     <li class="tel">售后电话</li>
+			     <li class="num">{$service_hotline}</li>
+			 </ul>
+	    </div>
+		<div class="box-bot">
+			<!-- <i>在线 9:00-18:00</i> -->
+		</div>
+    </div>
+</div>

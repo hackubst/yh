@@ -1,0 +1,29 @@
+.t-detail-top{ overflow:hidden; border:#ddd solid 1px; padding:20px;}
+.t-detail-top .top-tit{ height:35px; line-height:35px; font-size:14px; font-weight:bold; color:#368ee0;}
+.t-detail-top .top-info{ height:20px; line-height:25px; overflow:hidden; color:#666;}
+.t-detail-top .top-info span{ padding-right:30px;}
+.t-detail-top .top-but{ margin-top:20px;}
+.t-detail-top .top-but .btn{ margin-right:5px;}
+.t-detail-goods-con .tables-form .line-t{ float:left; display:block; line-height:32px; margin-right:10px; display:inline;}
+.mag{ margin-top:15px;}
+
+.t-detail-goods{ overflow:hidden; border:#ddd solid 1px; padding:20px; margin-top:15px;}
+.t-detail-goods-tit{ height:20px; line-height:20px; color:#666; font-weight:bold;}
+.t-detail-goods-con{ overflow:hidden;border:#ddd solid 1px; margin-top:5px;}
+.t-detail-goods-con .pic-t img{ float:left; width:35px; height:35px; display:inline-block; margin-right:4px;}
+.t-detail-goods-con .pic-t span{ display:block; float:left;}
+.t-detail-goods .mag{ margin-top:10px;}
+.t-border{ border:0px;}
+.tables-form td {padding: 6px 3px 6px;}
+
+.t-detail-goods-con .t-lin{ float:left; display:block; line-height:30px; margin-right:10px; display:inline;}
+
+.t-set-baocun{ margin-top:25px; margin-left:150px;}
+
+
+.t-change-apply-detail{ overflow:hidden; color:#666;}
+.table-w{ width:100%; margin:0px;}
+.table-w tr{ vertical-align:inherit;}
+.table-w tr td{ padding:6px 3px;}
+.table-w tr .table-w-le{ text-align:right;}
+.img-jl{ margin-right:5px;}

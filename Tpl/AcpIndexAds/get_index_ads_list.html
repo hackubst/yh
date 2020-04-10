@@ -1,0 +1,167 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<div class="t-art" style="margin-bottom:10px;"><a href="/AcpIndexAds/add_index_ads" class="btn btn-blue"><i class="gicon-plus white"></i>添加首页广告图片</a></div>
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+    	<div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                <div class="t-a-wait-top-li"><span>标题：</span><input type="text" placeholder="" value="{$title}" class="mini" name="title"> </div>
+                <div class="t-a-wait-top-li">
+                <select class="small" name="isuse">
+                    <option value="-1" >是否显示</option>
+					<option value="1" {if 1 == $isuse}selected{/if} >是</option>
+					<option value="0" {if is_numeric($isuse) &&  0 == $isuse}selected{/if} >否</option>
+                </select>
+                </div>
+
+                <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+              </form>
+            </div>        
+        </div> 
+        <table class="wxtables">  
+            <colgroup>  
+            <col width="20%">
+            <col width="15%"> 
+            <col width="25%">
+            <col width="15%">
+            <col width="10%">  
+            <col width="20%">
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <td>图片</td>  
+                    <td>标题</td>  
+                    <td>链接</td>  
+                    <td>尺寸类型</td>  
+                    <td>排序号</td>
+                    <td>操作</td>  
+                </tr>  
+            </thead>  
+            <tbody>
+				{foreach from=$index_ads_list item=row}
+                <tr>  
+					<td><img src="{$row.pic}" style="height:50px;"></td>  
+                    <td>{$row.title}</td>  
+                    <td>{$row.link}</td>  
+                    <td>{$row.style_name}</td>  
+                    <td>{$row.serial}</td>
+                    <td>  
+						<a href="/AcpIndexAds/edit_index_ads/index_ads_id/{$row.index_ads_id}" class="btn" title="点击修改">修改</a>   
+                        <a href="javascript:;" class="btn" onclick="del_index_ads({$row.index_ads_id})">删除</a>   
+                    </td>  
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的用户</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <!--<div class="fl">  
+				<a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+				<a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+			</div> -->
+            <div class="fr">  
+                <div class="paginate">  
+                    {$show}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{literal} 
+<script>
+//全选
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+function del_index_ads(id)
+{
+	opt = "删除";
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行该操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpIndexAds/del_index_ads', {"id":id}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，' + opt + '失败!');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function set_display_mode(id, is_enable)
+{
+	opt = (is_enable == 1) ? '显示' : '不显示';
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行该操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpIndexAds/set_display_mode', {"id":id, "is_enable":is_enable}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，设置' + opt + '状态成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，设置' + opt + '状态失败!');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+{/block}

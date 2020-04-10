@@ -1,0 +1,49 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/front/flash_css/base.css" />
+<link rel="stylesheet" href="/Public/Css/front/flash_css/global.css" />
+{/block}
+{block name="content"}
+<header class="common_head">
+    <a class="back" id="redir_back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+    <div class="header_title{if $merchant_info.online == 0} offline{/if}">
+        {$head_title}
+    </div>
+</header>
+
+		<div id="load_wrapper">
+			<div id="scroller ">
+				<div id="content">
+                    {foreach from=$list item=item}
+                    <a href="/FrontGroupBuy/group_buy_item_detail/group_buy_id/{$item.group_buy_id}" class="box clearfix">
+                        <img src="{$item.pic}"  />
+						<div class="box_div clearfix">
+                            <p>{$item.group_name}</p>
+                            <p>{$item.people_limit}人团</p>
+							<p>拼团价</p>
+                            <p>￥{$item.group_price}</p>
+						</div>
+					</a>
+                    {foreachelse}
+                    暂无数据
+                    {/foreach}
+					
+                </div>
+                {if $list}
+                <div id="pullUp">
+					<span class="pullUpIcon"></span><span class="pullUpLabel">上拉加载...</span>
+				</div>
+                {/if}
+			</div>
+		</div>
+        {/block}
+        {block name="js"}
+		<script type="text/javascript" src="__JS__/front/flash_js/iscroll.js" ></script>
+		<script type="text/javascript" src="__JS__/front/flash_js/load.js" ></script>
+        <script>
+            var page = 1,
+            page_num = parseInt('{$page_num}'),
+            firstRow = parseInt('{$firstRow}');
+        </script>
+        {/block}

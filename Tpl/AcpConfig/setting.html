@@ -1,0 +1,52 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 是否开启：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="limit_open" value='1' {if $config.LIMIT_OPEN == 1}checked="checked"{/if}>是</label>
+            <label><input type="radio" name="limit_open" value='0' {if $config.LIMIT_OPEN == 0}checked="checked"{/if}>否</label>
+        </div>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 结束时间：</label>
+    <div class="form-controls">
+        <!--<input type="text" name='limit_endtime' value='{$config.LIMIT_ENDTIME}' placeholder="">-->
+        <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="limit_endtime" value="{if $config.LIMIT_ENDTIME}{date('Y-m-d H:m:s',$config.LIMIT_ENDTIME)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">  
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span> 描述：</label>
+    <div class="form-controls">
+        <textarea name='limit_desc'>{$config.LIMIT_DESC}</textarea>
+        <span class="fi-help-text"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src='__ACPJS__/AcpConfig/edit_config.js?version={$version}'></script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

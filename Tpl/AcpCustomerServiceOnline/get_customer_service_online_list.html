@@ -1,0 +1,185 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+        <form method="post">
+            <span class="tbs-txt">客服名称：</span>
+            <input type="text" name="customer_service_online_name" value="{$customer_service_online_name}">
+
+            <div class="mgt10">
+                <span class="tbs-txt">添加时间：</span>
+                <input type="text" autocomplete="off" class="Wdate" name="start_date" value="{$start_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <span class="tbs-txt">至</span>
+                <input type="text" autocomplete="off" class="Wdate" name="end_date" value="{$end_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+            </div>
+
+        </form>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="8%">
+            <col width="8%">
+            <col width="8%">
+            <col width="15%">
+            <col width="15%">
+            <col width="8%">
+            <col width="15%">
+            <col width="12%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>客服类型</td>
+            <td>售前/售后</td>
+			<!-- <td>产品名称</td> -->
+            <td>账号</td>
+			<td>点击量</td>
+            <td>添加时间</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$customer_service_online_list item=customer_service_online}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$customer_service_online.customer_service_online_id}" name="checkIds[]"></td>
+            <td>{$customer_service_online.service_type}</td>
+            <td>{$customer_service_online.is_after_service}</td>
+            <!-- <td>{$customer_service_online.item_name}</td> -->
+            <td>{$customer_service_online.account}</td>
+            <td>{$customer_service_online.clickdot}</td>
+            <td>{$customer_service_online.addtime|date_format:"%Y-%m-%d %H-%M-%S"}</td>
+            <td>
+				<a href="/AcpCustomerServiceOnline/edit_customer_service_online/customer_service_online_id/{$customer_service_online.customer_service_online_id}" class="btn" title="编辑">编辑</a>
+				{if $opt == 'onsale'}
+					<a href="javascript:;" class="btn J_store" onclick="set_isuse({$customer_service_online.customer_service_online_id}, 0)" title="下架">下架</a>
+				{elseif $opt == 'store'}
+					<a href="javascript:;" class="btn J_display" onclick="set_isuse({$customer_service_online.customer_service_online_id}, 1)" title="上架">上架</a>
+				{/if}
+                <input type="hidden" name="customer_service_online_id" value="{$customer_service_online.customer_service_online_id}">
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+			{if $opt == 'onsale'}
+				<a href="javascript:;" class="btn btn-blue J_batch_store" onclick="batch_set_customer_service_online_isuse(0)">下架</a>
+			{elseif $opt == 'store'}
+				<a href="javascript:;" class="btn btn-blue J_batch_store" onclick="batch_set_customer_service_online_isuse(1)">上架</a>
+			{/if}
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+
+{literal}
+var opt;
+function set_isuse(id, isuse)
+{
+	opt = (isuse == 1) ? '上架' : '下架';
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行该操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 $.post('/AcpCustomerServiceOnline/set_customer_service_online_isuse', {"customer_service_online_id":id, "isuse":isuse}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，' + opt + '失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });  	
+}
+
+function batch_set_customer_service_online_isuse(isuse)
+{
+	opt = (isuse == 1) ? '上架' : '下架';
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要执行这些操作吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {  
+			 if(r)
+			 {
+				 var ids = '';
+				 var count = 0;
+				 $('input[name="checkIds[]"]:checked').each(function(){
+					 count ++;
+					 ids += $(this).val() + ',';
+				 });
+
+				 if (!count)
+				 {
+					 alert('对不起，请选择至少一项进行操作！');
+					 return;
+				 }
+
+				 ids = ids.substr(0, ids.length - 1);
+
+				 $.post('/AcpCustomerServiceOnline/batch_set_customer_service_online_isuse', {"customer_service_online_ids":ids, "isuse":isuse}, function(data, textStatus) 
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，' + opt + '失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });
+}
+{/literal}
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+{/block}

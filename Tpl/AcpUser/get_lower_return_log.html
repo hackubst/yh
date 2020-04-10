@@ -1,0 +1,63 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+    <div class="t-rank-con">
+        <div class="tablesWrap">
+            <table class="wxtables">  
+                <colgroup>  
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                </colgroup>  
+                <thead>  
+                    <tr> 
+                        <td>用户ID</td>
+                        <td>下线ID</td>
+                        <td>返利金豆</td>
+                        <td>返利时间</td>
+                    </tr>  
+                </thead>  
+                <tbody>
+                    {foreach from=$return_log item=v}
+                    <tr>  
+                        <td>{$v.id}</td>
+                        <td>{$v.lower_id}</td>
+                        <td>{$v.money}</td>
+                        <td>{$v.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                    </tr>
+                    {foreachelse}
+                    <tr><td colspan="10">没有找到任何记录</td></tr>
+                    {/foreach}
+                </tbody>  
+            </table>  
+            <!-- end wxtables -->  
+            <div class="tables-btmctrl clearfix">  
+                <div class="fl">  
+                     
+                </div>  
+                <div class="fr">  
+                    <div class="paginate">  
+                        {$show}
+                    </div>  
+                    <!-- end paginate -->  
+                </div>  
+            </div>  
+            <!-- end tables-btmctrl -->  
+        </div>  
+		<!-- end tablesWrap -->       
+    </div>
+
+{/block} 
+
+{block name="js"}
+<script src="__ACPJS__/AcpUser/edit_rank.js?version={$version}"></script>
+<script>
+
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/list_rank.css" type="text/css" />
+{/block}

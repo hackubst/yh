@@ -1,0 +1,150 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+<div class="tablesWrap">
+
+<div class="tables-searchbox">
+    <form method="post">
+        <div class="mgt10">
+            <span class="tbs-txt">ID：</span>
+            <input type="text" name="id" value="{if $id}{$id}{else}{/if}">
+
+            <span class="tbs-txt">类型名称：</span>
+            <input type="text" name="type_name" value="{$type_name}">
+
+            <span class="tbs-txt">游戏类型：</span>
+            <select name="game_type_id">
+                <option value="">--请选择--</option>
+                {foreach from= $game_type_list item=game }
+                <option value="{$game.game_type_id}" {if $game.game_type_id == $game_type_id}selected{/if}>{$game.game_type_name}</option>
+                {/foreach}
+            </select>
+
+            <span class="tbs-txt">用户昵称：</span>
+            <input type="text" name="nickname" value="{$nickname}">
+
+            <span class="tbs-txt">手机号：</span>
+            <input type="text" name="mobile" value="{$mobile}">
+
+            <span class="tbs-txt">系列：</span>
+            <select name="series_id">
+                <option value="">--请选择--</option>
+                {foreach from= $series_list item=series}
+                <option value="{$series.game_series_id}" {if $series_id == $series.game_series_id}selected{/if}>{$series.game_series_name}</option>
+                {/foreach}
+            </select>
+
+            <span "tbs-txt">查询时间：</span>  
+                <input type="text" style="width:150px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+
+            <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </div>
+    </form>
+</div>
+    <table class="wxtables">
+        <colgroup>
+            <col width="16%">
+            <col width="16%">
+            <col width="16%">
+            <col width="16%">
+             <col width="16%">
+            <col width="16%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>用户ID</td>
+            <td>用户昵称</td>
+            <!-- <td>游戏类型</td> -->
+            <td>输赢</td>
+            <td>当前乐豆</td>
+            <td>游戏日期</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$bet_log_list item=v}
+        <tr>
+            <!--<td>{if $v.id}{$v.id}{else}&#45;&#45;{/if}</td>-->
+            <td><a href="/AcpUser/user_detail/user_id/{$v.user_id}" title="查看用户详情"><span style="color: blue">{$v.id}</span></a></td>
+
+            <td>{if $v.nickname}{$v.nickname}{else}--{/if}</td>
+            <!-- <td>{$v.game_type_name}</td> -->
+            <td>{$v.win_loss}</td>
+            <td>{if $v.left_money}{$v.left_money}{else}--{/if}</td>
+            <td>{$v.addtime|date_format:"%Y-%m-%d"}</td>
+            <td><a href="/AcpGame/get_bet_log/user_id/{$v.user_id}/start_time/{$v.addtime|date_format:"%Y-%m-%d"}"
+                   class="btn" title="今日投注记录">今日投注记录</a>
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+        </div>
+    </div>
+
+    <!-- end tables-btmctrl -->
+
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+{literal}
+<script>
+
+
+
+function set_enable(id, enable,type)
+{
+    if(type == 2){
+        var opt = enable ? '启用':'禁用';
+    }else if(type == 1){
+        var opt = enable ? '显示':'隐藏';
+    }
+    $.jPops.confirm({
+        title:"提示",
+        content:"您确定要执行这个操作吗？",
+        okBtnTxt:"确定",
+        cancelBtnTxt:"取消",
+        callback:function(r) {
+            if(r) {
+                $.post('/AcpGame/type_set_enable', {"type_id":id, "opt":enable,"type":type}, function(data, textStatus)
+                {
+                    if (data == 'success') {
+                        alert('恭喜您，' + opt + '成功！');
+                        location.reload();
+                    } else {
+                        alert('对不起，'+ opt +'失败！');
+                    }
+                });
+            }
+            return true;
+        }
+    });
+}
+
+
+</script>
+{/literal}
+{/block}

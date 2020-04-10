@@ -1,0 +1,66 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormNotice" action="" method="post">
+
+    <div class="formitems inline">
+        <label class="fi-name">选择红包类型：</label>
+        <div class="form-controls">
+            <div class="radio-group">
+                <label><input type="radio" name="type" value="1" checked="checked" />普通红包</label>
+                <label><input type="radio" name="type" value="2" />手气红包</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>红包总金额(金豆)：</label>
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="total_money" id="total_money">
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div>
+
+    <div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>红包数量：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="num" id="num">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+    <div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>红包标题：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="恭喜发财，大吉大利！" class="xlarge" name="title" id="title">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="submit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>生成红包</button>
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+    <!-- 编辑器 -->
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__UE__/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__UE__/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+</script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpNotice/add_notice.css"  type="text/css"/>
+{/block}

@@ -1,0 +1,48 @@
+{if $pc_site eq 1}
+<!-- s顶部 -->
+{include file="top_header.html"}
+<!-- e顶部 -->
+<!--s导航，购物车，搜索-->
+<div class="header-wrapper">
+  <header class="container">
+    <div class="head-right">
+      <section class="header-bottom">
+        <!-- s购物车 -->
+        {include file="cart_min.html"}
+        <!-- e购物车 -->
+        <!-- s搜索 -->
+        <div class="search-block">
+          <form name="search" action="{$item_list_link}" method="GET" onsubmit="return false">
+            <input type="text" value="{$item_name}" placeholder="输入商品名称" name="keyword" />
+            <input type="submit" value="搜索" title="搜索" id="search_submit" />
+          </form>
+        </div>
+        <!-- e搜索 -->
+        <!-- s二维码 -->
+        <div class="wx-code">
+            <img src="__PUBLIC__/Images/front/wx_code.jpg" alt="扫码关注我们" />
+        </div>
+        <!-- e二维码 -->
+      </section>
+    </div>
+      <!-- s LOGO -->
+    <h1 class="logo">
+      <a href="{$home_link}" title="Logo">
+        <img title="Logo" alt="Logo" src="__PUBLIC__/Images/front/logo.png" style="margin-top:30px;" />
+      </a>
+    </h1>
+      <!-- e lOGO -->
+      <!-- s导航 -->
+    {include file="top_nav.html"}
+      <!-- e导航 -->  
+  </header>
+</div>
+<!--e导航，购物车，搜索-->
+{else}
+{if $APP_TYPE == ''}
+<header class="common_head">
+    <a class="back" id="redir_back" href="{if $cart_url}{$cart_url}{else}javascript:history.go(-1);{/if}"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+    <div class="header_title">{$head_title}</div>
+</header>
+{/if}
+{/if}

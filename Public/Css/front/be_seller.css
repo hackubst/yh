@@ -1,0 +1,94 @@
+body{
+	font-size: 13px;
+	color: #323232;
+	background-color: #efefef;
+}
+.red{
+	color: #ff5b6f;
+}
+.seller_cont{
+	margin: 30px auto;
+	width: 96%;
+}
+.txt_info{
+	line-height: 20px;
+}
+.vip_rule{
+	float: right;
+	color: #009dff;
+}
+.seller_btn{
+	width: 100%;
+	height: 44px;
+	line-height: 44px;
+	margin: 20px auto;
+}
+.seller_btn .go_buy{
+	background-color: #ff5b6f;
+	border-radius: 6px;
+	text-align: center;
+	color: #fff;
+	display: block;
+}
+.seller_icon{
+	background: url(/Public/Images/front/be_seller_icon.png) no-repeat;
+	background-size: 130px 37px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.go_buy .cart{
+	width: 18px;
+	height: 18px;
+	background-position: 0 0;
+	margin-right: 3px;
+}
+.right_wrap{
+	width: 100%;
+	background-color: #fff;
+	border-radius: 6px;
+}
+.right_wrap .title{
+	text-align: center;
+	line-height: 30px;
+	border-bottom: 1px solid #d6d7dc;
+}
+.right_li{
+	position: relative;
+	width: 100%;
+	height: 76px;
+	border-bottom: 1px solid #d6d7dc;
+}
+.right_li .merchant,.right_li .income,.right_li .award{
+	width: 36px;
+	height: 37px;
+	position: absolute;
+	top: 15px;
+	left: 10px;
+}
+.right_li .merchant{
+	background-position: -20px 0;
+}
+.right_li .income{
+	background-position: -56px 0;
+}
+.right_li .award{
+	background-position: -92px 0;
+}
+.right_li .tit{
+	font-size: 15px;
+	position: absolute;
+	top: 15px;
+	left: 54px;
+}
+.right_li .info{
+	position: absolute;
+	top: 38px;
+	left: 54px;
+	color: #9b9b9b;
+}
+.over_info{
+	height: 65px;
+	color: #9b9b9b;
+	line-height: 22px;
+    margin: 6px;
+}

@@ -1,0 +1,229 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox">
+        <form method="post">
+            <span class="tbs-txt">{$ITEM_NAME}名称：</span>
+            <input type="text" name="item_name" value="{$item_name}">
+
+            <span class="tbs-txt">{$ITEM_NAME}货号：</span>
+            <input type="text" class="mini" name="item_sn" value="{$item_sn}">
+
+            <!--
+            <span class="tbs-txt">销售量：</span>
+            <input type="text" style="width:60px;" name="start_sales_num" value="{$start_sales_num}">
+            <span class="tbs-txt">——</span>
+            <input type="text" style="width:60px;" name="end_sales_num" value="{$end_sales_num}">
+            -->
+
+            <select name="category_id">
+                <option value="0" selected="">-{$ITEM_NAME}分类-</option>
+                {foreach from=$arr_category item=row1}
+                <option value="1.{$row1.class_id}" {if "1."|cat:$row1.class_id EQ $category_id}selected{/if}>{$row1.class_name}</option>
+                {foreach from=$row1.sort_info item=row2}
+                <option value="2.{$row2.sort_id}" {if "2."|cat:$row2.sort_id EQ $category_id}selected{/if}>{$row2.sort_name}</option>
+                <!--{foreach from=$row2.genre_info item=row3}
+                <option value="3.{$row3.class_genre_id}" {if "3."|cat:$row3.class_genre_id EQ $category_id}selected{/if}>{$row3.genre_name}</option>
+				{/foreach}-->
+                {/foreach}
+                {/foreach}
+            </select>
+         
+            <select name="item_status">
+                <option value="0" selected="">-{$ITEM_NAME}状态-</option>
+                {foreach from=$arr_item_status item=row key=key}
+                <option value="{$key}" {if $key EQ $item_status}selected{/if}>{$row}</option>
+                {/foreach}
+            </select>
+
+            <div class="mgt10">
+                <span class="tbs-txt">添加时间：</span>
+                <input type="text" autocomplete="off" class="Wdate" name="start_date" value="{$start_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <span class="tbs-txt">至</span>
+                <input type="text" autocomplete="off" class="Wdate" name="end_date" value="{$end_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+                <button type="button" class="btn" style="background-color:#FF9900;color:#FFF" onclick="sync_item();">同步商品资料</button>
+            </div>
+
+        </form>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="5%">
+            <col width="5%">
+            <col width="10%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="7%">
+            <col width="20%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>编号</td>
+            <td>图片</td>
+            <td>{$ITEM_NAME}名称</td>
+            <td>货号</td>
+            <td>是否礼品</td>
+            <td>本店价</td>
+            <td>积分抵扣</td>
+            <td>库存</td>
+            <td>销售量</td>
+            <td>{$ITEM_NAME}状态</td>
+            <td>排序号</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$item_list item=item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$item.item_id}" name="checkIds[]"></td>
+            <td>{$smarty.foreach.list.iteration + $page->firstRow}.</td>
+            <td>
+				<div class="gallery">
+					<div><a href="{$item.small_img}"><img src="{$item.small_img}" style="width:70px;display:block;"/></a></div>
+					<div class="clear"></div>
+				</div>
+				<!--<a href="{$item.link_item}" target="_blank"><img src="{$item.small_img}" alt="" width="50" height="50" onerror="no_pic(this);"></a>-->
+			</td>
+            <td>
+                <a href="{$item.link_item}" target="_blank">{$item.item_name}</a>
+            </td>
+            <td>{$item.item_sn}</td>
+            <td>{if $item.is_gift == '1'}礼品{else}商品{/if}</td>
+            <td>{$item.mall_price}</td>
+            <td>{$item.integral_exchange}</td>
+            <td>{$item.stock}</td>
+            <td>{$item.sales_num}</td>
+            <td>{$item.status}</td>
+            <td>{$item.serial}</td>
+            <td>
+				{include file="./opt.html"}
+                <input type="hidden" name="item_id" value="{$item.item_id}">
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_store">下架</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_del">删除</a>
+        </div>
+        <div class="fr">
+            <div class="paginate">
+                {$page->show()}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script src="__JS__/front/jquery.showLoading.min.js?version={$version}"></script>
+<script src="__JS__/clipboard.min.js"></script>
+<link rel="stylesheet" href="__CSS__/front/showLoading.css?version={$version}">
+<script>
+var item_name = '{$ITEM_NAME}';
+
+function sync_item()
+{
+    var html = "确定执行此操作，本操作将比较费时，请耐心等候!";
+	$.jPops.custom({
+		title:"同步商品资料",  
+		content:html,
+		okBtnTxt:"确定",  
+		cancelBtnTxt:"取消",  
+		callback:function(r)
+		{
+			if(r)
+			{
+                $('body').showLoading();
+                $.post('/Global/sync',{},function(data) {
+                    $("body").hideLoading();
+                    if (data == 'success') {
+                        alert('同步成功');
+                        location.reload();
+                    } else {
+                        alert('同步失败，请稍后再试');
+                    }
+                });
+			}
+            return true;  
+		}
+	});
+}
+//复制商品链接
+function item_link(item_id, is_integral)
+{
+    if(is_integral == 1){
+        action = 'integral_item_detail';
+    }else{
+        action = 'item_detail';
+    }
+    var link = 'http://' + document.domain + '/FrontMall/'+action+'/item_id/' + item_id;
+    $.jPops.custom({
+        title:"请复制链接",  
+        content:'<div>商品链接：' + link + '</div>',
+        okBtnTxt:"复制",  
+        cancelBtnTxt:"关闭",  
+        callback:function(r)
+        {
+            if(r)
+            {
+                text = link;
+                copy_text('jpops-btn-ok');
+            }
+            else
+            {
+                return true;  
+            }
+        }
+    });
+}
+function copy_text(id)
+    {
+        var clipboard = new Clipboard('#' + id, {
+            text: function() {
+                return text;
+            }
+        });
+
+        clipboard.on('success', function(e) {
+            console.log(e);
+            alert('复制成功');
+        });
+
+        clipboard.on('error', function(e) {
+            console.log(e);
+            alert('复制失败，请手动复制');
+        });
+    }       
+</script>
+{/block}

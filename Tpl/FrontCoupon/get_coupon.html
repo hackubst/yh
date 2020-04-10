@@ -1,0 +1,133 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/front/ticket_css/base.css" />
+<link rel="stylesheet" href="/Public/Css/front/ticket_css/global.css" />
+<link rel="stylesheet" href="/Public/Css/front/ticket_css/layer.css" />
+<style>
+	.send_to {
+	border-bottom: 1px solid #ECECEC;
+	margin-bottom: 10px;
+	}
+	.address_defalut1{
+	position: relative;
+	line-height: 35px;
+	padding: 0px 4%;
+	font-size: 14px;
+	color: #ccc;
+	}
+	.address_defalut1:after{
+	content: '\20';
+	display: block;
+	position: absolute;
+	top: 50%;
+	right: 18px;
+	width: 12px;
+	height: 12px;
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	background: none;
+	margin-top: -6px;
+	-webkit-transform: rotate(135deg);
+	-ms-transform: rotate(135deg);
+	transform: rotate(135deg);
+	}
+
+</style>
+{/block}
+
+{block name="content"}
+<header class="common_head">
+<a class="back" id="redir_back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+<div class="header_title{if $merchant_info.online == 0} offline{/if}">
+	{$head_title}
+</div>
+</header>
+<div>
+	<div id="sendTo" class="send_to" >
+		<div class="address_defalut1">
+			<h5>
+				会员卡号：
+			</h5>
+			<select style="width:70%;height:40px;font-size:15px;" id="card_id">
+				 <!-- onchange="get_shopping_cost()"> -->
+				{foreach from=$card_list item=row}
+				<option value="{$row.card_code|default:0}">{$row.card_code}</option>
+				{/foreach}
+			</select>
+		</div>
+	</div>
+
+	<div class="tict_mid clearfix">
+		{foreach from=$vouchers key=key item=item}
+		<div class="tict_cont">
+			<div class="tict_num {if $item.type eq 2}tict_1{elseif $item.type eq 3}tict_2{/if}">
+				<div class="tict_money">￥{$item.amount_limit|string_format:"%d"}</div>
+				<hr>
+				<div class="tict_usage">{$item.use_limit_desc}</div>
+				<div class="left_circle"></div>
+				<div class="right_circle"></div>
+			</div>
+			<div class="tict_info">
+				<div class="tict_time">有效期至{$item.end_time|date_format:"%Y.%m.%d"}</div>
+			</div>
+			<div class="tict_get">
+				<a href="javascript:;" onclick="get_coupon({$item.vouchers_id})">领取</a>
+			</div>
+		</div>
+		{foreachelse}
+		<div style="margin-top:10%;text-align:center;">
+			暂时没有可以领取的券哦，敬请期待；
+		</div>
+		{/foreach}
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Js/front/ticket_js/layer.js" ></script>
+<script type="text/javascript" src="/Public/Js/front/ticket_js/jquery-1.12.1.min.js" ></script>
+<script type="text/javascript">
+{literal}
+
+function get_coupon(id)
+{
+	if (!id) {
+		layer.open({
+            content : '<img src="/Public/Images/front/icon_yihan.png" style="width:23px;height:22px;margin-bottom:10px" /> <div style="font-size:14px;color:#555;">出错啦，请稍后再试!</div>',
+            style   : 'width:30%;height:100px;',
+        });
+        return;
+    }
+
+    var card_id = $("#card_id").val();
+    if (!card_id) {
+    	layer.open({
+            content : '<img src="/Public/Images/front/icon_yihan.png" style="width:23px;height:22px;margin-bottom:10px" /> <div style="font-size:14px;color:#555;">请选择会员卡号!</div>',
+            style   : 'width:30%;height:100px;',
+        });
+        return;
+    }
+
+    $.post('/FrontCoupon/get_coupon', {'id':id, 'card':card_id}, function(data){
+		if (data == 'success') {
+            layer.open({
+                content : '<img src="/Public/Images/front/icon_wancheng.png" style="width:23px;height:22px;margin-bottom:10px" /> <div style="font-size:14px;color:#555;">领取成功</div>',
+                style   : 'width:30%;height:100px;',
+            });
+		} else if (data == 'have') {
+    		layer.open({
+                content : '<img src="/Public/Images/front/icon_yihan.png" style="width:23px;height:22px;margin-bottom:10px" />  <div style="font-size:14px;color:#555;">您已领过券了</div>',
+                style   : 'width:30%;height:100px;',
+            });
+		} else {
+    		layer.open({
+                content : '<img src="/Public/Images/front/icon_yihan.png" style="width:23px;height:22px;margin-bottom:10px" />  <div style="font-size:14px;color:#555;">很遗憾,券已发完</div>',
+                style   : 'width:30%;height:100px;',
+            });
+		}
+    });
+}
+{/literal}
+</script>
+{/block}

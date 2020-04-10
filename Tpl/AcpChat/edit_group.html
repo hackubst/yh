@@ -1,0 +1,37 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> 群组名称：</label>
+        <div class="form-controls">
+            <input type="text" name='group_name' value='{$group_info.hx_group_name}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> 群描述：</label>
+        <div class="form-controls" id="J_KindEditor">
+            <textarea name="group_desc" id="contents" class="large">{$group_info.hx_group_desc}</textarea>
+        </div>
+    </div>
+    <input type="hidden" value="{$group_id}"name="group_id">
+    <div class="formitems inline">
+        <label class="fi-name"></label>
+        <div class="form-controls">
+            <input type='hidden' name='act' value='save' />
+            <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定修改</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

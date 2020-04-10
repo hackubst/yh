@@ -1,0 +1,81 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="POST" action="" name="add_role_form" id="add_role_form">
+	<div class="formitems inline">  
+		<label class="fi-name"><span class="colorRed">*</span> 角色名称：</label>  
+		<div class="form-controls">  
+			<input type="text" name="role_name" id="role_name" placeholder="">  
+			<span class="fi-help-text"></span>
+		</div>  
+	</div> 
+	<div class="add_role_box">
+		{foreach from=$priv_list key=key item=priv_info}
+			<div class="add-role-list">
+				<div class="add-role-tit">
+					<input type="checkbox" name="checkbox" id="checkbox{$key}" class="che-t"/>
+					<label for="checkbox{$key}">{$priv_info.name}</label>
+				</div>
+				<ul>
+					{foreach from=$priv_info.menu_list item=first_level_menu_info}
+						{foreach from=$first_level_menu_info item=second_level_menu_info}
+							<li><input type="checkbox" name="priv" id="{$second_level_menu_info.id}" class="che-li" value="{$second_level_menu_info.id}"/><label for="{$second_level_menu_info.id}">{$second_level_menu_info.name}</label></li>
+						{/foreach}
+					{/foreach}
+				</ul>
+			</div>
+		{/foreach}
+		<input type="hidden" name="priv_list" id="priv_list">
+		<span class="fi-help-text"></span>
+	</div>  
+	<input type="hidden" name="act" value="add">
+    <div class="t-set-baocun"><button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存修改</button>  </div>
+</form>
+{/block} 
+
+{block name="js"}
+<script>
+$(".che-t").click(function(){
+	$(this).parents(".add-role-list").find("input:checkbox[name=priv]").attr("checked",this.checked);
+})
+
+$('input:checkbox').click(function(){
+	generate_priv_list();
+});
+
+function generate_priv_list()
+{
+	var priv_list = '';
+	$('input:checkbox[name="priv"]:checked').each(function(){
+		priv_list += $(this).val() + ',';
+	});
+	$('#priv_list').val(priv_list);
+}
+
+$("#add_role_form").validate({
+	rules: {
+		role_name:{
+			required: true
+		},
+		priv_list:{
+			required: true
+		}
+	},
+	messages: {
+		role_name:{
+			required: "对不起，角色名不能为空！"
+		},
+		priv_list:{
+			required: "对不起，请至少选择一项权限！"
+		}
+	},
+	errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+	success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+});
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpRole/add_role.css" type="text/css" />
+{/block}

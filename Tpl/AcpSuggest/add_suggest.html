@@ -1,0 +1,73 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-suggest">
+	<div class="t-suggest-tit">非常期待您给我们留下您的建议</div>
+    <div class="t-suggest-con">
+	<form name="form1" id="form1" action="" method="post">
+        <div class="formitems inline">  
+            <label class="fi-name">建议内容：</label>  
+            <div class="form-controls">  
+                <textarea name="message" id="message"></textarea>   
+				<span class="fi-help-text hide"></span>
+            </div>  
+    	</div>
+        <div class="formitems t-sug-yz">  
+            <div class="t-name">验证码：</div>  
+            <div class="t-form-controls">  
+				<input type="text" placeholder="" class="mini t-mini" name="vcode" id="vcode">
+				<span class="t-yzm">
+					<a href="javascript:freshVerify();">
+						<img id="verifyImg" src="__APP__/Public/verify" />
+					</a>
+					<a href="javascript:freshVerify();">看不清？点击更换</a>
+				</span> 
+				<span class="fi-help-text hide"></span>
+            </div>  
+        </div>  
+        <div class="t-but">
+			<input type="hidden" name="act" value="submit" />
+			<button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>提交</button>  
+		</div>  
+	</form>
+    </div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript">
+$(function(){
+	$("#form1").validate({
+		rules: {
+			message: {
+				required: true
+			},
+			vcode: {
+				required: true
+			}
+		},
+		messages: {
+			message: {
+				required: "请输入您的建议"
+			},
+			vcode: {
+				required: "请输入验证码"
+			}
+		},
+		errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+		success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+	});
+});
+
+function freshVerify(){
+	var x = new Date().getTime();
+    //重载验证码
+    $('#verifyImg').attr('src', '/Public/verify/' + x);
+}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpSuggest/add_suggest.css"  type="text/css"/>
+{/block}

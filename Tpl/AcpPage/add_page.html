@@ -1,0 +1,168 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" enctype="multipart/form-data" action="" id="add_rank">
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>页面模板名称：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="" class="xlarge" name="page_name" id="page_name" value="{$page_info.page_name}">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div> 
+
+    <div class="formitems inline" id="base_image">
+    <label class="fi-name">缩略图：</label>
+    <div class="form-controls">
+        <ul class="fi-imgslist">
+            <li class="preview fi-imgslist-item pic{if !$page_info.base_image|| !file_exists($base_image_path)} hide{/if}" id="preview" style="">
+                <div>
+                    <img id="J_Preview" style="height:69px;" src="{$page_info.base_image}"/>
+                </div>
+                <input type="hidden" name="base_image" id="J_ImgUrl" data-id="{if $page_info.base_image}{/if}" value="{$page_info.base_image}" />
+                <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('base_image');"></i></a>
+                <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                <div class="pic-mask" id="J_Mask"></div>
+            </li>
+            <li class="fi-imgslist-item{if $base_image_path && file_exists($base_image_path)} hide{/if}" id="add_li">
+                <a href="javascript:;" class="add" title="上传一张新的图片" id="base_image_uploader">+</a>
+            </li>
+        </ul>
+        <span class="fi-help-text">宽高600*375最佳</span>
+    </div>
+    </div>
+    
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>页面模板地址：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="" class="xlarge" name="page_url" id="page_url" value="{$page_info.page_url}">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div>
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>文件名称：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="" class="xlarge" name="file_name" id="file_name" value="{$page_info.file_name}">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div>
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>页面模板描述：</label>  
+        <div class="form-controls">  
+            <textarea name="page_desc" id="page_desc">{$page_info.page_desc}</textarea>  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div>
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>排序号：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="" class="mini" name="serial" id="serial" value="{$page_info.serial}">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div> 
+
+    <div class="formitems inline">  
+        <label class="fi-name">显示：</label>  
+        <div class="form-controls">  
+            <div class="radio-group">  
+                <label><input type="radio" name="isuse" value="1"  checked="checked"/>是</label>  
+                <label><input type="radio" name="isuse" value="0"  />否</label>   
+            </div>  
+        </div>  
+    </div> 
+
+    <div class="formactions mgl180">
+        <input type="hidden" name="act" value="add" />
+        <button tpye="button" class="btn btn-blue"><i class="gicon-ok white"></i>确定</button>
+    </div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script>
+{literal}
+    function upload_file(div_id)
+    {
+        // ajax上传图片
+        new AjaxUpload("#" + div_id + "_uploader", {
+            action: "/AcpArticleAjax/uploadHandler",
+            name: "imgFile",
+            responseType: "json",
+            onSubmit: function(){
+                //alert('正在上传');
+                //preview处的图片改为loading图片
+                $('#' + div_id).find('.preview').removeClass('hide');
+            },
+            onChange: function(file, extension){
+                if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+                    return true;
+                }
+                else {
+                    alert('暂不支持该图片格式！');
+                    return false;
+                }
+            },
+            onComplete: function(file, response){
+                console.log(response);
+                if (response.status === 0) {
+                    alert(response.msg);
+                }
+                else if (response.status === 1) {
+                    $('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+                    $('#' + div_id).find('.preview').show();
+                    $('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+                    $('#' + div_id).find('#add_li').hide();
+                }
+            }
+        });
+    }
+
+    function delImage(div_id)
+    {
+        var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+        var preview = $('#' + div_id).find('#J_Preview');
+        var param = {};
+        var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+        var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+        
+        if (_id != '') {
+            param.id = _id;
+        }
+        if (imgUrl != '') {
+            param.img_url = imgUrl;
+        }
+        $.ajax({
+            url: '/AcpArticleAjax/delImage',
+            type: 'post',
+            data: param,
+            dataType: 'json',
+            beforeSend: function(){
+                ajaxLoading.show();
+            },
+            success: function(data){
+            //  console.log(data);
+                if (data.status === 1) {
+                    $('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+                    $('#' + div_id).find('#J_Del').off('click', delImage);
+                    preview.removeAttr('src').parent().parent().addClass('hide');
+                    $('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+                    $('#' + div_id).find('#add_li').show();
+                }
+                ajaxLoading.fadeOut();
+            }
+        });
+    }
+
+    upload_file('base_image');
+
+{/literal}
+</script>
+
+{/block}
+

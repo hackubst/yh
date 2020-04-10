@@ -1,0 +1,184 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form method="post" id="form_addItem" enctype="multipart/form-data">
+
+    <div class="formitems inline">
+        <label class="fi-name">
+            <span class="colorRed">*</span>团购名称：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="请输入团购名称" class="xxlarge" name="group_name">
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name">
+            <span class="colorRed">*</span>团购商品：</label>
+        <div class="form-controls">
+            <input type="text" autocomplete="off" name='item_name' value='{$group_buy_info.item_name}' id='search_item' placeholder="输入商品名称找要团购的商品" class="xxlarge" oninput="get_item_list()"> 
+            <input type="hidden" name="item_id" id="item_id" value="{$group_buy_info.item_id}">
+            <div id="searchResultPanel" style="padding-left:1px;background-color:white;border:1px solid #C0C0C0;width:390px;height:auto;display:none;position:absolute;"></div>
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>排序号：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="0" class="small" name="serial" id="serial">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div> 
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>团购状态：</label>
+        <div class="form-controls">
+            <div class="radio-group">
+                <label><input type="radio" name="isuse" value="1" checked>团购中</label>
+                <label><input type="radio" name="isuse" value="0">仓库中</label>
+            </div>
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+
+    <!--<div class="formitems inline">
+        <label class="fi-name">{$ITEM_NAME}图片：</label>
+        <div class="form-controls">
+            <ul class="fi-imgslist">
+                <li class="fi-imgslist-item" id="J_add_pic">
+                <a href="javascript:;" class="add" id="add_link" title="上传一张新的图片">+</a>
+                </li>
+            </ul>
+            <span class="fi-help-text">(图片800x800像素的效果最佳，建议使用4张以内图片</span>
+        </div>
+    </div>-->
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>团购时间：</label>
+        <div class="form-controls">
+            <input type="text" autocomplete="off" class="Wdate" name="start_time" value="{$start_date|date_format:'%Y-%m-%d %H:%M:%S'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">
+            至
+            <input type="text" autocomplete="off" class="Wdate" name="end_time" value="{$end_date|date_format:'%Y-%m-%d %H:%M:%S'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name">
+            <span class="colorRed">*</span>团购价格：</label>
+        <div class="form-controls">
+            <input type="text" placeholder="0" class="small" name="group_price">
+            <span class="fi-help-text error"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">  
+        <label class="fi-name"><span class="colorRed">*</span>团购人数：</label>  
+        <div class="form-controls">  
+            <input type="text" placeholder="0" class="small" name="people_limit" id="">  
+            <span class="fi-help-text hide"></span>
+        </div>  
+    </div> 
+
+
+    <div class="formitems inline">  
+        <label class="fi-name">简介：</label>   
+        <div class="form-controls">  
+            <textarea name="group_desc" id="group_desc">{$item.group_desc}</textarea>  
+            <span class="fi-help-text">一般在200字以内</span>  
+        </div>    
+    </div>
+
+    <!--<div class="formitems inline">
+        <label class="fi-name">详情：</label>
+        <div class="form-controls">
+            <textarea name="contents" id="contents" class="large">{$contents}</textarea>
+            <span class="fi-help-text error"></span>
+        </div>
+    </div> -->
+
+<div class="formactions mgl180">
+    <input type="hidden" name="action" value="add">
+    <button class="btn btn-blue"><i class="gicon-ok white"></i>提交</button>
+</div>
+
+</form>
+{/block}
+{block name="css"}
+{literal}
+<style>
+    .dropdown_item {padding-left:3px;width:385px;height:auto;}
+</style>
+{/literal}
+{/block}
+{block name="js"}
+<script>
+    var item_name = '{$ITEM_NAME}';
+    
+</script>
+<script src="__KD__/kindeditor.js?version={$version}" > </script>
+<script src="__KD__/lang/zh_CN.js?version={$version}" > </script>
+<script src="__ACPJS__/AcpItem/add_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_validate.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_step2.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/add_item_step3.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<!--<script src="__ACPJS__/AcpItem/add_item_step4.js?version={$version}"></script>-->
+<script>
+{literal}
+function over(obj)
+{
+    $(obj).css('background-color', 'gray');
+    $(obj).css('color', 'white');
+    //console.log(obj);
+}
+function out(obj)
+{
+    //console.log(obj);
+    $(obj).css('background-color', 'white');
+    $(obj).css('color', 'black');
+}
+    function selectItem(item_id, item_name)
+    {
+        $('[name="item_id"]').val(item_id);
+        $('[name="item_name"]').val(item_name);
+        //$('#search_item').val(item_name);
+        $('#searchResultPanel').hide();  
+    }
+
+    function get_item_list()
+    {
+			var item_name = $('#search_item').val();
+			if (item_name != '')
+			{
+				$.ajax({
+					url:"/AcpGroupBuy/get_item_by_name",
+					type:"POST",
+					dataType:"json",
+					data:{
+						item_name:item_name,
+					},
+					timeout:10000,
+					success:function(data){
+                        console.log(data);
+						if (data)
+						{
+							var len = data.length;
+							var html = '';
+							for (i = 0; i < len; i++)
+							{
+                                html += '<div class="dropdown_item" onmouseover="over(this);" onmouseout="out(this)"'
+                                    +'onclick="selectItem(' + data[i].item_id+ ', \'' + data[i].item_name+ '\');"><label>' + data[i].item_name+ '</label></div>';
+							}
+							$('#searchResultPanel').html(html);  
+							$('#searchResultPanel').show();  
+						}
+					}
+				});
+			}
+    }
+{/literal}
+</script>
+{/block}

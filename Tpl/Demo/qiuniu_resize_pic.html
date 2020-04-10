@@ -1,0 +1,26 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<!-- {upload_image_widget($pic)} -->
+<form action="" method="post" enctype="multipart/form-data" >
+<input type="file" name='pic'>
+<button class='btn btn-blue'>上传</button>
+</form>
+
+{if $img_url}
+<p>原图：<img src="{$img_url}" alt=""></p>
+{/if}
+{if $new_img_url}
+<p>取固定尺寸后的图：<img src="{$new_img_url}" alt=""></p>
+{/if}
+
+{/block}
+
+{block name="content"}
+{literal}
+
+
+{/literal}
+{/block}

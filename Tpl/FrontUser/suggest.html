@@ -1,0 +1,33 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/user_glb.css?version={$version}">
+{literal}
+<style>
+body{background-color:#fff;}	
+</style>
+{/literal}
+{/block}
+{block name="content"}
+{include file="header.html"}
+	<!--主内容-->
+	<div class="suggest_main">
+		<textarea placeholder="请输入您的反馈意见吧~" id="suggest_msg"></textarea>
+	</div>
+	<div class="submit_sugest" id="submit">发送</div>
+	<!--提示层-->
+  <div id="tan_wrap"><div id="tan"></div></div>
+{/block}
+{block name="js"}
+<script src="__JS__/front/bbc.districtdata.js?version={$version}"></script>
+<script>
+{literal}
+$(function()
+{
+	$("#submit").click(function(){
+		ToFeedback();
+	});
+});
+{/literal}
+</script>
+{/block}

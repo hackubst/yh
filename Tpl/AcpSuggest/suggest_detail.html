@@ -1,0 +1,21 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-com-de">  
+    <div class="t-com-de-le">添加时间：</div>  
+    <div class="t-com-de-ri">{$suggest_info.addtime}</div>  
+</div> 
+<div class="t-com-de">  
+    <div class="t-com-de-le">建议内容：</div>  
+    <div class="t-com-de-ri" style="width: 400px;">{$suggest_info.message}</div>  
+</div> 
+{/block} 
+
+{block name="js"}
+
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpSuggest/complain_detail.css" />
+{/block}

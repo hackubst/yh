@@ -1,0 +1,141 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span> 最大牌名称：</label>  
+    <div class="form-controls">  
+        <input type="text" name='major_title' value='{$config.MAJOR_TITLE}' placeholder="">
+        <span class="fi-help-text"></span>  
+    </div>  
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name">最大牌链接：</label>  
+    <div class="form-controls">  
+        <input type="text" name='major_link' value='{$config.MAJOR_LINK}' placeholder="">  
+        <span class="fi-help-text"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline" id="major_pic">
+    <label class="fi-name">最大牌图片：</label>
+    <div class="form-controls">
+        <ul class="fi-imgslist">
+            <li class="preview fi-imgslist-item pic{if !$config.MAJOR_PIC || !file_exists($major_pic_path)} hide{/if}" id="preview" style="">
+                <div>
+                    <img id="J_Preview" style="height:69px;" src="{$config.MAJOR_PIC}"/>
+                </div>
+                <input type="hidden" name="major_pic" id="J_ImgUrl" data-id="{if $config.MAJOR_PIC }{/if}" value="{$config.MAJOR_PIC}" />
+                <a href="javascript:;" class="del" id="J_Del" title="删除这张图"><i class="gicon-remove" onclick="delImage('major_pic');"></i></a>
+                <img src="__IMAGES__/popup-loading.gif" id="J_AjaxLoading" class="pic-loading" style="width: 32px; height: 32px;" />
+                <div class="pic-mask" id="J_Mask"></div>
+            </li>
+            <li class="fi-imgslist-item{if $major_pic_path && file_exists($major_pic_path)} hide{/if}" id="add_li">
+                <a href="javascript:;" class="add" title="上传一张新的图片" id="major_pic_uploader">+</a>
+            </li>
+        </ul>
+        <span class="fi-help-text">宽高100*100最佳</span>
+    </div>
+</div>
+
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <!-- <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button> -->
+    </div>  
+</div>
+</form> 
+{/block} 
+
+{block name="js"}
+<script src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script>
+{literal}
+    function upload_file(div_id)
+    {
+        // ajax上传图片
+        new AjaxUpload("#" + div_id + "_uploader", {
+            action: "/AcpArticleAjax/uploadHandler",
+            name: "imgFile",
+            responseType: "json",
+            onSubmit: function(){
+                //alert('正在上传');
+                //preview处的图片改为loading图片
+                $('#' + div_id).find('.preview').removeClass('hide');
+            },
+            onChange: function(file, extension){
+                if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+                    return true;
+                }
+                else {
+                    alert('暂不支持该图片格式！');
+                    return false;
+                }
+            },
+            onComplete: function(file, response){
+                console.log(response);
+                if (response.status === 0) {
+                    alert(response.msg);
+                }
+                else if (response.status === 1) {
+                    $('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+                    $('#' + div_id).find('.preview').show();
+                    $('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+                    $('#' + div_id).find('#add_li').hide();
+                }
+            }
+        });
+    }
+
+    function delImage(div_id)
+    {
+        var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+        var preview = $('#' + div_id).find('#J_Preview');
+        var param = {};
+        var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+        var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+        
+        if (_id != '') {
+            param.id = _id;
+        }
+        if (imgUrl != '') {
+            param.img_url = imgUrl;
+        }
+        $.ajax({
+            url: '/AcpArticleAjax/delImage',
+            type: 'post',
+            data: param,
+            dataType: 'json',
+            beforeSend: function(){
+                ajaxLoading.show();
+            },
+            success: function(data){
+            //  console.log(data);
+                if (data.status === 1) {
+                    $('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+                    $('#' + div_id).find('#J_Del').off('click', delImage);
+                    preview.removeAttr('src').parent().parent().addClass('hide');
+                    $('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+                    $('#' + div_id).find('#add_li').show();
+                }
+                ajaxLoading.fadeOut();
+            }
+        });
+    }
+
+    upload_file('major_pic');
+
+{/literal}
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src='__ACPJS__/AcpConfig/edit_config.js?version={$version}'></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

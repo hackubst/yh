@@ -1,0 +1,143 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s面包屑导航 -->
+  	{include file="../breadcrum_nav.html"}
+  	<!-- e面包屑导航 -->
+    <!-- s分类 -->
+    <div class="col-left">
+    {include file="../common_personal_nav.html"}
+	</div>	
+    <!-- e分类 -->
+    <!-- s主内容 -->
+    <div class="col-main">
+		{include file="../common_personal_header.html"}
+		<!-- s个人信息 -->
+		<form class="form-horizontal">
+		    <fieldset>
+		        <h6 class="form-title">个人信息</h6>
+		         <div class="form-content psn-data-form">
+		          <div class="fl">
+			          <div class="control-group">
+			            <label class="control-label"><span class="form-must">*</span>姓名</label>
+			            <div class="controls">
+			              <input type="text" class="input-xlarge" id="realname" name="realname" value="{$user_info.realname}">
+			            </div>
+			          </div>
+			          <div class="control-group">
+			            <label class="control-label"><span class="form-must">*</span>性别</label>
+			            <div class="controls">			             
+	                      <label class="radio">
+	                      	<input type="radio" name="sex" value="1" {if $user_info.sex == 1}checked{/if}>男
+	                      </label>
+	                      <label class="radio">
+	                      	<input type="radio" name="sex" value="2" {if $user_info.sex == 2}checked{/if}>女
+	                      </label>
+	                       <label class="radio">
+	                      	<input type="radio" name="sex" value="0" {if $user_info.sex == 0}checked{/if}>保密
+	                      </label>
+			            </div>
+			          </div>
+			          <div class="control-group">
+			            <label class="control-label">出生日期</label>
+			            <div class="controls">
+			              <input type="text" class="Wdate input-xlarge" id="birthday" name="birthday" value="{$user_info.birthday|date_format:'%Y-%m-%d'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+			            </div>
+			          </div>
+			           <div class="control-group">
+			            <label class="control-label"><span class="form-must">*</span>手机</label>
+			            <div class="controls">
+			              <input type="text" class="input-xlarge" id="mobile" name="mobile" value="{$user_info.mobile}">
+			            </div>
+			          </div>
+			          <div class="control-group">
+			            <label class="control-label">固定电话</label>
+			            <div class="controls">
+			              <input type="text" class="input-xlarge" id="tel" name="tel" value="{$user_info.tel}">
+			            </div>
+			          </div>
+			          <div class="control-group">
+			            <label class="control-label"><span class="form-must">*</span>邮箱</label>
+			            <div class="controls">
+			              <input type="text" class="input-xlarge" id="email" name="email" value="{$user_info.email}">
+			            </div>
+			          </div>
+			          <div class="control-group">
+			            <label class="control-label"><span class="form-must">*</span>QQ</label>
+			            <div class="controls">
+			              <input type="text" class="input-xlarge" id="qq" name="qq" value="{$user_info.qq}">
+			            </div>
+			          </div>
+		          </div>
+		          
+		          <div class="fl">
+		          		<div class="control-group">
+		          		  <label class="control-label"><span class="form-must">*</span>所在地区</label>
+		          		  <div class="controls">
+		          		     <select id="province_id" name="province_id">
+			                  	<option value="0"> 选择省份 </option>	
+			                  {foreach from=$province_list item=province}
+								<option value="{$province.province_id}" {if $province.province_id == $user_info.province_id}selected{/if}>{$province.province_name}</option>				
+			              	  {/foreach}
+			              	</select>
+		          		    <select name="city_id" id="city_id">
+			                  <option value="0"> 选择城市 </option>
+			              	</select>
+			              	<span id="areaSelP">
+		          		    <select name="area_id" id="area_id">
+			                  <option value=""> 选择县/区 </option>
+			              	</select>
+			              	</span>
+		          		  </div>
+		          		</div>
+		          		<div class="control-group">
+		          		  <label class="control-label"><span class="form-must">*</span>详细地址</label>
+		          		  <div class="controls">
+		          		    <textarea class="input-xlarge" name="address" id="address" rows="2">{$user_info.address}</textarea>
+		          		  </div>
+		          		</div>
+<!-- 		          		<div class="control-group">
+		          		  <label class="control-label">邮政编码</label>
+		          		  <div class="controls">
+		          		    <input type="text" class="input-xlarge" id="post" name="post" value="{$user_info.post}">
+		          		  </div>
+		          		</div> -->
+		          		<div class="control-group">
+		          		  <label class="control-label">备注</label>
+		          		  <div class="controls">
+		          		    <textarea class="input-xlarge" name="remark" id="remark" rows="3">{$user_info.remark}</textarea>
+		          		  </div>
+		          		</div>
+		          </div>
+		         </div>
+		          <div class="form-actions">
+		            <a href="javascript:;" onClick="save_user_info();" class="btn btn-primary">保存更改</a>
+		            <!-- <button class="btn">取消</button> -->
+		            <input type="hidden" id="pre_province_id" value="{$user_info.province_id}">
+					<input type="hidden" id="pre_city_id" value="{$user_info.city_id}">
+					<input type="hidden" id="pre_area_id" value="{$user_info.area_id}">
+		          </div>
+		        </fieldset>
+		      </form>
+		<!-- e个人信息 -->
+
+	</div>
+	<div class="clearfix"></div>
+    <!-- e主内容 -->
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__JS__/front/bbc.districtdata.js?version={$version}"></script>
+{/block}

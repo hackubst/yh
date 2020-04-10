@@ -1,0 +1,60 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>规则名称：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="rule_name" id="rule_name" value="">
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>关键字：</label>
+    <div class="form-controls">
+		<input type="text" placeholder="" class="xlarge" name="keyword" id="keyword" value="">
+       <!--  <span class="fi-help-text">多个关键字请使用','隔开</span> -->
+		<span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline" id="type">
+    <label class="fi-name"><span class="colorRed">*</span>回复类型：</label>
+    <div class="form-controls">
+        <div  id="class_icon">
+            <select name="reply_type" id='reply_type' class='small'>
+                    <option value="">---请选择---</option>
+                    <option value='text'>文本</option>
+                    <option value='news'>图文</option>
+                    <option value='image'>图片</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+		<input type="hidden" name="act" value="add" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>添加</button>
+    </div>
+</div>
+</form>
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script src='/Public/Js/common/upload_image.js?version={$version}'></script>
+<script type="text/javascript" src="__ACPJS__/AcpConfig/auto_reply.js?version={$version}"></script>
+<script>
+{literal}
+
+
+
+
+{/literal}
+</script>
+{/block}

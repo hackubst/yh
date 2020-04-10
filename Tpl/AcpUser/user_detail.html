@@ -1,0 +1,223 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-detail-top">
+	<div class="top-tit">
+		当前用户状态：{$user_info.is_enable}
+	</div>
+</div>
+<div class="t-detail-goods">
+    <div class="t-detail-goods-tit mag">基本信息：</div>
+    <div class="t-detail-goods-con t-buser">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="10%">  
+                <col width="90%">   
+            </colgroup>  
+            <tbody>  
+                <!-- <tr>  
+                    <td class="tables-form-title">微信头像：</td>  
+					<td><img src="{$user_info.headimgurl}" style="width:50px;"></td> 
+                </tr> --> 
+<!--                <tr>  -->
+<!--                    <td class="tables-form-title">用户ID：</td>  -->
+<!--					<td>{if $user_info.user_id}{$user_info.user_id}{else}&#45;&#45;{/if}</td>   -->
+<!--                </tr>-->
+                <tr>
+                    <td class="tables-form-title">ID：</td>
+					<td>{if $user_info.id}{$user_info.id}{else}--{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">昵称：</td>  
+					<td>{if $user_info.nickname}{$user_info.nickname}{else}--{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">手机号：</td>  
+					<td>{if $user_info.mobile}{$user_info.mobile}{else}--{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">邮箱：</td>  
+					<td>{if $user_info.email}{$user_info.email}{else}--{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">当前/累积经验：</td>  
+					<td>{if $user_info.exp}{$user_info.exp}{else}0{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">QQ：</td>  
+                    <td>{if $user_info.qq}{$user_info.qq}{else}--{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">登录时间：</td>  
+                    <td>{if $user_info.login_time}{$user_info.login_time|date_format:"%Y-%m-%d %H:%M:%S"}{else}--{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">注册时间：</td>  
+                    <td>{if $user_info.reg_time}{$user_info.reg_time|date_format:"%Y-%m-%d %H:%M:%S"}{else}--{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">游戏分：</td>  
+                    <td>{if $user_info.left_money}{$user_info.left_money}{else}0{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">银行分：</td>  
+                    <td>{if $user_info.frozen_money}{$user_info.frozen_money}{else}0{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">总分：</td>  
+                    <td>{if $user_info.total_money}{$user_info.total_money}{else}0{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">登录ip：</td>  
+                    <td>{if $user_info.login_ip}<a href="/AcpUser/get_all_user_list/login_ip/{$user_info.login_ip}"><span style="color: blue">{$user_info.login_ip}</span></a>{else}--{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">注册ip：</td>  
+                    <td>{if $user_info.reg_ip}<a href="/AcpUser/get_all_user_list/reg_ip/{$user_info.reg_ip}"><span style="color: blue">{$user_info.reg_ip}</span></a>{else}--{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">登录密码：</td>
+                    <td>{if $user_info.password}<a href="/AcpUser/get_all_user_list/password/{$user_info.password}"><span style="color: blue">{$user_info.password}</span></a>{else}--{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">七日充值：</td>  
+                    <td>{if $user_info.recharge}{$user_info.recharge}{else}0{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">七日流水：</td>  
+                    <td>{if $user_info.flow}{$user_info.flow}{else}0{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">今日充值：</td>
+                    <td>{if $user_info.daily_recharge}{$user_info.daily_recharge}{else}0{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">今日流水：</td>
+                    <td>{if $user_info.daily_flow}{$user_info.daily_flow}{else}0{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">vip等级：</td>  
+                    <td>{if $user_info.level_name}{$user_info.level_name}{else}--{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">给上线返利：</td>  
+                    <td>{if $user_info.return_money}{$user_info.return_money}{else}0{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">最后返时间：</td>  
+                    <td>{if $user_info.return_time}{$user_info.return_time|date_format:"%Y-%m-%d %H:%M:%S"}{else}--{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">推荐人ID：</td>  
+                    <td>{if $user_info.parent_id}{$user_info.parent_id}{else}--{/if}</td>   
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">真实姓名：</td>  
+                    <td>{if $user_info.parent_name}{$user_info.parent_name}{else}--{/if}</td>   
+                </tr>
+            </tbody>  
+        </table>   
+    </div>
+
+	<div class="t-detail-goods-tit mag">其他信息：</div>
+    <div class="t-detail-goods-con t-buser">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="10%">  
+                <col width="90%">   
+            </colgroup>  
+            <tbody>
+                <tr>
+                    <td class="tables-form-title">游戏总输赢：</td>  
+                    <td>{if $user_info.game_total}{$user_info.game_total}{else}0{/if}</td>
+                </tr>  
+                <tr>
+                    <td class="tables-form-title">在线充值：</td>
+                    <td>{if $user_info.total_recharge}<a href="/AcpFinance/get_recharge_log/id/{$user_info.id}"><span style="color: blue">{$user_info.total_recharge}</span></a>{else}0{/if}</td>
+                    <td>{if $user_info.total_recharge}{$user_info.total_recharge}{else}0{/if}</td>
+                </tr>
+                <!-- <tr>  
+					<td class="tables-form-title">卡充值：</td>  
+					<td>{$user_info.left_money}</td>
+                </tr>  -->
+<!--                 <tr>
+                    <td class="tables-form-title">代理充入：</td>  
+                    <td>{if $user_info.rank_name}{$user_info.rank_name}{else}0{/if}</td>
+                </tr> -->
+                <tr>  
+                    <td class="tables-form-title">领取救济：</td>  
+                    <td>{if $user_info.relief}{$user_info.relief}{else}0{/if}</td>
+                </tr>  
+                <tr>
+                    <td class="tables-form-title">下线奖励：</td>  
+                    <td>{if $user_info.my_return_money}{$user_info.my_return_money}{else}0{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">活动奖励：</td>  
+                    <td>{if $user_info.activity_reward}{$user_info.activity_reward}{else}0{/if}</td>
+                </tr> 
+                <!-- <tr>
+                    <td class="tables-form-title">提现：</td>  
+                    <td>{if $user_info.rank_name}{$user_info.rank_name}{else}--{/if}</td>
+                </tr>
+                <tr>  
+                    <td class="tables-form-title">转账代理充出：</td>  
+                    <td>{$user_info.left_money}</td>
+                </tr>  -->
+                <tr>
+                    <td class="tables-form-title">代理提现：</td>  
+                    <td>{if $user_info.cash}{$user_info.cash}￥{else}0{/if}</td>
+                </tr>
+                {if $user_info.role_type == 4}
+                <tr>
+                    <td class="tables-form-title">代理总充值：</td>
+                    <td>{if $total_recharge}{$total_recharge}{else}0{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">总提现(RMB)：</td>
+                    <td>{if $total_deposit}{$total_deposit}￥{else}0{/if}</td>
+                </tr>
+                <tr>
+                    <td class="tables-form-title">代理总充值利润：</td>
+                    <td>{if $total_profit}{$total_profit}{else}0{/if}</td>
+                </tr>
+                {/if}
+<!--                 <tr>  
+                    <td class="tables-form-title">代理收卡：</td>  
+                    <td>{$user_info.left_money}</td>
+                </tr> --> 
+            </tbody>  
+        </table>   
+    </div>
+
+	<!-- <div class="t-detail-goods-tit mag">收货信息：</div>
+    <div class="t-detail-goods-con t-buser">
+    	<table class="wxtables tables-form">  
+            <colgroup>  
+                <col width="10%">
+                <col width="90%">
+            </colgroup>  
+            <tbody>  
+                <tr>  
+                    <td class="tables-form-title">收货地址：</td>  
+					<td>{$user_info.area_string}{$user_info.address}</td>   
+                </tr>  
+            </tbody>  
+        </table>   
+    </div> -->
+</div>
+{/block} 
+
+{block name="js"}
+{literal}
+<style>
+#jpops .fi-name{width:100px;}
+#jpops .form-controls{margin-left:100px;}
+</style>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_detail.css" type="text/css" />
+{/block} 

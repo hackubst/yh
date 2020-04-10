@@ -1,0 +1,52 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/base.css?version={$version}">
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/integral_mall_home.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--全部商品-->
+		<div class="home_cont1" id="load_wrapper">
+			<div id="scroller">
+				<div class="home_main">
+					<ul class="home_content clearfix" id="new_list">
+						{foreach from=$integral_item_list item=item}
+						<li class="item_list_li">
+							<a href="{$integral_item_detail_link}{$item.item_id}" class="content_right content_left">
+								<img src="{$item.base_pic}" data-original="{$item.small_img}" class="lazyload" />
+								<p>{$item.item_name}</p>
+								<h4>{$item.integral_exchange}积分</h4>
+							</a>
+						</li>
+						{foreachelse}
+							<div style="margin:40px;text-align:center;">抱歉，暂无可兑换的商品。</div>
+						{/foreach}
+					</ul>
+				</div>
+				{if $integral_item_list}
+					<div id="pullUp">
+						<span class="pullUpIcon index jiazaizhong3x"></span><span class="pullUpLabel">上拉加载...</span>
+					</div>
+					<div class="spacing"></div>
+				{/if}
+			</div>
+		</div>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="__JS__/front/iscroll.js"></script>
+<script type="text/javascript" src="__JS__/front/integral_item_list.js"></script>
+<script src="__PUBLIC__/Js/front/jquery.lazyload.min.js"></script>
+<script type="text/javascript">
+var firstRow = parseInt('{$firstRow}');
+var total = parseInt('{$total}');
+var class_id = parseInt('{$class_id}');
+{literal}
+	/*$(function()
+	{
+		$(".lazyload").lazyload({
+			effect : "fadeIn"
+		});
+	});*/
+</script>
+{/literal}
+{/block}

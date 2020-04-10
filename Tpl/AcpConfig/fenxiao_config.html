@@ -1,0 +1,75 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+<div class="formitems inline">
+    <label class="fi-name">开启分销模式：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+			<label><input type="radio" name="is_fenxiao_open" value="1" {if $config.IS_FENXIAO_OPEN == 1}checked="checked"{/if} />是</label>
+            <label><input type="radio" name="is_fenxiao_open" value="0" {if $config.IS_FENXIAO_OPEN == 0}checked="checked"{/if} />否</label>   
+        </div>
+    </div>
+</div>
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>分销级数：</label>  
+    <div class="form-controls">  
+    <select name="fenxiao_level" id="fenxiao_level" onchange="change_level();">
+    <option value="0">--请选择--</option>
+	<option value="1" {if $config.FENXIAO_LEVEL == 1}selected{/if}>一级分销</option>
+    <option value="2" {if $config.FENXIAO_LEVEL == 2}selected{/if}>二级分销</option>
+    <option value="3" {if $config.FENXIAO_LEVEL == 3}selected{/if}>三级分销</option>
+    </select>
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">一级代理提成比例：</label>  
+    <div class="form-controls">  
+        <input type="text" name='first_level_agent_rate' value='{$config.FIRST_LEVEL_AGENT_RATE}' placeholder="">%
+        <span class="fi-help-text"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">二级代理提成比例：</label>  
+    <div class="form-controls">  
+        <input type="text" name='second_level_agent_rate' value='{$config.SECOND_LEVEL_AGENT_RATE}' placeholder="">%
+        <span class="fi-help-text"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name">三级代理提成比例：</label>  
+    <div class="form-controls">  
+        <input type="text" name='third_level_agent_rate' value='{$config.THIRD_LEVEL_AGENT_RATE}' placeholder="">%
+        <span class="fi-help-text"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">
+    	<input type='hidden' name='act' value='save' />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>确定</button>
+        <button type="reset" class="btn"><i class="gicon-repeat"></i>重置</button>
+    </div>
+</div>
+</form> 
+{/block} 
+
+{block name="js"}
+<script>
+{literal}
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+{/block}

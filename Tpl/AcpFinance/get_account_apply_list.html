@@ -1,0 +1,148 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">
+	<form   method="post" action="">
+   <div class="tables-searchbox">
+		<span class="tbs-txt">用户账号：</span>
+		<input type="text" name="username" value="{$username}">  
+
+		<span class="tbs-txt">起始时间：</span>
+		 <input  type="text" id="start_time" name="start_time" value="{$start_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">  
+         <span class="fi-text">-</span>  
+         <input type="text" id="end_time" name="end_time" value="{$end_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})"> 
+		
+		<button class="btn" type="submit"><i class="gicon-search"></i>查询</button>
+	</div>
+	</form> 
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="20%">  
+        <col width="15%">  
+        <col width="20%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>分销商账号</td>  
+                <td>入账金额</td>  
+                <td>相关订单号</td>  
+                <td>支付凭证号</td> 
+                <td>备注</td>   
+                <td>时间</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+			{foreach from=$data key=key name=loop item=v}
+            <tr>  
+                
+                <td>{$v.username}</td>  
+                <td>{$v.amount} 元</td>  
+                <td>
+                {if $v.order_id != ''}
+                {$v.order_id}
+                {else}
+                --
+                {/if}
+                </td>  
+                <td>
+                {if $v.proof != ''}
+                {$v.proof}
+                {else}
+                --
+                {/if}
+                </td>  
+                <td>{$v.agent_remark}</td>  
+                <td>{$v.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td> 
+                <td>  
+                    <a href="javascript:;" data-url="/AcpFinance/confirm_enter/action/by/id/{$v.account_apply_id}" class="btn by_accout" title="确认">确认</a>   
+                    <a href="javascript:;" data-url="/AcpFinance/confirm_enter/action/refusal/id/{$v.account_apply_id}" class="btn refusal_accout"  title="拒绝">拒绝</a>   
+                    <a href="/AcpFinance/get_account_log/user_id/{$v.user_id}" class="btn" title="查看">查看</a>   
+                </td>  
+            </tr>  
+			{foreachelse}
+			<tr>  
+                <td colspan="20" style="text-align:center">对不起,暂无您要查询的数据!</td>  
+            </tr>  
+			{/foreach}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript">
+
+$(function(){
+	//确认通过
+	$('.by_accout').click(function(){
+		var url = $(this).data('url');
+		
+		$.jPops.confirm({
+			title:"处理待确认入账",
+			content:"您确认这笔款项已经到账了吗?",
+			okBtnTxt:"确定",
+			cancelBtnTxt:"取消",
+			callback:function(r){
+				if(r){
+					location.href= url;
+				}
+				else{
+					// console.log("我是confirm的回调,false");
+				}
+				return true;
+			}
+		});
+	});	
+	
+	//拒绝通过
+	$('.refusal_accout').click(function(){
+		var url = $(this).data('url');
+		
+		$.jPops.confirm({
+			title:"入账申请拒绝通过提示",
+			content:"您确认拒绝通过本条记录吗?",
+			okBtnTxt:"确定",
+			cancelBtnTxt:"取消",
+			callback:function(r){
+				if(r){
+					location.href= url;
+				}
+				else{
+					// console.log("我是confirm的回调,false");
+				}
+				return true;
+			}
+		});
+	});
+
+	
+});
+
+    
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/waiting_enter.css" type="text/css" />
+{/block} 

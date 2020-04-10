@@ -1,0 +1,11 @@
+.allclass_con{ width: 990px; margin: 0 auto; padding: 20px 0;}
+.allclass_con_tit{padding-top:30px;height: 40px;overflow: hidden; border-bottom: 1px solid #ebebeb;color: #333;line-height: 40px;font-size: 16px;font-weight: bold; padding-left: 10px;}
+.allclass_con_list{ width: 990px; overflow: hidden; padding-top: 10px;}
+.allclass_con_list_left{float: left; width: 475px; overflow: hidden;}
+.allclass_con_list_right{float: right; width: 475px; overflow: hidden;}
+.allclass_con_list dl{ float:left; width: 475px; overflow: hidden; margin-bottom: 10px;}
+.allclass_con_list dl dt{ float:left; width: 60px; height: 26px; line-height: 26px;}
+.allclass_con_list dl dt a{ color: #666666; font-weight: bold; font-size: 13px;}
+.allclass_con_list dl dd{ float:right; width: 400px; overflow: hidden;}
+.allclass_con_list dl dd a{ display: inline-block; padding: 7px 10px; color: #666;}
+.allclass_con_list dl dd a:hover{ color: #f00; text-decoration: underline;}

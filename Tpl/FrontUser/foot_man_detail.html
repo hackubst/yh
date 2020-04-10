@@ -1,0 +1,59 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/detail.css?version={$version}">
+{/block}
+{block name="content"}
+<!--主内容-->
+<div class="footman_cont">
+	<!--镖师基本信息-->
+	<div class="shop_cont">
+      <div class="shop_pic_wrap">
+        <div class="shop_pic">
+            <img src="{$footman_info.head_photo}" />
+        </div>
+      </div>
+      <div class="shop_content">
+          <div class="shop_name_wrap">
+              <span class="shop_name_txt">{$user_info.realname}</span>	
+          </div>
+          <div class="shop_type">
+              <span class="shop_time_txt"><svg class="loct_icon"><use xlink:href="#location"></use></svg>里程数：{$footman_info.meters}&nbsp;公里</span>            
+          </div>                    
+          <div class="shop_desc">
+              <span class="shop_time_txt"><svg class="time_loct_icon"><use xlink:href="#madetime"></use></svg>准时率：{$footman_info.on_time_rate}&nbsp;%</span>
+          </div>
+      </div>
+	</div>
+	<!--三个评分数-->
+	<div class="detail_info">
+		<div class="detail_info_cell">
+			<h5>接单数</h5>
+			<div class="detail_info_data">
+				<span class="detail_info_receive">{$footman_info.total_order_num}</span>
+			</div>
+		</div>
+		<div class="detail_separate"></div>
+		<!--<div class="detail_info_cell">
+			<h5>好评数</h5>
+			<div class="detail_info_data">
+				<span class="detail_info_ship">{$footman_info.score_avg}</span>
+			</div>
+		</div>
+		<div class="detail_separate"></div>-->
+		<div class="detail_info_cell">
+			<h5>评分</h5>
+			<div class="detail_info_data">
+				<span class="detail_info_rate">{$footman_info.score_avg}</span>
+			</div>
+		</div>
+	</div>
+	<!--电话-->
+	<div class="foot_d_tel">
+		<a href="tel:{$user_info.mobile}">
+			<svg class="tel_icon"><use xlink:href="#tel"></use></svg>
+			<span class="tel_txt">{$user_info.mobile}</span>
+		</a>
+	</div>
+</div>
+{/block}

@@ -1,0 +1,22 @@
+<div class="block shop-by-block">
+	<div class="block-title">会员中心</div>
+	<ul>
+		<li class="nav-sub-title">交易记录</li>
+		<li{if $smarty.const.MODULE_NAME == 'FrontOrder'} class="active"{/if}><a href="{$all_order_link}" title="我的订单">我的订单</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'history_item'} class="active"{/if}><a href="{$history_item_link}" title="常购商品">常购商品</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'requirment_submit'} class="active"{/if}><a href="{$requirment_submit_link}" title="需求提交">需求提交</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'requirment_list' || $smarty.const.ACTION_NAME == 'requirment_detail'} class="active"{/if}><a href="{$requirment_list_link}" title="需求列表">需求列表</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'my_account'} class="active"{/if}><a href="{$my_account_link}" title="账户余额">交易明细</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'my_collect'} class="active"{/if}><a href="{$my_collect_link}" title="我的收藏">我的收藏</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'coupon_list'} class="active"{/if}><a href="{$coupon_list_link}" title="优惠券">优惠券</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'integral_list'} class="active"{/if}><a href="{$integral_list_link}" title="我的积分">我的积分</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'integral_item'} class="active"{/if}><a href="{$integral_item_link}" title="积分兑换商品">积分兑换商品</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'integral_exchange_record'} class="active"{/if}><a href="{$integral_exchange_record_link}" title="积分换购记录">积分换购记录</a></li>
+	</ul>
+	<ul>
+		<li class="nav-sub-title">个人设置</li>
+		<li{if $smarty.const.ACTION_NAME == 'personal_data'} class="active"{/if}><a href="{$personal_data_link}" title="个人信息">个人信息</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'edit_pwd'} class="active"{/if}><a href="{$edit_pwd_link}" title="修改密码">修改密码</a></li>
+		<li{if $smarty.const.ACTION_NAME == 'address_list' || $smarty.const.ACTION_NAME == 'edit_address' || $smarty.const.ACTION_NAME == 'add_address'} class="active"{/if}><a href="{$address_list_link}" title="收货地址">收货地址</a></li>
+	</ul>
+</div>

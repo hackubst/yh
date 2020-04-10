@@ -1,0 +1,104 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tablesWrap">
+	<form   method="post" action="">
+   <div class="tables-searchbox">
+		<span class="tbs-txt">分销商名称：</span>
+		<input type="text" name="username" value="{$username}">  
+
+		<span class="colorRed"></span>状态：
+		<select name="apply_state">
+			<option value="4" {if $apply_state == 4}selected{/if}>--请选择--</option>
+			<option value="0" {if $apply_state == 0}selected{/if} >--未处理--</option>
+			<option value="1" {if $apply_state == 1}selected{/if}>--已通过--</option>
+			<option value="2" {if $apply_state == 2}selected{/if}>--已拒绝--</option>
+		</select>
+		
+		<span class="tbs-txt">起始时间：</span>
+		 <input  type="text" id="start_time" name="start_time" value="{$start_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">  
+         <span class="fi-text">-</span>  
+         <input type="text" id="end_time" name="end_time" value="{$end_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})"> 
+		
+		<button class="btn" type="submit"><i class="gicon-search"></i>查询</button>
+	</div>
+	</form> 
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="5%">  
+        <col width="15%">  
+        <col width="8%">  
+        <col width="8%">  
+        <col width="8%">  
+        <col width="20%">  
+        <col width="15%">  
+        <col width="20%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+                <td>ID</td>  
+                <td>分销商名称</td>  
+                <td>入账金额</td>  
+                <td>相关订单号</td>  
+                <td>支付凭证号</td>  
+                <td>备注</td>  
+                <td>时间</td>  
+                <td>状态</td>  
+            </tr>  
+        </thead>  
+        <tbody>  
+			{foreach from=$data key=key name=loop item=v}
+            <tr>  
+                <td>{$smarty.foreach.loop.iteration}</td>  
+                <td>{$v.username}</td>  
+                <td>{$v.amount}</td>  
+                <td>{$v.order_id}</td>  
+                <td>{$v.proof}</td>  
+                <td>{$v.agent_remark}</td>  
+                <td>{$v.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td> 
+                <td>  
+				{if $v.apply_state == 0}
+					<a class="btn btn-blue">未处理</a>  
+					 
+				{else if $v.apply_state == 1}
+					
+					<a class="btn btn-green">已通过</a>  
+					 
+				{else}
+					<a  class="btn btn-red">已拒绝</a> 
+				{/if}
+                    
+                </td>  
+            </tr>  
+			{foreachelse}
+			<tr>  
+                <td colspan="20" style="text-align:center">对不起,暂无您要查询的数据!</td>  
+            </tr>  
+			{/foreach}
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page}
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->   
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/waiting_enter.css" type="text/css" />
+{/block} 

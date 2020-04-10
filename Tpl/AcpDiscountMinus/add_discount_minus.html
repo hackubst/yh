@@ -1,0 +1,203 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form action='' method='post' id='add_admin'>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>名称：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="title" id="title" value="{$title}">
+        <span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline" style="display:none;">
+    <label class="fi-name">
+        <span class="colorRed">*</span>{$ITEM_NAME}分类：</label>
+    <div class="form-controls">
+        <select name="genre_id">
+            <option value="">--请选择--</option>
+            {foreach from=$arr_category item=row1}
+            {foreach from=$row1.sort_info item=row2}
+            {foreach from=$row2.genre_info item=row3}
+            <option value="{$row3.genre_id}" {if $category_id eq $row3.genre_id}selected{/if}>{$row3.original_genre_name}</option>
+            {/foreach}
+            {/foreach}
+            {/foreach}
+        </select>
+        <span class="fi-help-text">选择分类</span>
+    </div>
+</div>
+
+<!-- <div class="formitems inline">
+	<label class="fi-name">礼品：</label>
+	<div class="form-controls">
+		<select name="gift_id">
+			<option value="0">--请选择--</option>
+			{foreach from=$gift_list item=row}
+				<option value="{$row.gift_id}" {if $gift_id == $row.gift_id}selected{/if}>{$row.gift_name}</option>
+			{/foreach}
+		</select>
+		<span class="fi-help-text">礼品和优惠券至少选一项</span>
+	</div>
+</div>
+
+<div class="formitems inline">
+	<label class="fi-name">优惠券：</label>
+	<div class="form-controls">
+		<select name="vouchers_id">
+			<option value="0">--请选择--</option>
+			{foreach from=$vouchers_list item=row}
+			<option value="{$row.vouchers_id}" {if $vouchers_id == $row.vouchers_id}selected{/if}>面额{$row.num}元，满{$row.amount_limit}元可使用</option>
+			{/foreach}
+		</select>
+		<span class="fi-help-text">礼品和优惠券至少选一项</span>
+	</div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>赠送优惠券张数：</label>
+    <div class="form-controls">
+		<input type="text" name='give_num' value='{$give_num}' id='give_num' placeholder="" class="small">
+        <span class="fi-help-text"></span>
+    </div>
+</div> -->
+
+<div class="formitems inline">
+	<label class="fi-name"><span class="colorRed">*</span>活动有效期：</label>
+    <div class="form-controls">
+		<input type="text" autocomplete="off" class="Wdate" name="start_time" value="{$start_time|date_format:'%Y-%m-%d %H:%M:%S'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">至
+		<input type="text" autocomplete="off" class="Wdate" name="end_time" value="{$end_time|date_format:'%Y-%m-%d %H:%M:%S'}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:mm:ss'})">
+        <span class="fi-help-text"></span>
+	</div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>面额：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="num" id="num" value="{$num}">
+        <span class="fi-help-text hide"></span>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"><span class="colorRed">*</span>订单满足金额：</label>
+    <div class="form-controls">
+        <input type="text" placeholder="" class="xlarge" name="amount_limit" id="amount_limit" value="{$amount_limit}">
+        <span class="fi-help-text">订单满多少(此处指合并支付的总金额)可使用该优惠券</span>
+    </div>
+</div>
+
+<!-- <div class="formitems inline">
+    <label class="fi-name"><span class='colorRed'>*</span>参与次数限制：</label>
+    <div class="form-controls">
+		<input type="text" name='use_time' value='{$use_time}' id='use_time' placeholder="" class="small">
+        <span class="fi-help-text">用户可参与几次这样的活动，0表示无限制</span>
+    </div>
+</div> -->
+
+<div class="formitems inline">
+    <label class="fi-name">是否有效：</label>
+    <div class="form-controls">
+        <div class="radio-group">
+            <label><input type="radio" name="isuse" value="1" {if $isuse != 0}checked="checked"{/if} />是</label>
+            <label><input type="radio" name="isuse" value="0" {if $isuse == 0}checked="checked"{/if}/>否</label>
+        </div>
+    </div>
+</div>
+
+<div class="formitems inline">
+    <label class="fi-name"></label>
+    <div class="form-controls">
+    	<input type='hidden' name='submit' value='submit' />
+    	<button type="submit" class="btn btn-blue"><i class="gicon-ok white"></i>保存</button>
+    </div>
+</div>
+
+</form>
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+{literal}
+	upload_file('activity_small_pic');
+	upload_file('activity_pic');
+	upload_file('bg_pic');
+	function upload_file(div_id)
+	{
+		// ajax上传图片
+		new AjaxUpload("#" + div_id + "_uploader", {
+			action: "/AcpArticleAjax/uploadHandler",
+			name: "imgFile",
+			responseType: "json",
+			onSubmit: function(){
+				//alert('正在上传');
+				//preview处的图片改为loading图片
+				$('#' + div_id).find('.preview').removeClass('hide');
+			},
+			onChange: function(file, extension){
+				if (extension && /^(jpg|png|jpeg|gif)$/.test(extension)) {
+					return true;
+				}
+				else {
+					alert('暂不支持该图片格式！');
+					return false;
+				}
+			},
+			onComplete: function(file, response){
+				console.log(response);
+				if (response.status === 0) {
+					alert(response.msg);
+				}
+				else if (response.status === 1) {
+					$('#' + div_id).find('#J_Preview').attr('src', response.img_url);
+					$('#' + div_id).find('.preview').show();
+					$('#' + div_id).find('#J_ImgUrl').val(response.img_url);
+					$('#' + div_id).find('#add_li').hide();
+				}
+			}
+		});
+	}
+
+	function delImage(div_id)
+	{
+		var ajaxLoading = $('#' + div_id).find('#J_AjaxLoading');
+		var preview = $('#' + div_id).find('#J_Preview');
+		var param = {};
+		var _id = $('#' + div_id).find('#J_ImgUrl').data('id');
+		var imgUrl = $('#' + div_id).find('#J_ImgUrl').val();
+
+		if (_id != '') {
+			param.id = _id;
+		}
+		if (imgUrl != '') {
+			param.img_url = imgUrl;
+		}
+		$.ajax({
+			url: '/AcpArticleAjax/delImage',
+			type: 'post',
+			data: param,
+			dataType: 'json',
+			beforeSend: function(){
+				ajaxLoading.show();
+			},
+			success: function(data){
+			//	console.log(data);
+				if (data.status === 1) {
+					$('#' + div_id).find('#J_ImgUrl').attr('data-id', '').val(null);
+					$('#' + div_id).find('#J_Del').off('click', delImage);
+					preview.removeAttr('src').parent().parent().addClass('hide');
+					$('#' + div_id).find('#' + div_id + '_uploader').parent().removeClass('hide');
+					$('#' + div_id).find('#add_li').show();
+				}
+				ajaxLoading.fadeOut();
+			}
+		});
+	}
+
+{/literal}
+</script>
+{/block}

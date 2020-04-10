@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>上传实例</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+
+
+<!-- 图片上传 -->
+<script type="text/javascript" src="__JS__/jquery/jquery-1.8.3.min.js?version={$version}"></script>
+<script type="text/javascript" src="__JS__/jquery/uploadify/swfobject.js?version={$version}"></script>
+<script type="text/javascript" src="__JS__/jquery/uploadify/jquery.uploadify.v2.1.4.min.js?version={$version}"></script>
+<link  rel="stylesheet" type="text/css" href="__JS__/jquery/uploadify/uploadify.css"/>
+
+
+</head>
+<body>
+
+
+
+
+{literal}
+<script>
+$(document).ready(function() {
+	$("#doUpload").click(function(){
+
+		$("#uploadify").uploadifySettings('scriptData', {action: 'save', banner_id: 1, banner_title: '标题2', banner_link_url: 'http://www.baidu.com', img_sequence: 2});
+
+        $("#uploadify").uploadifyUpload();
+    });
+
+
+
+
+	 $("#uploadify").uploadify({
+	 	// 'formData'      : {'someKey' : '123123', 'someOtherKey' : 1},
+	 	 'auto':true,
+	 	// "formData": {'tmpdir':$("input[name=tmpdir]").val()},
+		 'uploader': '/Public/Js/jquery/uploadify/uploadify.swf',//所需要的flash文件
+		 'cancelImg': '/Public/Js/jquery/uploadify/cancel.png',//单个取消上传的图片
+		 'script': '/Public/common_upload_img',//实现上传的程序
+		 'folder': 'uploads',//服务端的上传目录
+		 'multi': false,//是否多文件上传
+		 'displayData': 'speed',//进度条的显示方式
+		 'fileDesc': 'Image(*.jpg;*.gif;*.png)',//对话框的文件类型描述
+		 'fileExt': '*.jpg;*.jpeg;*.gif;*.png',//可上传的文件类型
+		 'sizeLimit': 999999 ,//限制上传文件的大小
+		 'simUploadLimit' :3, //并发上传数据
+		 'queueSizeLimit' :20, //可上传的文件个数
+		 'buttonText' :'文件上传',//通过文字替换钮扣上的文字
+		 'buttonImg': '/Public/Images/ajax_upload_tmp_select.png',//替换上传钮扣
+		 'width': 80,//buttonImg的大小
+		 'height': 24,//
+		onComplete: function (evt, queueID, fileObj, response, data) {
+		
+			alert(response);//获得上传的文件路径
+		}
+		/*onUploadStart : function(file) {
+			$('#uploadify').uploadify('settings', 'formData',  {'someKey' : '123123', 'someOtherKey' : 1});
+			//$("#uploadify").uploadify("settings", "someOtherKey", 2);
+		}*/
+ });
+});
+</script>
+{/literal}
+	<div>
+		<div style="width:80px;height:25px;float:left" >
+			
+			<input type="file" name="uploadify" id="uploadify" />
+		</div>
+		<div style="width:80px;height:25px;float:left" >
+			<input type="hidden" name="tmpdir" value="1111111111" />
+			<img id="doUpload" style="float: left;margin-left: 10px;" src="/Public/Images/ajax_upload_tmp_start.png" />
+		</div>
+	</div>
+
+
+
+
+
+</body>
+</html>

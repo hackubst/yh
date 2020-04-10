@@ -1,0 +1,87 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/front/mall_pay.css?version={$version}">
+<script type="text/javascript">
+//调用微信JS api 支付
+function jsApiCall()
+{
+	WeixinJSBridge.invoke(
+		'getBrandWCPayRequest',
+		{$jsApiParameters},
+		function(res)
+		{
+			if(res.err_msg == "get_brand_wcpay_request:ok" )
+			{
+				//
+			}
+			else
+			{
+				//WeixinJSBridge.log(res.err_msg);
+				//alert(res.err_code);
+				//alert(res.err_desc);
+				//alert(res.err_msg);
+			}
+		}
+	);
+}
+
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		}
+	}else{
+		jsApiCall();
+	}
+}
+</script>
+{/block}
+
+{block name="content"}
+	</br></br></br></br>
+	<div align="center">
+		<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >贡献一下</button>
+	</div>
+{include file="$header_path"}
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+	$( function(){
+			$('.sbmBtn a').click(function(e){
+				e.preventDefault();
+				if(!$("input[name=recharge_num]").val()){
+					var error="请填写充值金额";
+					$("#tan").html(error);
+					tishi();
+					return;
+				}
+				
+				$("#editPwd_form").submit();
+			});
+		});
+
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		 //$('.black-bg').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+		 //$('.black-bg').fadeOut(1500);
+	  }
+</script>
+{/literal}
+{/block}

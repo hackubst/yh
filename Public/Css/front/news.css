@@ -1,0 +1,77 @@
+﻿body{background-color:#efefef;}
+/*列表*/
+.help_cate{
+height: 38px;
+line-height: 46px;
+padding-left: 15px;
+}
+.help_list {
+background-color: #fff;
+}
+.help_li {
+position:relative;
+height: 45px;
+line-height: 45px;
+border-bottom: 1px solid #efefef;
+}
+.help_li a{
+color: #333;
+padding-left: 10px;
+display: inline-block;
+width: 90%;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;	
+}
+.help_li a:after{
+position: absolute;
+right: 10px;
+top: 17px;
+display: block;
+content: '';
+width: 10px;
+height: 10px;
+border: #C8C3C3 solid 1px;
+border-left: none;
+border-bottom: none;
+-webkit-transform: rotate(45deg);
+transform: rotate(45deg);	
+}
+/*详情*/
+.help_header {
+position: relative;
+height: 95px;
+}
+.article_tit,.article_author,.article_time {
+position: absolute;
+left: 10px;
+}
+.article_tit{
+top: 15px;
+color: #333;
+font-weight: bold;
+width: 90%;	
+}
+.article_tit h1{
+width: 100%;	
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;	
+}
+.article_author {
+top: 42px;
+}
+.article_time {
+top: 64px;
+}
+.article_from {
+position: absolute;
+right: 10px;
+top: 64px;
+}
+.article_cont {
+padding: 10px;
+color: #333;
+font-size: 15px;
+overflow:hidden;
+}

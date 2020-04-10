@@ -1,0 +1,146 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/all_order.css?version={$version}">
+{literal}
+<style>
+body{background-color:#efefef;}
+</style>
+{/literal}
+{/block}
+{block name="content"}
+	<div class="assess_cont">
+		<!--好差评选择-->
+    <div class="as_top_cont">
+    	<h5 class="as_title">我要评价</h5>
+    	<div class="as_checkbox selected" id="as_good_ckb">
+    		<svg class="assess_icon as_good_icon"><use xlink:href="#assessment"></use></svg>
+    		<label for="good" class="as_good" onclick="toggleRadio(this);" id="as_good_btn">好评<input type="radio" value="0" name="as_choose" id="good" checked="checked" /></label>
+    		<i class="icon_select" id="good_btn" onclick="toggleRadio(this);"></i>
+    	</div>
+    	<div class="as_checkbox" id="as_bad_ckb">
+    		<svg class="assess_icon as_bad_icon"><use xlink:href="#assessment"></use></svg>
+    		<label for="bad" class="as_bad" onclick="toggleRadio(this);" id="as_bad_btn">差评<input type="radio" value="1" name="as_choose" id="bad" /></label>
+    		<i class="icon_select" id="bad_btn" onclick="toggleRadio(this);"></i>
+    	</div>
+    </div>
+    <!--差评具体选择-->
+    <div class="as_bad_info">
+        {if 0}
+    	<h5 class="as_title">选择具体差评</h5>
+    	<!--商家差评对象-->
+    	{foreach from=$complain_target_list['merchant_list'] item=user}
+    	<div class="as_bad_detail">
+    		<div class="as_bad_chose">
+		    	<label class="as_bad_obj">【商家】{$user.shop_name}<input type="checkbox" value="{$user.merchant_id}" name="complain_obj" /></label>
+		    	<i class="icon_select" onclick="toggleCheckbox(this);"></i>
+		    </div>
+		    <!--差评评语-->
+		    <div class="as_bad_text">
+	    		<textarea name="as_cont_txt" placeholder="写点评价吧，您的评价对我们很重要！"></textarea>
+    		</div>
+    		<input type="hidden" name="role_type" id="role_type" value="2">
+    	</div>
+    	{/foreach}
+    	<!--镖师差评对象-->
+    	<div class="as_bad_detail">
+    		<div class="as_bad_chose">
+		    	<label class="as_bad_obj">【镖师】{$complain_target_list['foot_man_info']['realname']}<input type="checkbox" value="{$complain_target_list['foot_man_info']['user_id']}" name="complain_obj" /></label>
+		    	<i class="icon_select" onclick="toggleCheckbox(this);"></i>
+		    </div>
+		    <!--差评评语-->
+		    <div class="as_bad_text">
+	    		<textarea name="as_cont_txt" placeholder="写点评价吧，您的评价对我们很重要！"></textarea>
+    		</div>
+    		<input type="hidden" name="role_type" id="role_type" value="4">
+    	</div>
+	  </div>
+      {/if}
+      {if 1}
+    	<!--镖师差评对象-->
+    	<div class="as_bad_detail">
+		    <!--差评评语-->
+		    <div class="as_bad_text" style="display:block;">
+	    		<textarea name="as_cont_txt" placeholder="写点评价吧，您的评价对我们很重要！" id="remark_content"></textarea>
+    		</div>
+    	</div>
+	  </div>
+      {/if}
+
+	  <form method="POST" action="" id="assess_form" style="display:none;">
+		  <input name="score" id="score">
+		  <input name="complain_user_ids" id="complain_user_ids">
+		  <input name="remark_str" id="remark_str">
+		  <input name="role_type_str" id="role_type_str">
+		  <input name="act" value="assess">
+		  <input type="SUBMIT" value="submit">
+	  </form>
+	  <!--提交按钮-->
+    <div class="submit_btn">
+    	<a class="submit" href="javascript:;" onclick="assess();">确认提交</a>
+    </div>
+	</div>
+{/block}
+{block name="js"}
+{literal}
+<script>
+var score = 1;
+$(function(){
+	$('#bad_btn,#as_bad_btn').click(function()
+	{
+		score = 0;
+		$('.as_bad_info').show();	
+	});
+	$('#good_btn,#as_good_btn').click(function()
+	{
+		score = 1;
+		$('.as_bad_info').hide();	
+	});
+});
+function assess()
+{
+	//var complain_user_ids = '';
+	//var remark_str = '';
+	//var role_type_str = '';
+	//$('input[name="complain_obj"]:checked').each(function(){
+	//	complain_user_ids += $(this).val() + ',';
+	//	remark_str += $(this).parent().parent().next().children().val() + ',';
+	//	role_type_str += $(this).parent().parent().next().next().val() + ',';
+	//});
+	//complain_user_ids = complain_user_ids.substr(0, complain_user_ids.length - 1);
+	//remark_str = remark_str.substr(0, remark_str.length - 1);
+	//role_type_str = role_type_str.substr(0, role_type_str.length - 1);
+	//console.log(complain_user_ids,remark_str,role_type_str,score);
+    var complain_user_ids = 1;
+    var role_type_str = 1;
+    var remark_str = $('#remark_content').val();
+	$('#complain_user_ids').val(complain_user_ids);
+	$('#remark_str').val(remark_str);
+	$('#role_type_str').val(role_type_str);
+	$('#score').val(score);
+	$('#assess_form').submit();
+}
+
+function toggleRadio(obj){
+	var has_slbing_selted = $(obj).parent().siblings().hasClass("selected");
+	if(has_slbing_selted){
+		$(obj).parent().siblings().removeClass("selected");
+	}
+	$(obj).parent().addClass("selected");
+	$(obj).parent().find("input:radio").attr("checked", "checked");
+}
+function toggleCheckbox(obj){
+	var css = $(obj).parent().hasClass("selected");
+	if(css){
+		$(obj).parent().removeClass("selected");
+		$(obj).parent().siblings().hide();
+		$(obj).parent().find("input:checkbox").attr("checked", false);
+	}else{
+		$(obj).parent().addClass("selected");
+		$(obj).parent().siblings().show();
+		$(obj).parent().find("input:checkbox").attr("checked", "true");
+	}
+}
+</script>
+{/literal}
+{/block}

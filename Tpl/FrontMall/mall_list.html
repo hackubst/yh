@@ -1,0 +1,76 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/search.css?version={$version}">
+{/block}
+{block name="content"}
+	<!--头部模块-->
+	<header class="common_head">
+        <a class="back" href="javascript:history.go(-1);"><svg class="back_icon"><use xlink:href="#back"></use></svg></a>
+        <div class="header_title">
+					{$head_title}
+				</div>
+			<a class="city" href="{$city_list_link}">11{if $default_area_name}
+				{$default_area_name}
+			{/if}<i></i></a>
+	</header>
+{include file="./merchant_list_common.html"}
+{/block}
+{block name="js"}
+<script type="text/javascript" src="__PUBLIC__/Js/front/iscroll.js?version={$version}"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/slide_nav.js?version={$version}"></script>
+<script>
+var firstRow = '{$firstRow}';
+var total = parseInt('{$total}');
+var orderby = parseInt('{$orderby}');
+var class_id = parseInt('{$class_id}');
+var trading_area_id = parseInt('{$trading_area_id}');
+{literal}
+$(function()
+{
+	var range = 20; //距下边界长度/单位px  
+	var elemt = 500; //插入元素高度/单位px  
+	var num = firstRow;  
+	var totalheight = 0;  
+	var main = $("#going_list"); //主体元素  
+	$(window).scroll(function()
+	{
+		var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)   
+		totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+		if(($(document).height()-range) <= totalheight  && total > num)
+		{
+			num = parseInt(num) + parseInt(firstRow);
+			//获取订单列表
+			$.post('/FrontMall/get_mall_list', {"firstRow":num - parseInt(firstRow), "class_id":class_id, "trading_area_id":trading_area_id, "orderby":orderby}, function(data, textStatus) 
+			 {
+				if (data != 'failure')
+				{
+					var len = data.length;
+					for (i = 0; i < len; i++)
+					{
+						var offline_class = data[i].online == 0 ? 'offline' : '';
+						var html = '<li class="shop_cont '+offline_class+'"><a class="shop_link" href="/FrontMall/item_list/merchant_id/' + data[i].merchant_id + '"><div class="shop_pic_wrap"><div class="shop_pic"><img src="' + data[i].logo + '" /></div></div><div class="shop_content"><div class="shop_name_wrap"><span class="shop_name_txt">' + data[i].shop_name + '';
+						if(data[i].busy_level == 1)
+						{
+							html += '<span class="busy_state"><svg class="busy_icon"><use xlink:href="#busy"></use></svg></span>';
+						}
+
+						html +='<span class="shop_online"><svg class="closed_icon"><use xlink:href="#closed"></use></svg></span></span><span class="shop_sale_num"><i class="shop_sale_txt">' + data[i].total_sales_num + '</i>销量</span></div><div class="shop_type fresh">' + data[i].class_name + '</div><div class="shop_desc"><span class="shop_time_txt"><svg class="time_loct_icon"><use xlink:href="#madetime"></use></svg>制作时间：' + data[i].make_time_avg + '分钟</span><span class="shop_intime_rate">准时率：' + data[i].on_time_rate + '%</span></div><div class="shop_intro"><span class="shop_area"><svg class="time_loct_icon"><use xlink:href="#location"></use></svg>' + data[i].trading_area_name + '</span><span class="sale_distance">距离：' + data[i].distance + '米</span></div></div></a></li>';
+						main.append(html);
+					}
+				}
+			}, 'json');
+		}  
+		else
+		{
+			$('#order_ending').show();
+		}
+	}); 
+	
+});	
+
+
+</script>  
+{/literal}
+
+{/block}

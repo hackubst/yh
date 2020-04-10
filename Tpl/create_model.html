@@ -1,0 +1,38 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormLink" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>表名：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="table_name" id="table_name" />
+        <span class="fi-help-text">使用'_'连接表名，不需要前缀</span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>中文备注：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="remark" id="remark" />
+        <span class="fi-help-text">做模型中文备注</span>
+    </div>  
+</div> 
+
+<!-- <div class="formitems inline">  
+    <label class="fi-name">主键Id：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="py_key" id="py_key" />
+        <span class="fi-help-text">此项可不填，默认使用'表名+_id'做主键</span>
+    </div>  
+</div>  -->
+
+<div class="formitems inline"> 
+    <div class="form-controls"> 
+		<input type="hidden" name="act" value="submit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>
+</div>
+</form>
+{/block} 
+

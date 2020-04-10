@@ -1,0 +1,15 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="chartWrap">
+    <div class="chartBox chartBox-blue">
+        <div class="cb-title">今日动态</div>
+        <div class="cb-contain" style='min-height:100px;'>
+            数据统计</br>
+            总充值：{$total_recharge} </br>
+            总提现：{$total_deposit}</br>
+        </div>
+    </div>
+</div>
+{/block}

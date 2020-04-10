@@ -1,0 +1,169 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-n-s-top">
+    <div class="t-month-title">按年统计</div>
+    <div class="t-month-con">
+		<form method="POST" action="">
+        <div class="t-con-list">
+            <div class="formitems inline">  
+                <label class="fi-name" style="width:60px;">请选择：</label>  
+                <div class="form-controls" style=" margin-left:60px;">  
+                    <select class="mini" name="year" id="year1">  
+                        <option value="2014" {if $year == 2014}selected{/if}>2014</option>  
+                        <option value="2015" {if $year == 2015}selected{/if}>2015</option>  
+                        <option value="2016" {if $year == 2016}selected{/if}>2016</option>  
+                        <option value="2017" {if $year == 2017}selected{/if}>2017</option>  
+                        <option value="2018" {if $year == 2018}selected{/if}>2018</option>  
+                        <option value="2019" {if $year == 2019}selected{/if}>2019</option>  
+                        <option value="2020" {if $year == 2020}selected{/if}>2020</option> 
+                    </select>  
+                    <span>年</span>  
+                </div>  
+            </div>  
+        </div>
+        <div class="t-con-list">
+			<span class="t-zl">总交易量：{$year_total_order_num}</span>
+			<span class="t-zg">最高峰交易量：{$max_month_num}</span>
+				<button type="submit" class="btn">筛选</button>
+        </div>
+		</form>
+		<form method="POST" action="">
+			<input type="hidden" name="act" value="export_year_data">
+			<input type="hidden" name="year" id="hidden_year1" value="{$year}">
+            <span class="t-s"><button type="submit" class="btn">生成报表</button></span>
+		</form>
+    </div>
+	<div class="t-month-chart" id="year_container">
+		<!--<img src="/Public/Images/acp/bao.jpg" />-->
+	</div>
+</div>
+
+<div class="t-n-s-bottom">
+    <div class="t-month-title">按月统计</div>
+    <div class="t-month-con">
+		<form method="POST" action="">
+        <div class="t-con-list">
+        	<div class="formitems inline">  
+                <label class="fi-name" style="width:60px;">请选择：</label>  
+                <div class="form-controls" style=" margin-left:60px;">  
+                    <select class="mini" name="year" id="year1">  
+                        <option value="2014" {if $year == 2014}selected{/if}>2014</option>  
+                        <option value="2015" {if $year == 2015}selected{/if}>2015</option>  
+                        <option value="2016" {if $year == 2016}selected{/if}>2016</option>  
+                        <option value="2017" {if $year == 2017}selected{/if}>2017</option>  
+                        <option value="2018" {if $year == 2018}selected{/if}>2018</option>  
+                        <option value="2019" {if $year == 2019}selected{/if}>2019</option>  
+                        <option value="2020" {if $year == 2020}selected{/if}>2020</option> 
+                    </select>  
+                    <span>年</span>  
+                </div>  
+            </div>
+         </div> 
+         <div class="t-con-list">    
+            <div class="formitems inline">  
+                <div class="form-controls" style=" margin-left:10px;">  
+                    <select class="mini" name="month" id="month">  
+                        <option value="1" {if $month == 1}selected{/if}>1</option>  
+                        <option value="2" {if $month == 2}selected{/if}>2</option>  
+                        <option value="3" {if $month == 3}selected{/if}>3</option>  
+                        <option value="4" {if $month == 4}selected{/if}>4</option>  
+                        <option value="5" {if $month == 5}selected{/if}>5</option>  
+                        <option value="6" {if $month == 6}selected{/if}>6</option>  
+                        <option value="7" {if $month == 7}selected{/if}>7</option>  
+                        <option value="8" {if $month == 8}selected{/if}>8</option>  
+                        <option value="9" {if $month == 9}selected{/if}>9</option>  
+                        <option value="10" {if $month == 10}selected{/if}>10</option>  
+                        <option value="11" {if $month == 11}selected{/if}>11</option>  
+                        <option value="12" {if $month == 12}selected{/if}>12</option>
+                    </select>  
+                    <span>月</span>  
+                </div>  
+            </div>  
+        </div>
+        <div class="t-con-list">
+			<span class="t-zl">总交易量：{$month_total_order_num}</span>
+			<span class="t-zg">最高峰交易量：{$max_day_num}</span>
+            <button type="submit" class="btn">筛选</button>
+        </div>
+		</form>
+		<form method="POST" action="">
+			<input type="hidden" name="act" value="export_month_data">
+			<input type="hidden" name="year" id="hidden_year2" value="{$year}">
+			<input type="hidden" name="month" id="hidden_month2" value="{$month}">
+            <span class="t-s"><button type="submit" class="btn" onclick="">生成报表</button></span>
+		</form>
+    </div>
+	<div class="t-month-chart" id="month_container">
+		<!--<img src="/Public/Images/acp/bao.jpg" />-->
+	</div>
+</div>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="/Public/Plugins/Highcharts/highcharts.js?version={$version}"></script>
+<script type="text/javascript">
+var year = '{$year}';
+var selected_month = '{$month}';
+var day_num = '{$day_num}';
+var data = '[';
+{foreach from=$month_stat_data_list item=data}
+	data += {$data} + ',';
+{/foreach}
+data = data.substr(0, data.length - 1);
+data += ']';
+
+var month_data = '[';
+{foreach from=$day_stat_data_list item=data}
+	month_data += {$data} + ',';
+{/foreach}
+month_data = month_data.substr(0, month_data.length - 1);
+month_data += ']';
+
+//月份
+var month = '[';
+for (var i = 1; i <= 12; i++)
+{
+	month += i + ',';
+}
+month = month.substr(0, month.length - 1);
+month += ']';
+
+//日期
+var day = '[';
+for (var i = 1; i <= day_num; i++)
+{
+	day += i + ',';
+}
+day = day.substr(0, day.length - 1);
+day += ']';
+
+{literal}
+$(function (){
+	$("#year_container").highcharts(
+		{"credits":{"text":"@\u542f\u535a\u8f6f\u4ef6","enabled":false,"href":"http:\/\/www.360shop.com.cn","position":{"align":"right","y":-10}},"legend":{"enabled":true,"layout":"vertical","align":"right","verticalAlign":"middle","borderWidth":0},"xAxis":{"categories":eval(month),"title":{"text":"时间"}},"title":{"text":"订单交易量统计(" + year + "年)"},"yAxis":{"title":{"text":"交易量"},"allowDecimals":false,"plotLines":[{"value":0,"width":1,"color":"#808080"}],"min":0},"plotOptions":{"line":{"dataLabels":{"enabled":true},"enableMouseTracking":true}},"series":[{"type":"column","name":"交易量","data":eval(data)}]}
+	);
+	$("#month_container").highcharts(
+		{"credits":{"text":"@\u542f\u535a\u8f6f\u4ef6","enabled":false,"href":"http:\/\/www.360shop.com.cn","position":{"align":"right","y":-10}},"legend":{"enabled":true,"layout":"vertical","align":"right","verticalAlign":"middle","borderWidth":0},"xAxis":{"categories":eval(day),"title":{"text":"时间"}},"title":{"text":"订单交易量统计(" + year + "年)"},"yAxis":{"title":{"text":"交易量"},"allowDecimals":false,"plotLines":[{"value":0,"width":1,"color":"#808080"}],"min":0},"plotOptions":{"line":{"dataLabels":{"enabled":true},"enableMouseTracking":true}},"series":[{"type":"column","name":"交易量","data":eval(month_data)}]}
+	);
+});
+
+$('#year1').change(function(){
+	$('#hidden_year1').val($(this).val());
+});
+
+$('#year2').change(function(){
+	$('#hidden_year2').val($(this).val());
+});
+
+$('#month').change(function(){
+	$('#hidden_month2').val($(this).val());
+});
+</script>
+{/literal}
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpOrder/order_num_stat.css" type="text/css" />
+{/block} 

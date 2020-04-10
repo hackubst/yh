@@ -1,0 +1,15 @@
+<nav id="smoothmenu1" class="ddsmoothmenu mainMenu">
+  <ul id="nav">
+    <li{if $smarty.const.ACTION_NAME == 'index'} class="active"{/if}><a href="{$home_link}" title="首页">首页</a></li>
+    <!-- <li{if $smarty.const.ACTION_NAME == 'daily_item'} class="active"{/if}><a href="{$daily_item_link}" title="日常快速订单">日常快速订单</a></li>
+    <li{if $smarty.const.ACTION_NAME == 'history_item'} class="active"{/if}><a href="{$history_item_link}" title="历史常购订单">历史常购订单</a></li>
+    <li{if $smarty.const.ACTION_NAME == 'first_order'} class="active"{/if}><a href="{$first_order_link}" title="首批订单">首批订单</a></li>
+    
+    <li{if $smarty.const.ACTION_NAME == 'integral_exchange'} class="active"{/if}><a href="{$integral_exchange_link}" title="积分兑换">积分兑换</a></li>
+    <li{if $smarty.const.ACTION_NAME == 'item_list' && $smarty.get.new_shop == '1'} class="active"{/if}><a href="{$item_list_link}new_shop/1" title="开业装修">开业装修</a></li>
+    <li{if $smarty.const.ACTION_NAME == 'item_list' && $smarty.get.package == '1'} class="active"{/if}><a href="{$item_list_link}package/1" title="套餐商品">套餐商品</a></li> -->
+    <li{if $smarty.const.ACTION_NAME == 'item_list' && $smarty.get.new == '1'} class="active"{/if}><a href="{$item_list_link}new/1" title="新品">新品</a></li>
+    <li{if $smarty.const.ACTION_NAME == 'item_list' && $smarty.get.promo == '1'} class="active"{/if}><a href="{$item_list_link}promo/1" title="降价商品">促销商品</a></li>
+    <li{if $smarty.const.MODULE_NAME == 'FrontUser' || $smarty.const.MODULE_NAME == 'FrontOrder' || $smarty.const.MODULE_NAME == 'FrontAddress' || $smarty.const.MODULE_NAME == 'FrontPassword' || $smarty.const.MODULE_NAME == 'FrontIntegral' || $smarty.const.ACTION_NAME == 'my_collect'} class="active"{/if}><a href="{if $user_id}{$personal_center_link}{else}{$login_link}{/if}" title="我的账户">我的账户</a></li>
+  </ul>
+</nav>

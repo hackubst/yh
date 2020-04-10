@@ -1,0 +1,17 @@
+<span id='page_flag' class='hide' >{$page_str}</span>
+{if $item_list}
+{section name=row loop=$item_list}  
+<tr>  
+    <td><input type="checkbox" class="checkbox" name="checkIds[]" value='{$item_list[row].page_id}'> </td>  
+    <td><img src="{$item_list[row].image}"  width="50" height="50" /></td>  
+    <td>{$item_list[row].page_name}</td>  
+    <td><span></span><span class='cost'>{$item_list[row].file_name}</span></td>  
+    <td>  
+        <a href="/AcpPage/edit_page/page_id/{$item_list[row].page_id}" target='_blank' class="btn" title="查看">查看</a>   
+    </td>  
+    <input type="hidden" id="page_url_ajax" value="{$item_list[row].page_url}"/>
+</tr>
+{/section}
+{else}
+<tr><td colspan='7'>暂无商品可选，点击搜索获取商品信息</td></tr>
+{/if} 

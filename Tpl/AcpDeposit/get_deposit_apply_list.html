@@ -1,0 +1,286 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+    	<div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+				<input type="hidden" name="user_id" value="{$user_id}">
+                <div class="t-a-wait-top-li">
+                <select class="small" name="state">
+					<option value="-1" >--选择状态--</option>
+					{foreach from=$state_list key=key item=val}
+						<option value="{$key}" {if is_numeric($state) && $state == $key}selected{/if}>{$val}</option>
+					{/foreach}
+                </select>
+                <select class="small" name="deposit_type" style="display:none;">
+                    <option value="0" >--选择提现类型--</option>
+					{foreach from=$deposit_type_list key=key item=val}
+						<option value="{$key}" {if $deposit_type == $key}selected{/if}>{$val}</option>
+					{/foreach}
+                </select>
+                </div>
+                <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+              </form>
+            </div>        
+        </div> 
+
+        <table class="wxtables">  
+            <colgroup>  
+             <col width="5%">
+            <col width="10%">
+            <col width="10%">
+            <col width="8%">  
+            <col width="8%">  
+            <col width="10%">
+            <col width="8%">
+            <col width="15%">
+            <col width="7%">
+            <col width="15%">
+            </colgroup>  
+            <thead>  
+                <tr>  
+                    <!-- <td>选择</td>   -->
+                    <td>用户ID</td>
+                    <td>用户姓名</td>
+                    <td>提现支付宝</td>
+                    <td>提现金额</td> 
+                    <td>提现手续费</td>
+                    <td>实际到账金额</td>  
+                    <td>管理员留言</td>  
+                    <td>提交时间</td>  
+                    <td>状态</td>  
+                    <td>操作</td>  
+                </tr>  
+            </thead> 
+            <tbody>
+				{foreach from=$deposit_apply_list item=row}
+                <tr>  
+                    <!-- <td><input type="checkbox" class="checkbox" value='{$row.deposit_apply_id}' name="a[]"></td> -->
+                    <td><a href="/AcpUser/user_detail/user_id/{$row.user_id}" title="查看用户详情"><span style="color: blue">{$row.id}</span></a></td>
+                    <td>{$row.username}</td>
+                    <td>{$row.mobile}</td>
+                    <td>{$row.money}元</td>
+                    <td>{$row.deposit_server_charge}元</td>
+                    <td>{$row.real_get_money}元</td>
+                    <td>{if $row.admin_remark}{$row.admin_remark}{else}--{/if}</td>
+                    <td>{$row.addtime|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                    <td>{$row.state_name}</td>
+                    <td>
+						{if $row.state == 0}
+							<a href="javascript:;" class="btn" title="通过" onclick="set_state({$row.deposit_apply_id}, 1)">通过</a>
+							<a href="javascript:;" class="btn" title="拒绝" onclick="refuse({$row.deposit_apply_id}, 2, '{$row.admin_remark}')">拒绝</a>
+						{else}
+							--
+						{/if}
+						
+                    </td>
+                </tr>
+                {foreachelse}
+					<tr><td colspan="11">没有符合条件的用户</td></tr>
+                {/foreach}
+            </tbody>  
+        </table>  
+        <!-- end wxtables -->  
+        <div class="tables-btmctrl clearfix">  
+            <div class="fl">  
+            	<!-- <a href="javascript:;" class="btn btn-blue" onclick="copy_link()">复制申请提现链接</a>  -->
+            	<!-- <a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+            	<a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>   -->
+            </div>
+            <div class="fr">  
+                <div class="paginate">  
+                    {$show}
+                </div>  
+                <!-- end paginate -->  
+            </div>  
+        </div>  
+        <!-- end tables-btmctrl -->  
+    </div>  
+    <!-- end tablesWrap --> 
+</div>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script>
+{literal} 
+//全选
+function Select(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=true;
+	}
+}
+//取消全选
+function Cancel(){
+	var sel=document.getElementsByName("a[]");
+	for(var i=0;i<sel.length;i++){
+		sel[i].checked=false;
+	}
+}
+
+function refuse(deposit_apply_id, state, admin_remark)
+{
+	var html='<form id="pop_demo">                                                                '+
+			'<div class="formitems inline">                                                       '+
+			'	<label class="fi-name" style="width:80px;text-align:left;"><span class="colorRed">*</span>拒绝原因：</label>          '+
+			'	<div class="form-controls" style="margin-left:85px;">                                                       '+
+			'		<textarea name="admin_remark" id="admin_remark" style="height:120px;width:350px;" rows="8" cols="80">' + admin_remark + '</textarea>'+
+			'		<span class="fi-help-text" id="amount_ts"></span>       '+
+			'	</div>                                                                            '+
+			'</div>                                                                               '+
+			'</form>                                                                              ';
+			
+	$.jPops.custom({
+			title:"拒绝提现申请",
+			content:html,
+			callback:function(r){
+				acp.popFormStatus=false;//弹窗表单验证状态
+				if(r){
+					$.validator.setDefaults({
+						submitHandler: function() {
+							acp.popFormStatus=true;//设置弹窗表单验证状态为通过
+							var admin_remark=$("#jpops #admin_remark").val();
+                            if(!admin_remark)
+                            {
+                                alert('请填写拒绝理由');exit;
+                            }
+
+							$.ajax({
+								url : '/AcpDeposit/refuse', 
+								type : 'POST', 
+								//dataType : 'JSON',
+								timeout : 1000,
+								data : {"deposit_apply_id": deposit_apply_id, "admin_remark": admin_remark},
+								error : function() {
+									$.jPops.message({title:"操作提示",content: "操作失败请重试",timing:3000});
+								},
+								success : function(result) {
+									if(result == 'success')
+									{
+										alert('恭喜您，拒绝成功');
+										location.reload();
+									}
+									else
+									{
+										alert('抱歉，拒绝失败');
+									}
+								}
+							});
+							
+						}
+					});
+
+					//表单验证规则
+					$("#pop_demo").validate({
+						rules: {
+							amount: {required: true, check_float: true}
+						},
+						messages: {
+							amount: {required: "请输入变动金额", check_float: "格式如: 99.00 或 99.99"}
+						},
+						errorPlacement: acp.form_ShowError,//显示出错信息(这段代码必须加)
+						success:acp.form_HideError//验证成功隐藏错误信息(这段代码必须加)
+					});
+
+					//模拟提交表单
+					$("#pop_demo").submit();
+
+					return acp.popFormStatus;//通过表单验证状态确定是否关闭窗口
+				}
+				else{//点击取消按钮执行的事件
+					return true;
+				}
+			}
+			
+		}); 	
+}
+
+function set_state(deposit_apply_id, state)
+{
+	opt = state == 1 ? '通过' : '拒绝';
+	$.jPops.confirm(
+	{  
+		 title:"提示",  
+		 content:"您确定要" + opt + "该申请吗？",  
+		 okBtnTxt:"确定",  
+		 cancelBtnTxt:"取消",  
+		 callback:function(r)
+		 {
+			 if(r)
+			 {
+				 $.post('/AcpDeposit/set_state', {"deposit_apply_id":deposit_apply_id, "state":state}, function(data)
+				 {
+					if (data == 'success')
+					{
+						alert('恭喜您，' + opt + '成功！');
+						location.reload();
+					}
+					else
+					{
+						alert('对不起，' + opt + '失败');
+					}
+				});
+			 }  
+			 return true;  
+		 }
+	 });
+}
+
+    //复制链接
+function copy_link()
+{
+    var link = 'http://' + document.domain + '/FrontUser/getcash';
+    $.jPops.custom({
+        title:"请复制链接",  
+        content:'<div>申请提现链接：' + link + '</div>',
+        okBtnTxt:"复制",  
+        cancelBtnTxt:"关闭",  
+        callback:function(r)
+        {
+            if(r)
+            {
+                text = link;
+                copy_text('jpops-btn-ok');
+            }
+            else
+            {
+                return true;  
+            }
+        }
+    });
+}
+function copy_text(id)
+    {
+        var clipboard = new Clipboard('#' + id, {
+            text: function() {
+                return text;
+            }
+        });
+
+        clipboard.on('success', function(e) {
+            console.log(e);
+            alert('复制成功');
+        });
+
+        clipboard.on('error', function(e) {
+            console.log(e);
+            alert('复制失败，请手动复制');
+        });
+    }
+</script>
+{/literal} 
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+<style>
+.fi-name {
+	line-height: 23px;
+	font-weight: 700;
+}
+</style>
+{/block}

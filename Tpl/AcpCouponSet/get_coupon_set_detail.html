@@ -1,0 +1,193 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="t-a-wait-con">
+    <div class="tablesWrap"> 
+        <div class="tables-searchbox">
+            <div class="t-a-wait-top">
+                <form action="" method="post" id="rank_waiting">
+                    <div class="t-a-wait-top-li"><span>商家名称：</span><input type="text" placeholder="" value="{$shop_name}" class="mini" name="shop_name"> </div>
+                    <div class="t-a-wait-top-li"><span>顾客姓名：</span><input type="text" placeholder="" value="{$user_name}" class="mini" name="user_name"> </div>
+                    <div class="t-a-wait-top-li" style="width:400px;">
+                        <div class="formitems inline">  
+                            <label class="fi-name" style="width:70px; font-weight:normal;">活动时间：</label>  
+                            <div class="form-controls" style="margin-left:80px;">  
+                                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+
+                                <span class="fi-text">-</span>  
+
+                                <input type="text" style="width:120px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">  
+                            </div>  
+                        </div> 
+                    </div>
+
+                    <div class="t-a-wait-top-li" style=""><input type="hidden" name="submit" value="search" /><button class="btn"><i class="gicon-search"></i>搜索</button> </div>
+                </form>
+            </div>        
+        </div> 
+        <table class="wxtables">  
+            <colgroup>  
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+            </colgroup>
+            <thead>
+                <tr>  
+                    <!--<td>选择</td>-->
+                    <td>商家</td>
+                    <td>顾客</td>
+                    <td>活动</td>
+                    <td>订单编号</td>
+                    <td><a class="{$order_amount_sort_order}" href="{$order_amount_sort_url}">订单金额</a></td>
+                    <td><a class="{$num_sort_order}" href="{$num_sort_url}">减免额度</a></td>
+                </tr>  
+            </thead>  
+            {foreach from=$vouchers_list item=discount_item}
+            <tbody class="combo-tbody">  
+            <tr>
+                <!-- <td><input type="checkbox" class="checkbox" value='{$discount_item.discount_minus_id}' name="a[]"></td> -->
+                <td>{$discount_item.shop_name}</td>
+                <td>{$discount_item.username}</td>
+                <td>{$discount_item.content}</td>
+                <td>{$discount_item.order_sn}</td>
+                <td>{$discount_item.order_amount}</td>
+                <td>{$discount_item.num}</td>
+            </tr>
+            </tbody>
+            {foreachelse}   
+            <tbody>    
+            <tr>
+                <td colspan="7">
+                    没有符合条件的记录
+                </td>
+                <tr>
+                    </tbody>  
+                    {/foreach}
+                </table>  
+                <!-- end wxtables -->  
+                <div class="tables-btmctrl clearfix">  
+                <!--
+                    <div class="fl">  
+                        <a href="javascript:;" class="btn btn-blue" onclick="Select()">全选</a>  
+                        <a href="javascript:;" class="btn btn-blue" onclick="Cancel()">取消</a>  
+                    </div> 
+                    -->
+                    <div class="fr">  
+                        <div class="paginate">  
+                            {$show}
+                        </div>  
+                        <!-- end paginate -->  
+                    </div>  
+                </div>  
+                <!-- end tables-btmctrl -->  
+            </div>  
+            <!-- end tablesWrap --> 
+        </div>
+        {/block} 
+
+        {block name="js"}
+        <script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+        {literal} 
+        <script>
+//全选
+        function Select(){
+            var sel=document.getElementsByName("a[]");
+            for(var i=0;i<sel.length;i++){
+                sel[i].checked=true;
+            }
+        }
+//取消全选
+function Cancel(){
+    var sel=document.getElementsByName("a[]");
+    for(var i=0;i<sel.length;i++){
+        sel[i].checked=false;
+    }
+}
+
+function set_is_enable(id, is_enable)
+{
+    opt = (is_enable == 1) ? '激活' : '禁用';
+    $.jPops.confirm(
+            {  
+title:"提示",  
+content:"您确定要执行该操作吗？",  
+okBtnTxt:"确定",  
+cancelBtnTxt:"取消",  
+callback:function(r)
+{  
+if(r)
+{
+$.post('/AcpUserAjax/set_user_is_enable', {"user_id":id, "is_enable":is_enable}, function(data, textStatus) 
+    {
+    if (data == 'success')
+    {
+    alert('恭喜您，' + opt + '成功！');
+    location.reload();
+    }
+    else
+    {
+    alert('对不起，' + opt + '失败');
+    }
+    });
+}  
+return true;  
+}
+});  	
+}
+
+function batch_set_is_enable(is_enable)
+{
+    opt = (is_enable == 1) ? '激活' : '禁用';
+    $.jPops.confirm(
+            {  
+title:"提示",  
+content:"您确定要执行这些操作吗？",  
+okBtnTxt:"确定",  
+cancelBtnTxt:"取消",  
+callback:function(r)
+{  
+if(r)
+{
+var ids = '';
+var count = 0;
+$('input[name="a[]"]:checked').each(function(){
+    count ++;
+    ids += $(this).val() + ',';
+    });
+
+if (!count)
+{
+alert('对不起，请选择至少一项进行操作！');
+return;
+}
+
+ids = ids.substr(0, ids.length - 1);
+
+$.post('/AcpUserAjax/batch_set_user_is_enable', {"user_ids":ids, "is_enable":is_enable}, function(data, textStatus) 
+        {
+        if (data == 'success')
+        {
+        alert('恭喜您，' + opt + '成功！');
+        location.reload();
+        }
+        else
+        {
+        alert('对不起，' + opt + '失败');
+        }
+        });
+}  
+return true;  
+}
+});
+}
+        </script>
+        {/literal} 
+        {/block} 
+
+        {block name="css"}
+        <link rel="stylesheet" href="/Public/Css/acp/AcpUser/audit_waiting.css" type="text/css" />
+        {/block}

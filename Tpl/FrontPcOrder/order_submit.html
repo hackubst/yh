@@ -1,0 +1,393 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" href="__PUBLIC__/Css/front/order.css">
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+  	<!-- s流程状态 -->
+  	<div class="cartWrap pdt20">
+		<div class="cart-status clearfix">
+			<!-- <div class="cs-logo fl"></div> -->
+			<div class="cs-bar cs-bar-st1 fr">
+				<div class="order-status-bg"></div>
+				<div class="cs-bar-txt">
+					<span class="cs-bar-txt-step1">1.我的购物车</span>
+					<span class="cs-bar-txt-step2" style="color:#ff7f00;">2.填写核对订单信息</span>
+					<span class="cs-bar-txt-step3">3.成功提交订单</span>
+				</div>
+			</div>
+		</div>
+	</div>
+  	<!-- e流程状态 -->
+  	<!-- s提交订单内容 -->
+  	<form method="POST" action="" id="confirm_order_form">
+	<div class="xg_count_alls">
+		<div class="xg_alls_t">填写并核对订单信息</div>
+			<!-- 收货地址begin -->
+			<div class="xg_count_con ">
+				<div class="xg_title_bar">
+	        		<h2>收货地址 &nbsp;<span id="shouhuo_tishi" style="display:none;color:red;font-size: 14px;font-weight:normal;">填写后请确认收货人信息</span></h2>
+	        	</div>
+
+				<!-- 收货地址 -->
+				<div class="xg_address" id="xg_address">
+			            <ul id="addr-ul">
+			            	{foreach from=$user_address_list item=addr}
+			            	<li class="addr_cont{if $default_user_address == $addr.user_address_id} selected{/if}">
+			                    <div class="cons_name">
+			                        <input class="addr_radio" type="radio" name="address_id" value="{$addr.user_address_id}" style="vertical-align:middle;" {if $default_user_address == $addr.user_address_id}checked{/if}> <strong>{$addr.realname}</strong>
+			                    </div>
+			                    <div class="fl mr30">{$addr.mobile}</div>			                    
+			                    <div class="cons_title">{$addr.area_string}</div>
+			                    <input type="hidden" data-pid="{$addr.province_id}" data-cid="{$addr.city_id}" data-aid="{$addr.area_id}" data-address="{$addr.address}" data-name="{$addr.realname}" data-mobile="{$addr.mobile}">
+			                </li>
+			                {/foreach}
+			                {if !$user_address_list}
+							<li><a href="{$add_address_link}" class="red ml10">点击添加收货地址</a></li>
+			                {/if}	            
+			            </ul>
+		        </div>
+
+			</div>
+			<!-- 收货地址end -->
+		
+			<!-- 支付方式 begin-->
+			<div class="xg_count_con" style="">
+				<div class="xg_title_bar">
+	        		<h2 class="xg_bar">支付方式</h2>
+	        	</div>
+
+				<div class="xg_method" id="xz_divb" style="display:block;">
+		        	<dl>
+		            	<dt>选择支付方式</dt>
+		                <dd>
+							<ul class="ct-cp-con-PayWay j-payway">
+								<!-- <li class="selected">
+									<input type="radio" name="payway_id" value="1" checked="checked">
+									<span>余额支付</span>
+									<div class="xg_pay_info">使用个人账户余额支付/或者通过银行柜台汇款方式支付</div>
+									<input type="hidden" value="余额支付" name="payway_name">
+									<input type="hidden" value="wallet" name="pay_tag">
+								</li> -->	
+								<li class="selected">
+									<input type="radio" name="payway_id" value="3" checked="checked">
+									<span>支付宝支付</span>
+									<div class="xg_pay_info">支付宝账户支付</div>
+									<input type="hidden" value="支付宝" name="payway_name">
+									<input type="hidden" value="alipay" name="pay_tag">
+								</li>																				
+								<li>
+									<input type="radio" name="payway_id" value="4">
+									<span>银行卡支付</span>
+									<div class="xg_pay_info">支持绝大多数银行借记卡和在线支付平台</div>
+									<input type="hidden" value="网银在线" name="payway_name">
+									<input type="hidden" value="chinabank" name="pay_tag">
+								</li>				
+								
+							</ul>
+		                </dd>
+		            </dl>
+
+	            		            	
+	            </div>
+			</div>
+			<!-- 支付方式 end-->
+
+		<!--提交订单 begin-->
+		<form action="" method="post" id="yeepay">
+		<!-- 商品清单 begin-->
+		<div class="xg_count_con" style="overflow:hidden;">
+			<div class="xg_title_bar">
+	        	<h2>商品清单<a href="{$cart_link}" style="float:right;">[返回购物车，修改订单商品]</a></h2>
+	        </div>
+			<!--供货商订单商品-->
+			<table class="table table-bordered" style="width:90%;margin:0 auto;">
+				<thead>
+		        	<tr>
+				        <th>序号</th>
+				        <th>商品名称</th>
+				        <!-- <th>规格</th> -->
+				        <td>数量</td>
+				        <td>单价</td>
+				        <td>可抵扣</td>
+				        <td>优惠</td>
+				        <td>小计</td>
+			        </tr>
+				</thead>
+				<tbody>
+					{foreach from=$item_coupon_info['item_list'] name=loop item=item}
+					<tr>
+						<td>{$smarty.foreach.loop.iteration}</td>
+						<td>
+							<a href="{if $item.item_id == 0}{$item_detail_link}{$item.item_package_id}/package/1{else}{$item_detail_link}{$item.item_id}{/if}" target="_blank">{$item.item_name}</a>
+						</td>
+						<!-- <td>--</td> -->
+						<td>{$item.number}</td>
+						<td>
+							<span class="market_pri">￥{$item.real_price} 元 <br></span>
+						</td>
+						<td>{$item.integral_num}</td>
+						<td>
+							{if $item.from_virtual_stock}
+							<span class="preferential" style="">--</span>
+							{else}
+							{if $item['discount_ary']['promo_discount']['name'] != ''}
+								<span class="preferential" style=""><!-- <b>减{$item['discount_sum_total_ary'][$item.item_sku_price_id]}元<em></em></b> --><i></i>
+								<div class="preferential_js">
+									<ul>
+										<li>
+										{if $item['discount_ary'][$item.item_sku_price_id]['rank_discount']['name'] != ''}
+										{if $item['discount_ary'][$item.item_sku_price_id]['rank_discount']['amount'] != 0}
+										{$item['discount_ary'][$item.item_sku_price_id]['rank_discount']['name']} &nbsp;&nbsp;减
+										{$item['discount_ary'][$item.item_sku_price_id]['rank_discount']['amount']} 元
+										</li>
+										{/if}
+										{/if}
+										
+										
+										
+										{if $item['discount_ary']['promo_discount']['name'] != ''}
+										{if $item['discount_ary']['promo_discount']['amount'] != 0}
+										<li>
+										{$item['discount_ary']['promo_discount']['name']} &nbsp;&nbsp;减
+										{$item['discount_ary']['promo_discount']['amount']} 元
+										 </li>
+										 {/if}
+										 {/if}
+										
+										</ul>
+								</div>	
+								<!-- 计算会员等级优惠 -->
+								</span>
+								{else}
+								<span class="preferential" style="">--</span>
+								{/if}
+								{/if}	
+						</td>
+						<td>
+							<b>￥{$item.total_price}</b>
+						</td>
+					</tr>
+					{/foreach}
+				</tbody>
+			</table>
+			
+	        <!--供货商订单商品-->
+                                    
+			<!--订单详情 begin-->
+	        <div class="xg_all_count">
+				<table class="xg_count_all">
+					<tbody>
+	            		<tr style="height:20px; line-height:20px;"><th>商品总金额：</th><td class="bold">￥{$total_amount}</td>
+	            		</tr>
+	            		<!-- <tr style="height:20px; line-height:20px;"><th>运费：</th><td>￥8</td></tr> -->
+	            		{if $total_item_coupon}
+	            		<tr style="height:20px;line-height:20px;">
+	            			<th>
+							<span style="font-weight:normal;"><img src="/Public/Images/checkmark.png" align="absmiddle" width="15" />&nbsp;商品总优惠：</span>												
+	            			</th>
+	            			<td>
+	            				-￥{$total_item_coupon}
+	            			</td>
+	            		</tr>
+	            		{/if}
+	            		{if $coupon_info['order_discount_ary']['name'] != ''}
+	            		<tr style="height:20px;line-height:20px;">
+	            			<th>
+							{if $coupon_info['order_discount_ary']['name'] != ''}
+							<span style="font-weight:normal;" title="减{$coupon_info['order_discount_ary']['total']}元"><img src="/Public/Images/checkmark.png" align="absmiddle" width="15" />&nbsp;{$coupon_info['order_discount_ary']['name']}：</span>
+							{/if}									
+	            			</th>
+	            			<td>
+	            				-￥{$coupon_info['order_discount_ary']['amount']}
+	            			</td>
+	            		</tr>	
+	            		{/if} 
+		  				{if $freight_coupon_list and !$has_coupon}
+	            		<tr style="height:20px;line-height:20px;">
+	            			<!--优惠券-->
+							  <th>选择优惠券：
+							  	<select name="freight_coupon_id" class="sel_freight_coupon" id="freight_coupon_id" data-order_type="0">
+								  <option value="0" selected>--请选择--</option>
+								{foreach from=$freight_coupon_list item=item key=key}
+									<option value="{$item.coupon_id}" data-num="{$item.num}" id="freight_coupon{$item.coupon_id}">&yen;{$item.num}&nbsp;截至{$item.deadline|date_format:"%m-%d"}</option>
+								{/foreach}
+							  	</select>：
+							  </th>
+							  <td>
+							  	-￥<span id="freight_discount">0</span>
+							  </td>							  
+	            		</tr>  
+	            		{/if}         		
+	            		<tr style="height:20px;line-height:20px;">
+	            			<th>
+							<span style="font-weight:normal;">&nbsp;积分可抵扣：</span>									
+	            			</th>
+	            			<td>-￥{$total_integral}</td>
+	            		</tr>
+						<tr>
+							<td colspan="2" style="text-align:right;height:55px;">应付金额：<strong id="yfje1">￥<span id="pay_amount_id">{$pay_amount}</span></strong></td>
+						</tr>
+					</tbody>
+				</table>
+	        </div>
+	        <!--订单详情 end-->
+		</div>
+		<!-- 商品清单 end-->
+			
+		
+			<div class="xg_title_bar">
+	        	<h2>订单留言</h2>
+	        </div>
+
+	        <div class="xg_massage">
+	        	<div class="xg_sub_title"><h5 style="padding-left:20px;">订单留言</h5></div>
+	            <div class="xg_sub_con">
+	            		<textarea name="user_remark" id="message_text" placeholder="请输入订单留言" class="f_textarea message_input"></textarea>
+	                <div class="xg_sub_nodes">字数请控制在50以内</div>
+	            </div>
+	        </div>
+
+	        <div class="xg_simple_total">
+		    	<div class="xg_total_count">
+		    		<div class="xg_count_total" id="xg_count_total_dizhi" style="font-size:12px;color:#494949;">
+						您的<!-- 余额为<i class="bold">{$left_money}</i>元， -->积分数为：{$all_total_integral}
+		    		</div>
+		    		<div class="xg_count_total" style="font-size:12px;color:#494949;">
+		    			
+						<b>应付金额：</b> <strong>￥<i id="now_pay_amount">{$pay_amount}</i></strong>
+		    			
+		    		</div>
+		    		
+		    		<span></span>
+		    	</div>
+		    	<div class="xg_all_ok">  
+		    		<a href="javascript:;" id="submit" class="online_pay form-button">去支付</a>
+
+		    	</div>
+		    </div>
+		</form>
+		<!--提交订单 end-->
+
+
+	</div>
+
+
+	</form>
+	<!-- e提交订单内容 -->
+    
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+var shopping_cart_id_str = '{$shopping_cart_id_str}';
+var number_str = '{$number_str}';
+var pay_amount = parseFloat("{$pay_amount}");
+var total_amount = parseFloat("{$total_amount}");
+var total_integral = parseFloat("{$total_integral}");
+var total_discount_amount = (parseFloat("{$total_item_coupon}") + parseFloat("{$coupon_info['order_discount_ary']['amount']}")).toFixed(2);
+var freight_coupon_id = 0;
+{literal}
+$(function(){
+	//选择地址
+	$('#addr-ul .addr_cont').click(function(event) {
+		$(this).addClass('selected').find("input[name=address_id]").attr('checked', true);
+		$(this).siblings('li').removeClass('selected').find("input[name=address_id]").attr('checked', false);
+	});
+	//去支付
+	$(".online_pay").click(function(e)
+	{
+		var obj = "input[name=payway_id]:checked";
+		var payway_id = $(obj).val();
+		var payway_name = $(obj).siblings('input[name=payway_name]').val();
+		var pay_tag = $(obj).siblings('input[name=pay_tag]').val();
+		add_order(payway_id, payway_name, pay_tag);
+	});
+	//切换支付方式
+	 $('.j-payway li').click(function(){
+	 	var $self=$(this);
+	 	$self.addClass('selected').siblings('li').removeClass('selected');//选中的样式
+        $self.find("input[type=radio]").attr("checked",true);//选中隐藏的checkbox
+	 });
+	 //改变优惠券值
+	 $('#freight_coupon_id').change(function(){
+		freight_coupon_id = $(this).find('option:checked').val();
+		freight_coupon_id = freight_coupon_id ? freight_coupon_id : 0;
+		changeFreightCoupon();
+	});
+});
+//改变优惠券值时的变化
+function changeFreightCoupon()
+{
+	//根据id获取num
+	var num = freight_coupon_id != 0 ? $('#freight_coupon' + freight_coupon_id).data('num') : 0;
+	//num = num >= total_freight ? total_freight : num;
+	pay_amount = (total_amount - parseFloat(num) - parseFloat(total_integral)).toFixed(2);
+	//alert(num + ', ' + pay_amount);
+	$('#freight_discount').html(num);
+	$('#pay_amount_id').html(pay_amount);
+	$('#now_pay_amount').html(pay_amount);
+}
+//验证表单和加入订单
+function add_order(payway_id, payway_name, pay_tag)
+{
+	//验证表单数据
+	var user_address_id = $('input[name=address_id]:checked').val();
+	var user_remark = $('#message_text').val();
+	if (!user_address_id)
+	{
+		alert('对不起，请选择一个收货地址！');
+		$('input[name=address_id]').focus();
+		return false;
+	}
+
+	if (!payway_id)
+	{
+		alert('对不起，请选择支付方式！');
+		return false;
+	}
+
+	//提交订单
+	$.ajax({
+		url:"/FrontOrder/add_order",
+		type:"POST",
+		dataType:"json",
+		data:{
+			user_address_id: user_address_id,
+			shopping_cart_id_str: shopping_cart_id_str,
+			number_str: number_str,
+			payway_id: payway_id,
+			payway_name: payway_name,
+			user_remark: user_remark,
+			pay_amount: pay_amount,
+			total_integral: total_integral,
+			freight_coupon_id: freight_coupon_id,
+			total_discount_amount: total_discount_amount,
+
+		},
+		timeout:10000,
+		success:function(d){
+			if(d) {
+			
+				if (d != 'failure')
+				{
+					//返回成功，代码写这里
+					var link = '/FrontOrder/pay_order/order_id/' + d + '/payway_id/' + payway_id;
+					location.href = link;
+				}
+			}
+		}
+	});
+}
+</script>
+{/literal}
+{/block}

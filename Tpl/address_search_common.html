@@ -1,0 +1,26 @@
+<!--搜索-->
+<div class="search_cont" id="home_search">
+<header class="common_head">
+	<a class="back" id="redir_back" href="javascript:void(0);" onclick="$('#home_search').hide();$('#screenIfm').hide();"><svg class="back_icon"><use xlink:href="#{if isset($is_mcp) && $is_mcp}svg3{else}back{/if}"></use></svg></a>
+        <div class="header_title">选择小区</div>
+</header>
+<form class="search_form" method="post" action="">
+    <div class="head_cnt">
+        <div class="head_cnt_input">
+            <input type="text" name="keyword" id="keyword" class="search_input" placeholder="输入小区/写字楼名称" autocomplete="off" value="{$keyword}" style="font-size:18px;"/>
+        </div>
+        <a class="cancel" href="javascript:void(0);" onclick="build_search();">搜索</a>
+        <!-- <a class="cancel" href="javascript:void(0);" onclick="$('#home_search').hide();$('#screenIfm').hide();">取消</a> -->
+    </div>
+    <div class="keyres_list" id="going_list">
+        {foreach from=$building_list item=item}
+        <div class="keyres_line">
+            <a class="keyres_block" href="">{$item.building_name}</a>
+        </div>
+        {/foreach}
+    </div>
+</form>
+</div>
+<!--弹出层背景透明化-->
+<div id="screenIfm" style="z-index:10;display:none;background-color:#EFEFEF;opacity:1;" class="screenIfm">
+</div>

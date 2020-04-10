@@ -1,0 +1,96 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<div class="tablesWrap">
+
+    <div class="tables-searchbox">
+        <form method="post">
+            <div class="mgt10">
+                <span "tbs-txt">查询开始日期：</span>
+                <input type="text" style="width:150px;" autocomplete="off" class="Wdate" name="start_time" value="{if $start_time}{date('Y-m-d',$start_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+                <span "tbs-txt">查询结束日期：</span>
+                <input type="text" style="width:150px;" autocomplete="off" class="Wdate" name="end_time" value="{if $end_time}{date('Y-m-d',$end_time)}{/if}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})">
+
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+            </div>
+        </form>
+    </div>
+
+    <table class="wxtables">
+        <colgroup>
+            <col width="10%">
+            <col width="15%">
+            <col width="15%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>时间</td>
+            <td>今日充值（RMB）</td>
+            <td>今日收卡（RMB）</td>
+            <td>今日充值利润</td>
+            <td>今日收卡利润</td>
+            <td>今日利润（RMB）</td>
+        </tr>
+        </thead>
+        <tbody>
+        {if $data}
+        {foreach from=$data item=this}
+        <tr>
+            <td>{$this.addtime}</td>
+            <td>{$this.recharge}</td>
+            <td>{$this.card}</td>
+            <td>{$this.recharge_profit}</td>
+            <td>{$this.card_profit}</td>
+            <td>{$this.today_profit}</td>
+        </tr>
+        {/foreach}
+        {else}
+        <tr>
+            <td colspan="6" class="center">暂无用户建议记录</td>
+        </tr>
+        {/if}
+        </tbody>
+        <thead>
+        <tr>
+            <td></td>
+            <td>累计充值（RMB）</td>
+            <td>累计收卡（RMB）</td>
+            <td>累计充值利润</td>
+            <td>累计收卡利润</td>
+            <td>累计利润（RMB）</td>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+            <td></td>
+            <td>{$recharge}</td>
+            <td>{$card}</td>
+            <td>{$recharge_profit}</td>
+            <td>{$card_profit}</td>
+            <td>{$today_profit}</td>
+        </tr>
+        </thead>
+    </table>
+    <div class="tables-btmctrl clearfix">
+
+        <div class="fr">
+            <div class="paginate">
+                {$page}
+            </div>
+        </div>
+    </div>
+    <!-- end wxtables -->
+    <!-- end tables-btmctrl -->
+</div>
+
+{/block}
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+
+{/block}
+

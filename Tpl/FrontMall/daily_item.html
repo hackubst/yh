@@ -1,0 +1,158 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{/block}
+
+{block name="content"}
+<!--s主内容-->
+<section class="content-wrapper">
+  <div class="content-container container">
+    <form method="get" name="first_order_form" id="first_order_form" action="{$cart_link}">
+  	<!-- s日常快速分类 -->
+  	<div class="col-cate-list">
+  	  <ul id="cate_ul">
+        {foreach from=$sort_list name=loop item=sort}
+        <li class="" onclick="change_single({$sort_total},{$smarty.foreach.loop.iteration})" id="c_{$smarty.foreach.loop.iteration}">{$sort.sort_name}</li>
+        {/foreach}
+  	  </ul>
+  	</div>
+  	<!-- e日常快速分类 -->
+  	<hr>
+    <!-- s商品列表 -->
+    <div class="col-table" id="col_table">
+      {foreach from=$item_list name=loop item=item}
+      <table class="table table-striped table-bordered table-condensed" id="d_{$smarty.foreach.loop.iteration}" style="display:none;">
+	    <thead>
+          <tr>
+            <th>序号</th>
+            <th>商品名称</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>小计</th>
+          </tr>
+        </thead>
+        <tbody>
+          {foreach from=$item.items name=loop1 item=items}
+          <tr class="attr_select_content">
+            <td>{$smarty.foreach.loop1.iteration}</td>
+            <td><a href="{$item_detail_link}{$items.item_id}">{$items.item_name}</a></td>
+            <td><input name="number" class="daily_itemNum" type="text" onkeyup="write_number(this)" value=""></td>
+            <td class="daily_price">{$items.vip_price}</td>
+            <td class="daily_total">0.0</td>
+            <input type="hidden" name="item_id" class="item_id" value="{$items.item_id}">
+            <input type="hidden" name="item_name" class="item_name" value="{$items.item_name}">
+            <input type="hidden" name="mall_price" class="mall_price" value="{$items.vip_price}">
+            <input type="hidden" name="small_pic" class="small_pic" value="{$items.small_img}">
+            <input type="hidden" name="integral_num" class="integral_num" value="{$items.integral_num}">
+          </tr>
+          {/foreach}
+        </tbody>
+      </table>
+      {/foreach}
+      <a href="javascript:;" onClick="addCart(1);" class="form-button btn">继续结算</a>
+	</div>	
+    <!-- e商品列表 -->
+  </form>
+  </div>
+</section>
+<!--e主内容-->
+{/block}
+
+{block name="js"}
+<script>
+{literal}
+var first_order = 1;
+
+$(function(){
+  //默认第一个高亮和显示
+  $('#cate_ul li:first-child').addClass('yellow');
+  $('#col_table table:first-child').show();
+
+	//小计计算
+	$('.daily_itemNum').blur(function(){
+		var _this = $(this);
+		if(!_this.val().match(/^\d+$/) && _this.val() != ""){
+			alert('必须是数字');
+			return;
+		}
+    if(_this.val() != ""){
+      var price = parseInt(_this.val()) * Number(parseFloat(_this.parent().siblings('.daily_price').html()).toFixed(2));
+      _this.parent().siblings('.daily_total').html(parseFloat(price.toFixed(2)));
+    }else{
+      _this.parent().siblings('.daily_total').html("0");  
+    }	
+	});
+});
+//输入控制字符
+function write_number(t)
+{
+      t.value = t.value.replace(/[^\d]/g,'');
+}
+//标签切换
+function change_single(len,id){
+  for(var i=1; i<=len; i++){  
+      $('#c_'+i).removeClass();
+      var dnode = $('#d_'+i);
+      if(i!=id){
+          dnode&&(dnode.hide());
+    } 
+  }
+  $('#c_'+id).addClass('yellow');
+  $('#d_'+id).css('display','inline-table');
+}
+
+//加入购物车
+function addCart(type)
+{
+  var add_item_num = 0;
+  var item_str = '';
+
+  $('.attr_select_content').each(function(){
+    var number = parseInt($(this).find('.daily_itemNum').val());
+    if (number > 0)
+    {
+      item_str += $(this).find('.item_name').val() + ',';
+      item_str += $(this).find('.mall_price').val() + ',';
+      item_str += $(this).find('.small_pic').val() + ',';
+      item_str += number + ',';
+      item_str += $(this).find('.item_id').val() + ',';
+      item_str += $(this).find('.integral_num').val() + ';';
+      add_item_num += number;
+    }
+  });
+
+  item_str = item_str.substr(0, item_str.length - 1);
+
+  if (add_item_num == 0)
+  {
+    alert('抱歉，请至少选择一个商品！');
+    return false;
+  }
+
+  $.post('/FrontCart/add_cart', {'first_order':first_order, 'item_str': item_str}, function(data){   
+    if (data != 'failure')
+    {
+      if(data == 'nostock'){
+        alert('对不起，商品库存不足');
+      }else{
+        if (type == 1)
+        {
+          alert('加入购物车成功');
+          location.href = '/FrontCart/cart.html';
+        }
+      }
+      
+
+    }
+    else
+    {
+      alert('对不起，加入购物车失败');
+
+    }
+  });
+}
+{/literal}
+</script>
+{/block}

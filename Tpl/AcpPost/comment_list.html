@@ -1,0 +1,60 @@
+{extends file="../acp.html"}
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+	    <table class="wxtables">
+        <colgroup>
+            <col width="5%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+          
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+            <td>选择</td>
+            <td>评论用户</td>
+            <td>评论时间</td>
+            <td>内容</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$reword_list item=reword_item name=list}
+        <tr>
+            <td><input type="checkbox" class="checkbox" value="{$reword_item.id}" name="a[]"></td>
+            
+            <td>{$reword_item.username}</td>
+            <td>{$reword_item.creattime}</td>  
+            <td>{$reword_item.content}</td>
+
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+     <div class="fr">  
+        <div class="paginate">  
+            {$show}
+        </div>  
+    </div>
+
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script src="__ACPJS__/acp_item.js?version={$version}"></script>
+<script src="__ACPJS__/AcpItem/list_item.js?version={$version}"></script>
+<script>
+{literal}
+
+
+
+
+
+
+{/literal}
+</script>
+{/block}

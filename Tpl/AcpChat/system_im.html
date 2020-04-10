@@ -1,0 +1,404 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" href="__PUBLIC__/Css/front/front_css/index.css?version={$version}">
+
+<style>
+	input{
+		border:1px solid #ccc;
+	}
+	.login{
+		/*display: none;*/
+	}
+	.main{
+		/*display: none;*/
+		width: 100%;
+		height: 500px;
+		border:2px solid #368ee0;
+		margin-top: 20px;
+	}
+	.left{
+		width: 232px;
+		float: left;
+		box-sizing: border-box;
+		height: 100%;
+		border-right:2px solid #368ee0;
+	}
+	.right{
+		width: 75%  !important;
+		float: left !important;
+		box-sizing: border-box !important;
+		height: 100% !important;
+	}
+	.title{
+		line-height: 60px;
+		height: 60px;
+		border-bottom:2px solid #368ee0;
+		text-align: center;
+		font-size: 24px;
+		color: #368ee0;
+	}
+	.title2{
+		line-height: 39px;
+		height: 39px;
+		border-bottom:2px solid #368ee0;
+		text-align: center;
+		font-size: 24px;
+		color: #368ee0;
+	}
+	.msg_window{
+		height: 366px;
+		box-sizing: border-box;
+		padding: 15px;
+		overflow-y:scroll;
+	}
+	.msg_window>div{
+	}
+	.msg_bottom {
+		height: 72px;
+		border-top:2px solid #368ee0;
+		box-sizing: border-box;
+		padding: 12px;
+		font-size: 0;
+	}
+	.msg_bottom button{
+		width: 112px;
+		height: 48px;
+		background: #368ee0;
+		border-radius: 24px;
+		color: #fff;
+		border:none;
+		font-size: 24px;
+		outline: none;
+	}
+	#text{
+		height: 48px;
+		box-sizing: border-box;
+		vertical-align: top;
+		outline: none;
+		border: 1px solid #979797;
+		width: 520px;
+		text-indent: 18px;
+		margin-right: 17px;
+		font-size: 16px;
+	}
+
+	.friend_list{
+		overflow-y:scroll;
+		height: 400px;
+	}
+	.friend_list li{
+		padding: 16px;
+		border-bottom: 1px solid #368ee0;
+		cursor: pointer;
+		list-style-type:none;
+	}
+	.friend_list li img{
+		width: 36px;
+		height: 36px;
+		float: left;
+		border-radius: 50%;
+	}
+	.friend_list li .name_info{
+		margin-left: 46px;
+	}
+	.friend_list li .name_info h4{
+		font-size: 14px;
+		color: #333;
+		line-height: 19px;
+		margin-bottom: 2px;
+	}
+	.friend_list li .name_info p{
+		color: #999;
+		font-size: 12px;
+	}
+	.friend_list li.active{
+		background: #D2EFFF;
+	}
+	.icon_image{
+		background: url(/Public/Images/front_img/icon_addpic.png) no-repeat ;
+		background-size: 24px 24px;
+		width: 24px;
+		height: 24px;	
+		display: inline-block;
+		margin-right: 15px;
+	}
+	.icon_face{
+		background: url(/Public/Images/front_img/icon_stick.png) no-repeat ;
+		background-size: 24px 24px;
+		width: 24px;
+		height: 24px;	
+		display: inline-block;
+		margin-right: 15px;
+	}
+
+	.my{
+		margin-bottom: 10px;
+	}
+	.my img{
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		float: left;
+	}
+	.my_text{
+		margin-left: 12px;	
+		border: 1px solid #368ee0;
+		padding: 10px;
+		font-size: 14px;
+		line-height: 19px;
+		border-radius: 8px;
+		position: relative;
+		max-width: 500px;
+		float: left;
+		margin-bottom: 3px;	
+	}	
+	.my_text::before{
+		background: #fff none repeat scroll 0 0;
+	    border-top: 1px solid #368ee0;
+	    border-left: 1px solid #368ee0;
+	    content: " ";
+	    display: block;
+	    height: 12px;
+	    width: 12px;
+	    top:12px;
+	    left: -8px;
+	    position: absolute;
+	    transform: rotate(-45deg);
+	}
+	.my .time{
+		font-size: 12px;
+		line-height: 16px;
+		color: #999999;
+		letter-spacing: 0;
+		margin-left: 48px;
+	}
+	.other{
+		margin-bottom: 10px;
+	}
+	.other img{
+		float: right;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+	}
+	.other .other_text{
+		margin-right: 12px;
+		border: 1px solid #368ee0;
+		padding: 10px;
+		font-size: 14px;
+		line-height: 19px;
+		border-radius: 8px;
+		position: relative;
+		max-width: 500px;
+		float: right;
+		background: #D2EFFF;
+		margin-bottom: 3px;
+	}
+	.other_text::before{
+		background: #D2EFFF none repeat scroll 0 0;
+	    border-top: 1px solid #368ee0;
+	    border-right: 1px solid #368ee0;
+	    content: " ";
+	    display: block;
+	    height: 12px;
+	    width: 12px;
+	    top:12px;
+	    right: -8px;
+	    position: absolute;
+	    transform: rotate(45deg);
+	}
+	.other .time{
+		text-align: right;
+		font-size: 12px;
+		line-height: 16px;
+		color: #999999;
+		letter-spacing: 0;
+		margin-right: 48px;
+	}
+
+	/*.header{*/
+		/*display: none;*/
+	/*}*/
+
+	/*.breadcrumbs{*/
+		/*display: none;*/
+	/*}*/
+
+
+	/*#sidebar{*/
+		/*display: none;*/
+	/*}*/
+
+	/*#main{*/
+		/*margin-left: 0px !important;*/
+	/*}*/
+</style>
+{/block}
+
+{block name="content"}
+<div class="wrapper" style="max-width: 1000px">
+	<div class="login">
+		<span>该功能需要给每个用户创建一个环信的hx_password，获取用户环信hx_password方法已经写在该控制下了</span>
+		<!--<h2>登录&注册</h2>-->
+		<!--<div>-->
+		    <!--账号：<input type="text" id="username"><br>-->
+		    <!--密码：<input type="text" id="password"><br>-->
+		    <!--<hr>-->
+		    <!--昵称：<input type="text" id="nickname">ps：注册时填写<br>-->
+		<!--</div>-->
+		<!--<button id="register">注册</button>-->
+		<!--<button id="login">登录</button>-->
+		<!--<br>-->
+	</div>
+	<div class="main">
+		<div class="left">
+			<h2 class="title">会话</h2>
+			<div class="friend">
+				<div style="vertical-align: center;border-bottom:1px solid #368ee0;">
+					<input id="keyword" style="width: 160px;height: 30px;padding: 2px;"  type="text" placeholder="输入姓名搜索"/>
+					<input type="button" style="width: 60px;height: 30px;border: none;background: #fff" onclick="search_user()" value="搜索">
+				</div>
+				<div style="clear: both"></div>
+				<div class="friend_list" id="pozx"><!-- 客服id固定，后期后台配置 -->
+					<!--<li class="list_item" data-userId="pozx">-->
+						<!--<img src="" alt="">-->
+						<!--<div class="name_info">-->
+							<!--<h4 class="nickname">牛咖堂客服</h4>-->
+							<!--<p>2017-5-24 15:23:55</p>-->
+						<!--</div>-->
+					<!--</li>-->
+					<div id="friend_list">
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="right">
+			<h2 class="title" id="toUser_nickname">未选中用户</h2>
+			<div class="msg_window" id="msg_window">
+				<div class="">
+					<!-- <div class="my">
+						<div class="clearfix">
+							<img src="/Public/Images/front_img/bg_login_box.png" alt="">
+							<div class="my_text">
+								你好啊！
+							</div>
+						</div>
+						<p class="time">2017-5-24 15:23:55</p>
+					</div> -->
+					<!-- <div class="other">
+						<div class="clearfix">
+							<img src="/Public/Images/front_img/bg_login_box.png" alt="">
+							<div class="other_text">
+								你也好吗？
+							</div>
+						</div>
+						<p class="time">2017-5-24 15:23:55</p>
+					</div> -->
+				</div>
+			</div>
+			<div class="msg_bottom">
+				<!--<label for="image" class="icon_image"></label><input type="file" id="image" style="display: none;">-->
+				<!--<i class="icon_face"></i>-->
+				<input type="text" id="text" placeholder="请输入">
+				<button id="privateText">发送</button>
+			</div>
+		</div>
+	</div>
+		
+</div>
+{/block}
+
+{block name="js"}
+<script type='text/javascript' src='/Public/Js/front/webim.config.js'></script>
+<script type='text/javascript' src='/Public/Js/front/strophe-1.2.8.min.js'></script>
+<!--<script src='http://downloads.easemob.com/downloads/cdn/websdk-1.4.5.min.js'></script>-->
+<script src='/Public/Js/front/websdk-1.4.10.js'></script>
+<!--<script src='/Public/Js/front/front_js/websdk-1.4.10.min.js.map'></script>-->
+<script type='text/javascript' src='/Public/Js/front/nkt_system_webim.js'></script>
+<script>
+	var hx_id = '{$config.HX_ID}';
+	var hx_pwd = '{$config.HX_PWD}';
+	var from_user_id = '{$from_user_id}';
+	var from_username = '{$from_username}';
+	var from_nickname = '{$from_nickname}';
+	var selfimgurl = '/Public/Images/front_img/bg_login_box.png';
+
+	var from_headimgurl = '{$from_headimgurl}';
+	var service_hx_id = '{$config.HX_ID}';
+
+
+	if(hx_id!=''&&hx_pwd!=''){
+		//$('.login').hide();
+		auto_login(hx_id,hx_pwd);
+	}
+
+
+	if(from_user_id!=""&&from_user_id.length>0){
+		var list_item ='<li class="list_item" data-userId="'+from_user_id+'" id="'+from_user_id+'">\
+									<img src="'+from_headimgurl+'" alt="">\
+									<div class="name_info">\
+										<h4 class="nickname">'+from_nickname+'</h4>\
+										<p class="reply_prev" id="'+ from_user_id +'_p">----</p>\
+									</div>\
+								</li>'
+		$('#friend_list').append(list_item);
+		var li = $('#'+from_username+'');
+		//li.trigger("click");
+	}
+
+	function default_img(obj){
+		//alert(123);
+		$(obj).attr('src','/Public/Images/front_img/bg_login_box.png')
+	}
+
+	function search_user(){
+		var keyword = $("#keyword").val();
+		$(".list_item").each(function(){
+			$(this).hide();
+		});
+		$(".list_item").each(function(){
+			var nick =  $(this).find(".nickname").html()
+			if(nick.indexOf(keyword)>=0){
+				$(this).show();
+			}
+		})
+	}
+
+	$("#text").keypress(function (event) {
+		var key = event.which;
+		if (key == 13) {
+			$("#privateText").trigger("click");
+		}
+	});
+
+	function check_un_read(){
+		$.post('/AcpCustomerServiceOnline/ajax_system_unread',{  },function(data){
+//			if(data > 0){
+//				$(".active b").html(data);
+//			}else if(data == 0){
+//				$(".active b").html(data);
+//			}
+			$(".active b").html(data);
+		})
+	}
+</script>
+<script type="text/javascript">
+//	window.onbeforeunload = function() {
+//		return "确认离开当前页面吗？未保存的数据将会丢失";
+//	}
+</script>
+<style>
+	.reply_prev{
+		margin: auto;
+		color: #999999;
+		font-style: normal;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+</style>
+
+{/block}

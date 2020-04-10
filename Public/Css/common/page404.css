@@ -1,0 +1,34 @@
+/*page404*/
+.page404{
+	position: relative;
+	width: 990px;
+	padding:87px 0;
+}
+.page404-img{
+	margin-left: 65px;
+	width:473px;
+	height: 231px;
+	background: url(/Public/Images/common/404.jpg) no-repeat;
+}
+.page404-tipsPanel{
+	position: absolute;
+	width: 260px;
+	height: 115px;
+	right: 140px;
+	top:137px;
+}
+.page404-tips-title{
+	color: #e36c08;
+	font-size: 20px;
+	padding-bottom: 25px;
+}
+.page404-tips{
+	line-height: 1.7em;
+	color: #959595;
+}
+.page404-tips dt{
+	font-weight: bold;
+}
+.page404-tips-list li{
+	list-style: square;
+}

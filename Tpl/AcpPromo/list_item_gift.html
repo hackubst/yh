@@ -1,0 +1,97 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tables-searchbox">  
+        <a href="/AcpPromo/add_item_gift/mod_id/4/redirect/{$cur_url}" class="btn btn-blue"><i class="gicon-plus white"></i>添加新的商品促销(赠礼品)</a> 
+    </div>
+<div class="tablesWrap">  
+     <div class="tables-searchbox">
+        <form method="post" action='/AcpPromo/list_item_gift/mod_id/4'>
+        	<span class="tbs-txt">商品名称：</span>
+	        <input type="text" name='iname' id='iname' value='{$s_item_name}' />
+         	
+			<span class="tbs-txt">活动时间：</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t1" value="{if $s_time1}{date('Y-m-d H:i',$s_time1)}{/if}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">
+	        <span class="tbs-txt">至</span>
+	        <input type="text" autocomplete="off" class="Wdate" name="t2" value="{if $s_time2}{date('Y-m-d H:i',$s_time2)}{/if}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">
+	        
+	        <span class="tbs-txt">状态：</span>
+	        <label><input type="radio" name="isuse" value='0' checked>全部</label> 
+			<label><input type="radio" name="isuse" value='1' {if $s_isuse == 1}checked{/if}>{$s_type}启用</label>  
+			<label><input type="radio" name="isuse" value='2' {if $s_isuse == 2}checked{/if}/>未启用</label>
+	        
+	        <input type='hidden' name='act' value='search' />
+	        <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+        </form>
+    </div> 
+    <!-- end tables-searchbox -->  
+    <table class="wxtables">  
+        <colgroup>  
+        <col width="10%">
+        <col width="20%">  
+        <col width="13%">  
+        <col width="17%">
+        <col width="8%">  
+        <col width="10%">  
+        <col width="10%">  
+        <col width="17%">  
+        </colgroup>  
+        <thead>  
+            <tr>  
+            	<td>商品图片</td>
+                <td>商品名称</td>  
+                <td>需购买商品(件)</td> 
+                <td>礼品名称</td> 
+                <td>活动状态</td>
+                <td>开始时间</td>  
+                <td>结束时间</td>  
+                <td>操作</td>  
+            </tr>  
+        </thead>  
+        <tbody>
+        	{if $promo_info}
+        	{section name=row loop=$promo_info}  
+            <tr data_mate='{url_jiami($promo_info[row].promotion_item_gift_id)}'>  
+            	<td><img src='{$promo_info[row].small_img}' width=50 height=50/></td>
+            	<td><a href="/ItemDisplay/index/id/{$promo_info[row].item_id}" target="_blank">{$promo_info[row].item_name}</a></td>
+                <td>{$promo_info[row].item_total}</td>  
+                <td>{$promo_info[row].gift_name}</td>
+                <td>{if $promo_info[row].isuse == 2}<i class="gicon-remove" title='未启用'></i>{else}<i class="gicon-ok" title='已启用'></i>{/if}</td>    
+                <td>{$promo_info[row].start_time}</td>  
+                <td>{$promo_info[row].end_time}</td>  
+                <td>  
+                  <!--   <a href="javascript:;" class="btn" title="查看">查看</a>   -->
+                    <a href="/AcpPromo/edit_item_gift/pi/{url_jiami($promo_info[row].promotion_item_gift_id)}/mod_id/4/redirec/{url_jiami($cur_url)}" class="btn" title="修改">编辑</a>   
+                    <a href="javascript:;" class="btn del_item_gift" title="删除">删除</a>   
+                </td>  
+            </tr> 
+            {/section}
+            {else}
+            <tr><td colspan='7'>未能找到合适的活动</td></tr>
+            {/if} 
+        </tbody>  
+    </table>  
+    <!-- end wxtables -->  
+    <div class="tables-btmctrl clearfix">  
+        <div class="fl">  
+        </div>  
+        <div class="fr">  
+            <div class="paginate">  
+                {$page_str}  
+            </div>  
+            <!-- end paginate -->  
+        </div>  
+    </div>  
+    <!-- end tables-btmctrl -->  
+</div>  
+<!-- end tablesWrap -->  {/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpPromo/list_item_gift.js"></script>
+{/block} 
+
+{block name="css"}
+
+{/block}

@@ -1,0 +1,21 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+
+{block name="content"}
+<div class="friendlinksPanel mgt20">
+	<div class="flp-title">
+		<h1>{$head_title}</h1>
+	</div>
+	<ul class="flp-list clearfix">
+	{foreach from=$link_list item=this}
+		<li>
+			<a href="{$this.link_url}" target="_blank">{$this.link_name}</a>
+		</li>
+	{/foreach}
+	</ul>
+</div>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="__COMMCSS__/friendlinks.css" />
+{/block}

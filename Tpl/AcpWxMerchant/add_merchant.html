@@ -1,0 +1,70 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id='base_config' action='' method='POST'>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> 商户名称：</label>
+        <div class="form-controls">
+            <input type="text" name='name' value='{$info.name}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> appid：</label>
+        <div class="form-controls">
+            <input type="text" name='appid' value='{$info.appid}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> appsecret：</label>
+        <div class="form-controls">
+            <input type="text" name='appsecret' value='{$info.appsecret}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> mcid：</label>
+        <div class="form-controls">
+            <input type="text" name='mcid' value='{$info.mcid}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> 商户密钥：</label>
+        <div class="form-controls">
+            <input type="text" name='pay_key' value='{$info.pay_key}' placeholder="">
+            <span class="fi-help-text"></span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span> 固定金额：</label>
+        <div class="form-controls">
+            <div class="radio-group">
+                <label><input type="radio" name="price_fixed" value="1" {if $info.price_fixed == 1}checked="checked"{/if} />是</label>
+                <label><input type="radio" name="price_fixed" value="0" {if $info.price_fixed == 0}checked="checked"{/if} />否</label>   
+            </div>
+            <span class="fi-help-text">固定后默认支付金额为0.01，不固定则为0.01 ~ 10</span>
+        </div>
+    </div>
+
+    <div class="formitems inline">
+        <label class="fi-name"></label>
+        <div class="form-controls">
+            <input type='hidden' name='id' value='{$info.wx_merchant_id}' />
+            <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>提交</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block}
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpConfig/base_config.css" type="text/css" />
+{/block}

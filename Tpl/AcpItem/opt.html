@@ -1,0 +1,14 @@
+
+{if !$item.is_integral}
+<a href="/AcpItem/set_wholesale_price/item_id/{$item.item_id}" class="btn" title="设置批发价">设置批发价</a>
+{/if}
+<a href="/AcpItem/edit_item/item_id/{$item.item_id}" class="btn" title="编辑">编辑</a>
+{if $opt == 'onsale'}
+	<a href="javascript:;" class="btn J_store" title="下架">下架</a>
+{elseif $opt == 'store'}
+	<a href="javascript:;" class="btn J_display" title="上架">上架</a>
+{/if}
+{if $item.isuse != 2}
+<a href="javascript:;" class="btn" title="复制链接" onclick='item_link({$item.item_id},{$item.is_integral})'>复制链接</a>
+<a href="javascript:;" class="btn J_del" title="删除">删除</a>
+{/if}

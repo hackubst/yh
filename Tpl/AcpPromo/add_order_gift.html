@@ -1,0 +1,99 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<form action='' method='post' class="bs-docs-example" id="add_order_discount">
+	<div class="tc" data-index="1">  
+                 <div class="formitems inline">  
+            		<label class="fi-name">活动类型：</label>  
+            		<div class="form-controls" style="line-height:32px;">订单满额送礼品</div>  
+        		 </div>
+        		<div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed">*</span>促销活动名称：</label>  
+		            <div class="form-controls">  
+		                <input type="text" placeholder="" name='title' value='' class="xlarge">  
+		                <span class="fi-help-text">活动的名称</span>  
+		            </div>  
+		        </div>
+		         
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed">*</span>需订单额度：</label>  
+		            <div class="form-controls">  
+		                &yen;<input type="text" placeholder="" name='total' value='1.00'  class="mini">  
+		                <span class="fi-help-text">达到该额度的订单可以享受本次送礼品活动</span>  
+		            </div>  
+		        </div>
+		        <div class="formitems inline">  
+    				<label class="fi-name"><span class="colorRed">*</span>选择要赠送的礼品：</label>  
+    				<div class="form-controls">
+    					{if $gift_list}  
+        				<select name="gift">
+        					<option value selected>--请选择--</option>
+            				{section name='row' loop=$gift_list}
+            				<option value="{$gift_list[row].gift_id}">{$gift_list[row].gift_name}</option>
+            				{/section}
+        				</select>
+        				<span class="fi-help-text">选择一件礼品</span> 
+        				{else}
+            			您还没有可赠送的礼品	
+            			{/if}  
+    				</div>  
+				</div>
+		        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>开始日期：</label>  
+		            <div class="form-controls">  
+		                <input type="text" autocomplete="off" name='start_time' value='' class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">  
+		                <span class="fi-help-text">只有达到开始日期，活动才会生效。若不指定，则表示即刻生效。</span>  
+		            </div>  
+		        </div> 
+		        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>结束日期：</label>  
+		            <div class="form-controls">  
+		                <input type="text" autocomplete="off"  name='end_time' value='' class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm'})">  
+		                <span class="fi-help-text">当达到结束日期时，活动会结束。若不指定，则表示一直生效。</span>  
+		            </div>  
+		        </div>  
+		        
+ 	        	<div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>适合的客户：</label>  
+		            <div class="form-controls">  
+		                <div class="checkbox-group">
+		                	{section name=row loop=$rank_list}
+		                    <label><input type="checkbox" name="rank_need[]" value='{$rank_list[row].agent_rank_id}'>{$rank_list[row].rank_name}</label>
+		                    {/section} 
+		                </div>  
+		                <span class="fi-help-text">不勾选表示适用于所有分销商</span>  
+		            </div>  
+		        </div>
+	        
+		        <div class="formitems inline">  
+		            <label class="fi-name"><span class="colorRed"></span>活动是否启用：</label>  
+		            <div class="radio-group">  
+            			<label><input type="radio" name="used" value='1' checked>是</label>  
+            			<label><input type="radio" name="used" value='2'>否</label> 
+        			</div>  
+        			<span class="fi-help-text"></span> 
+		        </div> 
+		        
+		        <div class="formitems inline"> 
+		        	<label class="fi-name">&nbsp;</label> 
+		        	<div class="radio-group">
+		        		<input type='hidden' name='act' value='add' />
+		        		<button class="btn btn-blue"><i class="gicon-check white"></i>保存</button>
+		        	</div>
+		        </div>
+            </div>        
+</form>
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="__ACPJS__/AcpPromo/add_order_gift.js"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpPromo/add_list_item_discount.css" />
+{/block}

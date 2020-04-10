@@ -1,0 +1,85 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>客服昵称：</label>  
+    <div class="form-controls">  
+		<input type="text" placeholder="" class="xlarge" name="customer_service_online_name" id="customer_service_online_name" value="{$customer_service_online_name}">  
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>客服类型：</label>  
+   <div class="form-controls">  
+        <select name="service_type" id="service_type">  
+            <option value="">--请选择--</option>
+			{foreach from=$service_type_list key=key item=service_type1}
+			<option value="{$key}" {if $service_type === $key}selected{/if}>{$service_type1}</option>
+			{/foreach}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>售前/售后：</label>  
+   <div class="form-controls">  
+        <select name="is_after_service" id="is_after_service">  
+            <option value="">--请选择--</option>
+			{foreach from=$is_after_service_list key=key item=is_after_service1}
+			<option value="{$key}" {if $is_after_service === $key}selected{/if}>{$is_after_service1}</option>
+			{/foreach}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+
+<!-- <div class="formitems inline">  
+	<label class="fi-name"><span class="colorRed">*</span>所属{$ITEM_NAME}：</label>  
+   <div class="form-controls">  
+        <select name="item_id" id="item_id">  
+            <option value="">--请选择--</option>
+			{foreach from=$item_list item=item}
+			<option value="{$item.item_id}" {if $item_id === intval($item.item_id)}selected{/if}>{$item.item_name}</option>
+			{/foreach}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div>  -->
+
+<div class="formitems inline">  
+    <label class="fi-name">账号：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="large" name="account" id="account" value="{$account}"> 
+    </div>  
+</div>
+
+<div class="formitems inline">  
+	<label class="fi-name">上架：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">  
+			<label><input type="radio" name="isuse" value="1" {if !isset($isuse) || $isuse == 1}checked="checked"{/if} />是</label>  
+			<label><input type="radio" name="isuse" value="0" {if isset($isuse) && $isuse == 0}checked="checked"{/if} />否</label>   
+        </div>  
+    </div>  
+</div> 
+
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="edit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+{/block} 
+
+{block name="css"}
+{/block}

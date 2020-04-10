@@ -1,0 +1,460 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<!--导入的js框架--> 
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.circliful.js?version={$version}"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/jquery.mobile-1.4.3.min.js?version={$version}"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/front/control.js?version={$version}"></script>
+<!--end--> 
+{/block}
+
+{block name="content"}
+<script type="text/javascript">
+var arr1 = new Array();
+var arr2 = new Array();
+var arr3 = new Array();
+var arr4 = new Array();
+var arr5 = new Array();
+var arr6 = new Array();
+var arr7 = new Array();
+var arr8 = new Array();
+var arr9 = new Array();
+var command_arr = new Array();
+{foreach from=$command item=c key=key}
+	command_arr[{$key}] = {$c};
+{/foreach}
+
+var seed_state_list = new Array();
+var current_seed_state_id;
+var current_state;
+{foreach from=$seed_state_list item=state key=key1}
+	seed_state_list[{$key1}] = new Array();
+	arr{$state.state} = ['{$state.img_path}'];
+	{foreach from=$state item=data key=key2}
+		seed_state_list[{$key1}]['{$key2}'] = '{$data}';
+	{/foreach}
+{/foreach}
+
+var alarm = {$planter_info.alarm};
+var planter_id = {$planter_info.planter_id};
+var seed_id = {$item_info.item_id};
+var planter_seed_num = {$planter_seed_num};
+{literal}
+</script>
+
+<!--select界面的js--> 
+<script type="text/javascript">
+var Count =9;
+var Imgs = new Array(Count);
+//预加载图片
+function preLoadImgs()
+{
+	for(var i=0;i<Imgs.length;i++){
+		Imgs[i]=new Image();
+		downloadImage(i);
+	}
+}
+//加载单个图片
+function downloadImage(i)
+{
+    var imageIndex = i+1; //图片以1开始
+    Imgs[i].src = "__PUBLIC__/Images/front/phase"+imageIndex+"_s.png";
+}
+
+var select_init_is_over=false;
+$(document).on("pageinit","#select",function()
+{
+	if(!select_init_is_over)
+	{
+		select_init();
+	}
+	initialize_btn();
+});
+
+function select_init()
+{
+	select_fillstat();
+	var clientWidth = document.body.clientWidth;
+	if(clientWidth >= 540)
+	{
+		select_setDivs_pad();
+	}
+	else
+	{
+		select_setDivs();
+	}
+	imglist=$('#images_ul').html();
+	imginit();
+	var obj=$('#jd_img1_select');
+	select_beTouch(obj);
+	var content_text = document.getElementById('select').firstChild;//去除主内容区自动生成的空text节点
+	$(content_text).remove();
+	preLoadImgs();
+
+}
+//旋转图片的初始化
+function imginit(imgurl,num)
+{
+	if((imgurl!=undefined)&&(num!=undefined))
+	{
+		switch(num)
+		{
+			case '1':arr1.push(imgurl);break;
+			case '2':arr2.push(imgurl);break;
+			case '3':arr3.push(imgurl);break;
+			case '4':arr4.push(imgurl);break;
+			case '5':arr5.push(imgurl);break;
+			case '6':arr6.push(imgurl);break;
+			case '7':arr7.push(imgurl);break;
+			case '8':arr8.push(imgurl);break;
+			case '9':arr9.push(imgurl);break;
+			default:break;
+		}
+		var str='<li><a href="#" onclick="enlarge_img()"><img src="'+imgurl+'" alt="" /></a></li>';
+		//$('#fullscreen_img').find('img').attr('src', imgurl);
+		imglist=str+imglist;
+	}
+	$('#images_ul').empty();
+	$('#images_ul').html(imglist);
+	//$('#featured-area ul').roundabout({
+		//easing: 'easeOutInCirc',
+	//});
+}
+//植物阶段改变时，图片切换
+function imgChange(arr)
+{
+	if(arr!=undefined)
+	{
+		var str='';
+		for(var i=0;i<arr.length;i++)
+		{
+			str+='<li><a href="#"><img src="'+arr[i]+'" alt="" /></a></li>';
+			imglist=str;
+		}
+	}
+
+	$('#images_ul').empty();
+	$('#images_ul').html(imglist);
+	//$('#featured-area ul').roundabout({
+		//easing: 'easeOutInCirc',
+	//});
+}
+function select_fillstat()
+{
+	$('#myStat_select1').circliful();
+	$('#myStat_select2').circliful();
+	$('#myStat_select3').circliful();
+}
+
+function select_setDivs()//手机布局
+{	
+	var dotLeft = $("#img_lb_div_select").offset().left-25+($("#img_lb_div_select").width()-$(".dot_select").width())/2;
+	//中心点纵坐标
+	//var dotTop = $("#img_lb_div_select").offset().top-20+($("#img_lb_div_select").height()-$(".dot_select").height())/2;
+	var dotTop=245;
+
+	//起始角度
+	var stard = 0;
+	//半径
+	var radius = 132;
+	//每一个BOX对应的角度;
+	var avd = 360/$(".d_jd_select").length;
+	//每一个BOX对应的弧度;
+	var ahd = avd*Math.PI/180;
+
+	//设置圆的中心点的位置
+	$(".dot_select").css({"left":dotLeft,"top":dotTop});	
+	$(".d_jd_select").each(function(index, element){
+		index = (seed_state_list.length + 1) - index;
+		$(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+	});
+}
+
+function select_setDivs_pad()//pad布局
+{
+	var dotLeft = $("#img_lb_div_select").offset().left-40+($("#img_lb_div_select").width()-$(".dot_select").width())/2;
+	//中心点纵坐标
+	//var dotTop = $("#img_lb_div_select").offset().top-20+($("#img_lb_div_select").height()-$(".dot_select").height())/2;
+	var dotTop=435;
+
+	//起始角度
+	var stard = 0;
+	//半径
+	var radius = 245;
+	//每一个BOX对应的角度;
+	var avd = 360/$(".d_jd_select").length;
+	//每一个BOX对应的弧度;
+	var ahd = avd*Math.PI/180;
+
+	//设置圆的中心点的位置
+	$(".dot_select").css({"left":dotLeft,"top":dotTop});
+	$(".d_jd_select").each(function(index, element){
+		index = (seed_state_list.length + 1) - index;
+	$(this).css({"left":Math.sin((ahd*index))*radius+dotLeft,"top":Math.cos((ahd*index))*radius+dotTop});
+	});
+}
+
+var select_plant_num=1;//被选中的阶段
+
+function select_beTouch(obj)
+{
+	//清除被选择的状态
+	select_reSetAllImg();
+	var url=$(obj).attr('src').split(".");
+	var newurl='';
+	var t=$(obj).attr('src').split('selected'); 
+
+	var num=$(obj).parent().attr('value');//取得哪个阶段
+	$('#images_ul').attr('value',num);
+	if(t.length>1)
+	{
+	}
+	else
+	{ 
+		//各种阶段被选中时的代码
+		newurl=url[0]+'_s.png';
+		$(obj).attr('src',newurl);
+		$('#select_p').html($('#jd_img'+num+'_select').prev().html());	
+		
+		//各阶段植物的图片切换
+		var arr = new Array();
+		switch(num)
+		{
+			case '1':arr=arr1;break;
+			case '2':arr=arr2;break;
+			case '3':arr=arr3;break;
+			case '4':arr=arr4;break;
+			case '5':arr=arr5;break;
+			case '6':arr=arr6;break;
+			case '7':arr=arr7;break;
+			case '8':arr=arr8;break;
+			case '9':arr=arr9;break;
+			default:arr=arr1;break;
+		}
+
+		$('#images_ul').empty();
+			imgChange(arr);//初始化图片
+	}
+
+	select_plant_num=num;
+	var t=5;
+	var d=5;
+	var l=5;
+
+	len = seed_state_list.length;
+	for (var j = 0; j < len; j++)
+	{
+		if (seed_state_list[j]['state'] == num)
+		{
+			current_seed_state_id = seed_state_list[j]['seed_state_id'];
+			current_state = num;
+			t = seed_state_list[j]['outside_temperature'];
+			d = seed_state_list[j]['humidity'];
+			l = seed_state_list[j]['illuminance_limit'];
+		}
+	}
+
+	$('#myStat_select1').attr('data-part',t);
+	$('#myStat_select1').attr('data-text',t+'℃');
+	$('#myStat_select2').attr('data-part',d);
+	$('#myStat_select2').attr('data-text',d+'%');
+	$('#myStat_select3').attr('data-part',parseFloat(l) / 10);
+	$('#myStat_select3').attr('data-text',l+'lx');
+	select_fillstat();	 
+}
+
+//取消其他阶段的选中情况
+function select_reSetAllImg()
+{
+	//var imgs=$('.plant_img');
+	$('.plant_img_select').each(function(){
+		var url=$(this).attr('src').replace('_s',"");
+		$(this).attr('src',url);
+	});
+}
+
+function select_startPlaneNum()
+{
+	if (current_seed_state_id == undefined)
+	{
+		alert('请选择一个状态！');
+		return false;
+	}
+
+	//提示确认
+	/*if (planter_seed_num == 0 || (confirm('开始后当前种植机内之前已种植的植物会受到影响，您确定要开始吗？')))
+	{
+		//种植该种子
+		plant_new_seed(planter_id, seed_id, current_seed_state_id, current_state);
+	}
+	else
+	{
+		return false;
+	}*/
+	if (planter_seed_num == 0)
+	{
+		plant_new_seed(planter_id, seed_id, current_seed_state_id, current_state);
+	}
+	else
+	{
+		confirm('开始后当前种植机内之前已种植的植物会受到影响，您确定要开始吗？', "plant_new_seed(planter_id, seed_id, current_seed_state_id, current_state)");
+	}
+
+	//var num=select_plant_num;
+	//home_sel_plant(num);
+	//isend=false;
+	//isfinal=false;
+}
+</script>
+
+<!--select界面的css--> 
+<style type="text/css">
+.bd-btm-grey01{border-bottom:none;}
+.dot_select
+	 { 
+	 position:absolute;
+	 width:0px;
+	 height:0px;
+	 }
+
+.plant_img_select
+    {
+        width:100%;
+		height:100%;
+	}
+.stat{
+	   float:left;
+	}
+#select_info{margin-top:-155px;}
+#images_ul img{width:177px;border-radius:90px;}
+#images_ul{margin-top: -103px;margin-left: 16px;width: 180px;height: 180px;padding-top: 15px;}
+.s_start_btn{text-align: center;margin-top: -44px;}
+.s_start_btn .main-btn{
+width: 105px;
+height: 42px;
+display: inline-block;
+font-size: 1em;
+line-height: 42px;
+text-align: center;
+color: #5FC849;
+background: #fff;
+border:2px solid #5FC849;
+border-radius: 10px;
+position:relative;z-index:100;
+}
+.s_start_btn .main-btn:hover{color:white;background: #5FC849;}
+#s_info {
+position: relative;
+width: 180px;
+height: 180px;
+margin-left: 15px;
+top: 15px;
+background-image: url(/Public/Images/front/quan3.png);
+margin-top: -195px;
+}
+.main_plant_desc{color:grey;}
+#select{width:100%;position:absolute;}
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+#images_ul{margin-top: 0px;margin-left: 30px;width: 340px;height: 340px;padding-top: 31px;}
+#images_ul img{width:338px;border-radius: 171px;}
+#s_info{width: 340px;height: 340px;margin-left: 30px;margin-top: -355px;background-image: url(/Public/Images/front/quan3_pad.png);}
+#select_info {margin-top: -202px;}
+.s_start_btn .main-btn {width: 180px;height: 60px;font-size: 2em;line-height: 60px;}
+}
+</style>
+{/literal}
+</head>
+
+<body>
+<!--select页面-->
+<div data-role="page" id="select"> 
+	{include file="$header_path"}
+
+	<div data-role="content" id="select_content" style='min-height:200px;margin:0px auto;width: 100%;overflow: hidden;'>
+		<!--植物标题-->
+		<div class="text-center mt5">
+			<p class="main_plant_name">{$item_info.item_name}</p>
+			<p class="main_plant_desc">这是{$item_info.item_name}种植的一个详细过程,请选择开始阶段</p>
+		</div>
+
+		<!--植物各个阶段-->
+		<div id='img_lb_div_select'>
+			<div id='plant_m_select'>
+				
+					
+						<!--圆背景图-->
+				<ul id='images_ul' value=''>
+					{foreach from=$seed_state_list item=state}
+						<a href="#"><img src="{$state}" alt="" /></a>
+					{/foreach}
+				</ul> 
+				<div id="s_info">
+				</div>
+				<div id='select_info'>
+					<p id='select_p'>点击每个种植阶段，查看种植信息</p>
+				</div>
+
+		<div class="dot_select"></div>
+		<div class='d_jd_select'></div>
+		{foreach from=$seed_state_list item=state}
+			{if $state.state == 9}
+				<div id='jd9_select' value='9' class='d_jd_select'><span style='display:none;'>种子形成期：植物器官脱落，成熟种子落回土壤</span><img id='jd_img9_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase9.png'></img></div>
+			{elseif $state.state == 8}
+				<div id='jd8_select' value='8' class='d_jd_select'><span style='display:none;'>结果期：果实经过生化转变，色香味变得香甜</span><img id='jd_img8_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase8.png'></img></div>
+			{elseif $state.state == 7}
+				<div id='jd7_select' value='7' class='d_jd_select'><span style='display:none;'>传粉期：成熟的花粉落在雌蕊柱头受精</span><img id='jd_img7_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase7.png'></img></div>
+			{elseif $state.state == 6}
+				<div id='jd6_select' value='6' class='d_jd_select'><span style='display:none;'>开花期：花瓣打开，在激素作用下花粉成熟</span><img id='jd_img6_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase6.png'></img></div>
+			{elseif $state.state == 5}
+				<div id='jd5_select' value='5' class='d_jd_select'><span style='display:none;'>花芽期：花芽分化、花器官形成和性别分化</span><img id='jd_img5_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase5.png'></img></div>
+			{elseif $state.state == 4}
+				<div id='jd4_select' value='4' class='d_jd_select'><span style='display:none;'>根茎叶期：光合作用帮助根茎叶快速生长</span><img id='jd_img4_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase4.png'></img></div>
+			{elseif $state.state == 3}
+				<div id='jd3_select' value='3' class='d_jd_select'><span style='display:none;'>幼苗期：在光的作用下，嫩芽显绿色</span><img id='jd_img3_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase3.png'></img></div>
+			{elseif $state.state == 2}
+				<div id='jd2_select' value='2' class='d_jd_select'><span style='display:none;'>萌芽期：配合酶的作用种子吸水并萌芽</span><img id='jd_img2_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase2.png'></img></div>
+			{elseif $state.state == 1}
+				<div id='jd1_select' value='1' class='d_jd_select'><span style='display:none;'>种子期：埋于松紧适中土壤中</span><img id='jd_img1_select' onclick='select_beTouch(this)' class='plant_img_select' src='__PUBLIC__/Images/front/phase1.png'></img></div>
+			{/if}
+		{/foreach}
+	</div>
+</div> 
+<!--开始种植按钮-->
+<div class="s_start_btn">
+		<a href="javascript:;" class="main-btn txt-shd0" onclick='return select_startPlaneNum()' data-prefetch="ture">开始种植</a>
+</div> 
+<!--select统计图-->
+<script>
+var screenWidth = document.body.clientWidth;
+if(screenWidth >= 540)
+{
+	document.write('<div id="stats_select" class="stats_select"><div class="stat" id="myStat_select1" data-dimension="170" data-text="{$planter_info.outside_temperature}℃"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#ff1919" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="{$planter_info.outside_temperature}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select2" data-dimension="170" data-text="{$planter_info.humidity}%"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#22AEEB" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="{$planter_info.humidity}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select3" data-dimension="170" data-text="{$planter_info.illuminance}lx"  data-width="5" data-outsize="5" data-fontsize="28" data-percent="100" data-fgcolor="#ff9834" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="{$planter_info.illuminance / 10}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+}
+else
+{
+	document.write('<div id="stats_select" class="stats_select"><div class="stat" id="myStat_select1" data-dimension="90" data-text="{$planter_info.outside_temperature}℃"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#ff1919" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="{$planter_info.outside_temperature}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select2" data-dimension="90" data-text="{$planter_info.humidity}%"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#22AEEB" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="{$planter_info.humidity}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div class="stat" id="myStat_select3" data-dimension="90" data-text="{$planter_info.illuminance}lx"  data-width="2" data-outsize="2" data-fontsize="17" data-percent="100" data-fgcolor="#ff9834" data-bgcolor="#f2f2f2" data-fill="#fff" data-total="100" data-part="{$planter_info.illuminance / 10}" data-icon="star-black" data-icon-size="28" data-icon-color="#fff"><\/div><div style="clear:both;"><\/div><\/div>');
+}
+</script>
+	<!--三个图标-->
+	<div class="param_icon3">
+		<div class="param_icon_temp"></div>
+		<div class="param_icon_humit"></div>
+		<div class="param_icon_light"></div>
+	</div>
+
+	<!--说明文字-->
+	<!--<div id='select_info' class="select_info">
+		<label id="select_info_txt"><p><span class="bold green01">温度</span>：番茄是喜温性蔬菜，在正常条件下，同化作用最适温度为20～25℃;</p><p><span class="bold green01">光照</span>：番茄是喜光作物，光饱和点为70000lx，适宜光照强度为30000～50000lx;</p><p><span class="bold green01">水分</span>：番茄既需要较多的水分，但又不必经常大量的灌溉，一般以土壤湿度60～80%、空气湿度45～50%为宜。</p></label>
+	</div>-->
+
+	<!--按钮-->
+	<div class="select_btn">
+
+	<!--底部导航-->
+	{include file="./footer.html"}
+{/block}

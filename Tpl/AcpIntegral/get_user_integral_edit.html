@@ -1,0 +1,109 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tabs clearfix">
+    <a href="javascript:;" class="active tabs_a fl" data-origin="additem" data-index="1">调整积分</a>
+</div>
+<!-- end tabs -->
+<div class="tabs-content" data-origin="additem">
+<form method="post" id="form_addAgent" enctype="multipart/form-data">
+
+<div class="tc" data-index="1">
+        <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>用户名：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" class="small" name="username" value="{$user_info.username}" readonly="readonly">
+                <input type="hidden" placeholder="" class="small" name="user_id" value="{$user_info.user_id}">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+        <!-- <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>手机号：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="0" class="small" name="mobile" value="{$user_info.mobile}">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div> -->
+
+        <div class="formitems inline">
+            <label class="fi-name"><span class="colorRed">*</span>变动方式：</label>
+            <div class="form-controls">
+                <div class="radio-group">
+                    <label><input type="radio" name="type" value="1" checked>增加</label>
+                    <label><input type="radio" name="type" value="0">减少</label>
+                </div>
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+        <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>变动数量：</label>
+            <div class="form-controls">
+                <input type="text" placeholder="" class="small" name="integral">
+                <span class="fi-help-text error"></span>
+            </div>
+        </div>
+
+        <!-- <div class="formitems inline">
+            <label class="fi-name">
+                <span class="colorRed">*</span>变动类型：
+            </label>
+            <div class="form-controls">
+                <select name="big_area_id">
+                    <option value="0">--请选择--</option>
+                    {foreach from=$big_area_list item=item}
+                    <option value="{$item.big_area_id}"{if $user_info.big_area_id == $item.big_area_id} selected="selected"{/if}>{$item.area_name}</option>
+                    {/foreach}
+                </select>
+                <span class="fi-help-text error"></span>
+            </div>
+        </div> -->
+
+        <div class="formitems inline">  
+            <label class="fi-name"><span class="colorRed">*</span> 变动类型：</label>  
+            <div class="form-controls">  
+                <select class="small" id="selectOne" name="class_id">  
+                    <option value="0">--选择一级变动类型--</option>  
+                    {*{foreach from=$class_list item=class_info}
+                        <option value="{$class_info.class_id}" >{$class_info.class_name}</option>  
+                    {/foreach}*}
+                </select> 
+                <select class="small" id="selectTwo" name="sort_id">  
+                    <option value="0">--选择二级变动类型--</option>  
+                </select>
+                <span class="fi-help-text"></span>  
+            </div>  
+        </div>
+
+        <div class="formactions mgl180">
+            <input type="hidden" name="action" value="edit">
+            <button class="btn btn-blue"><i class="gicon-ok white"></i>提交</button>
+        </div>
+</div>
+
+<!-- end 基本信息 -->
+</form>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/jquery/jquery.linkageMenu.js?version={$version}"></script>
+<script type="text/javascript">
+var selectOneVal = '{$selectOneVal}';
+{literal}
+$(function(){ 
+    $.linkageMenu({ 
+     'selectOneId': 'selectOne',//一级菜单Id 
+     'selectTwoId': 'selectTwo',//二级菜单Id 
+     'selectOneVal': selectOneVal,//一级菜单option值 
+     'paramName' : 'class_id',//请求url的参数key 
+     'getSelectTwoValUrl': '/AcpIntegral/get_sort_list'//通过一级菜单的value获取二级菜单的值的url 
+    }); 
+});
+</script>
+{/literal}
+{/block}

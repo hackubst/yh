@@ -1,0 +1,65 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+    <div class="formitems inline">
+        <label class="fi-name"><span class="colorRed">*</span>群发对象：</label>  
+        <div class="form-controls">
+            <div  id="class_icon">
+                <select name="groups" id='groups' class='small'>
+                        <option value="">---请选择---</option>
+                        <option value="all" {if $mass_msg.group == 'all'}selected{/if}>所有用户</option>
+                        {foreach from=$groups item=v}
+                        <option value="{$v.id}" {if $mass_msg.group == {$v.id}}selected{/if}>{$v.name}</option>
+                        {/foreach}
+                </select>
+                
+            </div>
+        </div>
+    </div>
+
+<div class="formitems inline" id="type">
+    <label class="fi-name"><span class="colorRed">*</span>消息类型：</label>  
+    <div class="form-controls">
+        <div  id="class_icon">
+            <select name="msg_type" id='msg_type' class='small'>
+                    <option value="">---请选择---</option>
+                    <option value='text' {if $mass_msg.msg_type == 'text'}selected{/if}>文本</option>
+                    <option value='news' {if $mass_msg.msg_type == 'news'}selected{/if}>图文</option>
+            </select>
+            <span class="fi-help-text">图文消息只显示第一篇文章的封面缩略图和图文简述</span>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+        <input type="hidden" name="act" value="set" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>设置</button>  
+    </div>  
+</div>  -->
+</form>
+{/block} 
+
+{block name="js"}
+<script type="text/javascript" src="__ACPJS__/AcpConfig/set_mass_msg.js?version={$version}"></script>
+<script>
+var mass_msg_type = '{$mass_msg.msg_type}';
+var mass_msg_media_id = '{$mass_msg.media_id}';
+var page = {$page};
+var item_count = {$item_count};
+{literal}
+{/literal}
+</script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

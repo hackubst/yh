@@ -1,0 +1,49 @@
+﻿{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/my_order_detail.css?version={$version}">
+{literal}
+<style>
+.address_title{
+width: 90px;
+text-align: left;
+float:left;
+}	
+.detailCon_tit{
+	margin: 10px 0 4px 15px;
+color: rgb(155, 151, 151);
+}
+/* TABLET LAYOUT 
+----------------------------------------------- */
+
+@media all and (min-width:540px){	/*pad 768px*/
+.detailCon_tit{margin: 30px 0 20px 30px;}
+.address_cnt {margin-left: 200px;}
+.address_title {width: 160px;}
+}
+</style>
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+  <div id="detailCon" class="wx_wrap">  
+	<div class="detailCon_tit">
+		<div class="address_title">时期</div> 
+		<div class="address_cnt" id="plant_name"> 开始时间</div> 
+	</div>
+	<div class="address" style="padding: 15px;"> 
+	{foreach from=$planter_log_list item=log}
+		<div class="address_row"> 
+			<div class="address_title"> {$log.state}： </div> 
+			<div class="address_cnt" id="plant_name"> {$log.addtime|date_format:"%Y-%m-%d  %H:%M:%S"} </div> 
+		</div> 
+	{/foreach}
+	</div>
+</div> 
+{/block}
+
+{block name="js"}
+{/block}

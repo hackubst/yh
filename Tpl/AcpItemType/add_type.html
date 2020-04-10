@@ -1,0 +1,120 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<div class="tabs wizardstep clearfix">  
+    <a href="javascript:;" class="tabs_a active fl" data-origin="addtype">
+        <span class="wizardstep-num">1</span>添加类型名称
+    </a>  
+    <a href="javascript:;" class="tabs_a fl" data-origin="addtype">  
+        <span class="wizardstep-num">2</span>添加规格属性
+    </a>  
+    <a href="javascript:;" class="tabs_a fl" data-origin="addtype">  
+        <span class="wizardstep-num">3</span>添加扩展属性
+    </a>  
+</div>  
+<!-- end tabs -->  
+<div class="tabs-content" data-origin="addtype">
+    <form method="post" id="form2">
+    <div class="tc">
+        <div class="formitems inline">
+            <label class="fi-name"><span class="colorRed">*</span>商品类型名称：</label>  
+            <div class="form-controls">  
+                <input type="text" name="item_type_name">
+                <span class="fi-help-text error"></span>
+            </div>  
+        </div>
+        <div class="formitems inline">  
+            <label class="fi-name">备注：</label>  
+            <div class="form-controls">  
+                <textarea name="remark"></textarea>
+                <span class="fi-help-text error"></span>  
+            </div>  
+        </div>  
+        <div class="formactions mgl180">
+            <a href="###" class="btn btn-blue j-wizardstep" data-step="1" data-origin="addtype" data-type="next">下一步</a>
+        </div>
+    </div>
+    <!-- end 添加类型名称 -->
+    <div class="tc hide">
+        <div class="tablesWrap">
+            <div class="tables-searchbox">
+                <a href="###" class="btn btn-blue" id="j-addgg">添加新规格</a>
+            </div>
+            <table class="wxtables">
+                <colgroup>
+                    <col width="20%">
+                    <col width="50%">
+                    <col width="10%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <td>规格名称</td>
+                        <td>规格属性值</td>
+                        <td>排序</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody class="J_sku">
+                </tbody>
+            </table>
+            <!-- end wxtables -->
+        </div>
+        <!-- end tablesWrap --> 
+        <div class="wizardstep-actions mgt10">
+            <a href="###" class="btn j-wizardstep" data-step="2" data-origin="addtype" data-type="prev">上一步</a>
+            <a href="###" class="btn btn-blue j-wizardstep" data-step="2" data-origin="addtype" data-type="next">下一步</a>
+        </div>
+    </div>
+    <!-- end 添加规格 -->
+    <div class="tc hide">
+        <div class="tablesWrap">
+            <div class="tables-searchbox">
+                <a href="###" class="btn btn-blue" id="j-addsx">添加扩展属性</a>
+            </div>
+            <table class="wxtables">
+                <colgroup>
+                    <col width="20%">
+                    <col width="50%">
+                    <col width="10%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <td>属性名称</td>
+                    <td>属性值</td>
+                    <td>排序</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <tbody class="J_prop">
+                </tbody>
+            </table>
+            <!-- end wxtables -->
+        </div>
+        <!-- end tablesWrap -->
+        <div class="wizardstep-actions mgt10">
+            <input type="hidden" name="action" value="add">
+            <a href="###" class="btn j-wizardstep" data-step="3" data-origin="addtype" data-type="prev">上一步</a>
+            <button type="submit" class="btn btn-blue">确定</button>
+        </div>
+    </div>
+    <!-- end 添加扩展属性  -->
+    </form>
+</div>
+<!-- end tabs-content --> 
+{/block}
+
+{block name="css"}
+{literal}
+<style>
+#jpops .fi-name{width:90px;}
+#jpops .form-controls{margin-left:100px;}
+</style>
+{/literal}
+{/block}
+
+{block name="js"}
+<script src="__ACPJS__/AcpItemType/add_type.js?version={$version}"></script>
+{/block}

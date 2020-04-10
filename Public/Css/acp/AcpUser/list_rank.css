@@ -1,0 +1,12 @@
+.t-list-rank{ width:100%;}
+.t-rank-tit{}
+.t-rank-con{ overflow:hidden; margin-top:10px;}
+.t-alert{ width:750px; height:400px; border:#ddd solid 1px; background:#fff; position:absolute; left:25%;top:20%; box-shadow:#ddd 0px 0px 5px; display:none; padding:20px;}
+.t-alert-tit{ height:25px; line-height:25px; overflow:hidden; color:#666;}
+.t-alert-tit .le{ float:left; display:block;}
+.t-alert-tit .ri{ float:right; display:block; cursor:pointer;}
+.t-tr{ width:100%; overflow:hidden; margin-top:10px; color:#666;}
+
+.t-tr .t-td{ float:left; line-height:35px; padding-right:10px;}
+.t-tr .wid{ width:200px; height:37px; text-align:right;}
+.t-tr .t-td .war{ color:#f00; padding-left:10px;}

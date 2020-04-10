@@ -1,0 +1,93 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+{include file="$header_path"}
+<section>
+	<div class="c_p_header">
+		<div class="uname01">请问<span class="pr10em"></span>您想种植什么？</div>
+	 </div>
+  </section>
+  <section class="mlr10 mb30">
+	  <div class="pt10 display-bl bk-bai">
+		<ul class="">
+		{foreach from=$item_list item=sort}
+			<li class="">
+				<div class="pos-rel green01">
+					<div class="pos-rel award-list">
+						<div id="{$sort.sort_tag}" class="left_slide categery_bk display-ib "><span class="c_p_cname">{$sort.sort_name}</span>
+						</div>
+						<p class="fr">
+							<i id="up" class="jiantou01"></i>
+						</p>
+					</div>
+					<ul class="f13em zk_cont pl10" style="display: none;">
+					{foreach from=$sort.item_list item=item}
+						<a href="{$main_select_link}{$item.item_id}" class="green01"><li class="sec_cate">{$item.item_name}</li></a>
+					{/foreach}
+					</ul>
+				</div>
+				<hr class="hr3" />
+			</li>
+		{/foreach}
+		</ul>
+	</div>
+	<div class="cp_alink">
+		<a href="{$mall_home_link}" class="w_alink_text">若没有种子，请前往商城购买
+			<span id="w2_alink_icon" class="w_alink_icon"></span>
+		</a>
+	</div>
+  </section>
+
+
+<!--浮框开始-->
+<div class="kuan-cont" style="display: none;">
+ <div class="kuan black f16 txt_center bai text-center" id="tan"></div>
+</div>
+<div class="black-bg" style="display: none;"></div>
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+		$('.award-list').click(function(){
+			$(this).find('i').toggleClass('jiantou01-up');
+			$(this).next('.zk_cont').slideToggle();	
+		});
+		
+		$('.formElem').on('change', function(){
+		if($("input[name=machine-num]").val())
+			$('.sbmBtn').removeClass('disable');
+		else
+			$('.sbmBtn').addClass('disable');
+		});
+
+		$('.sbmBtn a').click(function(e){
+			e.preventDefault();
+			if(this.parentNode.className.indexOf('disable') != -1) return;
+			if(!$("input[name=machine-num]").val()){
+				var error="请输入有效的机器码";
+				$("#tan").html(error);
+				tishi();
+				return;
+			}
+
+			$("#bind_form").submit();
+		});
+		
+	//弹出提示
+	function tishi(){
+		 $('.kuan-cont').fadeIn(1500);
+		 //$('.black-bg').fadeIn(1500);
+		 $('.kuan-cont').fadeOut(1500);
+		 //$('.black-bg').fadeOut(1500);
+	  }
+</script>
+{/literal}
+{/block}

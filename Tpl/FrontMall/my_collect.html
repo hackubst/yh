@@ -1,0 +1,115 @@
+﻿{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+<link rel="stylesheet" style="text/css" href="__PUBLIC__/Css/front/search.css?version={$version}">
+{literal}
+<style>
+.shop_time_txt{border-right:none;}	
+</style>
+{/literal}
+{/block}
+{block name="content"}
+	<!--主内容-->
+	{if $collect_list}
+	<div class="colet_cont conter" id="colet_cont">
+		<div class="colet_num">
+     共收藏<span class="fav_total_num" id="fav_total_num">{$total}</span>家商户
+  	</div>
+		<!--商户列表-->
+		<ul class="list-ul" id="going_list">
+			{foreach from=$collect_list item=collect}
+			<li class="shop_cont">
+				<a class="shop_link" href="{$item_list_link}/merchant_id/{$collect.merchant_id}" style="width:75%;">
+					<div class="shop_pic_wrap">
+						<div class="shop_pic">
+							<img src="{$collect.logo}" />
+						</div>
+					</div>
+					<div class="shop_content">
+						<div class="shop_name_wrap">
+							<span class="shop_name_txt">{$collect.shop_name}</span>
+						</div>
+						<div class="shop_type fresh">
+							{$collect.class_name}            
+						</div>
+						<div class="shop_desc">
+							<span class="shop_time_txt"><svg class="time_loct_icon"><use xlink:href="#madetime"></use></svg>制作时间：{$collect.make_time_avg}分钟</span>
+						</div>
+						<div class="shop_intro">
+							<span class="shop_area"><svg class="time_loct_icon"><use xlink:href="#location"></use></svg>{$collect.area_name}</span>
+							<span class="sale_distance">评分：{$collect.score_avg}</span>
+						</div>
+					</div>
+				</a>
+				<a class="colet_del del_btn" href="javascript:void(0);">
+					<svg class="colet_del_icon"><use xlink:href="#del"></use></svg>
+					<input type="hidden" id="item_id" value="{$collect.merchant_id}">
+				</a>
+			</li>
+	   {/foreach}
+		</ul>
+  </div>
+  {else}
+		<div class="error_cont">
+			<div class="error_img"><svg class="error_icon"><use xlink:href="#error"></use></svg></div>
+			<div class="error_txt">您还未收藏任何商品</div>
+			<a href="{$mall_home_link}" id="button" class="go_btn">快去看看吧</a>
+		</div>
+	{/if}
+	 <!--提示层-->
+  <div id="tan_wrap"><div id="tan"></div></div>
+{/block}
+{block name="js"}
+<script src="__JS__/front/collect.js?version={$version}"></script>
+<script>
+var firstRow = parseInt('{$firstRow}');
+var total = parseInt('{$total}');
+{literal}   
+$(function(){
+	var range = 200; //距下边界长度/单位px  
+    var elemt = 500; //插入元素高度/单位px  
+    var num = firstRow;  
+    var totalheight = 0;  
+    var main = $("#going_list"); //主体元素  
+    $(window).scroll(function(){  
+      var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+      totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+      if(($(window).height()+range) <= totalheight  && total > num)
+      {  
+        num = parseInt(num) + parseInt(firstRow);
+        //获取商品列表
+        $.post('/FrontMall/get_collect_list', {"firstRow":num - parseInt(firstRow)}, function(data, textStatus)
+         {
+          if (data != 'failure')
+          {
+            var len = data.length;
+            for (i = 0; i < len; i++)
+            {
+                var html = '<div class="dlink_record"><p><span>金额：</span><i>&yen;'+data[i].freight+'</i></p><p><span>变动前金额：</span> <em>'+data[i].start_freight+'</em> </p><p> <span>变动后金额：</span> <em>'+data[i].end_freight+'</em> </p><p> <span>变动时间：</span> <em>'+data[i].addtime+'</em> </p><p> <span>镖金来源：</span> <em>'+data[i].change_type_name+'</em> </p><p> <span>备注：</span> <em>'+data[i].remark+'</em> </p></div>';
+               	var html = '<li class="shop_cont"><a class="shop_link" href="{$item_list_link}/merchant_id/'+data[i].merchant_id+'" style="width:75%;"><div class="shop_pic_wrap"><div class="shop_pic"><img src="'+data[i].logo+'" /></div></div><div class="shop_content"><div class="shop_name_wrap"><span class="shop_name_txt">'+data[i].shop_name+'</span></div><div class="shop_type fresh">'+data[i].class_name+'</div><div class="shop_desc"><span class="shop_time_txt"><svg class="time_loct_icon"><use xlink:href="#madetime"></use></svg>制作时间：'+data[i].make_time_avg+'分钟</span></div><div class="shop_intro"><span class="shop_area"><svg class="time_loct_icon"><use xlink:href="#location"></use></svg>'+data[i].area_name+'</span><span class="sale_distance">好评率：'+data[i].score_avg+'</span></div></div></a><a href="javascript:void(0);" class="colet_del del_btn"><svg class="colet_del_icon"><use xlink:href="#del"></use></svg><input type="hidden" id="item_id" value="'+data[i].merchant_id+'"></a></li>';
+                  main.append(html);  
+            }
+ 
+          }
+        }, 'json');
+      } 
+       else
+      {
+        $('#item_ending').show();
+      }
+    }); 
+
+	$(".del_btn").click(function()
+	{
+		var merchant_id = $(this).find('#item_id').val();
+		cancel_collect(merchant_id);
+		$(this).parent().remove();
+		var tip="取消收藏成功";
+		$("#tan").html(tip);
+		tishi();
+	});
+
+});  
+</script>
+{/literal}
+{/block}

@@ -1,0 +1,149 @@
+{extends file="../home.html"}
+{block name="title"}{$head_title}{/block}
+{block name="css"}
+{literal}
+<style>
+body{
+  background-color: #fff;
+}
+.indx_wx{
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  height: 100%;
+}
+.qrcode_pic {
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  display: inline-block;
+    /*line-height: 150px;*/
+  text-align: center;
+  width: 100%;
+}
+.qrcode_pic img{
+  width: 90%;
+ /* height: auto;
+  margin:20%;*/
+  /*vertical-align: top;*/
+}
+.qrcode_info_txt{
+  color: #4A4A4A;
+  font-size: 33px;
+  line-height: 50px;
+  height: 50px;
+}
+/*新页面css*/
+.container{
+  margin: 0;
+  padding: 0;
+  height:100%;
+  position: fixed;
+}
+.qr_bk_img{
+  width: 100%;
+}
+.qr_avatar{
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  margin-left: -52px;
+  width: 90px;
+  height: 90px;
+  border: 7px solid #fff;
+  border-radius: 100%;
+}
+@media screen and (max-width: 375px){
+  .qr_avatar{
+  margin-left: -42px;
+  width: 80px;
+  height: 80px;
+  border: 4px solid #fff;
+  border-radius: 100%;
+}
+}
+.qr_avatar img{
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+.qr_code{
+  width: 172px;
+  height: 172px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -86px;
+  margin-top: -86px;
+  border-radius: 8px;
+  background-color: #ff5b6f;
+}
+.qr_border{
+  border-radius: 8px;
+  border: 1px dashed #fff;
+  width: 158px;
+  height: 158px;
+  margin: 5px 0 0 5px;
+}
+.qr_info_txt{
+  margin: 34px auto;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  font-size: 15px;
+}
+</style>
+{/literal}
+{/block}
+
+{block name="content"}
+<!-- <div id="bodyDiv" class="indx_wx">
+  <div class="qrcode_pic">
+    <img src="{$qr_code}">
+    <div class="qrcode_info_txt">请长按长按二维码</div>
+  </div>
+</div> -->
+<div class="container">
+  <img src="{if $system_config.QR_CODE_BG}{$system_config.QR_CODE_BG}{else}/Public/Images/front/qrcode_bk.jpg{/if}" class="qr_bk_img">
+  <div class="qr_avatar">
+    <img src="{$user_info.headimgurl}" id="head_img_code">
+  </div>
+  <div class="qr_code">
+    {if $qr_code}
+    <img src="{$qr_code}" id="code_img">
+    {else}
+    <div class="qr_border">
+      <div class="qr_info_txt">
+        购买消费满1280元<br>
+        您就可以成为合伙人<br>
+        拥有自己的专属二维码
+      </div>
+    </div>
+    {/if}
+  </div>
+</div>
+ 
+{/block}
+      
+{block name="js"}
+{literal}
+   <script type="text/javascript">
+    var html_url = window.location.href;
+    var img_url = $("#head_img_code").attr("src");
+    window.onload = function() {
+      if (is_mobile()) {
+            // 排除微信内调用
+          if (!is_wechat()) {
+             $("#code_img").attr("src","/Public/Images/front/62108.jpg");
+             native_listen('head_img',{
+                img_url:img_url
+              })
+          }
+        }
+
+
+
+    }
+
+   </script>
+{/literal}
+{/block}

@@ -1,0 +1,70 @@
+{extends file="../home.html"}
+
+{block name="title"}{$head_title}{/block}
+	
+{block name="css"}
+{literal}
+{/literal}
+{/block}
+
+{block name="content"}
+<header class="h42 bk-green pos-rel sn-nav">
+	<div class="pos-abs"><a href="javascript:history.go(-1);"><img class="" src="__PUBLIC__/Images/front/header_back.png" /></a></div>
+	<div class="searchWrap pos-rel">
+		<input  type="search"  id="wapSearchInput" oninput="OnInput(event)"class=" wbox-flex" value="" />
+		<a id="wapSearchURL" href="javascript:void(0);" class="search-submit"></a>
+	</div>
+ </header>
+
+<div id="hotwordsBox" class="keywordsBox">
+    <div class="keywordsGroup">
+        <div class="keywordsList">
+            <div class="wbox keywordsRow">
+                <a href="/Index/result.html?keyword=番茄">
+                    番茄
+                </a>
+                <a href="/Index/result.html?keyword=黄瓜">
+                    黄瓜
+                </a>
+                <a href="/Index/result.html?keyword=榴莲">
+                    榴莲
+                </a>
+            </div>
+        </div>
+        <div class="keywordsList">
+            <div class="wbox keywordsRow">
+                <a href="/Index/result.html?keyword=罂粟">
+                    罂粟
+                </a>
+                <a href="/Index/result.html?keyword=猕猴桃">
+                    猕猴桃
+                </a>
+                <a href="/Index/result.html?keyword=西瓜">
+                    西瓜
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="$footer_path"}
+{/block}
+
+{block name="js"}
+{literal}
+<script>
+$(function(){
+	var $wapSearchInput = $("#wapSearchInput");
+	$wapSearchInput.focus();
+	$wapSearchInput.attr("value",$("#keyword").val());
+	$wapSearchInput.keypress(function(e){
+		var key = e.which;
+		if(key ==13){
+			$(".search-submit").triggerHandler("click");
+		}
+	});
+});
+</script>
+
+{/literal}
+{/block}

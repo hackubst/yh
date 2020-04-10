@@ -1,0 +1,49 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+
+<form action="" method="post" >
+	<div class="tables-searchbox">
+		<span class="tbs-txt">起始时间：</span>
+		<input type="text" id="start_time" name="start_time" value="{$start_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})">  
+		<span class="fi-text">-</span>  
+		<input type="text" id="end_time" name="end_time" value="{$end_time}" autocomplete="off" class="Wdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss'})"> 
+		
+		<input type="hidden" name="action" value="select" />
+		<button class="btn" type="submit"><i class="gicon-search"></i>查询</button>
+	</div>
+</form>
+
+<div class="t-his-mid">
+	{if $count}
+		<div class="t-his-mid-a">
+			<span>当前条件筛选财务数据条数为：{$count}条。</span>
+			<a href="{$export_url}" class="btn btn-green" id="export">
+			<i class="gicon-check white"></i>导出订单</a>
+		</div>
+	<div class="t-his-mid-b">该操作可以导出指定的交易记录到EXCEL文件供您下载。 为安全起见，当您离开当前页面后，本次导出的文件将被清除。</div>
+	{else}
+	<div class="t-his-mid-b">对不起,暂时没有您要导出的数据!</div>
+	<div class="t-his-mid-b">该操作可以导出指定的交易记录到EXCEL文件供您下载。 为安全起见，当您离开当前页面后，本次导出的文件将被清除。</div>
+	{/if}
+	
+	{if $zip_url}
+	 <div class="t-his-mid-c">
+		<b>
+			<img src="/Public/Images/acp/yas.jpg" /></b>
+			<span>{$zip_name}</span>
+			<a href="{$zip_url}" class="btn btn-green"><i class="gicon-check white"></i>导出成功,请下载</a>
+		</div>
+	{/if}
+   
+</div>
+
+{/block}
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+{/block} 
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpFinance/export_data.css" type="text/css" />
+{/block}

@@ -1,0 +1,95 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<form id="J_FormArticle" action="" method="post">
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>标题：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="title" id="title" value="{$article_info.title}">
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"><span class="colorRed">*</span>所属栏目：</label>  
+    <div class="form-controls">  
+        <select name="sort_id" id="sort_id">
+            <option value="">--请选择--</option>
+            {foreach from=$article_sort_list item=this}
+            <option value="{$this.article_sort_id}" {if $article_info.article_sort_id == $this.article_sort_id}selected{/if}>{$this.article_sort_name}</option>
+            {/foreach}
+        </select>   
+		<span class="fi-help-text hide"></span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name">作者：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="author" id="author" value="{$article_info.author}">
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name">来源：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" name="article_source" id="article_source" value="{$article_info.article_source}">
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name">排序：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" style="width:45px;" name="serial" id="serial" value="{$article_info.serial}">
+    </div>  
+</div>
+<div class="formitems inline">  
+    <label class="fi-name">显示：</label>  
+    <div class="form-controls">  
+        <div class="radio-group">
+            <label><input type="radio" name="isuse" value="1" checked="checked"  {if $article_info.isuse== 1 }checked{/if} />是</label>
+            <label><input type="radio" name="isuse" value="0"  {if isset($article_info.isuse) && $article_info.isuse == 0 }checked{/if} />否</label>
+        </div>  
+    </div>  
+</div>
+
+{upload_image_widget($pic_data)}
+
+<div class="formitems inline">  
+    <label class="fi-name">页面关键字：</label>  
+    <div class="form-controls">  
+        <input type="text" placeholder="" class="xlarge" name="keywords" id="keywords" value="{$article_info.keywords}">
+        <span style="color:#ddd;">多个用"|"分隔</span>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name">页面描述：</label>  
+    <div class="form-controls">  
+        <textarea name="description" id="description">{$article_info.description}</textarea>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name">文章内容：</label>  
+    <div class="form-controls" id="J_KindEditor">  
+        <textarea name="contents" id="contents" class="large">{$article_info.contents}</textarea>
+    </div>  
+</div> 
+<div class="formitems inline">  
+    <label class="fi-name"></label>  
+    <div class="form-controls">  
+		<input type="hidden" name="act" value="submit" />
+        <button type="submit" class="btn btn-blue"><i class="gicon-check white"></i>保存</button>  
+    </div>  
+</div> 
+</form>
+{/block} 
+
+{block name="js"}
+<!-- 编辑器 -->
+<link rel="stylesheet" href="__KD__/themes/default/default.css" />
+<script charset="utf-8" src="__KD__/kindeditor.js?version={$version}" > </script>
+<script charset="utf-8" src="__KD__/lang/zh_CN.js?version={$version}" > </script>
+<script type="text/javascript" src="__JS__/jquery/ajaxupload.3.5.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article_save.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/add_article.css"  type="text/css"/>
+{/block}

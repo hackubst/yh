@@ -1,0 +1,13 @@
+{if $notice_list}
+<div class="con1-inforr">
+    <div class="infor_tt">最新公告<a class="right" href="{$notice_list_link}">更多&gt;&gt;</a></div>
+    <div class="infor_cent">
+        <!-- <img alt="" title="" width="250" height="98" src="__PUBLIC__/Images/front/logo_min.png"> -->
+        <ul class="dt_infor">
+          {foreach from=$notice_list item=notice}
+          <li class="infor_li"><a href="{$notice_detail_link}{$notice.notice_id}" title="{$notice.title}">{$notice.title}</a></li>
+          {/foreach}
+        </ul>
+    </div>
+</div>
+{/if}

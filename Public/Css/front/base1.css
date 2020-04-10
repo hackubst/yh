@@ -1,0 +1,823 @@
+@charset "utf-8";
+/*!
+ * @名称：base.css
+ * @功能：1、重设浏览器默认样式
+ *       2、设置通用原子类
+ */
+/* 防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
+html,a {
+    /*background:white;*/
+     color:#7a7a7a;
+}
+/* 内外边距通常让各个浏览器样式的表现位置不同 */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
+    margin:0;
+    padding:0;
+}
+/* 要注意表单元素并不继承父级 font 的问题 */
+body,button,input,select,textarea {
+    font:15px \5b8b\4f53,arial,sans-serif;
+}
+input,select,textarea {
+    font-size:100%;
+}
+/* 去掉 table cell 的边距并让其边重合 */
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+/* ie bug：th 不继承 text-align */
+th {
+    text-align:inherit;
+}
+/* 去除默认边框 */
+fieldset,img {
+    border:none;
+}
+/* ie6 7 8(q) bug 显示为行内表现 */
+iframe {
+    display:block;
+}
+/* 去掉 firefox 下此元素的边框 */
+abbr,acronym {
+    border:none;
+    font-variant:normal;
+}
+/* 一致的 del 样式 */
+del {
+    text-decoration:line-through;
+}
+address,caption,cite,code,dfn,em,th,var {
+    font-style:normal;
+    font-weight:500;
+}
+/* 去掉列表前的标识，li 会继承 */
+ol,ul {
+    list-style:none;
+}
+/* 对齐是排版最重要的因素，别让什么都居中 */
+caption,th {
+    text-align:left;
+}
+/* 来自yahoo，让标题都自定义，适应多个系统应用 */
+h1,h2,h3,h4,h5,h6 {
+    font-size:100%;
+    font-weight:500;
+}
+q:before,q:after {
+    content:'';
+}
+/* 统一上标和下标 */
+sub,sup {
+    font-size:75%;
+    line-height:0;
+    position:relative;
+    vertical-align:baseline;
+}
+sup {
+    top:-0.5em;
+}
+sub {
+    bottom:-0.25em;
+}
+/* 让链接在 hover 状态下显示下划线 */
+a:hover {
+    text-decoration:none;
+}
+/* 默认不显示下划线，保持页面简洁 */
+ins,a {
+    text-decoration:none;
+}
+/* 去除 ie6 & ie7 焦点点状线 */
+a:focus,*:focus {
+    outline:none;
+}
+img{
+  width: 100%;
+}
+/* 清除浮动 */
+.clearfix:before,.clearfix:after {
+    content:"";
+    display:table;
+}
+.clearfix:after {
+    clear:both;
+    overflow:hidden;
+}
+.clearfix {
+    zoom:1; /* for ie6 & ie7 */
+}
+.clear {
+    clear:both;
+    display:block;
+    font-size:0;
+    height:0;
+    line-height:0;
+    overflow:hidden;
+}
+/* 设置显示和隐藏，通常用来与 js 配合 */
+.hide {
+    display:none!important;
+}
+.block {
+    display:block;
+}
+/* 设置浮动，减少浮动带来的 bug */
+.fl,.fr {
+    display:inline;
+}
+.fl {
+    float:left;
+}
+.fr {
+    float:right;
+}
+.tl{
+    text-align: left;
+}
+.tr{
+    text-align: right;
+}
+.tc{
+    text-align: center;
+}
+.oh{
+  overflow: hidden;
+}
+.bold{
+  font-weight: bold;
+}
+.pos_abs{
+  position: absolute;
+}
+.pos_rel{
+  position: relative;
+}
+.txt_limit{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  -ms-text-overflow:ellipsis;
+  white-space: nowrap;
+}
+/* 去除IOS按钮美化 */
+input[type="radio"],input[type="checkbox"], input[type="button"], input[type="submit"], input[type="reset"] {
+-webkit-appearance: none;
+}
+input[type="radio"]{
+  font-size: 100%;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 100%;
+}
+input[type="radio"]:checked{
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  border: 4px solid #FF4D9D;
+  border-radius: 100%;
+}
+input[type="checkbox"]{
+  font-size: 100%;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+input[type="checkbox"]:checked{
+   width: 15px;
+  height: 15px;
+  background: url(/Public/Images/front/icon_sprite.png) no-repeat;
+    background-size: 264px 288px;
+  display: inline-block;
+  background-position: -237px -129px;
+  border: none;
+}
+/* 去除链接背景阴影 */
+a,img,button,input,textarea{-webkit-tap-highlight-color:rgba(255,255,255,0);}
+/*公共颜色*/
+.red{
+    color: #FF4D9D;
+}
+.green{
+    color: #FF4D9D;
+}
+.blue{
+    color: #FF5C5C;
+}
+.black{
+    color: #4a4a4a;
+}
+.grey{
+    color: #999;
+}
+/*公共样式*/
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:#D7D4D4;}
+
+.icon{
+    background: url(/Public/Images/front/icon_sprite.png) no-repeat;
+    background-size: 264px 288px;
+    vertical-align: middle;
+  display: inline-block;
+}
+.pic{
+    background: url(/Public/Images/front/pic_sprite.png) no-repeat;
+    background-size: 333px 128px;
+    vertical-align: middle;
+  display: inline-block;
+}
+.arrow_right {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  position: absolute;
+  top: 17px;
+  right: 5px;
+}
+.kongbai{
+    width: 100%;
+    height: 20px;
+    background-color: #FBFBFB;
+    border-top: 1px solid #E9E9E9;
+    border-bottom: 1px solid #E9E9E9;
+}
+.min_kongbai{
+    width: 100%;
+    height: 8px;
+    background-color: #FBFBFB;
+    border-top: 1px solid #E9E9E9;
+    border-bottom: 1px solid #E9E9E9;
+}
+.mb_navBtm{
+  margin-bottom: 55px;
+}
+.btn_wrap {
+  width: 100%;
+  text-align: center;
+  margin: 20px 0px 60px 0px;
+}
+.btn_wrap .btn_red {
+  width: 100%;
+  height: 40px;
+  border-radius: 3px;
+  background-color: #FF4D9D;
+  display: inline-block;
+  color: #fff;
+  line-height: 40px;
+  font-size: 21px;
+}
+.btn_wrap .btn_blue{
+    width: 100%;
+  height: 40px;
+  border-radius: 3px;
+  background-color: #FF5C5C;
+  display: inline-block;
+  color: #fff;
+  line-height: 40px;
+  font-size: 21px;
+}
+.icon-pullup{
+    background-position: -176px 0px;
+  width: 20px;
+  height: 20px;
+}
+.pullUpLabel{
+    color: #999;
+    font-size: 15px;
+}
+.layer_title{
+font-size: 19px;
+  color: #4a4a4a;
+  text-align: center;
+}
+.mcheck {
+  margin-right: auto;
+  margin-left: auto;
+  height: 100%;
+  width: 100%;
+}
+.mcheck img {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  max-height: 100%;
+  max-width: 100%;
+}
+.mcheck .ercode-back{
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  width: 50px;
+  height: 50px;
+  background: url(/Public/Images/front/back.png);
+  background-size: contain;  
+  z-index: 101;
+}
+.qt{
+  width:100%;height:100%;display:none;position:absolute;z-index:100;background-color:#fff;
+}
+.screenIfm {
+display: none;
+position: fixed;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background: #000;
+opacity: 0.5;
+z-index: 13;
+}
+.share_pic{
+  display: none;
+  width: 70%;
+  right: 10px;
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+}
+.audit_friend_num{
+    position: absolute;
+  top: -7px;
+  line-height: 18px;
+  left: 31px;
+  background-color: #FF4D9D;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0px 5px;
+  font-size: 12px;
+}
+.lay_cont{
+  width: 280px;
+  height: 268px;
+  background-color: #fff;
+  border: none;
+  border-radius: 6px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  overflow: scroll;
+  margin-left: -140px;
+  margin-top: -134px;
+}
+.lay_opt_div{
+  height: 40px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+}
+.close_lay{
+  height: 30px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+}
+.indx_wx{
+  margin-bottom: 55px;
+}
+.non-error-tip,.simple_error{
+  text-align: center;
+  line-height: 40px;
+}
+.alert_lay{
+  background-color:#fff; 
+  color:#000;
+   border:none; 
+  text-align:center;
+}
+/*动画s*/
+@-webkit-keyframes 'lr_move' {
+     0% {
+        margin-left: -20px;
+     }
+     50% {
+        margin-left: 40px;
+     }
+     100% {
+        margin-left: 0px;
+     }
+  }
+.animation-one{
+   -webkit-animation-name:'lr_move';
+   -webkit-animation-duration: 2s;/*动画持续时间*/
+   -webkit-animation-timing-function: ease-in-out;
+   -webkit-animation-delay: 0s;/*动画延迟时间*/
+   -webkit-animation-iteration-count: 10;/*定义循环次数，infinite为无限次*/
+   -webkit-animation-direction: alternate;/*定义动画方式*/
+}
+/*动画e*/
+/*公共样式end*/
+/*公共底部*/
+.navigation_bar_abs {
+  border-top: 1px solid #dddddd;
+  bottom: 0px;
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+  position: fixed;
+  z-index: 2;
+  background: #f7f7f7;
+  -moz-opacity: 0.9;
+  opacity: 0.9;
+  font-size: 16px;
+  /*display: none;*/
+}
+.navigation_bar_abs span,.navigation_bar_abs a{
+  display: inline;
+}
+
+.nav_list li {
+  width: 33%;
+  float: left;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  color: #5f5f5f;
+}
+.icon-quan{
+    background-position: 0px -30px;
+  width: 37px;
+  height: 37px;
+  position: relative;
+}
+.cur .icon-quan{
+    background-position: -40px -30px;
+  width: 37px;
+  height: 37px;
+}
+.icon-addfriend{
+    background-position: 0px -71px;
+  width: 32px;
+  height: 34px;
+}
+.cur .icon-addfriend{
+    background-position: -40px -70px;
+  width: 32px;
+  height: 37px;
+}
+.icon-me{
+    background-position: 0px -120px;
+  width: 32px;
+  height: 32px;
+}
+.cur .icon-me{
+    background-position: -40px -120px;
+  width: 32px;
+  height: 32px;
+}
+.cur .nav_txt{
+    color: #FF4D9D;
+}
+.icon-yuanfen{
+  background-position: -196px -255px;
+  width: 30px;
+  height: 30px;
+  margin-left: 8px;
+}
+.icon-vipright{
+  background-position: -163px -253px;
+  width: 33px;
+  height: 33px;
+  margin-left: 5px;
+}
+.icon-setup{
+  background-position: -228px -251px;
+  width: 37px;
+  height: 37px;
+  margin-left: 6px;
+}
+
+/*common*/
+body{
+    min-width: 320px;
+    max-width: 640px;
+    margin: 0 auto;
+    font-family: "SimHei";
+    font-size: 15px;
+    line-height: 17px;
+    overflow-x:hidden; 
+    /*color: #999;
+    background-color: #fbfbfb;*/
+}
+/*a,span,i{
+    display: inline-block;
+}*/
+input,select,textarea{
+    background: none;
+    border: none;
+}
+textarea{
+    resize: none;
+}
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+/*无内容显示*/
+.content-none {
+  text-align: center;
+  color: #d7d4d4;
+}
+.content-none .none-icon {
+  margin-bottom: 21px;
+  margin-top: 75px; 
+}
+.search-icon,.shift-left,.shift-right,.yf-icon,.sw-icon,.tc-icon,.xq-icon,.yx-icon,.male-icon,
+.female-icon,.location-icon,.cx-icon,.vip-icon,.merchant-icon,.notify-icon,.friend-icon,
+.praise-icon,.praise-on-icon,.msg-icon,.decomment-icon,.collect-icon,.collect-on-icon,.book-icon,
+.edit-icon,.delete-icon,.delete-red-icon,.add-icon,.addPic-icon,.email-icon,.write-icon,.question-icon,
+.about-icon,.safe-icon,.share-icon,.svip-icon,.icon-weishang{
+    background: url(/Public/Images/front/icon2_sprite.png) no-repeat;
+    -webkit-background-size: 166px 162px;
+    background-size: 166px 162px;
+    vertical-align: middle;
+}
+.xy-icon{
+    background: url(/Public/Images/front/icon_sprite2.png) no-repeat;
+    -webkit-background-size: 179px 87px;
+    background-size: 179px 87px;
+    vertical-align: middle;
+}
+.none-icon,.news-none-icon,.no-vip-icon,.add-pic-icon{
+    background: url(/Public/Images/front/pic2_sprite.png) no-repeat;
+    -webkit-background-size: 210px 210px;
+    background-size: 210px 210px;
+    vertical-align: middle;
+}
+.add-pic-icon{
+  width: 100px;
+  height: 100px;
+  background-position: -103px -102px;
+}
+/*搜索图标*/
+.search-icon{
+    width: 25px;
+    height: 25px;
+    background-position: -28px -40px;
+}
+/*左移右移图标*/
+.shift-left{
+    width: 12px;
+    height: 12px;
+    background-position: -89.5px -7.5px;
+}
+.shift-right{
+    width: 12px;
+    height: 12px;
+    background-position: -76px -7.5px;
+}
+
+.yf-icon,.sw-icon,.tc-icon,.xq-icon,.yx-icon{
+    width: 36px;
+    height: 36px;
+}
+/*缘分图标*/
+.yf-icon{
+    background-position: -1.5px -125px;
+}
+/*商务图标*/
+.sw-icon{
+    background-position: -129px -88px;
+}
+/*同城图标*/
+.tc-icon{
+    background-position: -115px -125px;
+}
+/*兴趣图标*/
+.xq-icon{
+    background-position: -77px -125px;
+}
+/*异性图标*/
+.yx-icon{
+    background-position: -39px -125px;
+}
+/*商图标*/
+.merchant-icon{
+    width: 19px;
+    height: 19px;
+    background-position: -32.1px -17.6px;
+}
+/*男图标*/
+.male-icon{
+    width: 16px;
+    height: 16px;
+    background-position: -16px -90px;
+}
+/*女图标*/
+.female-icon{
+    width: 16px;
+    height: 16px;
+    background-position: 1px -76.2px;
+}
+/*vip图标*/
+.vip-icon{
+    width: 22px;
+    height: 19px;
+    background-position: -77.2px -63.7px;
+}
+/*定位图标*/
+.location-icon{
+    width: 16px;
+    height: 16px;
+    background-position: 2px -94px;
+}
+/*诚信图标*/
+.cx-icon{
+    width: 18px;
+    height: 18px;
+    background-position: -55.2px 0;
+}
+/*信誉图标*/
+.xy-lvl1{
+    width: 17px;
+    height: 15px;
+    background-position: 0 0;
+}
+.xy-lvl2{
+    width: 34px;
+    height: 15px;
+    background-position: 0 -16px;
+}
+.xy-lvl3{
+    width: 53px;
+    height: 15px;
+    background-position: 0 -33px;
+}
+.xy-lvl4{
+    width: 71px;
+    height: 15px;
+    background-position: 0 -50px;
+}
+.xy-lvl5{
+    width: 87px;
+    height: 15px;
+    background-position: 0 -67px;
+}
+.xy-lvl6{
+    width: 17px;
+    height: 15px;
+    background-position: -93px 0;
+}
+.xy-lvl7{
+    width: 35px;
+    height: 15px;
+    background-position: -92px -16px;
+}
+.xy-lvl8{
+    width: 51px;
+    height: 15px;
+    background-position: -92px -33px;
+}
+.xy-lvl9{
+    width: 70px;
+    height: 15px;
+    background-position: -92px -49px;
+}
+.xy-lvl10{
+    width: 85px;
+    height: 15px;
+    background-position: -92px -67px;
+}
+/*通知图标*/
+.notify-icon{
+    width: 25px;
+    height: 23px;
+    background-position: -52px -64px;
+}
+/*好友图标*/
+.friend-icon{
+    width: 26px;
+    height: 22px;
+    background-position: -60px -87px;
+}
+.praise-icon{
+    width: 21px;
+    height: 21px;
+    background-position: -55px -21px;
+}
+/*已点赞图标*/
+.praise-on-icon{
+    width: 21px;
+    height: 21px;
+    background-position: -55px -41px;
+}
+/*信息图标*/
+.msg-icon{
+    width: 20px;
+    height: 16px;
+    background-position: -31px 0;
+}
+/*内容空图标*/
+.none-icon{
+    width: 98px;
+    height: 98px;
+    background-position: -104px -1px;
+}
+/*评论删除图标*/
+.decomment-icon{
+    width: 55px;
+    height: 40px;
+    background-position: -104px -42px;
+}
+/*收藏图标*/
+.collect-icon{
+    width: 20px;
+    height: 20px;
+    background-position: -78px -21px;
+}
+/*已收藏图标*/
+.collect-on-icon{
+    width: 20px;
+    height: 20px;
+    background-position: -78px -42px;
+}
+/*书图标*/
+.book-icon{
+    width: 22px;
+    height: 18px;
+    background-position: -30px -66px;
+}
+/*编辑图标*/
+.edit-icon{
+    width: 17px;
+    height: 17px;
+    background-position: -103px -7px;
+}
+/*删除图标*/
+.delete-icon{
+    width: 31px;
+    height: 31px;
+    background-position: 0 0;
+}
+/*红色删除图标*/
+.delete-red-icon{
+    width: 23px;
+    height: 23px;
+    background-position: -35px -84px;
+}
+/*添加图标*/
+.add-icon{
+    width: 34px;
+    height: 34px;
+    background-position: -94px -90px;
+}
+/*添加图片图标*/
+.addPic-icon{
+    width: 33px;
+    height: 33px;
+    background-position: -124px -7px;
+}
+/*消息图标*/
+.news-none-icon{
+    width: 98px;
+    height: 98px;
+    background-position: -1px -102px;
+}
+.no-vip-icon{
+    width: 98px;
+    height: 98px;
+    background-position: -1px -1px;
+}
+.email-icon,.write-icon,.question-icon,.about-icon,.safe-icon{
+    width: 18px;
+}
+.email-icon{
+    height: 14px;
+    background-position: -1px -110px;
+}
+.write-icon{
+    height: 17px;
+    background-position: -39px -108px;
+}
+.question-icon{
+    height: 15px;
+    background-position: -76px -109px;
+}
+.about-icon{
+    height: 16px;
+    background-position: -57px -108px;
+}
+.safe-icon{
+    height: 18px;
+    background-position: -21px -108px;
+}
+/*分享图标*/
+.share-icon{
+    width: 20px;
+    height: 16px;
+    background-position: -1px -32px;
+}

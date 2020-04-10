@@ -1,0 +1,50 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+{if $do=='help_article_list'}
+<div class="t-art" style="margin-bottom:10px;"><a href="/AcpArticle/add_article" class="btn btn-blue"><i
+        class="gicon-plus white"></i>添加文章</a>  </div>
+{/if}
+<div class="tablesWrap">
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <col width="16%">
+            <col width="16%">
+        </colgroup>
+        <thead>
+        <tr>
+            <!--  <td>选择</td>  -->
+            <td>标题</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$list item=this}
+        <tr>
+            <td>{$this.title}</td>
+            <td>
+                <a href="/AcpArticle/edit_article/id/{$this.article_id}" class="btn" title="编辑"><i class="gicon-edit black"></i>编辑</a>
+                {if $do=='help_article_list'}
+                <a href="/AcpArticle/del_article/id/{$this.article_id}" class="btn" title="删除">删除</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+
+        </tbody>
+    </table>
+
+</div>
+<!-- end tablesWrap -->    
+{/block} 
+
+{block name="js"}
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<script type="text/javascript" src="__ACPJS__/AcpArticle/article.js?version={$version}"></script>
+{/block} 
+
+{block name="css"}
+<link rel="stylesheet" href="/Public/Css/acp/AcpArticle/list_article_cloud.css" type="text/css" />
+{/block}

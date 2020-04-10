@@ -1,0 +1,155 @@
+{extends file="../acp.html"}
+
+{block name="title"}{$head_title}{/block}
+{block name="content"}
+<script>
+    function no_pic(obj) {
+        obj.setAttribute("src", "/Public/Images/acp/nopicture.jpg");
+    }
+</script>
+
+<div class="tablesWrap">
+    <div class="tables-searchbox"> 
+        <a href="/AcpItemPackage/add_item_package/mod_id/2/redirect/{$cur_url}" class="btn btn-blue"><i class="gicon-plus white"></i>添加套餐商品</a> 
+    </div>
+    <div class="tables-searchbox">
+        <form method="post">
+            <span class="tbs-txt">{$ITEM_NAME}名称：</span>
+            <input type="text" name="item_name" value="{$item_name}">
+
+            <span class="tbs-txt">{$ITEM_NAME}货号：</span>
+            <input type="text" class="mini" name="item_sn" value="{$item_sn}">
+
+            <span class="tbs-txt">销售量：</span>
+            <input type="text" style="width:60px;" name="start_sales_num" value="{$start_sales_num}">
+            <span class="tbs-txt">——</span>
+            <input type="text" style="width:60px;" name="end_sales_num" value="{$end_sales_num}">
+         
+            <select name="item_status">
+                <option value="0" selected="">--请选择{$ITEM_NAME}状态--</option>
+                {foreach from=$arr_item_status item=row key=key}
+                <option value="{$key}" {if $key EQ $item_status}selected{/if}>{$row}</option>
+                {/foreach}
+            </select>
+
+            <div class="mgt10">
+                <span class="tbs-txt">添加时间：</span>
+                <input type="text" autocomplete="off" class="Wdate" name="start_date" value="{$start_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <span class="tbs-txt">至</span>
+                <input type="text" autocomplete="off" class="Wdate" name="end_date" value="{$end_date|date_format:'%Y-%m-%d'}"  onclick="WdatePicker()">
+                <button type="submit" class="btn"><i class="gicon-search"></i>搜索</button>
+            </div>
+
+        </form>
+    </div>
+    <!-- end tables-searchbox -->
+    <table class="wxtables">
+        <colgroup>
+            <!-- <col width="5%"> -->
+            <col width="5%">
+            <col width="5%">
+            <col width="20%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="20%">
+        </colgroup>
+        <thead>
+        <tr>
+            <!-- <td>选择</td> -->
+            <td>编号</td>
+            <td>图片</td>
+            <td>{$ITEM_NAME}名称</td>
+            <td>货号</td>
+            <td>本店价</td>
+            <td>销售量</td>
+            <td>{$ITEM_NAME}状态</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$item_list item=item name=list}
+        <tr>
+            <!-- <td><input type="checkbox" class="checkbox" value="{$item.item_package_id}" name="checkIds[]"></td> -->
+            <td>{$smarty.foreach.list.iteration + $page->firstRow}.</td>
+            <td><a href="{$item.link_item}" target="_blank"><img src="{$item.small_img}" alt="" width="50" height="50" onerror="no_pic(this);"></a></td>
+            <td>
+                <a href="{$item.link_item}" target="_blank">{$item.item_name}</a>
+            </td>
+            <td>{$item.item_sn}</td>
+            <td>{$item.mall_price}</td>
+            <td>{$item.sales_num}</td>
+            <td>{$item.status}</td>
+            <td>
+                <a href="/AcpItemPackage/edit_item_package/item_package_id/{$item.item_package_id}" class="btn" title="编辑">编辑</a>
+                <a href="javascript:;" class="btn J_del" title="删除">删除</a>
+                <input type="hidden" name="item_package_id" value="{$item.item_package_id}">
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td colspan="10">没有找到任何记录</td></tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <!-- end wxtables -->
+    <div class="tables-btmctrl clearfix">
+        <!-- <div class="fl">
+            <a href="javascript:selall()" class="btn btn-blue">全选</a>
+            <a href="javascript:clearall()" class="btn btn-blue">取消</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_store">下架</a>
+            <a href="javascript:;" class="btn btn-blue J_batch_del">删除</a>
+        </div> -->
+        <div class="fr">
+            <div class="paginate">
+                {$show}
+            </div>
+            <!-- end paginate -->
+        </div>
+    </div>
+    <!-- end tables-btmctrl -->
+</div>
+<!-- end tablesWrap -->
+{/block}
+
+{block name="js"}
+<script>
+var item_name = '{$ITEM_NAME}';
+$(function(){
+    // 删除" + item_name + "
+    single_action(".J_del", "您确定要删除这件" + item_name + "吗？", "/AcpItemPackage/del_item_package", "");
+});
+</script>
+<script src="/Public/Plugins/My97DatePicker/WdatePicker.js?version={$version}"></script>
+<!-- <script src="__ACPJS__/acp_item.js?version={$version}"></script> -->
+<script>
+{literal}
+function single_action(selector, content, url, action) {
+    $(selector).click(function(){
+        var _this = this;
+        $.jPops.confirm({
+            title:"提示",
+            content: content,
+            okBtnTxt:"确定",
+            cancelBtnTxt:"取消",
+            callback:function(r){
+                if(r){
+                    var item_package_id = $(_this).siblings(":hidden[name='item_package_id']").val();
+                    $.post(url, {id: item_package_id, action: action}, function(data){
+                        $.jPops.message({
+                            title: "提示",
+                            content: data,
+                            callback: function() {
+                                location.reload();
+                            }
+                        });
+                    }, 'json')
+                }
+                return true;
+            }
+        });
+    });
+}
+{/literal}
+</script>
+{/block}

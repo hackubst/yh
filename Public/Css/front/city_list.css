@@ -1,0 +1,93 @@
+body{background-color:#efefef;}
+/*当前城市*/
+.back_home_txt{
+position: absolute;
+width: 40px;
+line-height: 45px;
+margin-top: -10px;
+color: #fff;
+font-size: 13px;
+letter-spacing: 1px;	
+}
+.position_city {
+height: 45px;
+background-color: white;
+line-height: 45px;
+padding-left: 15px;
+}
+.cur_city {
+color: #999;
+padding: 0px 8px;
+height: 27px;
+background-color: rgb(248,247,243);
+line-height: 27px;
+text-align: center;
+border: 1px solid #cdcdcd;
+border-radius: 2px;
+}
+.hd {
+height: 43px;
+color: #999;
+line-height: 43px;
+padding-left: 15px;
+}
+.home_place_list{
+margin: 0 10px;
+overflow:hidden;
+}
+.home_place_list li {
+float: left;
+width: 30%;
+height: 36px;
+line-height: 36px;
+border: 1px solid #ddd;
+border-radius: 50px;
+background-color: white;
+margin: 5px 4px;
+}
+.home_place_list a,.letter_list a,.letter_home_list a{
+display: block;
+text-align: center;
+color: #999;
+font-size: 13px;
+overflow: hidden;
+white-space: nowrap;
+}
+.letter_list,.letter_home_list{
+overflow:hidden;	
+}
+.letter_list ul,.letter_home_list ul{
+font-size:0;	
+}
+.letter_list li,.letter_home_list li{
+display: inline-block;
+box-sizing: border-box;
+-webkit-box-sizing: border-box;
+width: 20%;
+height: 45px;
+line-height: 45px;
+border-right:1px solid #f0f0f0;
+border-bottom:1px solid #f0f0f0;
+background-color: white;
+}
+.letter_home_list li{
+width:33%!important;
+}
+.gotop{
+display:none;
+position:fixed;
+right:10px;
+bottom:70px;
+width:41px;
+height:41px;
+border-radius:22px;
+background-color:#a4c31d;
+opacity:0.6;
+text-align: center;
+line-height: 55px;
+}
+.gotop_icon{
+width:19px;
+height:20px;
+fill:#fff;	
+}
