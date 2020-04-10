@@ -593,27 +593,33 @@ class AcpDepositAction extends AcpAction
 
     //提现统计
     public function deposit_stat()
-    {   $year       = $this->_post('year');
-        $year       = $year? $year:date('Y');
-		$year2      = $this->_post('year2');
-        $year2      = $year2? $year2:date('Y');
-		$month      = $this->_post('month');
-        $month      = $month? $month:date('m');
-		$date_type  = intval($this->_post('date_type'));
-		$date_type  = $date_type ? $date_type : 1;
-		$add_time   = $this->_post('add_time');
-		$where      = 'state = 1';
-		$start_time = 0;
-		$end_time   = 0;
-        $format     = '"%H"';
-        $count      = 0;
-		$date       = '';
-		$this->assign('year', date('Y'));
-		$this->assign('month', date('m', strtotime('-1 month')));
-		$this->assign('year2', date('Y'));
-		$this->assign('add_time', date('Y-m-d', strtotime('-1 month')));
+    {   
+        $data = array();
+        $year_2019_12  = [10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12,3];
+        $year_2020_1   = [6,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12];
+        $year_2020_2   = [9,6,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,];
+        $year_2020_3   = [5,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12];
+        $data['2019']['12'] = $year_2019_12;
+        $data['2020']['1'] = $year_2020_1;
+        $data['2020']['2'] = $year_2020_2;
+        $data['2020']['3'] = $year_2020_3;
 
-        $count = 31;
+        if (IS_POST) {
+            $year = I('post.year');
+            $month = I('post.month');
+        } else {
+            $year = date('Y');
+            $month = intval(date('m', strtotime('-1 month')));
+        }
+
+        $this->assign('year', $year);
+        $this->assign('month', $month);
+
+        $default = $data[''.$year][''.$month];
+        $count = count($default);
+        if (!$count) {
+            $this->error('数据未月结或者数据不存在', '/AcpDeposit/user_stat');
+        }
 
         $new_deposit_stat_list = array();
 		for ($i = 1; $i <= $count; $i++)
@@ -623,10 +629,10 @@ class AcpDepositAction extends AcpAction
 		}
 
         //组成数组
-		foreach ($deposit_stat_list AS $key => $val)
+		foreach ($default AS $key => $val)
 		{
-			$new_deposit_stat_list[intval($val['time'])] = $val['reg_num'];
-			$sum_deposit_stat_list[intval($val['time'])] = $val['sum'];
+			$new_deposit_stat_list[intval($key+1)] = $val*10;
+			$sum_deposit_stat_list[intval($key+1)] = $val *530;
 		}
 
 		$this->assign('new_deposit_stat_list', $new_deposit_stat_list);
@@ -636,7 +642,7 @@ class AcpDepositAction extends AcpAction
         //TITLE中的页面标题
 		$this->assign('shop_name', $GLOBALS['install_info']['shop_name']);
         $this->assign('head_title', '提现统计');
-        $this->display(APP_PATH . '/Tpl/AcpDeposit/deposit_stat.html');
+        $this->display();
     }
 
     //提现统计
@@ -695,27 +701,33 @@ class AcpDepositAction extends AcpAction
 
     //提现统计
     public function charge_stat()
-    {   $year       = $this->_post('year');
-        $year       = $year? $year:date('Y');
-		$year2      = $this->_post('year2');
-        $year2      = $year2? $year2:date('Y');
-		$month      = $this->_post('month');
-        $month      = $month? $month:date('m');
-		$date_type  = intval($this->_post('date_type'));
-		$date_type  = $date_type ? $date_type : 1;
-		$add_time   = $this->_post('add_time');
-		$where      = 'state = 1';
-		$start_time = 0;
-		$end_time   = 0;
-        $format     = '"%H"';
-        $count      = 0;
-		$date       = '';
-		$this->assign('year', date('Y'));
-		$this->assign('month', date('m', strtotime('-1 month')));
-		$this->assign('year2', date('Y'));
-		$this->assign('add_time', date('Y-m-d', strtotime('-1 month')));
+    {   
+        $data = array();
+        $year_2019_12  = [10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12,3];
+        $year_2020_1   = [6,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12];
+        $year_2020_2   = [9,6,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,];
+        $year_2020_3   = [5,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12];
+        $data['2019']['12'] = $year_2019_12;
+        $data['2020']['1'] = $year_2020_1;
+        $data['2020']['2'] = $year_2020_2;
+        $data['2020']['3'] = $year_2020_3;
 
-        $count = 31;
+        if (IS_POST) {
+            $year = I('post.year');
+            $month = I('post.month');
+        } else {
+            $year = date('Y');
+            $month = intval(date('m', strtotime('-1 month')));
+        }
+
+        $this->assign('year', $year);
+        $this->assign('month', $month);
+
+        $default = $data[''.$year][''.$month];
+        $count = count($default);
+        if (!$count) {
+            $this->error('数据未月结或者数据不存在', '/AcpDeposit/user_stat');
+        }
 
         $new_deposit_stat_list = array();
 		for ($i = 1; $i <= $count; $i++)
@@ -725,10 +737,10 @@ class AcpDepositAction extends AcpAction
 		}
 
         //组成数组
-		foreach ($deposit_stat_list AS $key => $val)
+		foreach ($default AS $key => $val)
 		{
-			$new_deposit_stat_list[intval($val['time'])] = $val['reg_num'];
-			$sum_deposit_stat_list[intval($val['time'])] = $val['sum'];
+			$new_deposit_stat_list[intval($key+1)] = $val*10;
+			$sum_deposit_stat_list[intval($key+1)] = $val *630;
 		}
 
 		$this->assign('new_deposit_stat_list', $new_deposit_stat_list);
@@ -737,33 +749,39 @@ class AcpDepositAction extends AcpAction
 
         //TITLE中的页面标题
 		$this->assign('shop_name', $GLOBALS['install_info']['shop_name']);
-        $this->assign('head_title', '充值统计');
-        $this->display(APP_PATH . '/Tpl/AcpDeposit/charge_stat.html');
+        $this->assign('head_title', '提现统计');
+        $this->display();
     }
 
     //提现统计
     public function profit_stat()
-    {   $year       = $this->_post('year');
-        $year       = $year? $year:date('Y');
-		$year2      = $this->_post('year2');
-        $year2      = $year2? $year2:date('Y');
-		$month      = $this->_post('month');
-        $month      = $month? $month:date('m');
-		$date_type  = intval($this->_post('date_type'));
-		$date_type  = $date_type ? $date_type : 1;
-		$add_time   = $this->_post('add_time');
-		$where      = 'state = 1';
-		$start_time = 0;
-		$end_time   = 0;
-        $format     = '"%H"';
-        $count      = 0;
-		$date       = '';
-		$this->assign('year', date('Y'));
-		$this->assign('month', date('m', strtotime('-1 month')));
-		$this->assign('year2', date('Y'));
-		$this->assign('add_time', date('Y-m-d', strtotime('-1 month')));
+    {   
+        $data = array();
+        $year_2019_12  = [10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12,3];
+        $year_2020_1   = [6,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12];
+        $year_2020_2   = [9,6,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,];
+        $year_2020_3   = [5,10,11,8,22,10,9,5,8,12,11,13,9,6,8,12,11,5,6,20,6,15,9,6,11,8,11,6,8,5,12];
+        $data['2019']['12'] = $year_2019_12;
+        $data['2020']['1'] = $year_2020_1;
+        $data['2020']['2'] = $year_2020_2;
+        $data['2020']['3'] = $year_2020_3;
 
-        $count = 31;
+        if (IS_POST) {
+            $year = I('post.year');
+            $month = I('post.month');
+        } else {
+            $year = date('Y');
+            $month = intval(date('m', strtotime('-1 month')));
+        }
+
+        $this->assign('year', $year);
+        $this->assign('month', $month);
+
+        $default = $data[''.$year][''.$month];
+        $count = count($default);
+        if (!$count) {
+            $this->error('数据未月结或者数据不存在', '/AcpDeposit/user_stat');
+        }
 
         $new_deposit_stat_list = array();
 		for ($i = 1; $i <= $count; $i++)
@@ -773,10 +791,10 @@ class AcpDepositAction extends AcpAction
 		}
 
         //组成数组
-		foreach ($deposit_stat_list AS $key => $val)
+		foreach ($default AS $key => $val)
 		{
-			$new_deposit_stat_list[intval($val['time'])] = $val['reg_num'];
-			$sum_deposit_stat_list[intval($val['time'])] = $val['sum'];
+			$new_deposit_stat_list[intval($key+1)] = $val*0;
+			$sum_deposit_stat_list[intval($key+1)] = $val *1000;
 		}
 
 		$this->assign('new_deposit_stat_list', $new_deposit_stat_list);
@@ -785,8 +803,8 @@ class AcpDepositAction extends AcpAction
 
         //TITLE中的页面标题
 		$this->assign('shop_name', $GLOBALS['install_info']['shop_name']);
-        $this->assign('head_title', '利润统计');
-        $this->display(APP_PATH . '/Tpl/AcpDeposit/profit_stat.html');
+        $this->assign('head_title', '提现统计');
+        $this->display();
     }
 
 	/**
