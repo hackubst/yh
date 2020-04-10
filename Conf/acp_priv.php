@@ -229,7 +229,7 @@ $admin_menu_file[$_mod_id]['menu_list'] = array(
 	'提现管理'	=> array(
 		array('id' => $_sort_id.'14', 'name' => '提现成功记录', 'mod_do_url' => '/AcpDeposit/get_deposit_list', 'in_menu' => ''),
 		array('id' => $_sort_id.'15', 'name' => '提现申请列表', 'mod_do_url' => '/AcpDeposit/get_deposit_apply_list', 'in_menu' => ''),
-//		array('id' => $_sort_id.'25', 'name' => '提现统计', 'mod_do_url' => '/AcpDeposit/deposit_stat', 'in_menu' => ''),
+		array('id' => $_sort_id.'25', 'name' => '提现统计', 'mod_do_url' => '/AcpDeposit/deposit_stat', 'in_menu' => ''),
 //		array('id' => $_sort_id.'24', 'name' => '导出提现申请', 'mod_do_url' => '/AcpDeposit/export_deposit_apply', 'in_menu' => ''),
 	),
 	'排行榜'	=> array(
@@ -237,6 +237,17 @@ $admin_menu_file[$_mod_id]['menu_list'] = array(
         array('id' => $_sort_id.'40', 'name' => '今日排行榜列表', 'mod_do_url' => '/AcpRank/get_robot_list', 'in_menu' => ''),
         // array('id' => $_sort_id.'17', 'name' => '调整排行榜', 'mod_do_url' => '/AcpRank/edit_rank_list', 'in_menu' => ''),
     ),
+
+);
+
+$admin_menu_file[++$_mod_id] = array('id' =>  ++$_sort_id, 'mod_name' => 'Account', 'name' => '统计汇总', 'mod_do_url' => '', 'in_menu' => '', 'default_url' => '/AcpFinance/get_account_apply_list');
+$admin_menu_file[$_mod_id]['menu_list'] = array(
+	'数据汇总'	=> array(
+		array('id' => $_sort_id.'15', 'name' => '会员统计', 'mod_do_url' => '/AcpDeposit/user_stat', 'in_menu' => ''),
+		array('id' => $_sort_id.'16', 'name' => '充值统计', 'mod_do_url' => '/AcpDeposit/charge_stat', 'in_menu' => ''),
+		array('id' => $_sort_id.'18', 'name' => '提现统计', 'mod_do_url' => '/AcpDeposit/deposit_stat', 'in_menu' => ''),
+		array('id' => $_sort_id.'19', 'name' => '利润统计', 'mod_do_url' => '/AcpDeposit/profit_stat', 'in_menu' => ''),
+    )
 
 );
 

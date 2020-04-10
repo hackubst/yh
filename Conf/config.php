@@ -17,9 +17,9 @@ return array(
 //'配置项'                 =>'配置值'
 'DB_TYPE'               => 'mysql', //数据库类型
 'DB_HOST'               => 'localhost', //数据库主机200.360shop.cc
-'DB_NAME'               => 'admin_ecp688_com', //数据库名称
-'DB_USER'               => 'admin_ecp688_com', //数据库用户名
-'DB_PWD'                => 'DL3wjJWyAJKxezEY', //数据库密码
+'DB_NAME'               => 'kkl28', //数据库名称
+'DB_USER'               => 'root', //数据库用户名
+'DB_PWD'                => '0c7a11c3953fba72', //数据库密码
 'DB_PORT'               => '3306', //数据库端口
 'ADDR_URL'              => 'http://' . $_SERVER['HTTP_HOST'] . '/FrontOrder/order_submit/',
 'DB_PREFIX'             => 'tp_', //数据表前缀
